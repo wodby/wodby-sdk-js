@@ -31,6 +31,12 @@ import {
     UpdateTitleRequestToJSON,
 } from '../models/index';
 
+export interface AppInstancesByNameAppNameInstanceNameGetRequest {
+    appName: string;
+    instanceName: string;
+    orgId: number;
+}
+
 export interface AppInstancesGetRequest {
     orgId: number;
     projectIds?: string;
@@ -64,6 +70,23 @@ export interface AppInstancesPostRequest {
  * @interface AppInstancesApiInterface
  */
 export interface AppInstancesApiInterface {
+    /**
+     * 
+     * @summary Get app instance by app and instance name
+     * @param {string} appName 
+     * @param {string} instanceName 
+     * @param {number} orgId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    appInstancesByNameAppNameInstanceNameGetRaw(requestParameters: AppInstancesByNameAppNameInstanceNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>>;
+
+    /**
+     * Get app instance by app and instance name
+     */
+    appInstancesByNameAppNameInstanceNameGet(requestParameters: AppInstancesByNameAppNameInstanceNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
+
     /**
      * 
      * @summary List app instances
@@ -151,6 +174,65 @@ export interface AppInstancesApiInterface {
  * 
  */
 export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiInterface {
+
+    /**
+     * Get app instance by app and instance name
+     */
+    async appInstancesByNameAppNameInstanceNameGetRaw(requestParameters: AppInstancesByNameAppNameInstanceNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
+        if (requestParameters['appName'] == null) {
+            throw new runtime.RequiredError(
+                'appName',
+                'Required parameter "appName" was null or undefined when calling appInstancesByNameAppNameInstanceNameGet().'
+            );
+        }
+
+        if (requestParameters['instanceName'] == null) {
+            throw new runtime.RequiredError(
+                'instanceName',
+                'Required parameter "instanceName" was null or undefined when calling appInstancesByNameAppNameInstanceNameGet().'
+            );
+        }
+
+        if (requestParameters['orgId'] == null) {
+            throw new runtime.RequiredError(
+                'orgId',
+                'Required parameter "orgId" was null or undefined when calling appInstancesByNameAppNameInstanceNameGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['orgId'] != null) {
+            queryParameters['orgId'] = requestParameters['orgId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-instances/by-name/{appName}/{instanceName}`.replace(`{${"appName"}}`, encodeURIComponent(String(requestParameters['appName']))).replace(`{${"instanceName"}}`, encodeURIComponent(String(requestParameters['instanceName']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppInstanceFromJSON(jsonValue));
+    }
+
+    /**
+     * Get app instance by app and instance name
+     */
+    async appInstancesByNameAppNameInstanceNameGet(requestParameters: AppInstancesByNameAppNameInstanceNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
+        const response = await this.appInstancesByNameAppNameInstanceNameGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * List app instances

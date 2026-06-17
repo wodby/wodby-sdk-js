@@ -18,6 +18,7 @@ import type {
   AppDeployment,
   AppDeploymentsResponse,
   CreateDeploymentRequest,
+  DeploymentFromCIInput,
 } from '../models/index';
 import {
     AppDeploymentFromJSON,
@@ -26,7 +27,13 @@ import {
     AppDeploymentsResponseToJSON,
     CreateDeploymentRequestFromJSON,
     CreateDeploymentRequestToJSON,
+    DeploymentFromCIInputFromJSON,
+    DeploymentFromCIInputToJSON,
 } from '../models/index';
+
+export interface AppDeploymentsFromCiPostRequest {
+    deploymentFromCIInput: DeploymentFromCIInput;
+}
 
 export interface AppDeploymentsGetRequest {
     appInstanceId: number;
@@ -35,6 +42,10 @@ export interface AppDeploymentsGetRequest {
 }
 
 export interface AppDeploymentsIdGetRequest {
+    id: number;
+}
+
+export interface AppDeploymentsIdRedeployPostRequest {
     id: number;
 }
 
@@ -49,6 +60,21 @@ export interface AppDeploymentsPostRequest {
  * @interface AppDeploymentsApiInterface
  */
 export interface AppDeploymentsApiInterface {
+    /**
+     * 
+     * @summary Create deployment from CI
+     * @param {DeploymentFromCIInput} deploymentFromCIInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppDeploymentsApiInterface
+     */
+    appDeploymentsFromCiPostRaw(requestParameters: AppDeploymentsFromCiPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
+
+    /**
+     * Create deployment from CI
+     */
+    appDeploymentsFromCiPost(requestParameters: AppDeploymentsFromCiPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
+
     /**
      * 
      * @summary List app deployments
@@ -83,6 +109,21 @@ export interface AppDeploymentsApiInterface {
 
     /**
      * 
+     * @summary Redeploy deployment
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppDeploymentsApiInterface
+     */
+    appDeploymentsIdRedeployPostRaw(requestParameters: AppDeploymentsIdRedeployPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
+
+    /**
+     * Redeploy deployment
+     */
+    appDeploymentsIdRedeployPost(requestParameters: AppDeploymentsIdRedeployPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
+
+    /**
+     * 
      * @summary Create deployment
      * @param {CreateDeploymentRequest} createDeploymentRequest 
      * @param {*} [options] Override http request option.
@@ -102,6 +143,50 @@ export interface AppDeploymentsApiInterface {
  * 
  */
 export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeploymentsApiInterface {
+
+    /**
+     * Create deployment from CI
+     */
+    async appDeploymentsFromCiPostRaw(requestParameters: AppDeploymentsFromCiPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
+        if (requestParameters['deploymentFromCIInput'] == null) {
+            throw new runtime.RequiredError(
+                'deploymentFromCIInput',
+                'Required parameter "deploymentFromCIInput" was null or undefined when calling appDeploymentsFromCiPost().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-deployments/from-ci`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: DeploymentFromCIInputToJSON(requestParameters['deploymentFromCIInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppDeploymentFromJSON(jsonValue));
+    }
+
+    /**
+     * Create deployment from CI
+     */
+    async appDeploymentsFromCiPost(requestParameters: AppDeploymentsFromCiPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
+        const response = await this.appDeploymentsFromCiPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * List app deployments
@@ -194,6 +279,47 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
      */
     async appDeploymentsIdGet(requestParameters: AppDeploymentsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
         const response = await this.appDeploymentsIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Redeploy deployment
+     */
+    async appDeploymentsIdRedeployPostRaw(requestParameters: AppDeploymentsIdRedeployPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling appDeploymentsIdRedeployPost().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-deployments/{id}/redeploy`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppDeploymentFromJSON(jsonValue));
+    }
+
+    /**
+     * Redeploy deployment
+     */
+    async appDeploymentsIdRedeployPost(requestParameters: AppDeploymentsIdRedeployPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
+        const response = await this.appDeploymentsIdRedeployPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

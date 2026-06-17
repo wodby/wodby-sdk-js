@@ -31,6 +31,11 @@ import {
     UpdateTitleRequestToJSON,
 } from '../models/index';
 
+export interface AppsByNameNameGetRequest {
+    name: string;
+    orgId: number;
+}
+
 export interface AppsGetRequest {
     orgId: number;
     projectIds?: string;
@@ -61,6 +66,22 @@ export interface AppsPostRequest {
  * @interface AppsApiInterface
  */
 export interface AppsApiInterface {
+    /**
+     * 
+     * @summary Get app by name
+     * @param {string} name 
+     * @param {number} orgId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppsApiInterface
+     */
+    appsByNameNameGetRaw(requestParameters: AppsByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
+
+    /**
+     * Get app by name
+     */
+    appsByNameNameGet(requestParameters: AppsByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
+
     /**
      * 
      * @summary List apps
@@ -145,6 +166,58 @@ export interface AppsApiInterface {
  * 
  */
 export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
+
+    /**
+     * Get app by name
+     */
+    async appsByNameNameGetRaw(requestParameters: AppsByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling appsByNameNameGet().'
+            );
+        }
+
+        if (requestParameters['orgId'] == null) {
+            throw new runtime.RequiredError(
+                'orgId',
+                'Required parameter "orgId" was null or undefined when calling appsByNameNameGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['orgId'] != null) {
+            queryParameters['orgId'] = requestParameters['orgId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/apps/by-name/{name}`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppFromJSON(jsonValue));
+    }
+
+    /**
+     * Get app by name
+     */
+    async appsByNameNameGet(requestParameters: AppsByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
+        const response = await this.appsByNameNameGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * List apps

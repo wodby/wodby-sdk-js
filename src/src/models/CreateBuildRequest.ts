@@ -14,7 +14,7 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * Specify either appServiceId for one service or appServiceIds for a multi-service build.
  * @export
  * @interface CreateBuildRequest
  */
@@ -24,14 +24,19 @@ export interface CreateBuildRequest {
      * @type {number}
      * @memberof CreateBuildRequest
      */
-    appServiceId: number;
+    appServiceId?: number;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof CreateBuildRequest
+     */
+    appServiceIds?: Array<number>;
 }
 
 /**
  * Check if a given object implements the CreateBuildRequest interface.
  */
 export function instanceOfCreateBuildRequest(value: object): value is CreateBuildRequest {
-    if (!('appServiceId' in value) || value['appServiceId'] === undefined) return false;
     return true;
 }
 
@@ -45,7 +50,8 @@ export function CreateBuildRequestFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'appServiceId': json['appServiceId'],
+        'appServiceId': json['appServiceId'] == null ? undefined : json['appServiceId'],
+        'appServiceIds': json['appServiceIds'] == null ? undefined : json['appServiceIds'],
     };
 }
 
@@ -61,6 +67,7 @@ export function CreateBuildRequestToJSONTyped(value?: CreateBuildRequest | null,
     return {
         
         'appServiceId': value['appServiceId'],
+        'appServiceIds': value['appServiceIds'],
     };
 }
 

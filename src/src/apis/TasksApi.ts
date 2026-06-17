@@ -15,15 +15,52 @@
 
 import * as runtime from '../runtime';
 import type {
+  OperationResult,
+  RepeatTaskRequest,
   Task,
+  TasksResponse,
 } from '../models/index';
 import {
+    OperationResultFromJSON,
+    OperationResultToJSON,
+    RepeatTaskRequestFromJSON,
+    RepeatTaskRequestToJSON,
     TaskFromJSON,
     TaskToJSON,
+    TasksResponseFromJSON,
+    TasksResponseToJSON,
 } from '../models/index';
+
+export interface TasksGetRequest {
+    scope?: TasksGetScopeEnum;
+    orgId?: number;
+    projectIds?: string;
+    withoutOrigin?: boolean;
+    statuses?: string;
+    search?: string;
+    appId?: number;
+    appInstanceId?: number;
+    stackId?: number;
+    databaseId?: number;
+    clusterId?: number;
+    serviceId?: number;
+    integrationId?: number;
+    providerId?: number;
+    page?: number;
+    pageSize?: number;
+}
+
+export interface TasksIdCancelPostRequest {
+    id: number;
+}
 
 export interface TasksIdGetRequest {
     id: number;
+}
+
+export interface TasksIdRepeatPostRequest {
+    id: number;
+    repeatTaskRequest: RepeatTaskRequest;
 }
 
 /**
@@ -33,6 +70,51 @@ export interface TasksIdGetRequest {
  * @interface TasksApiInterface
  */
 export interface TasksApiInterface {
+    /**
+     * 
+     * @summary List tasks
+     * @param {'project_and_org' | 'org_only' | 'user_only'} [scope] 
+     * @param {number} [orgId] 
+     * @param {string} [projectIds] Comma-separated project ids
+     * @param {boolean} [withoutOrigin] 
+     * @param {string} [statuses] Comma-separated task statuses
+     * @param {string} [search] 
+     * @param {number} [appId] 
+     * @param {number} [appInstanceId] 
+     * @param {number} [stackId] 
+     * @param {number} [databaseId] 
+     * @param {number} [clusterId] 
+     * @param {number} [serviceId] 
+     * @param {number} [integrationId] 
+     * @param {number} [providerId] 
+     * @param {number} [page] Page number, defaults to 1
+     * @param {number} [pageSize] Page size, defaults to 30
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TasksApiInterface
+     */
+    tasksGetRaw(requestParameters: TasksGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TasksResponse>>;
+
+    /**
+     * List tasks
+     */
+    tasksGet(requestParameters: TasksGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TasksResponse>;
+
+    /**
+     * 
+     * @summary Cancel task
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TasksApiInterface
+     */
+    tasksIdCancelPostRaw(requestParameters: TasksIdCancelPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Cancel task
+     */
+    tasksIdCancelPost(requestParameters: TasksIdCancelPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
     /**
      * 
      * @summary Get task
@@ -48,12 +130,167 @@ export interface TasksApiInterface {
      */
     tasksIdGet(requestParameters: TasksIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task>;
 
+    /**
+     * 
+     * @summary Repeat task
+     * @param {number} id 
+     * @param {RepeatTaskRequest} repeatTaskRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TasksApiInterface
+     */
+    tasksIdRepeatPostRaw(requestParameters: TasksIdRepeatPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Repeat task
+     */
+    tasksIdRepeatPost(requestParameters: TasksIdRepeatPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
 }
 
 /**
  * 
  */
 export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
+
+    /**
+     * List tasks
+     */
+    async tasksGetRaw(requestParameters: TasksGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TasksResponse>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['scope'] != null) {
+            queryParameters['scope'] = requestParameters['scope'];
+        }
+
+        if (requestParameters['orgId'] != null) {
+            queryParameters['orgId'] = requestParameters['orgId'];
+        }
+
+        if (requestParameters['projectIds'] != null) {
+            queryParameters['projectIds'] = requestParameters['projectIds'];
+        }
+
+        if (requestParameters['withoutOrigin'] != null) {
+            queryParameters['withoutOrigin'] = requestParameters['withoutOrigin'];
+        }
+
+        if (requestParameters['statuses'] != null) {
+            queryParameters['statuses'] = requestParameters['statuses'];
+        }
+
+        if (requestParameters['search'] != null) {
+            queryParameters['search'] = requestParameters['search'];
+        }
+
+        if (requestParameters['appId'] != null) {
+            queryParameters['appId'] = requestParameters['appId'];
+        }
+
+        if (requestParameters['appInstanceId'] != null) {
+            queryParameters['appInstanceId'] = requestParameters['appInstanceId'];
+        }
+
+        if (requestParameters['stackId'] != null) {
+            queryParameters['stackId'] = requestParameters['stackId'];
+        }
+
+        if (requestParameters['databaseId'] != null) {
+            queryParameters['databaseId'] = requestParameters['databaseId'];
+        }
+
+        if (requestParameters['clusterId'] != null) {
+            queryParameters['clusterId'] = requestParameters['clusterId'];
+        }
+
+        if (requestParameters['serviceId'] != null) {
+            queryParameters['serviceId'] = requestParameters['serviceId'];
+        }
+
+        if (requestParameters['integrationId'] != null) {
+            queryParameters['integrationId'] = requestParameters['integrationId'];
+        }
+
+        if (requestParameters['providerId'] != null) {
+            queryParameters['providerId'] = requestParameters['providerId'];
+        }
+
+        if (requestParameters['page'] != null) {
+            queryParameters['page'] = requestParameters['page'];
+        }
+
+        if (requestParameters['pageSize'] != null) {
+            queryParameters['pageSize'] = requestParameters['pageSize'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/tasks`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TasksResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * List tasks
+     */
+    async tasksGet(requestParameters: TasksGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TasksResponse> {
+        const response = await this.tasksGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Cancel task
+     */
+    async tasksIdCancelPostRaw(requestParameters: TasksIdCancelPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling tasksIdCancelPost().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/tasks/{id}/cancel`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Cancel task
+     */
+    async tasksIdCancelPost(requestParameters: TasksIdCancelPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.tasksIdCancelPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Get task
@@ -96,4 +333,65 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
         return await response.value();
     }
 
+    /**
+     * Repeat task
+     */
+    async tasksIdRepeatPostRaw(requestParameters: TasksIdRepeatPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling tasksIdRepeatPost().'
+            );
+        }
+
+        if (requestParameters['repeatTaskRequest'] == null) {
+            throw new runtime.RequiredError(
+                'repeatTaskRequest',
+                'Required parameter "repeatTaskRequest" was null or undefined when calling tasksIdRepeatPost().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/tasks/{id}/repeat`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: RepeatTaskRequestToJSON(requestParameters['repeatTaskRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Repeat task
+     */
+    async tasksIdRepeatPost(requestParameters: TasksIdRepeatPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.tasksIdRepeatPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
 }
+
+/**
+ * @export
+ */
+export const TasksGetScopeEnum = {
+    ProjectAndOrg: 'project_and_org',
+    OrgOnly: 'org_only',
+    UserOnly: 'user_only'
+} as const;
+export type TasksGetScopeEnum = typeof TasksGetScopeEnum[keyof typeof TasksGetScopeEnum];
