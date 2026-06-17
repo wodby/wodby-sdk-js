@@ -16,6 +16,10 @@
     "type": "git",
     "url": "git+https://github.com/wodby/wodby-sdk-js.git"
   },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "files": [
     "dist"
   ],

@@ -45,3 +45,9 @@ make build
 ```
 
 `make build` regenerates TypeScript sources under `src/src/`, installs npm dependencies from the lockfile, and compiles JavaScript plus declaration files into `dist/`.
+
+## Release
+
+Releases are published to npm from semver tags through GitHub Actions.
+
+For the first publish, add an `NPM_TOKEN` repository secret with publish access to the `@wodby` scope. After `@wodby/sdk` exists on npm, configure npm trusted publishing for `wodby/wodby-sdk-js` and workflow `.github/workflows/release.yml`, then remove the token secret.
