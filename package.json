@@ -25,7 +25,8 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "test": "node -e \"const sdk = require('./'); if (typeof sdk.Configuration !== 'function' || typeof sdk.OrgsApi !== 'function') throw new Error('Invalid package exports')\""
   },
   "devDependencies": {
     "typescript": "^5.9.3"
