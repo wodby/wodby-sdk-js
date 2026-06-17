@@ -2,6 +2,8 @@
 
 OPENAPI_GENERATOR_VER = v7.10.0
 OPENAPI_GENERATOR_IMAGE = openapitools/openapi-generator-cli:$(OPENAPI_GENERATOR_VER)
+UID ?= $(shell id -u)
+GID ?= $(shell id -g)
 
 default: build
 
@@ -10,6 +12,7 @@ build: clean codegen deps compile
 
 codegen:
 	docker run --rm \
+		-u "$(UID):$(GID)" \
 		-v "$(PWD)":/gen \
 		-w /gen \
 		"$(OPENAPI_GENERATOR_IMAGE)" generate \
