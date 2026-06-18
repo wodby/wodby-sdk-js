@@ -1,7 +1,7 @@
 {
   "name": "@wodby/sdk",
-  "version": "2.0.0",
-  "description": "Wodby API SDK for JavaScript and TypeScript",
+  "version": "4.0.0",
+  "description": "JavaScript and TypeScript SDK for the Wodby 2.0 Public API",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

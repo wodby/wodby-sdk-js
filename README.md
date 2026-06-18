@@ -1,6 +1,11 @@
-# Wodby SDK for JavaScript and TypeScript
+# Wodby 2.0 SDK for JavaScript and TypeScript
 
-Generated JavaScript and TypeScript SDK for the Wodby API.
+JavaScript and TypeScript SDK for the Wodby 2.0 Public API.
+
+## Package
+
+- [npm: `@wodby/sdk`](https://www.npmjs.com/package/@wodby/sdk)
+- npm package: `@wodby/sdk`
 
 ## Usage
 
