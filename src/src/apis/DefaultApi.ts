@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -14,6 +14,13 @@
 
 
 import * as runtime from '../runtime';
+import type {
+  ErrorResponse,
+} from '../models/index';
+import {
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
+} from '../models/index';
 
 /**
  * DefaultApi - interface
@@ -29,12 +36,12 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    openapiJsonGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    getOpenApiJsonRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
     /**
      * Get OpenAPI JSON
      */
-    openapiJsonGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    getOpenApiJson(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
      * 
@@ -43,12 +50,12 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    openapiYamlGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
+    getOpenApiYamlRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
 
     /**
      * Get OpenAPI YAML
      */
-    openapiYamlGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
+    getOpenApiYaml(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
 
 }
 
@@ -60,7 +67,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * Get OpenAPI JSON
      */
-    async openapiJsonGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+    async getOpenApiJsonRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -78,15 +85,15 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * Get OpenAPI JSON
      */
-    async openapiJsonGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.openapiJsonGetRaw(initOverrides);
+    async getOpenApiJson(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.getOpenApiJsonRaw(initOverrides);
         return await response.value();
     }
 
     /**
      * Get OpenAPI YAML
      */
-    async openapiYamlGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+    async getOpenApiYamlRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -108,8 +115,8 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * Get OpenAPI YAML
      */
-    async openapiYamlGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
-        const response = await this.openapiYamlGetRaw(initOverrides);
+    async getOpenApiYaml(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.getOpenApiYamlRaw(initOverrides);
         return await response.value();
     }
 

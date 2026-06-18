@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -32,7 +32,7 @@ export interface DeploymentFromCIInput {
      * @type {number}
      * @memberof DeploymentFromCIInput
      */
-    appBuildID: number;
+    appBuildId: number;
     /**
      * 
      * @type {Array<ServiceDeploymentInput>}
@@ -51,7 +51,7 @@ export interface DeploymentFromCIInput {
  * Check if a given object implements the DeploymentFromCIInput interface.
  */
 export function instanceOfDeploymentFromCIInput(value: object): value is DeploymentFromCIInput {
-    if (!('appBuildID' in value) || value['appBuildID'] === undefined) return false;
+    if (!('appBuildId' in value) || value['appBuildId'] === undefined) return false;
     if (!('services' in value) || value['services'] === undefined) return false;
     if (!('skipPostDeployment' in value) || value['skipPostDeployment'] === undefined) return false;
     return true;
@@ -67,7 +67,7 @@ export function DeploymentFromCIInputFromJSONTyped(json: any, ignoreDiscriminato
     }
     return {
         
-        'appBuildID': json['appBuildID'],
+        'appBuildId': json['appBuildId'],
         'services': ((json['services'] as Array<any>).map(ServiceDeploymentInputFromJSON)),
         'skipPostDeployment': json['skipPostDeployment'],
     };
@@ -84,7 +84,7 @@ export function DeploymentFromCIInputToJSONTyped(value?: DeploymentFromCIInput |
 
     return {
         
-        'appBuildID': value['appBuildID'],
+        'appBuildId': value['appBuildId'],
         'services': ((value['services'] as Array<any>).map(ServiceDeploymentInputToJSON)),
         'skipPostDeployment': value['skipPostDeployment'],
     };

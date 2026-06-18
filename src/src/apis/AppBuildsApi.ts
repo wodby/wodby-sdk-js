@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -20,6 +20,7 @@ import type {
   AppDeployment,
   CreateBuildRequest,
   DockerRegistryCredentials,
+  ErrorResponse,
   NewBuildFromCIInput,
 } from '../models/index';
 import {
@@ -33,38 +34,40 @@ import {
     CreateBuildRequestToJSON,
     DockerRegistryCredentialsFromJSON,
     DockerRegistryCredentialsToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     NewBuildFromCIInputFromJSON,
     NewBuildFromCIInputToJSON,
 } from '../models/index';
 
-export interface AppBuildsFromCiPostRequest {
+export interface CreateAppBuildRequest {
+    createBuildRequest: CreateBuildRequest;
+}
+
+export interface CreateAppBuildFromCiRequest {
     newBuildFromCIInput: NewBuildFromCIInput;
 }
 
-export interface AppBuildsGetRequest {
+export interface DeployAppBuildRequest {
+    id: number;
+}
+
+export interface GetAppBuildRequest {
+    id: number;
+}
+
+export interface GetAppBuildDockerRegistryCredentialsRequest {
+    id: number;
+}
+
+export interface ListAppBuildsRequest {
     appInstanceId: number;
     page?: number;
     pageSize?: number;
 }
 
-export interface AppBuildsIdDeployPostRequest {
+export interface VoidAppBuildRequest {
     id: number;
-}
-
-export interface AppBuildsIdDockerRegistryCredentialsGetRequest {
-    id: number;
-}
-
-export interface AppBuildsIdGetRequest {
-    id: number;
-}
-
-export interface AppBuildsIdVoidPostRequest {
-    id: number;
-}
-
-export interface AppBuildsPostRequest {
-    createBuildRequest: CreateBuildRequest;
 }
 
 /**
@@ -76,18 +79,78 @@ export interface AppBuildsPostRequest {
 export interface AppBuildsApiInterface {
     /**
      * 
+     * @summary Create build
+     * @param {CreateBuildRequest} createBuildRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppBuildsApiInterface
+     */
+    createAppBuildRaw(requestParameters: CreateAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppBuild>>>;
+
+    /**
+     * Create build
+     */
+    createAppBuild(requestParameters: CreateAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppBuild>>;
+
+    /**
+     * 
      * @summary Create build from CI
      * @param {NewBuildFromCIInput} newBuildFromCIInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AppBuildsApiInterface
      */
-    appBuildsFromCiPostRaw(requestParameters: AppBuildsFromCiPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>>;
+    createAppBuildFromCiRaw(requestParameters: CreateAppBuildFromCiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>>;
 
     /**
      * Create build from CI
      */
-    appBuildsFromCiPost(requestParameters: AppBuildsFromCiPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild>;
+    createAppBuildFromCi(requestParameters: CreateAppBuildFromCiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild>;
+
+    /**
+     * 
+     * @summary Deploy build
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppBuildsApiInterface
+     */
+    deployAppBuildRaw(requestParameters: DeployAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
+
+    /**
+     * Deploy build
+     */
+    deployAppBuild(requestParameters: DeployAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
+
+    /**
+     * 
+     * @summary Get build
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppBuildsApiInterface
+     */
+    getAppBuildRaw(requestParameters: GetAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>>;
+
+    /**
+     * Get build
+     */
+    getAppBuild(requestParameters: GetAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild>;
+
+    /**
+     * 
+     * @summary Get Docker registry credentials for build
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppBuildsApiInterface
+     */
+    getAppBuildDockerRegistryCredentialsRaw(requestParameters: GetAppBuildDockerRegistryCredentialsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DockerRegistryCredentials>>;
+
+    /**
+     * Get Docker registry credentials for build
+     */
+    getAppBuildDockerRegistryCredentials(requestParameters: GetAppBuildDockerRegistryCredentialsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockerRegistryCredentials>;
 
     /**
      * 
@@ -99,57 +162,12 @@ export interface AppBuildsApiInterface {
      * @throws {RequiredError}
      * @memberof AppBuildsApiInterface
      */
-    appBuildsGetRaw(requestParameters: AppBuildsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuildsResponse>>;
+    listAppBuildsRaw(requestParameters: ListAppBuildsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuildsResponse>>;
 
     /**
      * List app builds
      */
-    appBuildsGet(requestParameters: AppBuildsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildsResponse>;
-
-    /**
-     * 
-     * @summary Deploy build
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppBuildsApiInterface
-     */
-    appBuildsIdDeployPostRaw(requestParameters: AppBuildsIdDeployPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
-
-    /**
-     * Deploy build
-     */
-    appBuildsIdDeployPost(requestParameters: AppBuildsIdDeployPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
-
-    /**
-     * 
-     * @summary Get Docker registry credentials for build
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppBuildsApiInterface
-     */
-    appBuildsIdDockerRegistryCredentialsGetRaw(requestParameters: AppBuildsIdDockerRegistryCredentialsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DockerRegistryCredentials>>;
-
-    /**
-     * Get Docker registry credentials for build
-     */
-    appBuildsIdDockerRegistryCredentialsGet(requestParameters: AppBuildsIdDockerRegistryCredentialsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockerRegistryCredentials>;
-
-    /**
-     * 
-     * @summary Get build
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppBuildsApiInterface
-     */
-    appBuildsIdGetRaw(requestParameters: AppBuildsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>>;
-
-    /**
-     * Get build
-     */
-    appBuildsIdGet(requestParameters: AppBuildsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild>;
+    listAppBuilds(requestParameters: ListAppBuildsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildsResponse>;
 
     /**
      * 
@@ -159,27 +177,12 @@ export interface AppBuildsApiInterface {
      * @throws {RequiredError}
      * @memberof AppBuildsApiInterface
      */
-    appBuildsIdVoidPostRaw(requestParameters: AppBuildsIdVoidPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>>;
+    voidAppBuildRaw(requestParameters: VoidAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>>;
 
     /**
      * Void build images
      */
-    appBuildsIdVoidPost(requestParameters: AppBuildsIdVoidPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild>;
-
-    /**
-     * 
-     * @summary Create build
-     * @param {CreateBuildRequest} createBuildRequest 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppBuildsApiInterface
-     */
-    appBuildsPostRaw(requestParameters: AppBuildsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppBuild>>>;
-
-    /**
-     * Create build
-     */
-    appBuildsPost(requestParameters: AppBuildsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppBuild>>;
+    voidAppBuild(requestParameters: VoidAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild>;
 
 }
 
@@ -189,13 +192,57 @@ export interface AppBuildsApiInterface {
 export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterface {
 
     /**
+     * Create build
+     */
+    async createAppBuildRaw(requestParameters: CreateAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppBuild>>> {
+        if (requestParameters['createBuildRequest'] == null) {
+            throw new runtime.RequiredError(
+                'createBuildRequest',
+                'Required parameter "createBuildRequest" was null or undefined when calling createAppBuild().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-builds`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateBuildRequestToJSON(requestParameters['createBuildRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppBuildFromJSON));
+    }
+
+    /**
+     * Create build
+     */
+    async createAppBuild(requestParameters: CreateAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppBuild>> {
+        const response = await this.createAppBuildRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Create build from CI
      */
-    async appBuildsFromCiPostRaw(requestParameters: AppBuildsFromCiPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>> {
+    async createAppBuildFromCiRaw(requestParameters: CreateAppBuildFromCiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>> {
         if (requestParameters['newBuildFromCIInput'] == null) {
             throw new runtime.RequiredError(
                 'newBuildFromCIInput',
-                'Required parameter "newBuildFromCIInput" was null or undefined when calling appBuildsFromCiPost().'
+                'Required parameter "newBuildFromCIInput" was null or undefined when calling createAppBuildFromCi().'
             );
         }
 
@@ -227,19 +274,142 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     /**
      * Create build from CI
      */
-    async appBuildsFromCiPost(requestParameters: AppBuildsFromCiPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild> {
-        const response = await this.appBuildsFromCiPostRaw(requestParameters, initOverrides);
+    async createAppBuildFromCi(requestParameters: CreateAppBuildFromCiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild> {
+        const response = await this.createAppBuildFromCiRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deploy build
+     */
+    async deployAppBuildRaw(requestParameters: DeployAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deployAppBuild().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-builds/{id}/deploy`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppDeploymentFromJSON(jsonValue));
+    }
+
+    /**
+     * Deploy build
+     */
+    async deployAppBuild(requestParameters: DeployAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
+        const response = await this.deployAppBuildRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get build
+     */
+    async getAppBuildRaw(requestParameters: GetAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppBuild().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-builds/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppBuildFromJSON(jsonValue));
+    }
+
+    /**
+     * Get build
+     */
+    async getAppBuild(requestParameters: GetAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild> {
+        const response = await this.getAppBuildRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get Docker registry credentials for build
+     */
+    async getAppBuildDockerRegistryCredentialsRaw(requestParameters: GetAppBuildDockerRegistryCredentialsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DockerRegistryCredentials>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppBuildDockerRegistryCredentials().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-builds/{id}/docker-registry-credentials`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DockerRegistryCredentialsFromJSON(jsonValue));
+    }
+
+    /**
+     * Get Docker registry credentials for build
+     */
+    async getAppBuildDockerRegistryCredentials(requestParameters: GetAppBuildDockerRegistryCredentialsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockerRegistryCredentials> {
+        const response = await this.getAppBuildDockerRegistryCredentialsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * List app builds
      */
-    async appBuildsGetRaw(requestParameters: AppBuildsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuildsResponse>> {
+    async listAppBuildsRaw(requestParameters: ListAppBuildsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuildsResponse>> {
         if (requestParameters['appInstanceId'] == null) {
             throw new runtime.RequiredError(
                 'appInstanceId',
-                'Required parameter "appInstanceId" was null or undefined when calling appBuildsGet().'
+                'Required parameter "appInstanceId" was null or undefined when calling listAppBuilds().'
             );
         }
 
@@ -280,142 +450,19 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     /**
      * List app builds
      */
-    async appBuildsGet(requestParameters: AppBuildsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildsResponse> {
-        const response = await this.appBuildsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Deploy build
-     */
-    async appBuildsIdDeployPostRaw(requestParameters: AppBuildsIdDeployPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling appBuildsIdDeployPost().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/app-builds/{id}/deploy`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppDeploymentFromJSON(jsonValue));
-    }
-
-    /**
-     * Deploy build
-     */
-    async appBuildsIdDeployPost(requestParameters: AppBuildsIdDeployPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
-        const response = await this.appBuildsIdDeployPostRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Get Docker registry credentials for build
-     */
-    async appBuildsIdDockerRegistryCredentialsGetRaw(requestParameters: AppBuildsIdDockerRegistryCredentialsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DockerRegistryCredentials>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling appBuildsIdDockerRegistryCredentialsGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/app-builds/{id}/docker-registry-credentials`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => DockerRegistryCredentialsFromJSON(jsonValue));
-    }
-
-    /**
-     * Get Docker registry credentials for build
-     */
-    async appBuildsIdDockerRegistryCredentialsGet(requestParameters: AppBuildsIdDockerRegistryCredentialsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockerRegistryCredentials> {
-        const response = await this.appBuildsIdDockerRegistryCredentialsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Get build
-     */
-    async appBuildsIdGetRaw(requestParameters: AppBuildsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling appBuildsIdGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/app-builds/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppBuildFromJSON(jsonValue));
-    }
-
-    /**
-     * Get build
-     */
-    async appBuildsIdGet(requestParameters: AppBuildsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild> {
-        const response = await this.appBuildsIdGetRaw(requestParameters, initOverrides);
+    async listAppBuilds(requestParameters: ListAppBuildsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildsResponse> {
+        const response = await this.listAppBuildsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Void build images
      */
-    async appBuildsIdVoidPostRaw(requestParameters: AppBuildsIdVoidPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>> {
+    async voidAppBuildRaw(requestParameters: VoidAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling appBuildsIdVoidPost().'
+                'Required parameter "id" was null or undefined when calling voidAppBuild().'
             );
         }
 
@@ -444,52 +491,8 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     /**
      * Void build images
      */
-    async appBuildsIdVoidPost(requestParameters: AppBuildsIdVoidPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild> {
-        const response = await this.appBuildsIdVoidPostRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Create build
-     */
-    async appBuildsPostRaw(requestParameters: AppBuildsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppBuild>>> {
-        if (requestParameters['createBuildRequest'] == null) {
-            throw new runtime.RequiredError(
-                'createBuildRequest',
-                'Required parameter "createBuildRequest" was null or undefined when calling appBuildsPost().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/app-builds`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: CreateBuildRequestToJSON(requestParameters['createBuildRequest']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppBuildFromJSON));
-    }
-
-    /**
-     * Create build
-     */
-    async appBuildsPost(requestParameters: AppBuildsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppBuild>> {
-        const response = await this.appBuildsPostRaw(requestParameters, initOverrides);
+    async voidAppBuild(requestParameters: VoidAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild> {
+        const response = await this.voidAppBuildRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -32,13 +32,13 @@ export interface NewIntegrationInput {
      * @type {number}
      * @memberof NewIntegrationInput
      */
-    orgID: number;
+    orgId: number;
     /**
      * 
      * @type {number}
      * @memberof NewIntegrationInput
      */
-    providerID: number;
+    providerId: number;
     /**
      * 
      * @type {string}
@@ -68,7 +68,7 @@ export interface NewIntegrationInput {
      * @type {number}
      * @memberof NewIntegrationInput
      */
-    projectID?: number | null;
+    projectId?: number | null;
     /**
      * 
      * @type {Array<FieldInput>}
@@ -87,8 +87,8 @@ export interface NewIntegrationInput {
  * Check if a given object implements the NewIntegrationInput interface.
  */
 export function instanceOfNewIntegrationInput(value: object): value is NewIntegrationInput {
-    if (!('orgID' in value) || value['orgID'] === undefined) return false;
-    if (!('providerID' in value) || value['providerID'] === undefined) return false;
+    if (!('orgId' in value) || value['orgId'] === undefined) return false;
+    if (!('providerId' in value) || value['providerId'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('title' in value) || value['title'] === undefined) return false;
     if (!('kinds' in value) || value['kinds'] === undefined) return false;
@@ -105,13 +105,13 @@ export function NewIntegrationInputFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'orgID': json['orgID'],
-        'providerID': json['providerID'],
+        'orgId': json['orgId'],
+        'providerId': json['providerId'],
         'name': json['name'],
         'title': json['title'],
         'kinds': json['kinds'],
         'auth': json['auth'] == null ? undefined : json['auth'],
-        'projectID': json['projectID'] == null ? undefined : json['projectID'],
+        'projectId': json['projectId'] == null ? undefined : json['projectId'],
         'fieldsInput': json['fieldsInput'] == null ? undefined : ((json['fieldsInput'] as Array<any>).map(FieldInputFromJSON)),
         'scope': json['scope'] == null ? undefined : json['scope'],
     };
@@ -128,13 +128,13 @@ export function NewIntegrationInputToJSONTyped(value?: NewIntegrationInput | nul
 
     return {
         
-        'orgID': value['orgID'],
-        'providerID': value['providerID'],
+        'orgId': value['orgId'],
+        'providerId': value['providerId'],
         'name': value['name'],
         'title': value['title'],
         'kinds': value['kinds'],
         'auth': value['auth'],
-        'projectID': value['projectID'],
+        'projectId': value['projectId'],
         'fieldsInput': value['fieldsInput'] == null ? undefined : ((value['fieldsInput'] as Array<any>).map(FieldInputToJSON)),
         'scope': value['scope'],
     };

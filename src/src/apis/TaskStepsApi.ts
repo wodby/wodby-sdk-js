@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -15,21 +15,24 @@
 
 import * as runtime from '../runtime';
 import type {
+  ErrorResponse,
   TaskStepLogs,
   URLResponse,
 } from '../models/index';
 import {
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     TaskStepLogsFromJSON,
     TaskStepLogsToJSON,
     URLResponseFromJSON,
     URLResponseToJSON,
 } from '../models/index';
 
-export interface TaskStepsIdLogUrlGetRequest {
+export interface GetTaskStepLogUrlRequest {
     id: number;
 }
 
-export interface TaskStepsIdLogsGetRequest {
+export interface GetTaskStepLogsRequest {
     id: number;
 }
 
@@ -48,12 +51,12 @@ export interface TaskStepsApiInterface {
      * @throws {RequiredError}
      * @memberof TaskStepsApiInterface
      */
-    taskStepsIdLogUrlGetRaw(requestParameters: TaskStepsIdLogUrlGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<URLResponse>>;
+    getTaskStepLogUrlRaw(requestParameters: GetTaskStepLogUrlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<URLResponse>>;
 
     /**
      * Get task step log URL
      */
-    taskStepsIdLogUrlGet(requestParameters: TaskStepsIdLogUrlGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<URLResponse>;
+    getTaskStepLogUrl(requestParameters: GetTaskStepLogUrlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<URLResponse>;
 
     /**
      * 
@@ -63,12 +66,12 @@ export interface TaskStepsApiInterface {
      * @throws {RequiredError}
      * @memberof TaskStepsApiInterface
      */
-    taskStepsIdLogsGetRaw(requestParameters: TaskStepsIdLogsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TaskStepLogs>>;
+    getTaskStepLogsRaw(requestParameters: GetTaskStepLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TaskStepLogs>>;
 
     /**
      * Get task step logs
      */
-    taskStepsIdLogsGet(requestParameters: TaskStepsIdLogsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TaskStepLogs>;
+    getTaskStepLogs(requestParameters: GetTaskStepLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TaskStepLogs>;
 
 }
 
@@ -80,11 +83,11 @@ export class TaskStepsApi extends runtime.BaseAPI implements TaskStepsApiInterfa
     /**
      * Get task step log URL
      */
-    async taskStepsIdLogUrlGetRaw(requestParameters: TaskStepsIdLogUrlGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<URLResponse>> {
+    async getTaskStepLogUrlRaw(requestParameters: GetTaskStepLogUrlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<URLResponse>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling taskStepsIdLogUrlGet().'
+                'Required parameter "id" was null or undefined when calling getTaskStepLogUrl().'
             );
         }
 
@@ -113,19 +116,19 @@ export class TaskStepsApi extends runtime.BaseAPI implements TaskStepsApiInterfa
     /**
      * Get task step log URL
      */
-    async taskStepsIdLogUrlGet(requestParameters: TaskStepsIdLogUrlGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<URLResponse> {
-        const response = await this.taskStepsIdLogUrlGetRaw(requestParameters, initOverrides);
+    async getTaskStepLogUrl(requestParameters: GetTaskStepLogUrlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<URLResponse> {
+        const response = await this.getTaskStepLogUrlRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Get task step logs
      */
-    async taskStepsIdLogsGetRaw(requestParameters: TaskStepsIdLogsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TaskStepLogs>> {
+    async getTaskStepLogsRaw(requestParameters: GetTaskStepLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TaskStepLogs>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling taskStepsIdLogsGet().'
+                'Required parameter "id" was null or undefined when calling getTaskStepLogs().'
             );
         }
 
@@ -154,8 +157,8 @@ export class TaskStepsApi extends runtime.BaseAPI implements TaskStepsApiInterfa
     /**
      * Get task step logs
      */
-    async taskStepsIdLogsGet(requestParameters: TaskStepsIdLogsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TaskStepLogs> {
-        const response = await this.taskStepsIdLogsGetRaw(requestParameters, initOverrides);
+    async getTaskStepLogs(requestParameters: GetTaskStepLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TaskStepLogs> {
+        const response = await this.getTaskStepLogsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

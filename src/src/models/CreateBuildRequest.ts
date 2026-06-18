@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -14,29 +14,24 @@
 
 import { mapValues } from '../runtime';
 /**
- * Specify either appServiceId for one service or appServiceIds for a multi-service build.
+ * App service IDs to build.
  * @export
  * @interface CreateBuildRequest
  */
 export interface CreateBuildRequest {
     /**
      * 
-     * @type {number}
-     * @memberof CreateBuildRequest
-     */
-    appServiceId?: number;
-    /**
-     * 
      * @type {Array<number>}
      * @memberof CreateBuildRequest
      */
-    appServiceIds?: Array<number>;
+    appServiceIds: Array<number>;
 }
 
 /**
  * Check if a given object implements the CreateBuildRequest interface.
  */
 export function instanceOfCreateBuildRequest(value: object): value is CreateBuildRequest {
+    if (!('appServiceIds' in value) || value['appServiceIds'] === undefined) return false;
     return true;
 }
 
@@ -50,8 +45,7 @@ export function CreateBuildRequestFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'appServiceId': json['appServiceId'] == null ? undefined : json['appServiceId'],
-        'appServiceIds': json['appServiceIds'] == null ? undefined : json['appServiceIds'],
+        'appServiceIds': json['appServiceIds'],
     };
 }
 
@@ -66,7 +60,6 @@ export function CreateBuildRequestToJSONTyped(value?: CreateBuildRequest | null,
 
     return {
         
-        'appServiceId': value['appServiceId'],
         'appServiceIds': value['appServiceIds'],
     };
 }

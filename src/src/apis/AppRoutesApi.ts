@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   AppRoute,
+  ErrorResponse,
   NewAppRouteInput,
   OperationResult,
   UpdateAppRouteInput,
@@ -23,6 +24,8 @@ import type {
 import {
     AppRouteFromJSON,
     AppRouteToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     NewAppRouteInputFromJSON,
     NewAppRouteInputToJSON,
     OperationResultFromJSON,
@@ -31,25 +34,25 @@ import {
     UpdateAppRouteInputToJSON,
 } from '../models/index';
 
-export interface AppRoutesGetRequest {
+export interface CreateAppRouteRequest {
+    newAppRouteInput: NewAppRouteInput;
+}
+
+export interface DeleteAppRouteRequest {
+    id: number;
+}
+
+export interface GetAppRouteRequest {
+    id: number;
+}
+
+export interface ListAppRoutesRequest {
     appInstanceId: number;
 }
 
-export interface AppRoutesIdDeleteRequest {
-    id: number;
-}
-
-export interface AppRoutesIdGetRequest {
-    id: number;
-}
-
-export interface AppRoutesIdPutRequest {
+export interface UpdateAppRouteRequest {
     id: number;
     updateAppRouteInput: UpdateAppRouteInput;
-}
-
-export interface AppRoutesPostRequest {
-    newAppRouteInput: NewAppRouteInput;
 }
 
 /**
@@ -61,18 +64,18 @@ export interface AppRoutesPostRequest {
 export interface AppRoutesApiInterface {
     /**
      * 
-     * @summary List app routes
-     * @param {number} appInstanceId 
+     * @summary Create app route
+     * @param {NewAppRouteInput} newAppRouteInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AppRoutesApiInterface
      */
-    appRoutesGetRaw(requestParameters: AppRoutesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppRoute>>>;
+    createAppRouteRaw(requestParameters: CreateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>>;
 
     /**
-     * List app routes
+     * Create app route
      */
-    appRoutesGet(requestParameters: AppRoutesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppRoute>>;
+    createAppRoute(requestParameters: CreateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute>;
 
     /**
      * 
@@ -82,12 +85,12 @@ export interface AppRoutesApiInterface {
      * @throws {RequiredError}
      * @memberof AppRoutesApiInterface
      */
-    appRoutesIdDeleteRaw(requestParameters: AppRoutesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+    deleteAppRouteRaw(requestParameters: DeleteAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
      * Delete app route
      */
-    appRoutesIdDelete(requestParameters: AppRoutesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+    deleteAppRoute(requestParameters: DeleteAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * 
@@ -97,12 +100,27 @@ export interface AppRoutesApiInterface {
      * @throws {RequiredError}
      * @memberof AppRoutesApiInterface
      */
-    appRoutesIdGetRaw(requestParameters: AppRoutesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>>;
+    getAppRouteRaw(requestParameters: GetAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>>;
 
     /**
      * Get app route
      */
-    appRoutesIdGet(requestParameters: AppRoutesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute>;
+    getAppRoute(requestParameters: GetAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute>;
+
+    /**
+     * 
+     * @summary List app routes
+     * @param {number} appInstanceId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppRoutesApiInterface
+     */
+    listAppRoutesRaw(requestParameters: ListAppRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppRoute>>>;
+
+    /**
+     * List app routes
+     */
+    listAppRoutes(requestParameters: ListAppRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppRoute>>;
 
     /**
      * 
@@ -113,27 +131,12 @@ export interface AppRoutesApiInterface {
      * @throws {RequiredError}
      * @memberof AppRoutesApiInterface
      */
-    appRoutesIdPutRaw(requestParameters: AppRoutesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>>;
+    updateAppRouteRaw(requestParameters: UpdateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>>;
 
     /**
      * Update app route
      */
-    appRoutesIdPut(requestParameters: AppRoutesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute>;
-
-    /**
-     * 
-     * @summary Create app route
-     * @param {NewAppRouteInput} newAppRouteInput 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppRoutesApiInterface
-     */
-    appRoutesPostRaw(requestParameters: AppRoutesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>>;
-
-    /**
-     * Create app route
-     */
-    appRoutesPost(requestParameters: AppRoutesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute>;
+    updateAppRoute(requestParameters: UpdateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute>;
 
 }
 
@@ -143,13 +146,139 @@ export interface AppRoutesApiInterface {
 export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterface {
 
     /**
+     * Create app route
+     */
+    async createAppRouteRaw(requestParameters: CreateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>> {
+        if (requestParameters['newAppRouteInput'] == null) {
+            throw new runtime.RequiredError(
+                'newAppRouteInput',
+                'Required parameter "newAppRouteInput" was null or undefined when calling createAppRoute().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-routes`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewAppRouteInputToJSON(requestParameters['newAppRouteInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppRouteFromJSON(jsonValue));
+    }
+
+    /**
+     * Create app route
+     */
+    async createAppRoute(requestParameters: CreateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute> {
+        const response = await this.createAppRouteRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Delete app route
+     */
+    async deleteAppRouteRaw(requestParameters: DeleteAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteAppRoute().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-routes/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Delete app route
+     */
+    async deleteAppRoute(requestParameters: DeleteAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteAppRouteRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get app route
+     */
+    async getAppRouteRaw(requestParameters: GetAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppRoute().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-routes/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppRouteFromJSON(jsonValue));
+    }
+
+    /**
+     * Get app route
+     */
+    async getAppRoute(requestParameters: GetAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute> {
+        const response = await this.getAppRouteRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * List app routes
      */
-    async appRoutesGetRaw(requestParameters: AppRoutesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppRoute>>> {
+    async listAppRoutesRaw(requestParameters: ListAppRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppRoute>>> {
         if (requestParameters['appInstanceId'] == null) {
             throw new runtime.RequiredError(
                 'appInstanceId',
-                'Required parameter "appInstanceId" was null or undefined when calling appRoutesGet().'
+                'Required parameter "appInstanceId" was null or undefined when calling listAppRoutes().'
             );
         }
 
@@ -182,108 +311,26 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
     /**
      * List app routes
      */
-    async appRoutesGet(requestParameters: AppRoutesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppRoute>> {
-        const response = await this.appRoutesGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Delete app route
-     */
-    async appRoutesIdDeleteRaw(requestParameters: AppRoutesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling appRoutesIdDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/app-routes/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
-    }
-
-    /**
-     * Delete app route
-     */
-    async appRoutesIdDelete(requestParameters: AppRoutesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
-        const response = await this.appRoutesIdDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Get app route
-     */
-    async appRoutesIdGetRaw(requestParameters: AppRoutesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling appRoutesIdGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/app-routes/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppRouteFromJSON(jsonValue));
-    }
-
-    /**
-     * Get app route
-     */
-    async appRoutesIdGet(requestParameters: AppRoutesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute> {
-        const response = await this.appRoutesIdGetRaw(requestParameters, initOverrides);
+    async listAppRoutes(requestParameters: ListAppRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppRoute>> {
+        const response = await this.listAppRoutesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Update app route
      */
-    async appRoutesIdPutRaw(requestParameters: AppRoutesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>> {
+    async updateAppRouteRaw(requestParameters: UpdateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling appRoutesIdPut().'
+                'Required parameter "id" was null or undefined when calling updateAppRoute().'
             );
         }
 
         if (requestParameters['updateAppRouteInput'] == null) {
             throw new runtime.RequiredError(
                 'updateAppRouteInput',
-                'Required parameter "updateAppRouteInput" was null or undefined when calling appRoutesIdPut().'
+                'Required parameter "updateAppRouteInput" was null or undefined when calling updateAppRoute().'
             );
         }
 
@@ -315,52 +362,8 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
     /**
      * Update app route
      */
-    async appRoutesIdPut(requestParameters: AppRoutesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute> {
-        const response = await this.appRoutesIdPutRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Create app route
-     */
-    async appRoutesPostRaw(requestParameters: AppRoutesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>> {
-        if (requestParameters['newAppRouteInput'] == null) {
-            throw new runtime.RequiredError(
-                'newAppRouteInput',
-                'Required parameter "newAppRouteInput" was null or undefined when calling appRoutesPost().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/app-routes`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: NewAppRouteInputToJSON(requestParameters['newAppRouteInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppRouteFromJSON(jsonValue));
-    }
-
-    /**
-     * Create app route
-     */
-    async appRoutesPost(requestParameters: AppRoutesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute> {
-        const response = await this.appRoutesPostRaw(requestParameters, initOverrides);
+    async updateAppRoute(requestParameters: UpdateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute> {
+        const response = await this.updateAppRouteRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

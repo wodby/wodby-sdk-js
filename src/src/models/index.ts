@@ -27,6 +27,7 @@ export * from './DatabaseVersion';
 export * from './DeploymentFromCIInput';
 export * from './DockerRegistryCredentials';
 export * from './Env';
+export * from './ErrorResponse';
 export * from './FieldInput';
 export * from './Import';
 export * from './ImportFromInput';

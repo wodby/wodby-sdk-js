@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -32,7 +32,7 @@ export interface NewAppRouteInput {
      * @type {number}
      * @memberof NewAppRouteInput
      */
-    appServiceID: number;
+    appServiceId: number;
     /**
      * 
      * @type {boolean}
@@ -122,7 +122,7 @@ export interface NewAppRouteInput {
      * @type {number}
      * @memberof NewAppRouteInput
      */
-    authID?: number | null;
+    authId?: number | null;
     /**
      * 
      * @type {Array<AppEndpointOptionInput>}
@@ -155,7 +155,7 @@ export type NewAppRouteInputActionEnum = typeof NewAppRouteInputActionEnum[keyof
  * Check if a given object implements the NewAppRouteInput interface.
  */
 export function instanceOfNewAppRouteInput(value: object): value is NewAppRouteInput {
-    if (!('appServiceID' in value) || value['appServiceID'] === undefined) return false;
+    if (!('appServiceId' in value) || value['appServiceId'] === undefined) return false;
     if (!('main' in value) || value['main'] === undefined) return false;
     if (!('primary' in value) || value['primary'] === undefined) return false;
     if (!('port' in value) || value['port'] === undefined) return false;
@@ -173,7 +173,7 @@ export function NewAppRouteInputFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'appServiceID': json['appServiceID'],
+        'appServiceId': json['appServiceId'],
         'main': json['main'],
         'primary': json['primary'],
         'port': json['port'],
@@ -188,7 +188,7 @@ export function NewAppRouteInputFromJSONTyped(json: any, ignoreDiscriminator: bo
         'letsencrypt': json['letsencrypt'] == null ? undefined : json['letsencrypt'],
         'authLogin': json['authLogin'] == null ? undefined : json['authLogin'],
         'authPassword': json['authPassword'] == null ? undefined : json['authPassword'],
-        'authID': json['authID'] == null ? undefined : json['authID'],
+        'authId': json['authId'] == null ? undefined : json['authId'],
         'options': json['options'] == null ? undefined : ((json['options'] as Array<any>).map(AppEndpointOptionInputFromJSON)),
     };
 }
@@ -204,7 +204,7 @@ export function NewAppRouteInputToJSONTyped(value?: NewAppRouteInput | null, ign
 
     return {
         
-        'appServiceID': value['appServiceID'],
+        'appServiceId': value['appServiceId'],
         'main': value['main'],
         'primary': value['primary'],
         'port': value['port'],
@@ -219,7 +219,7 @@ export function NewAppRouteInputToJSONTyped(value?: NewAppRouteInput | null, ign
         'letsencrypt': value['letsencrypt'],
         'authLogin': value['authLogin'],
         'authPassword': value['authPassword'],
-        'authID': value['authID'],
+        'authId': value['authId'],
         'options': value['options'] == null ? undefined : ((value['options'] as Array<any>).map(AppEndpointOptionInputToJSON)),
     };
 }

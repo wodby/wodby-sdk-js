@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   CreateOrgRequest,
+  ErrorResponse,
   OperationResult,
   Org,
   UpdateOrgRequest,
@@ -23,6 +24,8 @@ import type {
 import {
     CreateOrgRequestFromJSON,
     CreateOrgRequestToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
     OrgFromJSON,
@@ -31,17 +34,21 @@ import {
     UpdateOrgRequestToJSON,
 } from '../models/index';
 
-export interface OrgsIdDeleteRequest {
+export interface CreateOrgOperationRequest {
+    createOrgRequest: CreateOrgRequest;
+}
+
+export interface DeleteOrgRequest {
     id: number;
 }
 
-export interface OrgsIdPutRequest {
+export interface GetOrgRequest {
+    id: number;
+}
+
+export interface UpdateOrgOperationRequest {
     id: number;
     updateOrgRequest: UpdateOrgRequest;
-}
-
-export interface OrgsPostRequest {
-    createOrgRequest: CreateOrgRequest;
 }
 
 /**
@@ -53,17 +60,18 @@ export interface OrgsPostRequest {
 export interface OrgsApiInterface {
     /**
      * 
-     * @summary List orgs
+     * @summary Create org
+     * @param {CreateOrgRequest} createOrgRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof OrgsApiInterface
      */
-    orgsGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Org>>>;
+    createOrgRaw(requestParameters: CreateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>>;
 
     /**
-     * List orgs
+     * Create org
      */
-    orgsGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Org>>;
+    createOrg(requestParameters: CreateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org>;
 
     /**
      * 
@@ -73,12 +81,41 @@ export interface OrgsApiInterface {
      * @throws {RequiredError}
      * @memberof OrgsApiInterface
      */
-    orgsIdDeleteRaw(requestParameters: OrgsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+    deleteOrgRaw(requestParameters: DeleteOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
      * Delete org
      */
-    orgsIdDelete(requestParameters: OrgsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+    deleteOrg(requestParameters: DeleteOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * 
+     * @summary Get org
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrgsApiInterface
+     */
+    getOrgRaw(requestParameters: GetOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>>;
+
+    /**
+     * Get org
+     */
+    getOrg(requestParameters: GetOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org>;
+
+    /**
+     * 
+     * @summary List orgs
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrgsApiInterface
+     */
+    listOrgsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Org>>>;
+
+    /**
+     * List orgs
+     */
+    listOrgs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Org>>;
 
     /**
      * 
@@ -89,27 +126,12 @@ export interface OrgsApiInterface {
      * @throws {RequiredError}
      * @memberof OrgsApiInterface
      */
-    orgsIdPutRaw(requestParameters: OrgsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>>;
+    updateOrgRaw(requestParameters: UpdateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>>;
 
     /**
      * Update org
      */
-    orgsIdPut(requestParameters: OrgsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org>;
-
-    /**
-     * 
-     * @summary Create org
-     * @param {CreateOrgRequest} createOrgRequest 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OrgsApiInterface
-     */
-    orgsPostRaw(requestParameters: OrgsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>>;
-
-    /**
-     * Create org
-     */
-    orgsPost(requestParameters: OrgsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org>;
+    updateOrg(requestParameters: UpdateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org>;
 
 }
 
@@ -119,139 +141,13 @@ export interface OrgsApiInterface {
 export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
 
     /**
-     * List orgs
-     */
-    async orgsGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Org>>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/orgs`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(OrgFromJSON));
-    }
-
-    /**
-     * List orgs
-     */
-    async orgsGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Org>> {
-        const response = await this.orgsGetRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Delete org
-     */
-    async orgsIdDeleteRaw(requestParameters: OrgsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling orgsIdDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/orgs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
-    }
-
-    /**
-     * Delete org
-     */
-    async orgsIdDelete(requestParameters: OrgsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
-        const response = await this.orgsIdDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Update org
-     */
-    async orgsIdPutRaw(requestParameters: OrgsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling orgsIdPut().'
-            );
-        }
-
-        if (requestParameters['updateOrgRequest'] == null) {
-            throw new runtime.RequiredError(
-                'updateOrgRequest',
-                'Required parameter "updateOrgRequest" was null or undefined when calling orgsIdPut().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/orgs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: UpdateOrgRequestToJSON(requestParameters['updateOrgRequest']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OrgFromJSON(jsonValue));
-    }
-
-    /**
-     * Update org
-     */
-    async orgsIdPut(requestParameters: OrgsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org> {
-        const response = await this.orgsIdPutRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Create org
      */
-    async orgsPostRaw(requestParameters: OrgsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>> {
+    async createOrgRaw(requestParameters: CreateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>> {
         if (requestParameters['createOrgRequest'] == null) {
             throw new runtime.RequiredError(
                 'createOrgRequest',
-                'Required parameter "createOrgRequest" was null or undefined when calling orgsPost().'
+                'Required parameter "createOrgRequest" was null or undefined when calling createOrg().'
             );
         }
 
@@ -283,8 +179,175 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
     /**
      * Create org
      */
-    async orgsPost(requestParameters: OrgsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org> {
-        const response = await this.orgsPostRaw(requestParameters, initOverrides);
+    async createOrg(requestParameters: CreateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org> {
+        const response = await this.createOrgRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Delete org
+     */
+    async deleteOrgRaw(requestParameters: DeleteOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteOrg().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/orgs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Delete org
+     */
+    async deleteOrg(requestParameters: DeleteOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteOrgRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get org
+     */
+    async getOrgRaw(requestParameters: GetOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getOrg().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/orgs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OrgFromJSON(jsonValue));
+    }
+
+    /**
+     * Get org
+     */
+    async getOrg(requestParameters: GetOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org> {
+        const response = await this.getOrgRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List orgs
+     */
+    async listOrgsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Org>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/orgs`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(OrgFromJSON));
+    }
+
+    /**
+     * List orgs
+     */
+    async listOrgs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Org>> {
+        const response = await this.listOrgsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Update org
+     */
+    async updateOrgRaw(requestParameters: UpdateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateOrg().'
+            );
+        }
+
+        if (requestParameters['updateOrgRequest'] == null) {
+            throw new runtime.RequiredError(
+                'updateOrgRequest',
+                'Required parameter "updateOrgRequest" was null or undefined when calling updateOrg().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/orgs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateOrgRequestToJSON(requestParameters['updateOrgRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OrgFromJSON(jsonValue));
+    }
+
+    /**
+     * Update org
+     */
+    async updateOrg(requestParameters: UpdateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org> {
+        const response = await this.updateOrgRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

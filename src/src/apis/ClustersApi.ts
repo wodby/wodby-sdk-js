@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   Cluster,
+  ErrorResponse,
   NewClusterInput,
   OperationResult,
   UpdateTitleRequest,
@@ -23,6 +24,8 @@ import type {
 import {
     ClusterFromJSON,
     ClusterToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     NewClusterInputFromJSON,
     NewClusterInputToJSON,
     OperationResultFromJSON,
@@ -31,28 +34,33 @@ import {
     UpdateTitleRequestToJSON,
 } from '../models/index';
 
-export interface ClustersGetRequest {
+export interface CreateClusterRequest {
+    newClusterInput: NewClusterInput;
+}
+
+export interface DeleteClusterRequest {
+    id: number;
+    force?: boolean;
+}
+
+export interface GetClusterRequest {
+    id: number;
+}
+
+export interface GetClusterByNameRequest {
+    name: string;
+    orgId: number;
+}
+
+export interface ListClustersRequest {
     orgId: number;
     projectIds?: string;
     integrationId?: number;
 }
 
-export interface ClustersIdDeleteRequest {
-    id: number;
-    force?: boolean;
-}
-
-export interface ClustersIdGetRequest {
-    id: number;
-}
-
-export interface ClustersIdPutRequest {
+export interface UpdateClusterRequest {
     id: number;
     updateTitleRequest: UpdateTitleRequest;
-}
-
-export interface ClustersPostRequest {
-    newClusterInput: NewClusterInput;
 }
 
 /**
@@ -64,20 +72,18 @@ export interface ClustersPostRequest {
 export interface ClustersApiInterface {
     /**
      * 
-     * @summary List clusters
-     * @param {number} orgId 
-     * @param {string} [projectIds] Comma-separated project ids
-     * @param {number} [integrationId] 
+     * @summary Create cluster
+     * @param {NewClusterInput} newClusterInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ClustersApiInterface
      */
-    clustersGetRaw(requestParameters: ClustersGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Cluster>>>;
+    createClusterRaw(requestParameters: CreateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
 
     /**
-     * List clusters
+     * Create cluster
      */
-    clustersGet(requestParameters: ClustersGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Cluster>>;
+    createCluster(requestParameters: CreateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
 
     /**
      * 
@@ -88,12 +94,12 @@ export interface ClustersApiInterface {
      * @throws {RequiredError}
      * @memberof ClustersApiInterface
      */
-    clustersIdDeleteRaw(requestParameters: ClustersIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+    deleteClusterRaw(requestParameters: DeleteClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
      * Delete cluster
      */
-    clustersIdDelete(requestParameters: ClustersIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+    deleteCluster(requestParameters: DeleteClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * 
@@ -103,12 +109,45 @@ export interface ClustersApiInterface {
      * @throws {RequiredError}
      * @memberof ClustersApiInterface
      */
-    clustersIdGetRaw(requestParameters: ClustersIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
+    getClusterRaw(requestParameters: GetClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
 
     /**
      * Get cluster
      */
-    clustersIdGet(requestParameters: ClustersIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
+    getCluster(requestParameters: GetClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
+
+    /**
+     * 
+     * @summary Get cluster by name
+     * @param {string} name 
+     * @param {number} orgId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    getClusterByNameRaw(requestParameters: GetClusterByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
+
+    /**
+     * Get cluster by name
+     */
+    getClusterByName(requestParameters: GetClusterByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
+
+    /**
+     * 
+     * @summary List clusters
+     * @param {number} orgId 
+     * @param {string} [projectIds] Comma-separated project ids
+     * @param {number} [integrationId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    listClustersRaw(requestParameters: ListClustersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Cluster>>>;
+
+    /**
+     * List clusters
+     */
+    listClusters(requestParameters: ListClustersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Cluster>>;
 
     /**
      * 
@@ -119,27 +158,12 @@ export interface ClustersApiInterface {
      * @throws {RequiredError}
      * @memberof ClustersApiInterface
      */
-    clustersIdPutRaw(requestParameters: ClustersIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
+    updateClusterRaw(requestParameters: UpdateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
 
     /**
      * Update cluster
      */
-    clustersIdPut(requestParameters: ClustersIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
-
-    /**
-     * 
-     * @summary Create cluster
-     * @param {NewClusterInput} newClusterInput 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ClustersApiInterface
-     */
-    clustersPostRaw(requestParameters: ClustersPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
-
-    /**
-     * Create cluster
-     */
-    clustersPost(requestParameters: ClustersPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
+    updateCluster(requestParameters: UpdateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
 
 }
 
@@ -149,13 +173,195 @@ export interface ClustersApiInterface {
 export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface {
 
     /**
-     * List clusters
+     * Create cluster
      */
-    async clustersGetRaw(requestParameters: ClustersGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Cluster>>> {
+    async createClusterRaw(requestParameters: CreateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
+        if (requestParameters['newClusterInput'] == null) {
+            throw new runtime.RequiredError(
+                'newClusterInput',
+                'Required parameter "newClusterInput" was null or undefined when calling createCluster().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewClusterInputToJSON(requestParameters['newClusterInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ClusterFromJSON(jsonValue));
+    }
+
+    /**
+     * Create cluster
+     */
+    async createCluster(requestParameters: CreateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
+        const response = await this.createClusterRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Delete cluster
+     */
+    async deleteClusterRaw(requestParameters: DeleteClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteCluster().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['force'] != null) {
+            queryParameters['force'] = requestParameters['force'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Delete cluster
+     */
+    async deleteCluster(requestParameters: DeleteClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteClusterRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get cluster
+     */
+    async getClusterRaw(requestParameters: GetClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getCluster().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ClusterFromJSON(jsonValue));
+    }
+
+    /**
+     * Get cluster
+     */
+    async getCluster(requestParameters: GetClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
+        const response = await this.getClusterRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get cluster by name
+     */
+    async getClusterByNameRaw(requestParameters: GetClusterByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getClusterByName().'
+            );
+        }
+
         if (requestParameters['orgId'] == null) {
             throw new runtime.RequiredError(
                 'orgId',
-                'Required parameter "orgId" was null or undefined when calling clustersGet().'
+                'Required parameter "orgId" was null or undefined when calling getClusterByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['orgId'] != null) {
+            queryParameters['orgId'] = requestParameters['orgId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/by-name/{name}`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ClusterFromJSON(jsonValue));
+    }
+
+    /**
+     * Get cluster by name
+     */
+    async getClusterByName(requestParameters: GetClusterByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
+        const response = await this.getClusterByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List clusters
+     */
+    async listClustersRaw(requestParameters: ListClustersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Cluster>>> {
+        if (requestParameters['orgId'] == null) {
+            throw new runtime.RequiredError(
+                'orgId',
+                'Required parameter "orgId" was null or undefined when calling listClusters().'
             );
         }
 
@@ -196,112 +402,26 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     /**
      * List clusters
      */
-    async clustersGet(requestParameters: ClustersGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Cluster>> {
-        const response = await this.clustersGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Delete cluster
-     */
-    async clustersIdDeleteRaw(requestParameters: ClustersIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling clustersIdDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        if (requestParameters['force'] != null) {
-            queryParameters['force'] = requestParameters['force'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/clusters/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
-    }
-
-    /**
-     * Delete cluster
-     */
-    async clustersIdDelete(requestParameters: ClustersIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
-        const response = await this.clustersIdDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Get cluster
-     */
-    async clustersIdGetRaw(requestParameters: ClustersIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling clustersIdGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/clusters/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ClusterFromJSON(jsonValue));
-    }
-
-    /**
-     * Get cluster
-     */
-    async clustersIdGet(requestParameters: ClustersIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
-        const response = await this.clustersIdGetRaw(requestParameters, initOverrides);
+    async listClusters(requestParameters: ListClustersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Cluster>> {
+        const response = await this.listClustersRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Update cluster
      */
-    async clustersIdPutRaw(requestParameters: ClustersIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
+    async updateClusterRaw(requestParameters: UpdateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling clustersIdPut().'
+                'Required parameter "id" was null or undefined when calling updateCluster().'
             );
         }
 
         if (requestParameters['updateTitleRequest'] == null) {
             throw new runtime.RequiredError(
                 'updateTitleRequest',
-                'Required parameter "updateTitleRequest" was null or undefined when calling clustersIdPut().'
+                'Required parameter "updateTitleRequest" was null or undefined when calling updateCluster().'
             );
         }
 
@@ -333,52 +453,8 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     /**
      * Update cluster
      */
-    async clustersIdPut(requestParameters: ClustersIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
-        const response = await this.clustersIdPutRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Create cluster
-     */
-    async clustersPostRaw(requestParameters: ClustersPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
-        if (requestParameters['newClusterInput'] == null) {
-            throw new runtime.RequiredError(
-                'newClusterInput',
-                'Required parameter "newClusterInput" was null or undefined when calling clustersPost().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/clusters`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: NewClusterInputToJSON(requestParameters['newClusterInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ClusterFromJSON(jsonValue));
-    }
-
-    /**
-     * Create cluster
-     */
-    async clustersPost(requestParameters: ClustersPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
-        const response = await this.clustersPostRaw(requestParameters, initOverrides);
+    async updateCluster(requestParameters: UpdateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
+        const response = await this.updateClusterRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

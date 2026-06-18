@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -16,32 +16,35 @@
 import * as runtime from '../runtime';
 import type {
   Backup,
+  ErrorResponse,
   NewBackupInput,
   OperationResult,
 } from '../models/index';
 import {
     BackupFromJSON,
     BackupToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     NewBackupInputFromJSON,
     NewBackupInputToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
 } from '../models/index';
 
-export interface BackupsGetRequest {
+export interface CreateBackupRequest {
+    newBackupInput: NewBackupInput;
+}
+
+export interface GetBackupRequest {
+    id: number;
+}
+
+export interface ListBackupsRequest {
     appInstanceId?: number;
     appServiceId?: number;
     databaseId?: number;
     databaseDbId?: number;
     backupName?: string;
-}
-
-export interface BackupsIdGetRequest {
-    id: number;
-}
-
-export interface BackupsPostRequest {
-    newBackupInput: NewBackupInput;
 }
 
 /**
@@ -51,6 +54,36 @@ export interface BackupsPostRequest {
  * @interface BackupsApiInterface
  */
 export interface BackupsApiInterface {
+    /**
+     * 
+     * @summary Create backup
+     * @param {NewBackupInput} newBackupInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BackupsApiInterface
+     */
+    createBackupRaw(requestParameters: CreateBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Create backup
+     */
+    createBackup(requestParameters: CreateBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * 
+     * @summary Get backup
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BackupsApiInterface
+     */
+    getBackupRaw(requestParameters: GetBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Backup>>;
+
+    /**
+     * Get backup
+     */
+    getBackup(requestParameters: GetBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Backup>;
+
     /**
      * 
      * @summary List backups
@@ -63,42 +96,12 @@ export interface BackupsApiInterface {
      * @throws {RequiredError}
      * @memberof BackupsApiInterface
      */
-    backupsGetRaw(requestParameters: BackupsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Backup>>>;
+    listBackupsRaw(requestParameters: ListBackupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Backup>>>;
 
     /**
      * List backups
      */
-    backupsGet(requestParameters: BackupsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Backup>>;
-
-    /**
-     * 
-     * @summary Get backup
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BackupsApiInterface
-     */
-    backupsIdGetRaw(requestParameters: BackupsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Backup>>;
-
-    /**
-     * Get backup
-     */
-    backupsIdGet(requestParameters: BackupsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Backup>;
-
-    /**
-     * 
-     * @summary Create backup
-     * @param {NewBackupInput} newBackupInput 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BackupsApiInterface
-     */
-    backupsPostRaw(requestParameters: BackupsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
-
-    /**
-     * Create backup
-     */
-    backupsPost(requestParameters: BackupsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+    listBackups(requestParameters: ListBackupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Backup>>;
 
 }
 
@@ -108,9 +111,94 @@ export interface BackupsApiInterface {
 export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
 
     /**
+     * Create backup
+     */
+    async createBackupRaw(requestParameters: CreateBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['newBackupInput'] == null) {
+            throw new runtime.RequiredError(
+                'newBackupInput',
+                'Required parameter "newBackupInput" was null or undefined when calling createBackup().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/backups`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewBackupInputToJSON(requestParameters['newBackupInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Create backup
+     */
+    async createBackup(requestParameters: CreateBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.createBackupRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get backup
+     */
+    async getBackupRaw(requestParameters: GetBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Backup>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getBackup().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/backups/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BackupFromJSON(jsonValue));
+    }
+
+    /**
+     * Get backup
+     */
+    async getBackup(requestParameters: GetBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Backup> {
+        const response = await this.getBackupRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * List backups
      */
-    async backupsGetRaw(requestParameters: BackupsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Backup>>> {
+    async listBackupsRaw(requestParameters: ListBackupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Backup>>> {
         const queryParameters: any = {};
 
         if (requestParameters['appInstanceId'] != null) {
@@ -156,93 +244,8 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
     /**
      * List backups
      */
-    async backupsGet(requestParameters: BackupsGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Backup>> {
-        const response = await this.backupsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Get backup
-     */
-    async backupsIdGetRaw(requestParameters: BackupsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Backup>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling backupsIdGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/backups/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => BackupFromJSON(jsonValue));
-    }
-
-    /**
-     * Get backup
-     */
-    async backupsIdGet(requestParameters: BackupsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Backup> {
-        const response = await this.backupsIdGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Create backup
-     */
-    async backupsPostRaw(requestParameters: BackupsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
-        if (requestParameters['newBackupInput'] == null) {
-            throw new runtime.RequiredError(
-                'newBackupInput',
-                'Required parameter "newBackupInput" was null or undefined when calling backupsPost().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/backups`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: NewBackupInputToJSON(requestParameters['newBackupInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
-    }
-
-    /**
-     * Create backup
-     */
-    async backupsPost(requestParameters: BackupsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
-        const response = await this.backupsPostRaw(requestParameters, initOverrides);
+    async listBackups(requestParameters: ListBackupsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Backup>> {
+        const response = await this.listBackupsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -19,6 +19,7 @@ import type {
   AppDeploymentsResponse,
   CreateDeploymentRequest,
   DeploymentFromCIInput,
+  ErrorResponse,
 } from '../models/index';
 import {
     AppDeploymentFromJSON,
@@ -29,28 +30,30 @@ import {
     CreateDeploymentRequestToJSON,
     DeploymentFromCIInputFromJSON,
     DeploymentFromCIInputToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
 } from '../models/index';
 
-export interface AppDeploymentsFromCiPostRequest {
+export interface CreateAppDeploymentRequest {
+    createDeploymentRequest: CreateDeploymentRequest;
+}
+
+export interface CreateAppDeploymentFromCiRequest {
     deploymentFromCIInput: DeploymentFromCIInput;
 }
 
-export interface AppDeploymentsGetRequest {
+export interface GetAppDeploymentRequest {
+    id: number;
+}
+
+export interface ListAppDeploymentsRequest {
     appInstanceId: number;
     page?: number;
     pageSize?: number;
 }
 
-export interface AppDeploymentsIdGetRequest {
+export interface RedeployAppDeploymentRequest {
     id: number;
-}
-
-export interface AppDeploymentsIdRedeployPostRequest {
-    id: number;
-}
-
-export interface AppDeploymentsPostRequest {
-    createDeploymentRequest: CreateDeploymentRequest;
 }
 
 /**
@@ -62,18 +65,48 @@ export interface AppDeploymentsPostRequest {
 export interface AppDeploymentsApiInterface {
     /**
      * 
+     * @summary Create deployment
+     * @param {CreateDeploymentRequest} createDeploymentRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppDeploymentsApiInterface
+     */
+    createAppDeploymentRaw(requestParameters: CreateAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
+
+    /**
+     * Create deployment
+     */
+    createAppDeployment(requestParameters: CreateAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
+
+    /**
+     * 
      * @summary Create deployment from CI
      * @param {DeploymentFromCIInput} deploymentFromCIInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AppDeploymentsApiInterface
      */
-    appDeploymentsFromCiPostRaw(requestParameters: AppDeploymentsFromCiPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
+    createAppDeploymentFromCiRaw(requestParameters: CreateAppDeploymentFromCiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
 
     /**
      * Create deployment from CI
      */
-    appDeploymentsFromCiPost(requestParameters: AppDeploymentsFromCiPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
+    createAppDeploymentFromCi(requestParameters: CreateAppDeploymentFromCiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
+
+    /**
+     * 
+     * @summary Get deployment
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppDeploymentsApiInterface
+     */
+    getAppDeploymentRaw(requestParameters: GetAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
+
+    /**
+     * Get deployment
+     */
+    getAppDeployment(requestParameters: GetAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
 
     /**
      * 
@@ -85,27 +118,12 @@ export interface AppDeploymentsApiInterface {
      * @throws {RequiredError}
      * @memberof AppDeploymentsApiInterface
      */
-    appDeploymentsGetRaw(requestParameters: AppDeploymentsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeploymentsResponse>>;
+    listAppDeploymentsRaw(requestParameters: ListAppDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeploymentsResponse>>;
 
     /**
      * List app deployments
      */
-    appDeploymentsGet(requestParameters: AppDeploymentsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeploymentsResponse>;
-
-    /**
-     * 
-     * @summary Get deployment
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppDeploymentsApiInterface
-     */
-    appDeploymentsIdGetRaw(requestParameters: AppDeploymentsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
-
-    /**
-     * Get deployment
-     */
-    appDeploymentsIdGet(requestParameters: AppDeploymentsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
+    listAppDeployments(requestParameters: ListAppDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeploymentsResponse>;
 
     /**
      * 
@@ -115,27 +133,12 @@ export interface AppDeploymentsApiInterface {
      * @throws {RequiredError}
      * @memberof AppDeploymentsApiInterface
      */
-    appDeploymentsIdRedeployPostRaw(requestParameters: AppDeploymentsIdRedeployPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
+    redeployAppDeploymentRaw(requestParameters: RedeployAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
 
     /**
      * Redeploy deployment
      */
-    appDeploymentsIdRedeployPost(requestParameters: AppDeploymentsIdRedeployPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
-
-    /**
-     * 
-     * @summary Create deployment
-     * @param {CreateDeploymentRequest} createDeploymentRequest 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppDeploymentsApiInterface
-     */
-    appDeploymentsPostRaw(requestParameters: AppDeploymentsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
-
-    /**
-     * Create deployment
-     */
-    appDeploymentsPost(requestParameters: AppDeploymentsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
+    redeployAppDeployment(requestParameters: RedeployAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
 
 }
 
@@ -145,13 +148,57 @@ export interface AppDeploymentsApiInterface {
 export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeploymentsApiInterface {
 
     /**
+     * Create deployment
+     */
+    async createAppDeploymentRaw(requestParameters: CreateAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
+        if (requestParameters['createDeploymentRequest'] == null) {
+            throw new runtime.RequiredError(
+                'createDeploymentRequest',
+                'Required parameter "createDeploymentRequest" was null or undefined when calling createAppDeployment().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-deployments`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateDeploymentRequestToJSON(requestParameters['createDeploymentRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppDeploymentFromJSON(jsonValue));
+    }
+
+    /**
+     * Create deployment
+     */
+    async createAppDeployment(requestParameters: CreateAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
+        const response = await this.createAppDeploymentRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Create deployment from CI
      */
-    async appDeploymentsFromCiPostRaw(requestParameters: AppDeploymentsFromCiPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
+    async createAppDeploymentFromCiRaw(requestParameters: CreateAppDeploymentFromCiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
         if (requestParameters['deploymentFromCIInput'] == null) {
             throw new runtime.RequiredError(
                 'deploymentFromCIInput',
-                'Required parameter "deploymentFromCIInput" was null or undefined when calling appDeploymentsFromCiPost().'
+                'Required parameter "deploymentFromCIInput" was null or undefined when calling createAppDeploymentFromCi().'
             );
         }
 
@@ -183,19 +230,60 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
     /**
      * Create deployment from CI
      */
-    async appDeploymentsFromCiPost(requestParameters: AppDeploymentsFromCiPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
-        const response = await this.appDeploymentsFromCiPostRaw(requestParameters, initOverrides);
+    async createAppDeploymentFromCi(requestParameters: CreateAppDeploymentFromCiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
+        const response = await this.createAppDeploymentFromCiRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get deployment
+     */
+    async getAppDeploymentRaw(requestParameters: GetAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppDeployment().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-deployments/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppDeploymentFromJSON(jsonValue));
+    }
+
+    /**
+     * Get deployment
+     */
+    async getAppDeployment(requestParameters: GetAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
+        const response = await this.getAppDeploymentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * List app deployments
      */
-    async appDeploymentsGetRaw(requestParameters: AppDeploymentsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeploymentsResponse>> {
+    async listAppDeploymentsRaw(requestParameters: ListAppDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeploymentsResponse>> {
         if (requestParameters['appInstanceId'] == null) {
             throw new runtime.RequiredError(
                 'appInstanceId',
-                'Required parameter "appInstanceId" was null or undefined when calling appDeploymentsGet().'
+                'Required parameter "appInstanceId" was null or undefined when calling listAppDeployments().'
             );
         }
 
@@ -236,60 +324,19 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
     /**
      * List app deployments
      */
-    async appDeploymentsGet(requestParameters: AppDeploymentsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeploymentsResponse> {
-        const response = await this.appDeploymentsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Get deployment
-     */
-    async appDeploymentsIdGetRaw(requestParameters: AppDeploymentsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling appDeploymentsIdGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/app-deployments/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppDeploymentFromJSON(jsonValue));
-    }
-
-    /**
-     * Get deployment
-     */
-    async appDeploymentsIdGet(requestParameters: AppDeploymentsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
-        const response = await this.appDeploymentsIdGetRaw(requestParameters, initOverrides);
+    async listAppDeployments(requestParameters: ListAppDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeploymentsResponse> {
+        const response = await this.listAppDeploymentsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Redeploy deployment
      */
-    async appDeploymentsIdRedeployPostRaw(requestParameters: AppDeploymentsIdRedeployPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
+    async redeployAppDeploymentRaw(requestParameters: RedeployAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling appDeploymentsIdRedeployPost().'
+                'Required parameter "id" was null or undefined when calling redeployAppDeployment().'
             );
         }
 
@@ -318,52 +365,8 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
     /**
      * Redeploy deployment
      */
-    async appDeploymentsIdRedeployPost(requestParameters: AppDeploymentsIdRedeployPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
-        const response = await this.appDeploymentsIdRedeployPostRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Create deployment
-     */
-    async appDeploymentsPostRaw(requestParameters: AppDeploymentsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
-        if (requestParameters['createDeploymentRequest'] == null) {
-            throw new runtime.RequiredError(
-                'createDeploymentRequest',
-                'Required parameter "createDeploymentRequest" was null or undefined when calling appDeploymentsPost().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/app-deployments`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: CreateDeploymentRequestToJSON(requestParameters['createDeploymentRequest']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppDeploymentFromJSON(jsonValue));
-    }
-
-    /**
-     * Create deployment
-     */
-    async appDeploymentsPost(requestParameters: AppDeploymentsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
-        const response = await this.appDeploymentsPostRaw(requestParameters, initOverrides);
+    async redeployAppDeployment(requestParameters: RedeployAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
+        const response = await this.redeployAppDeploymentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

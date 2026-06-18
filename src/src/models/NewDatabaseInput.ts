@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -24,19 +24,19 @@ export interface NewDatabaseInput {
      * @type {number}
      * @memberof NewDatabaseInput
      */
-    orgID: number;
+    orgId: number;
     /**
      * 
      * @type {number}
      * @memberof NewDatabaseInput
      */
-    projectID?: number | null;
+    projectId?: number | null;
     /**
      * 
      * @type {number}
      * @memberof NewDatabaseInput
      */
-    envID: number;
+    envId: number;
     /**
      * 
      * @type {string}
@@ -54,7 +54,7 @@ export interface NewDatabaseInput {
      * @type {number}
      * @memberof NewDatabaseInput
      */
-    integrationKindID: number;
+    integrationKindId: number;
     /**
      * 
      * @type {string}
@@ -114,7 +114,7 @@ export interface NewDatabaseInput {
      * @type {number}
      * @memberof NewDatabaseInput
      */
-    residedClusterID?: number | null;
+    residedClusterId?: number | null;
     /**
      * 
      * @type {number}
@@ -127,11 +127,11 @@ export interface NewDatabaseInput {
  * Check if a given object implements the NewDatabaseInput interface.
  */
 export function instanceOfNewDatabaseInput(value: object): value is NewDatabaseInput {
-    if (!('orgID' in value) || value['orgID'] === undefined) return false;
-    if (!('envID' in value) || value['envID'] === undefined) return false;
+    if (!('orgId' in value) || value['orgId'] === undefined) return false;
+    if (!('envId' in value) || value['envId'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('title' in value) || value['title'] === undefined) return false;
-    if (!('integrationKindID' in value) || value['integrationKindID'] === undefined) return false;
+    if (!('integrationKindId' in value) || value['integrationKindId'] === undefined) return false;
     if (!('type' in value) || value['type'] === undefined) return false;
     if (!('version' in value) || value['version'] === undefined) return false;
     if (!('machineType' in value) || value['machineType'] === undefined) return false;
@@ -148,12 +148,12 @@ export function NewDatabaseInputFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'orgID': json['orgID'],
-        'projectID': json['projectID'] == null ? undefined : json['projectID'],
-        'envID': json['envID'],
+        'orgId': json['orgId'],
+        'projectId': json['projectId'] == null ? undefined : json['projectId'],
+        'envId': json['envId'],
         'name': json['name'],
         'title': json['title'],
-        'integrationKindID': json['integrationKindID'],
+        'integrationKindId': json['integrationKindId'],
         'type': json['type'],
         'version': json['version'],
         'machineType': json['machineType'],
@@ -163,7 +163,7 @@ export function NewDatabaseInputFromJSONTyped(json: any, ignoreDiscriminator: bo
         'highAvailability': json['highAvailability'] == null ? undefined : json['highAvailability'],
         'region': json['region'] == null ? undefined : json['region'],
         'zone': json['zone'] == null ? undefined : json['zone'],
-        'residedClusterID': json['residedClusterID'] == null ? undefined : json['residedClusterID'],
+        'residedClusterId': json['residedClusterId'] == null ? undefined : json['residedClusterId'],
         'iops': json['iops'] == null ? undefined : json['iops'],
     };
 }
@@ -179,12 +179,12 @@ export function NewDatabaseInputToJSONTyped(value?: NewDatabaseInput | null, ign
 
     return {
         
-        'orgID': value['orgID'],
-        'projectID': value['projectID'],
-        'envID': value['envID'],
+        'orgId': value['orgId'],
+        'projectId': value['projectId'],
+        'envId': value['envId'],
         'name': value['name'],
         'title': value['title'],
-        'integrationKindID': value['integrationKindID'],
+        'integrationKindId': value['integrationKindId'],
         'type': value['type'],
         'version': value['version'],
         'machineType': value['machineType'],
@@ -194,7 +194,7 @@ export function NewDatabaseInputToJSONTyped(value?: NewDatabaseInput | null, ign
         'highAvailability': value['highAvailability'],
         'region': value['region'],
         'zone': value['zone'],
-        'residedClusterID': value['residedClusterID'],
+        'residedClusterId': value['residedClusterId'],
         'iops': value['iops'],
     };
 }

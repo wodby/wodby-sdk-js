@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -24,7 +24,7 @@ export interface NewBuildFromCIInput {
      * @type {number}
      * @memberof NewBuildFromCIInput
      */
-    appServiceID: number;
+    appServiceId: number;
     /**
      * 
      * @type {string}
@@ -54,7 +54,7 @@ export interface NewBuildFromCIInput {
      * @type {string}
      * @memberof NewBuildFromCIInput
      */
-    buildID: string;
+    buildId: string;
     /**
      * 
      * @type {string}
@@ -97,12 +97,12 @@ export interface NewBuildFromCIInput {
  * Check if a given object implements the NewBuildFromCIInput interface.
  */
 export function instanceOfNewBuildFromCIInput(value: object): value is NewBuildFromCIInput {
-    if (!('appServiceID' in value) || value['appServiceID'] === undefined) return false;
+    if (!('appServiceId' in value) || value['appServiceId'] === undefined) return false;
     if (!('gitCommitSHA' in value) || value['gitCommitSHA'] === undefined) return false;
     if (!('gitRef' in value) || value['gitRef'] === undefined) return false;
     if (!('gitRefType' in value) || value['gitRefType'] === undefined) return false;
     if (!('buildNum' in value) || value['buildNum'] === undefined) return false;
-    if (!('buildID' in value) || value['buildID'] === undefined) return false;
+    if (!('buildId' in value) || value['buildId'] === undefined) return false;
     if (!('provider' in value) || value['provider'] === undefined) return false;
     return true;
 }
@@ -117,12 +117,12 @@ export function NewBuildFromCIInputFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'appServiceID': json['appServiceID'],
+        'appServiceId': json['appServiceId'],
         'gitCommitSHA': json['gitCommitSHA'],
         'gitRef': json['gitRef'],
         'gitRefType': json['gitRefType'],
         'buildNum': json['buildNum'],
-        'buildID': json['buildID'],
+        'buildId': json['buildId'],
         'workflow': json['workflow'] == null ? undefined : json['workflow'],
         'gitCommitAuthorName': json['gitCommitAuthorName'] == null ? undefined : json['gitCommitAuthorName'],
         'gitCommitAuthorEmail': json['gitCommitAuthorEmail'] == null ? undefined : json['gitCommitAuthorEmail'],
@@ -143,12 +143,12 @@ export function NewBuildFromCIInputToJSONTyped(value?: NewBuildFromCIInput | nul
 
     return {
         
-        'appServiceID': value['appServiceID'],
+        'appServiceId': value['appServiceId'],
         'gitCommitSHA': value['gitCommitSHA'],
         'gitRef': value['gitRef'],
         'gitRefType': value['gitRefType'],
         'buildNum': value['buildNum'],
-        'buildID': value['buildID'],
+        'buildId': value['buildId'],
         'workflow': value['workflow'],
         'gitCommitAuthorName': value['gitCommitAuthorName'],
         'gitCommitAuthorEmail': value['gitCommitAuthorEmail'],

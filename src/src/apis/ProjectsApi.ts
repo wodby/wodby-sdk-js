@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -15,12 +15,15 @@
 
 import * as runtime from '../runtime';
 import type {
+  ErrorResponse,
   NewProjectInput,
   OperationResult,
   Project,
   UpdateProjectInput,
 } from '../models/index';
 import {
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     NewProjectInputFromJSON,
     NewProjectInputToJSON,
     OperationResultFromJSON,
@@ -31,26 +34,30 @@ import {
     UpdateProjectInputToJSON,
 } from '../models/index';
 
-export interface ProjectsByNameNameGetRequest {
+export interface CreateProjectRequest {
+    newProjectInput: NewProjectInput;
+}
+
+export interface DeleteProjectRequest {
+    id: number;
+}
+
+export interface GetProjectRequest {
+    id: number;
+}
+
+export interface GetProjectByNameRequest {
     name: string;
     orgId: number;
 }
 
-export interface ProjectsGetRequest {
+export interface ListProjectsRequest {
     orgId: number;
 }
 
-export interface ProjectsIdDeleteRequest {
-    id: number;
-}
-
-export interface ProjectsIdPutRequest {
+export interface UpdateProjectRequest {
     id: number;
     updateProjectInput: UpdateProjectInput;
-}
-
-export interface ProjectsPostRequest {
-    newProjectInput: NewProjectInput;
 }
 
 /**
@@ -62,34 +69,18 @@ export interface ProjectsPostRequest {
 export interface ProjectsApiInterface {
     /**
      * 
-     * @summary Get project by name
-     * @param {string} name 
-     * @param {number} orgId 
+     * @summary Create project
+     * @param {NewProjectInput} newProjectInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectsApiInterface
      */
-    projectsByNameNameGetRaw(requestParameters: ProjectsByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>>;
+    createProjectRaw(requestParameters: CreateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>>;
 
     /**
-     * Get project by name
+     * Create project
      */
-    projectsByNameNameGet(requestParameters: ProjectsByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project>;
-
-    /**
-     * 
-     * @summary List projects
-     * @param {number} orgId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ProjectsApiInterface
-     */
-    projectsGetRaw(requestParameters: ProjectsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Project>>>;
-
-    /**
-     * List projects
-     */
-    projectsGet(requestParameters: ProjectsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Project>>;
+    createProject(requestParameters: CreateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project>;
 
     /**
      * 
@@ -99,12 +90,58 @@ export interface ProjectsApiInterface {
      * @throws {RequiredError}
      * @memberof ProjectsApiInterface
      */
-    projectsIdDeleteRaw(requestParameters: ProjectsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+    deleteProjectRaw(requestParameters: DeleteProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
      * Delete project
      */
-    projectsIdDelete(requestParameters: ProjectsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+    deleteProject(requestParameters: DeleteProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * 
+     * @summary Get project
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProjectsApiInterface
+     */
+    getProjectRaw(requestParameters: GetProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>>;
+
+    /**
+     * Get project
+     */
+    getProject(requestParameters: GetProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project>;
+
+    /**
+     * 
+     * @summary Get project by name
+     * @param {string} name 
+     * @param {number} orgId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProjectsApiInterface
+     */
+    getProjectByNameRaw(requestParameters: GetProjectByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>>;
+
+    /**
+     * Get project by name
+     */
+    getProjectByName(requestParameters: GetProjectByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project>;
+
+    /**
+     * 
+     * @summary List projects
+     * @param {number} orgId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProjectsApiInterface
+     */
+    listProjectsRaw(requestParameters: ListProjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Project>>>;
+
+    /**
+     * List projects
+     */
+    listProjects(requestParameters: ListProjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Project>>;
 
     /**
      * 
@@ -115,27 +152,12 @@ export interface ProjectsApiInterface {
      * @throws {RequiredError}
      * @memberof ProjectsApiInterface
      */
-    projectsIdPutRaw(requestParameters: ProjectsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>>;
+    updateProjectRaw(requestParameters: UpdateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>>;
 
     /**
      * Update project
      */
-    projectsIdPut(requestParameters: ProjectsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project>;
-
-    /**
-     * 
-     * @summary Create project
-     * @param {NewProjectInput} newProjectInput 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ProjectsApiInterface
-     */
-    projectsPostRaw(requestParameters: ProjectsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>>;
-
-    /**
-     * Create project
-     */
-    projectsPost(requestParameters: ProjectsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project>;
+    updateProject(requestParameters: UpdateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project>;
 
 }
 
@@ -145,20 +167,146 @@ export interface ProjectsApiInterface {
 export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface {
 
     /**
+     * Create project
+     */
+    async createProjectRaw(requestParameters: CreateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
+        if (requestParameters['newProjectInput'] == null) {
+            throw new runtime.RequiredError(
+                'newProjectInput',
+                'Required parameter "newProjectInput" was null or undefined when calling createProject().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/projects`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewProjectInputToJSON(requestParameters['newProjectInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProjectFromJSON(jsonValue));
+    }
+
+    /**
+     * Create project
+     */
+    async createProject(requestParameters: CreateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project> {
+        const response = await this.createProjectRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Delete project
+     */
+    async deleteProjectRaw(requestParameters: DeleteProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteProject().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/projects/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Delete project
+     */
+    async deleteProject(requestParameters: DeleteProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteProjectRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get project
+     */
+    async getProjectRaw(requestParameters: GetProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getProject().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/projects/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProjectFromJSON(jsonValue));
+    }
+
+    /**
+     * Get project
+     */
+    async getProject(requestParameters: GetProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project> {
+        const response = await this.getProjectRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Get project by name
      */
-    async projectsByNameNameGetRaw(requestParameters: ProjectsByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
+    async getProjectByNameRaw(requestParameters: GetProjectByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling projectsByNameNameGet().'
+                'Required parameter "name" was null or undefined when calling getProjectByName().'
             );
         }
 
         if (requestParameters['orgId'] == null) {
             throw new runtime.RequiredError(
                 'orgId',
-                'Required parameter "orgId" was null or undefined when calling projectsByNameNameGet().'
+                'Required parameter "orgId" was null or undefined when calling getProjectByName().'
             );
         }
 
@@ -191,19 +339,19 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
     /**
      * Get project by name
      */
-    async projectsByNameNameGet(requestParameters: ProjectsByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project> {
-        const response = await this.projectsByNameNameGetRaw(requestParameters, initOverrides);
+    async getProjectByName(requestParameters: GetProjectByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project> {
+        const response = await this.getProjectByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * List projects
      */
-    async projectsGetRaw(requestParameters: ProjectsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Project>>> {
+    async listProjectsRaw(requestParameters: ListProjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Project>>> {
         if (requestParameters['orgId'] == null) {
             throw new runtime.RequiredError(
                 'orgId',
-                'Required parameter "orgId" was null or undefined when calling projectsGet().'
+                'Required parameter "orgId" was null or undefined when calling listProjects().'
             );
         }
 
@@ -236,67 +384,26 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
     /**
      * List projects
      */
-    async projectsGet(requestParameters: ProjectsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Project>> {
-        const response = await this.projectsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Delete project
-     */
-    async projectsIdDeleteRaw(requestParameters: ProjectsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling projectsIdDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/projects/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
-    }
-
-    /**
-     * Delete project
-     */
-    async projectsIdDelete(requestParameters: ProjectsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
-        const response = await this.projectsIdDeleteRaw(requestParameters, initOverrides);
+    async listProjects(requestParameters: ListProjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Project>> {
+        const response = await this.listProjectsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Update project
      */
-    async projectsIdPutRaw(requestParameters: ProjectsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
+    async updateProjectRaw(requestParameters: UpdateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling projectsIdPut().'
+                'Required parameter "id" was null or undefined when calling updateProject().'
             );
         }
 
         if (requestParameters['updateProjectInput'] == null) {
             throw new runtime.RequiredError(
                 'updateProjectInput',
-                'Required parameter "updateProjectInput" was null or undefined when calling projectsIdPut().'
+                'Required parameter "updateProjectInput" was null or undefined when calling updateProject().'
             );
         }
 
@@ -328,52 +435,8 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
     /**
      * Update project
      */
-    async projectsIdPut(requestParameters: ProjectsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project> {
-        const response = await this.projectsIdPutRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Create project
-     */
-    async projectsPostRaw(requestParameters: ProjectsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
-        if (requestParameters['newProjectInput'] == null) {
-            throw new runtime.RequiredError(
-                'newProjectInput',
-                'Required parameter "newProjectInput" was null or undefined when calling projectsPost().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/projects`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: NewProjectInputToJSON(requestParameters['newProjectInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProjectFromJSON(jsonValue));
-    }
-
-    /**
-     * Create project
-     */
-    async projectsPost(requestParameters: ProjectsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project> {
-        const response = await this.projectsPostRaw(requestParameters, initOverrides);
+    async updateProject(requestParameters: UpdateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project> {
+        const response = await this.updateProjectRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

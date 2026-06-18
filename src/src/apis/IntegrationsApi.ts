@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -15,6 +15,7 @@
 
 import * as runtime from '../runtime';
 import type {
+  ErrorResponse,
   Integration,
   IntegrationScope,
   KubeVersion,
@@ -24,6 +25,8 @@ import type {
   UpdateIntegrationInput,
 } from '../models/index';
 import {
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     IntegrationFromJSON,
     IntegrationToJSON,
     IntegrationScopeFromJSON,
@@ -40,76 +43,80 @@ import {
     UpdateIntegrationInputToJSON,
 } from '../models/index';
 
-export interface IntegrationsByNameNameGetRequest {
+export interface CreateIntegrationRequest {
+    newIntegrationInput: NewIntegrationInput;
+}
+
+export interface DeleteIntegrationRequest {
+    id: number;
+}
+
+export interface GetIntegrationRequest {
+    id: number;
+}
+
+export interface GetIntegrationByNameRequest {
     name: string;
     orgId: number;
 }
 
-export interface IntegrationsGetRequest {
+export interface GetIntegrationKubeSettingsRequest {
+    id: number;
+}
+
+export interface ListIntegrationKubeMachineTypesRequest {
+    id: number;
+    location: string;
+}
+
+export interface ListIntegrationKubeRegionsRequest {
+    id: number;
+}
+
+export interface ListIntegrationKubeVersionsRequest {
+    id: number;
+    location: string;
+}
+
+export interface ListIntegrationKubeZonesRequest {
+    id: number;
+}
+
+export interface ListIntegrationRemoteGitRepoBranchesRequest {
+    id: number;
+    remoteGitRepoId: string;
+}
+
+export interface ListIntegrationRemoteGitRepoTagsRequest {
+    id: number;
+    remoteGitRepoId: string;
+}
+
+export interface ListIntegrationRemoteGitReposRequest {
+    id: number;
+}
+
+export interface ListIntegrationScopesRequest {
+    id: number;
+}
+
+export interface ListIntegrationStorageBucketsRequest {
+    id: number;
+}
+
+export interface ListIntegrationStorageClassesRequest {
+    id: number;
+}
+
+export interface ListIntegrationsRequest {
     orgId: number;
     projectIds?: string;
     labels?: string;
 }
 
-export interface IntegrationsIdDeleteRequest {
-    id: number;
-}
-
-export interface IntegrationsIdKubeMachineTypesGetRequest {
-    id: number;
-    location: string;
-}
-
-export interface IntegrationsIdKubeRegionsGetRequest {
-    id: number;
-}
-
-export interface IntegrationsIdKubeSettingsGetRequest {
-    id: number;
-}
-
-export interface IntegrationsIdKubeVersionsGetRequest {
-    id: number;
-    location: string;
-}
-
-export interface IntegrationsIdKubeZonesGetRequest {
-    id: number;
-}
-
-export interface IntegrationsIdPutRequest {
+export interface UpdateIntegrationRequest {
     id: number;
     updateIntegrationInput: UpdateIntegrationInput;
-}
-
-export interface IntegrationsIdRemoteGitRepoBranchesGetRequest {
-    id: number;
-    remoteGitRepoId: string;
-}
-
-export interface IntegrationsIdRemoteGitRepoTagsGetRequest {
-    id: number;
-    remoteGitRepoId: string;
-}
-
-export interface IntegrationsIdRemoteGitReposGetRequest {
-    id: number;
-}
-
-export interface IntegrationsIdScopesGetRequest {
-    id: number;
-}
-
-export interface IntegrationsIdStorageBucketsGetRequest {
-    id: number;
-}
-
-export interface IntegrationsIdStorageClassesGetRequest {
-    id: number;
-}
-
-export interface IntegrationsPostRequest {
-    newIntegrationInput: NewIntegrationInput;
 }
 
 /**
@@ -121,6 +128,51 @@ export interface IntegrationsPostRequest {
 export interface IntegrationsApiInterface {
     /**
      * 
+     * @summary Create integration
+     * @param {NewIntegrationInput} newIntegrationInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    createIntegrationRaw(requestParameters: CreateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>>;
+
+    /**
+     * Create integration
+     */
+    createIntegration(requestParameters: CreateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
+
+    /**
+     * 
+     * @summary Delete integration
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    deleteIntegrationRaw(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Delete integration
+     */
+    deleteIntegration(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * 
+     * @summary Get integration
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    getIntegrationRaw(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>>;
+
+    /**
+     * Get integration
+     */
+    getIntegration(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
+
+    /**
+     * 
      * @summary Get integration by name
      * @param {string} name 
      * @param {number} orgId 
@@ -128,12 +180,181 @@ export interface IntegrationsApiInterface {
      * @throws {RequiredError}
      * @memberof IntegrationsApiInterface
      */
-    integrationsByNameNameGetRaw(requestParameters: IntegrationsByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>>;
+    getIntegrationByNameRaw(requestParameters: GetIntegrationByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>>;
 
     /**
      * Get integration by name
      */
-    integrationsByNameNameGet(requestParameters: IntegrationsByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
+    getIntegrationByName(requestParameters: GetIntegrationByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
+
+    /**
+     * 
+     * @summary Get Kubernetes settings
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    getIntegrationKubeSettingsRaw(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>>;
+
+    /**
+     * Get Kubernetes settings
+     */
+    getIntegrationKubeSettings(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }>;
+
+    /**
+     * 
+     * @summary List Kubernetes machine types
+     * @param {number} id 
+     * @param {string} location 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    listIntegrationKubeMachineTypesRaw(requestParameters: ListIntegrationKubeMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
+
+    /**
+     * List Kubernetes machine types
+     */
+    listIntegrationKubeMachineTypes(requestParameters: ListIntegrationKubeMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
+
+    /**
+     * 
+     * @summary List Kubernetes regions
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    listIntegrationKubeRegionsRaw(requestParameters: ListIntegrationKubeRegionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
+
+    /**
+     * List Kubernetes regions
+     */
+    listIntegrationKubeRegions(requestParameters: ListIntegrationKubeRegionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
+
+    /**
+     * 
+     * @summary List Kubernetes versions
+     * @param {number} id 
+     * @param {string} location 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    listIntegrationKubeVersionsRaw(requestParameters: ListIntegrationKubeVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<KubeVersion>>>;
+
+    /**
+     * List Kubernetes versions
+     */
+    listIntegrationKubeVersions(requestParameters: ListIntegrationKubeVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<KubeVersion>>;
+
+    /**
+     * 
+     * @summary List Kubernetes zones
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    listIntegrationKubeZonesRaw(requestParameters: ListIntegrationKubeZonesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
+
+    /**
+     * List Kubernetes zones
+     */
+    listIntegrationKubeZones(requestParameters: ListIntegrationKubeZonesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
+
+    /**
+     * 
+     * @summary List remote Git repository branches
+     * @param {number} id 
+     * @param {string} remoteGitRepoId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    listIntegrationRemoteGitRepoBranchesRaw(requestParameters: ListIntegrationRemoteGitRepoBranchesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>>;
+
+    /**
+     * List remote Git repository branches
+     */
+    listIntegrationRemoteGitRepoBranches(requestParameters: ListIntegrationRemoteGitRepoBranchesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>>;
+
+    /**
+     * 
+     * @summary List remote Git repository tags
+     * @param {number} id 
+     * @param {string} remoteGitRepoId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    listIntegrationRemoteGitRepoTagsRaw(requestParameters: ListIntegrationRemoteGitRepoTagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>>;
+
+    /**
+     * List remote Git repository tags
+     */
+    listIntegrationRemoteGitRepoTags(requestParameters: ListIntegrationRemoteGitRepoTagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>>;
+
+    /**
+     * 
+     * @summary List remote Git repositories
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    listIntegrationRemoteGitReposRaw(requestParameters: ListIntegrationRemoteGitReposRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<RemoteGitRepo>>>;
+
+    /**
+     * List remote Git repositories
+     */
+    listIntegrationRemoteGitRepos(requestParameters: ListIntegrationRemoteGitReposRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<RemoteGitRepo>>;
+
+    /**
+     * 
+     * @summary List integration scopes
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    listIntegrationScopesRaw(requestParameters: ListIntegrationScopesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<IntegrationScope>>>;
+
+    /**
+     * List integration scopes
+     */
+    listIntegrationScopes(requestParameters: ListIntegrationScopesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<IntegrationScope>>;
+
+    /**
+     * 
+     * @summary List storage buckets
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    listIntegrationStorageBucketsRaw(requestParameters: ListIntegrationStorageBucketsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>>;
+
+    /**
+     * List storage buckets
+     */
+    listIntegrationStorageBuckets(requestParameters: ListIntegrationStorageBucketsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>>;
+
+    /**
+     * 
+     * @summary List storage classes
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    listIntegrationStorageClassesRaw(requestParameters: ListIntegrationStorageClassesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>>;
+
+    /**
+     * List storage classes
+     */
+    listIntegrationStorageClasses(requestParameters: ListIntegrationStorageClassesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>>;
 
     /**
      * 
@@ -145,104 +366,12 @@ export interface IntegrationsApiInterface {
      * @throws {RequiredError}
      * @memberof IntegrationsApiInterface
      */
-    integrationsGetRaw(requestParameters: IntegrationsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>>;
+    listIntegrationsRaw(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>>;
 
     /**
      * List integrations
      */
-    integrationsGet(requestParameters: IntegrationsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>>;
-
-    /**
-     * 
-     * @summary Delete integration
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IntegrationsApiInterface
-     */
-    integrationsIdDeleteRaw(requestParameters: IntegrationsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
-
-    /**
-     * Delete integration
-     */
-    integrationsIdDelete(requestParameters: IntegrationsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
-
-    /**
-     * 
-     * @summary List Kubernetes machine types
-     * @param {number} id 
-     * @param {string} location 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IntegrationsApiInterface
-     */
-    integrationsIdKubeMachineTypesGetRaw(requestParameters: IntegrationsIdKubeMachineTypesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
-
-    /**
-     * List Kubernetes machine types
-     */
-    integrationsIdKubeMachineTypesGet(requestParameters: IntegrationsIdKubeMachineTypesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
-
-    /**
-     * 
-     * @summary List Kubernetes regions
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IntegrationsApiInterface
-     */
-    integrationsIdKubeRegionsGetRaw(requestParameters: IntegrationsIdKubeRegionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
-
-    /**
-     * List Kubernetes regions
-     */
-    integrationsIdKubeRegionsGet(requestParameters: IntegrationsIdKubeRegionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
-
-    /**
-     * 
-     * @summary Get Kubernetes settings
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IntegrationsApiInterface
-     */
-    integrationsIdKubeSettingsGetRaw(requestParameters: IntegrationsIdKubeSettingsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>>;
-
-    /**
-     * Get Kubernetes settings
-     */
-    integrationsIdKubeSettingsGet(requestParameters: IntegrationsIdKubeSettingsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }>;
-
-    /**
-     * 
-     * @summary List Kubernetes versions
-     * @param {number} id 
-     * @param {string} location 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IntegrationsApiInterface
-     */
-    integrationsIdKubeVersionsGetRaw(requestParameters: IntegrationsIdKubeVersionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<KubeVersion>>>;
-
-    /**
-     * List Kubernetes versions
-     */
-    integrationsIdKubeVersionsGet(requestParameters: IntegrationsIdKubeVersionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<KubeVersion>>;
-
-    /**
-     * 
-     * @summary List Kubernetes zones
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IntegrationsApiInterface
-     */
-    integrationsIdKubeZonesGetRaw(requestParameters: IntegrationsIdKubeZonesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
-
-    /**
-     * List Kubernetes zones
-     */
-    integrationsIdKubeZonesGet(requestParameters: IntegrationsIdKubeZonesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
+    listIntegrations(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>>;
 
     /**
      * 
@@ -253,119 +382,12 @@ export interface IntegrationsApiInterface {
      * @throws {RequiredError}
      * @memberof IntegrationsApiInterface
      */
-    integrationsIdPutRaw(requestParameters: IntegrationsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>>;
+    updateIntegrationRaw(requestParameters: UpdateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>>;
 
     /**
      * Update integration
      */
-    integrationsIdPut(requestParameters: IntegrationsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
-
-    /**
-     * 
-     * @summary List remote Git repository branches
-     * @param {number} id 
-     * @param {string} remoteGitRepoId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IntegrationsApiInterface
-     */
-    integrationsIdRemoteGitRepoBranchesGetRaw(requestParameters: IntegrationsIdRemoteGitRepoBranchesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>>;
-
-    /**
-     * List remote Git repository branches
-     */
-    integrationsIdRemoteGitRepoBranchesGet(requestParameters: IntegrationsIdRemoteGitRepoBranchesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>>;
-
-    /**
-     * 
-     * @summary List remote Git repository tags
-     * @param {number} id 
-     * @param {string} remoteGitRepoId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IntegrationsApiInterface
-     */
-    integrationsIdRemoteGitRepoTagsGetRaw(requestParameters: IntegrationsIdRemoteGitRepoTagsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>>;
-
-    /**
-     * List remote Git repository tags
-     */
-    integrationsIdRemoteGitRepoTagsGet(requestParameters: IntegrationsIdRemoteGitRepoTagsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>>;
-
-    /**
-     * 
-     * @summary List remote Git repositories
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IntegrationsApiInterface
-     */
-    integrationsIdRemoteGitReposGetRaw(requestParameters: IntegrationsIdRemoteGitReposGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<RemoteGitRepo>>>;
-
-    /**
-     * List remote Git repositories
-     */
-    integrationsIdRemoteGitReposGet(requestParameters: IntegrationsIdRemoteGitReposGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<RemoteGitRepo>>;
-
-    /**
-     * 
-     * @summary List integration scopes
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IntegrationsApiInterface
-     */
-    integrationsIdScopesGetRaw(requestParameters: IntegrationsIdScopesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<IntegrationScope>>>;
-
-    /**
-     * List integration scopes
-     */
-    integrationsIdScopesGet(requestParameters: IntegrationsIdScopesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<IntegrationScope>>;
-
-    /**
-     * 
-     * @summary List storage buckets
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IntegrationsApiInterface
-     */
-    integrationsIdStorageBucketsGetRaw(requestParameters: IntegrationsIdStorageBucketsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>>;
-
-    /**
-     * List storage buckets
-     */
-    integrationsIdStorageBucketsGet(requestParameters: IntegrationsIdStorageBucketsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>>;
-
-    /**
-     * 
-     * @summary List storage classes
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IntegrationsApiInterface
-     */
-    integrationsIdStorageClassesGetRaw(requestParameters: IntegrationsIdStorageClassesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>>;
-
-    /**
-     * List storage classes
-     */
-    integrationsIdStorageClassesGet(requestParameters: IntegrationsIdStorageClassesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>>;
-
-    /**
-     * 
-     * @summary Create integration
-     * @param {NewIntegrationInput} newIntegrationInput 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IntegrationsApiInterface
-     */
-    integrationsPostRaw(requestParameters: IntegrationsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>>;
-
-    /**
-     * Create integration
-     */
-    integrationsPost(requestParameters: IntegrationsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
+    updateIntegration(requestParameters: UpdateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
 
 }
 
@@ -375,20 +397,146 @@ export interface IntegrationsApiInterface {
 export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiInterface {
 
     /**
+     * Create integration
+     */
+    async createIntegrationRaw(requestParameters: CreateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>> {
+        if (requestParameters['newIntegrationInput'] == null) {
+            throw new runtime.RequiredError(
+                'newIntegrationInput',
+                'Required parameter "newIntegrationInput" was null or undefined when calling createIntegration().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewIntegrationInputToJSON(requestParameters['newIntegrationInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IntegrationFromJSON(jsonValue));
+    }
+
+    /**
+     * Create integration
+     */
+    async createIntegration(requestParameters: CreateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
+        const response = await this.createIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Delete integration
+     */
+    async deleteIntegrationRaw(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteIntegration().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Delete integration
+     */
+    async deleteIntegration(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get integration
+     */
+    async getIntegrationRaw(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getIntegration().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IntegrationFromJSON(jsonValue));
+    }
+
+    /**
+     * Get integration
+     */
+    async getIntegration(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
+        const response = await this.getIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Get integration by name
      */
-    async integrationsByNameNameGetRaw(requestParameters: IntegrationsByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>> {
+    async getIntegrationByNameRaw(requestParameters: GetIntegrationByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling integrationsByNameNameGet().'
+                'Required parameter "name" was null or undefined when calling getIntegrationByName().'
             );
         }
 
         if (requestParameters['orgId'] == null) {
             throw new runtime.RequiredError(
                 'orgId',
-                'Required parameter "orgId" was null or undefined when calling integrationsByNameNameGet().'
+                'Required parameter "orgId" was null or undefined when calling getIntegrationByName().'
             );
         }
 
@@ -421,19 +569,514 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     /**
      * Get integration by name
      */
-    async integrationsByNameNameGet(requestParameters: IntegrationsByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
-        const response = await this.integrationsByNameNameGetRaw(requestParameters, initOverrides);
+    async getIntegrationByName(requestParameters: GetIntegrationByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
+        const response = await this.getIntegrationByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get Kubernetes settings
+     */
+    async getIntegrationKubeSettingsRaw(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getIntegrationKubeSettings().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}/options/kube-settings`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Get Kubernetes settings
+     */
+    async getIntegrationKubeSettings(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }> {
+        const response = await this.getIntegrationKubeSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List Kubernetes machine types
+     */
+    async listIntegrationKubeMachineTypesRaw(requestParameters: ListIntegrationKubeMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listIntegrationKubeMachineTypes().'
+            );
+        }
+
+        if (requestParameters['location'] == null) {
+            throw new runtime.RequiredError(
+                'location',
+                'Required parameter "location" was null or undefined when calling listIntegrationKubeMachineTypes().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['location'] != null) {
+            queryParameters['location'] = requestParameters['location'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}/options/kube-machine-types`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * List Kubernetes machine types
+     */
+    async listIntegrationKubeMachineTypes(requestParameters: ListIntegrationKubeMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
+        const response = await this.listIntegrationKubeMachineTypesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List Kubernetes regions
+     */
+    async listIntegrationKubeRegionsRaw(requestParameters: ListIntegrationKubeRegionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listIntegrationKubeRegions().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}/options/kube-regions`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * List Kubernetes regions
+     */
+    async listIntegrationKubeRegions(requestParameters: ListIntegrationKubeRegionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
+        const response = await this.listIntegrationKubeRegionsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List Kubernetes versions
+     */
+    async listIntegrationKubeVersionsRaw(requestParameters: ListIntegrationKubeVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<KubeVersion>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listIntegrationKubeVersions().'
+            );
+        }
+
+        if (requestParameters['location'] == null) {
+            throw new runtime.RequiredError(
+                'location',
+                'Required parameter "location" was null or undefined when calling listIntegrationKubeVersions().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['location'] != null) {
+            queryParameters['location'] = requestParameters['location'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}/options/kube-versions`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(KubeVersionFromJSON));
+    }
+
+    /**
+     * List Kubernetes versions
+     */
+    async listIntegrationKubeVersions(requestParameters: ListIntegrationKubeVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<KubeVersion>> {
+        const response = await this.listIntegrationKubeVersionsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List Kubernetes zones
+     */
+    async listIntegrationKubeZonesRaw(requestParameters: ListIntegrationKubeZonesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listIntegrationKubeZones().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}/options/kube-zones`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * List Kubernetes zones
+     */
+    async listIntegrationKubeZones(requestParameters: ListIntegrationKubeZonesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
+        const response = await this.listIntegrationKubeZonesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List remote Git repository branches
+     */
+    async listIntegrationRemoteGitRepoBranchesRaw(requestParameters: ListIntegrationRemoteGitRepoBranchesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listIntegrationRemoteGitRepoBranches().'
+            );
+        }
+
+        if (requestParameters['remoteGitRepoId'] == null) {
+            throw new runtime.RequiredError(
+                'remoteGitRepoId',
+                'Required parameter "remoteGitRepoId" was null or undefined when calling listIntegrationRemoteGitRepoBranches().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['remoteGitRepoId'] != null) {
+            queryParameters['remoteGitRepoId'] = requestParameters['remoteGitRepoId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}/options/remote-git-repo-branches`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * List remote Git repository branches
+     */
+    async listIntegrationRemoteGitRepoBranches(requestParameters: ListIntegrationRemoteGitRepoBranchesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
+        const response = await this.listIntegrationRemoteGitRepoBranchesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List remote Git repository tags
+     */
+    async listIntegrationRemoteGitRepoTagsRaw(requestParameters: ListIntegrationRemoteGitRepoTagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listIntegrationRemoteGitRepoTags().'
+            );
+        }
+
+        if (requestParameters['remoteGitRepoId'] == null) {
+            throw new runtime.RequiredError(
+                'remoteGitRepoId',
+                'Required parameter "remoteGitRepoId" was null or undefined when calling listIntegrationRemoteGitRepoTags().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['remoteGitRepoId'] != null) {
+            queryParameters['remoteGitRepoId'] = requestParameters['remoteGitRepoId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}/options/remote-git-repo-tags`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * List remote Git repository tags
+     */
+    async listIntegrationRemoteGitRepoTags(requestParameters: ListIntegrationRemoteGitRepoTagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
+        const response = await this.listIntegrationRemoteGitRepoTagsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List remote Git repositories
+     */
+    async listIntegrationRemoteGitReposRaw(requestParameters: ListIntegrationRemoteGitReposRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<RemoteGitRepo>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listIntegrationRemoteGitRepos().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}/options/remote-git-repos`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(RemoteGitRepoFromJSON));
+    }
+
+    /**
+     * List remote Git repositories
+     */
+    async listIntegrationRemoteGitRepos(requestParameters: ListIntegrationRemoteGitReposRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<RemoteGitRepo>> {
+        const response = await this.listIntegrationRemoteGitReposRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List integration scopes
+     */
+    async listIntegrationScopesRaw(requestParameters: ListIntegrationScopesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<IntegrationScope>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listIntegrationScopes().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}/options/scopes`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(IntegrationScopeFromJSON));
+    }
+
+    /**
+     * List integration scopes
+     */
+    async listIntegrationScopes(requestParameters: ListIntegrationScopesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<IntegrationScope>> {
+        const response = await this.listIntegrationScopesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List storage buckets
+     */
+    async listIntegrationStorageBucketsRaw(requestParameters: ListIntegrationStorageBucketsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listIntegrationStorageBuckets().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}/options/storage-buckets`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * List storage buckets
+     */
+    async listIntegrationStorageBuckets(requestParameters: ListIntegrationStorageBucketsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
+        const response = await this.listIntegrationStorageBucketsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List storage classes
+     */
+    async listIntegrationStorageClassesRaw(requestParameters: ListIntegrationStorageClassesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listIntegrationStorageClasses().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}/options/storage-classes`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * List storage classes
+     */
+    async listIntegrationStorageClasses(requestParameters: ListIntegrationStorageClassesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
+        const response = await this.listIntegrationStorageClassesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * List integrations
      */
-    async integrationsGetRaw(requestParameters: IntegrationsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>> {
+    async listIntegrationsRaw(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>> {
         if (requestParameters['orgId'] == null) {
             throw new runtime.RequiredError(
                 'orgId',
-                'Required parameter "orgId" was null or undefined when calling integrationsGet().'
+                'Required parameter "orgId" was null or undefined when calling listIntegrations().'
             );
         }
 
@@ -474,294 +1117,26 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     /**
      * List integrations
      */
-    async integrationsGet(requestParameters: IntegrationsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>> {
-        const response = await this.integrationsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Delete integration
-     */
-    async integrationsIdDeleteRaw(requestParameters: IntegrationsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling integrationsIdDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/integrations/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
-    }
-
-    /**
-     * Delete integration
-     */
-    async integrationsIdDelete(requestParameters: IntegrationsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
-        const response = await this.integrationsIdDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * List Kubernetes machine types
-     */
-    async integrationsIdKubeMachineTypesGetRaw(requestParameters: IntegrationsIdKubeMachineTypesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling integrationsIdKubeMachineTypesGet().'
-            );
-        }
-
-        if (requestParameters['location'] == null) {
-            throw new runtime.RequiredError(
-                'location',
-                'Required parameter "location" was null or undefined when calling integrationsIdKubeMachineTypesGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        if (requestParameters['location'] != null) {
-            queryParameters['location'] = requestParameters['location'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/integrations/{id}/kube-machine-types`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     * List Kubernetes machine types
-     */
-    async integrationsIdKubeMachineTypesGet(requestParameters: IntegrationsIdKubeMachineTypesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
-        const response = await this.integrationsIdKubeMachineTypesGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * List Kubernetes regions
-     */
-    async integrationsIdKubeRegionsGetRaw(requestParameters: IntegrationsIdKubeRegionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling integrationsIdKubeRegionsGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/integrations/{id}/kube-regions`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     * List Kubernetes regions
-     */
-    async integrationsIdKubeRegionsGet(requestParameters: IntegrationsIdKubeRegionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
-        const response = await this.integrationsIdKubeRegionsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Get Kubernetes settings
-     */
-    async integrationsIdKubeSettingsGetRaw(requestParameters: IntegrationsIdKubeSettingsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling integrationsIdKubeSettingsGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/integrations/{id}/kube-settings`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     * Get Kubernetes settings
-     */
-    async integrationsIdKubeSettingsGet(requestParameters: IntegrationsIdKubeSettingsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }> {
-        const response = await this.integrationsIdKubeSettingsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * List Kubernetes versions
-     */
-    async integrationsIdKubeVersionsGetRaw(requestParameters: IntegrationsIdKubeVersionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<KubeVersion>>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling integrationsIdKubeVersionsGet().'
-            );
-        }
-
-        if (requestParameters['location'] == null) {
-            throw new runtime.RequiredError(
-                'location',
-                'Required parameter "location" was null or undefined when calling integrationsIdKubeVersionsGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        if (requestParameters['location'] != null) {
-            queryParameters['location'] = requestParameters['location'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/integrations/{id}/kube-versions`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(KubeVersionFromJSON));
-    }
-
-    /**
-     * List Kubernetes versions
-     */
-    async integrationsIdKubeVersionsGet(requestParameters: IntegrationsIdKubeVersionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<KubeVersion>> {
-        const response = await this.integrationsIdKubeVersionsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * List Kubernetes zones
-     */
-    async integrationsIdKubeZonesGetRaw(requestParameters: IntegrationsIdKubeZonesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling integrationsIdKubeZonesGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/integrations/{id}/kube-zones`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     * List Kubernetes zones
-     */
-    async integrationsIdKubeZonesGet(requestParameters: IntegrationsIdKubeZonesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
-        const response = await this.integrationsIdKubeZonesGetRaw(requestParameters, initOverrides);
+    async listIntegrations(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>> {
+        const response = await this.listIntegrationsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Update integration
      */
-    async integrationsIdPutRaw(requestParameters: IntegrationsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>> {
+    async updateIntegrationRaw(requestParameters: UpdateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling integrationsIdPut().'
+                'Required parameter "id" was null or undefined when calling updateIntegration().'
             );
         }
 
         if (requestParameters['updateIntegrationInput'] == null) {
             throw new runtime.RequiredError(
                 'updateIntegrationInput',
-                'Required parameter "updateIntegrationInput" was null or undefined when calling integrationsIdPut().'
+                'Required parameter "updateIntegrationInput" was null or undefined when calling updateIntegration().'
             );
         }
 
@@ -793,320 +1168,8 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     /**
      * Update integration
      */
-    async integrationsIdPut(requestParameters: IntegrationsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
-        const response = await this.integrationsIdPutRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * List remote Git repository branches
-     */
-    async integrationsIdRemoteGitRepoBranchesGetRaw(requestParameters: IntegrationsIdRemoteGitRepoBranchesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling integrationsIdRemoteGitRepoBranchesGet().'
-            );
-        }
-
-        if (requestParameters['remoteGitRepoId'] == null) {
-            throw new runtime.RequiredError(
-                'remoteGitRepoId',
-                'Required parameter "remoteGitRepoId" was null or undefined when calling integrationsIdRemoteGitRepoBranchesGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        if (requestParameters['remoteGitRepoId'] != null) {
-            queryParameters['remoteGitRepoId'] = requestParameters['remoteGitRepoId'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/integrations/{id}/remote-git-repo-branches`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     * List remote Git repository branches
-     */
-    async integrationsIdRemoteGitRepoBranchesGet(requestParameters: IntegrationsIdRemoteGitRepoBranchesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
-        const response = await this.integrationsIdRemoteGitRepoBranchesGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * List remote Git repository tags
-     */
-    async integrationsIdRemoteGitRepoTagsGetRaw(requestParameters: IntegrationsIdRemoteGitRepoTagsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling integrationsIdRemoteGitRepoTagsGet().'
-            );
-        }
-
-        if (requestParameters['remoteGitRepoId'] == null) {
-            throw new runtime.RequiredError(
-                'remoteGitRepoId',
-                'Required parameter "remoteGitRepoId" was null or undefined when calling integrationsIdRemoteGitRepoTagsGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        if (requestParameters['remoteGitRepoId'] != null) {
-            queryParameters['remoteGitRepoId'] = requestParameters['remoteGitRepoId'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/integrations/{id}/remote-git-repo-tags`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     * List remote Git repository tags
-     */
-    async integrationsIdRemoteGitRepoTagsGet(requestParameters: IntegrationsIdRemoteGitRepoTagsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
-        const response = await this.integrationsIdRemoteGitRepoTagsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * List remote Git repositories
-     */
-    async integrationsIdRemoteGitReposGetRaw(requestParameters: IntegrationsIdRemoteGitReposGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<RemoteGitRepo>>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling integrationsIdRemoteGitReposGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/integrations/{id}/remote-git-repos`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(RemoteGitRepoFromJSON));
-    }
-
-    /**
-     * List remote Git repositories
-     */
-    async integrationsIdRemoteGitReposGet(requestParameters: IntegrationsIdRemoteGitReposGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<RemoteGitRepo>> {
-        const response = await this.integrationsIdRemoteGitReposGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * List integration scopes
-     */
-    async integrationsIdScopesGetRaw(requestParameters: IntegrationsIdScopesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<IntegrationScope>>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling integrationsIdScopesGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/integrations/{id}/scopes`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(IntegrationScopeFromJSON));
-    }
-
-    /**
-     * List integration scopes
-     */
-    async integrationsIdScopesGet(requestParameters: IntegrationsIdScopesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<IntegrationScope>> {
-        const response = await this.integrationsIdScopesGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * List storage buckets
-     */
-    async integrationsIdStorageBucketsGetRaw(requestParameters: IntegrationsIdStorageBucketsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling integrationsIdStorageBucketsGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/integrations/{id}/storage-buckets`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     * List storage buckets
-     */
-    async integrationsIdStorageBucketsGet(requestParameters: IntegrationsIdStorageBucketsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
-        const response = await this.integrationsIdStorageBucketsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * List storage classes
-     */
-    async integrationsIdStorageClassesGetRaw(requestParameters: IntegrationsIdStorageClassesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling integrationsIdStorageClassesGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/integrations/{id}/storage-classes`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     * List storage classes
-     */
-    async integrationsIdStorageClassesGet(requestParameters: IntegrationsIdStorageClassesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
-        const response = await this.integrationsIdStorageClassesGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Create integration
-     */
-    async integrationsPostRaw(requestParameters: IntegrationsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>> {
-        if (requestParameters['newIntegrationInput'] == null) {
-            throw new runtime.RequiredError(
-                'newIntegrationInput',
-                'Required parameter "newIntegrationInput" was null or undefined when calling integrationsPost().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/integrations`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: NewIntegrationInputToJSON(requestParameters['newIntegrationInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => IntegrationFromJSON(jsonValue));
-    }
-
-    /**
-     * Create integration
-     */
-    async integrationsPost(requestParameters: IntegrationsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
-        const response = await this.integrationsPostRaw(requestParameters, initOverrides);
+    async updateIntegration(requestParameters: UpdateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
+        const response = await this.updateIntegrationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

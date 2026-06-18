@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -24,19 +24,19 @@ export interface NewClusterInput {
      * @type {number}
      * @memberof NewClusterInput
      */
-    orgID: number;
+    orgId: number;
     /**
      * 
      * @type {number}
      * @memberof NewClusterInput
      */
-    projectID?: number | null;
+    projectId?: number | null;
     /**
      * 
      * @type {number}
      * @memberof NewClusterInput
      */
-    integrationID: number;
+    integrationId: number;
     /**
      * 
      * @type {string}
@@ -121,8 +121,8 @@ export interface NewClusterInput {
  * Check if a given object implements the NewClusterInput interface.
  */
 export function instanceOfNewClusterInput(value: object): value is NewClusterInput {
-    if (!('orgID' in value) || value['orgID'] === undefined) return false;
-    if (!('integrationID' in value) || value['integrationID'] === undefined) return false;
+    if (!('orgId' in value) || value['orgId'] === undefined) return false;
+    if (!('integrationId' in value) || value['integrationId'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('title' in value) || value['title'] === undefined) return false;
     if (!('serverless' in value) || value['serverless'] === undefined) return false;
@@ -140,9 +140,9 @@ export function NewClusterInputFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'orgID': json['orgID'],
-        'projectID': json['projectID'] == null ? undefined : json['projectID'],
-        'integrationID': json['integrationID'],
+        'orgId': json['orgId'],
+        'projectId': json['projectId'] == null ? undefined : json['projectId'],
+        'integrationId': json['integrationId'],
         'name': json['name'],
         'title': json['title'],
         'serverless': json['serverless'],
@@ -170,9 +170,9 @@ export function NewClusterInputToJSONTyped(value?: NewClusterInput | null, ignor
 
     return {
         
-        'orgID': value['orgID'],
-        'projectID': value['projectID'],
-        'integrationID': value['integrationID'],
+        'orgId': value['orgId'],
+        'projectId': value['projectId'],
+        'integrationId': value['integrationId'],
         'name': value['name'],
         'title': value['title'],
         'serverless': value['serverless'],

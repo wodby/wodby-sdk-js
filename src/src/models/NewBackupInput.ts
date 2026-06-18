@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -24,13 +24,13 @@ export interface NewBackupInput {
      * @type {number}
      * @memberof NewBackupInput
      */
-    appServiceID?: number | null;
+    appServiceId?: number | null;
     /**
      * 
      * @type {number}
      * @memberof NewBackupInput
      */
-    databaseDBID?: number | null;
+    databaseDbId?: number | null;
     /**
      * 
      * @type {string}
@@ -42,7 +42,7 @@ export interface NewBackupInput {
      * @type {number}
      * @memberof NewBackupInput
      */
-    integrationID: number;
+    integrationId: number;
     /**
      * 
      * @type {string}
@@ -61,7 +61,7 @@ export interface NewBackupInput {
  * Check if a given object implements the NewBackupInput interface.
  */
 export function instanceOfNewBackupInput(value: object): value is NewBackupInput {
-    if (!('integrationID' in value) || value['integrationID'] === undefined) return false;
+    if (!('integrationId' in value) || value['integrationId'] === undefined) return false;
     if (!('bucket' in value) || value['bucket'] === undefined) return false;
     return true;
 }
@@ -76,10 +76,10 @@ export function NewBackupInputFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'appServiceID': json['appServiceID'] == null ? undefined : json['appServiceID'],
-        'databaseDBID': json['databaseDBID'] == null ? undefined : json['databaseDBID'],
+        'appServiceId': json['appServiceId'] == null ? undefined : json['appServiceId'],
+        'databaseDbId': json['databaseDbId'] == null ? undefined : json['databaseDbId'],
         'backupName': json['backupName'] == null ? undefined : json['backupName'],
-        'integrationID': json['integrationID'],
+        'integrationId': json['integrationId'],
         'bucket': json['bucket'],
         'storageClass': json['storageClass'] == null ? undefined : json['storageClass'],
     };
@@ -96,10 +96,10 @@ export function NewBackupInputToJSONTyped(value?: NewBackupInput | null, ignoreD
 
     return {
         
-        'appServiceID': value['appServiceID'],
-        'databaseDBID': value['databaseDBID'],
+        'appServiceId': value['appServiceId'],
+        'databaseDbId': value['databaseDbId'],
         'backupName': value['backupName'],
-        'integrationID': value['integrationID'],
+        'integrationId': value['integrationId'],
         'bucket': value['bucket'],
         'storageClass': value['storageClass'],
     };

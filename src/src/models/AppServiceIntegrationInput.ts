@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -30,7 +30,7 @@ export interface AppServiceIntegrationInput {
      * @type {Array<number>}
      * @memberof AppServiceIntegrationInput
      */
-    integrationIDs: Array<number>;
+    integrationIds: Array<number>;
 }
 
 /**
@@ -38,7 +38,7 @@ export interface AppServiceIntegrationInput {
  */
 export function instanceOfAppServiceIntegrationInput(value: object): value is AppServiceIntegrationInput {
     if (!('name' in value) || value['name'] === undefined) return false;
-    if (!('integrationIDs' in value) || value['integrationIDs'] === undefined) return false;
+    if (!('integrationIds' in value) || value['integrationIds'] === undefined) return false;
     return true;
 }
 
@@ -53,7 +53,7 @@ export function AppServiceIntegrationInputFromJSONTyped(json: any, ignoreDiscrim
     return {
         
         'name': json['name'],
-        'integrationIDs': json['integrationIDs'],
+        'integrationIds': json['integrationIds'],
     };
 }
 
@@ -69,7 +69,7 @@ export function AppServiceIntegrationInputToJSONTyped(value?: AppServiceIntegrat
     return {
         
         'name': value['name'],
-        'integrationIDs': value['integrationIDs'],
+        'integrationIds': value['integrationIds'],
     };
 }
 

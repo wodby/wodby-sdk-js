@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   CreateEnvRequest,
   Env,
+  ErrorResponse,
   OperationResult,
   UpdateEnvRequest,
 } from '../models/index';
@@ -25,31 +26,38 @@ import {
     CreateEnvRequestToJSON,
     EnvFromJSON,
     EnvToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
     UpdateEnvRequestFromJSON,
     UpdateEnvRequestToJSON,
 } from '../models/index';
 
-export interface EnvsGetRequest {
+export interface CreateEnvOperationRequest {
+    createEnvRequest: CreateEnvRequest;
+}
+
+export interface DeleteEnvRequest {
+    id: number;
+}
+
+export interface GetEnvRequest {
+    id: number;
+}
+
+export interface GetEnvByNameRequest {
+    name: string;
     orgId: number;
 }
 
-export interface EnvsIdDeleteRequest {
-    id: number;
+export interface ListEnvsRequest {
+    orgId: number;
 }
 
-export interface EnvsIdGetRequest {
-    id: number;
-}
-
-export interface EnvsIdPutRequest {
+export interface UpdateEnvOperationRequest {
     id: number;
     updateEnvRequest: UpdateEnvRequest;
-}
-
-export interface EnvsPostRequest {
-    createEnvRequest: CreateEnvRequest;
 }
 
 /**
@@ -61,18 +69,18 @@ export interface EnvsPostRequest {
 export interface EnvsApiInterface {
     /**
      * 
-     * @summary List envs
-     * @param {number} orgId 
+     * @summary Create env
+     * @param {CreateEnvRequest} createEnvRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EnvsApiInterface
      */
-    envsGetRaw(requestParameters: EnvsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Env>>>;
+    createEnvRaw(requestParameters: CreateEnvOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>>;
 
     /**
-     * List envs
+     * Create env
      */
-    envsGet(requestParameters: EnvsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Env>>;
+    createEnv(requestParameters: CreateEnvOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env>;
 
     /**
      * 
@@ -82,12 +90,12 @@ export interface EnvsApiInterface {
      * @throws {RequiredError}
      * @memberof EnvsApiInterface
      */
-    envsIdDeleteRaw(requestParameters: EnvsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+    deleteEnvRaw(requestParameters: DeleteEnvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
      * Delete env
      */
-    envsIdDelete(requestParameters: EnvsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+    deleteEnv(requestParameters: DeleteEnvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * 
@@ -97,12 +105,43 @@ export interface EnvsApiInterface {
      * @throws {RequiredError}
      * @memberof EnvsApiInterface
      */
-    envsIdGetRaw(requestParameters: EnvsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>>;
+    getEnvRaw(requestParameters: GetEnvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>>;
 
     /**
      * Get env
      */
-    envsIdGet(requestParameters: EnvsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env>;
+    getEnv(requestParameters: GetEnvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env>;
+
+    /**
+     * 
+     * @summary Get env by name
+     * @param {string} name 
+     * @param {number} orgId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EnvsApiInterface
+     */
+    getEnvByNameRaw(requestParameters: GetEnvByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>>;
+
+    /**
+     * Get env by name
+     */
+    getEnvByName(requestParameters: GetEnvByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env>;
+
+    /**
+     * 
+     * @summary List envs
+     * @param {number} orgId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EnvsApiInterface
+     */
+    listEnvsRaw(requestParameters: ListEnvsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Env>>>;
+
+    /**
+     * List envs
+     */
+    listEnvs(requestParameters: ListEnvsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Env>>;
 
     /**
      * 
@@ -113,27 +152,12 @@ export interface EnvsApiInterface {
      * @throws {RequiredError}
      * @memberof EnvsApiInterface
      */
-    envsIdPutRaw(requestParameters: EnvsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>>;
+    updateEnvRaw(requestParameters: UpdateEnvOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>>;
 
     /**
      * Update env
      */
-    envsIdPut(requestParameters: EnvsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env>;
-
-    /**
-     * 
-     * @summary Create env
-     * @param {CreateEnvRequest} createEnvRequest 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof EnvsApiInterface
-     */
-    envsPostRaw(requestParameters: EnvsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>>;
-
-    /**
-     * Create env
-     */
-    envsPost(requestParameters: EnvsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env>;
+    updateEnv(requestParameters: UpdateEnvOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env>;
 
 }
 
@@ -143,13 +167,191 @@ export interface EnvsApiInterface {
 export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
 
     /**
-     * List envs
+     * Create env
      */
-    async envsGetRaw(requestParameters: EnvsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Env>>> {
+    async createEnvRaw(requestParameters: CreateEnvOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>> {
+        if (requestParameters['createEnvRequest'] == null) {
+            throw new runtime.RequiredError(
+                'createEnvRequest',
+                'Required parameter "createEnvRequest" was null or undefined when calling createEnv().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/envs`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateEnvRequestToJSON(requestParameters['createEnvRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EnvFromJSON(jsonValue));
+    }
+
+    /**
+     * Create env
+     */
+    async createEnv(requestParameters: CreateEnvOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env> {
+        const response = await this.createEnvRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Delete env
+     */
+    async deleteEnvRaw(requestParameters: DeleteEnvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteEnv().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/envs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Delete env
+     */
+    async deleteEnv(requestParameters: DeleteEnvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteEnvRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get env
+     */
+    async getEnvRaw(requestParameters: GetEnvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getEnv().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/envs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EnvFromJSON(jsonValue));
+    }
+
+    /**
+     * Get env
+     */
+    async getEnv(requestParameters: GetEnvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env> {
+        const response = await this.getEnvRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get env by name
+     */
+    async getEnvByNameRaw(requestParameters: GetEnvByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>> {
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling getEnvByName().'
+            );
+        }
+
         if (requestParameters['orgId'] == null) {
             throw new runtime.RequiredError(
                 'orgId',
-                'Required parameter "orgId" was null or undefined when calling envsGet().'
+                'Required parameter "orgId" was null or undefined when calling getEnvByName().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['orgId'] != null) {
+            queryParameters['orgId'] = requestParameters['orgId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/envs/by-name/{name}`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EnvFromJSON(jsonValue));
+    }
+
+    /**
+     * Get env by name
+     */
+    async getEnvByName(requestParameters: GetEnvByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env> {
+        const response = await this.getEnvByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List envs
+     */
+    async listEnvsRaw(requestParameters: ListEnvsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Env>>> {
+        if (requestParameters['orgId'] == null) {
+            throw new runtime.RequiredError(
+                'orgId',
+                'Required parameter "orgId" was null or undefined when calling listEnvs().'
             );
         }
 
@@ -182,108 +384,26 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
     /**
      * List envs
      */
-    async envsGet(requestParameters: EnvsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Env>> {
-        const response = await this.envsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Delete env
-     */
-    async envsIdDeleteRaw(requestParameters: EnvsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling envsIdDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/envs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
-    }
-
-    /**
-     * Delete env
-     */
-    async envsIdDelete(requestParameters: EnvsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
-        const response = await this.envsIdDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Get env
-     */
-    async envsIdGetRaw(requestParameters: EnvsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling envsIdGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/envs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvFromJSON(jsonValue));
-    }
-
-    /**
-     * Get env
-     */
-    async envsIdGet(requestParameters: EnvsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env> {
-        const response = await this.envsIdGetRaw(requestParameters, initOverrides);
+    async listEnvs(requestParameters: ListEnvsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Env>> {
+        const response = await this.listEnvsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Update env
      */
-    async envsIdPutRaw(requestParameters: EnvsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>> {
+    async updateEnvRaw(requestParameters: UpdateEnvOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling envsIdPut().'
+                'Required parameter "id" was null or undefined when calling updateEnv().'
             );
         }
 
         if (requestParameters['updateEnvRequest'] == null) {
             throw new runtime.RequiredError(
                 'updateEnvRequest',
-                'Required parameter "updateEnvRequest" was null or undefined when calling envsIdPut().'
+                'Required parameter "updateEnvRequest" was null or undefined when calling updateEnv().'
             );
         }
 
@@ -315,52 +435,8 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
     /**
      * Update env
      */
-    async envsIdPut(requestParameters: EnvsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env> {
-        const response = await this.envsIdPutRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Create env
-     */
-    async envsPostRaw(requestParameters: EnvsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>> {
-        if (requestParameters['createEnvRequest'] == null) {
-            throw new runtime.RequiredError(
-                'createEnvRequest',
-                'Required parameter "createEnvRequest" was null or undefined when calling envsPost().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/envs`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: CreateEnvRequestToJSON(requestParameters['createEnvRequest']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvFromJSON(jsonValue));
-    }
-
-    /**
-     * Create env
-     */
-    async envsPost(requestParameters: EnvsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env> {
-        const response = await this.envsPostRaw(requestParameters, initOverrides);
+    async updateEnv(requestParameters: UpdateEnvOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env> {
+        const response = await this.updateEnvRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

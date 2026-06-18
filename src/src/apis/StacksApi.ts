@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -15,12 +15,15 @@
 
 import * as runtime from '../runtime';
 import type {
+  ErrorResponse,
   Stack,
   StackRevision,
   StackService,
   StacksResponse,
 } from '../models/index';
 import {
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     StackFromJSON,
     StackToJSON,
     StackRevisionFromJSON,
@@ -31,20 +34,24 @@ import {
     StacksResponseToJSON,
 } from '../models/index';
 
-export interface StackRevisionsIdGetRequest {
+export interface GetStackRequest {
     id: number;
 }
 
-export interface StackRevisionsIdServicesGetRequest {
-    id: number;
-}
-
-export interface StacksByNameNameGetRequest {
+export interface GetStackByNameRequest {
     name: string;
     revNumber?: number;
 }
 
-export interface StacksGetRequest {
+export interface GetStackRevisionRequest {
+    id: number;
+}
+
+export interface ListStackRevisionServicesRequest {
+    id: number;
+}
+
+export interface ListStacksRequest {
     orgId: number;
     projectIds?: string;
     search?: string;
@@ -61,33 +68,18 @@ export interface StacksGetRequest {
 export interface StacksApiInterface {
     /**
      * 
-     * @summary Get stack revision
+     * @summary Get stack
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof StacksApiInterface
      */
-    stackRevisionsIdGetRaw(requestParameters: StackRevisionsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackRevision>>;
+    getStackRaw(requestParameters: GetStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>>;
 
     /**
-     * Get stack revision
+     * Get stack
      */
-    stackRevisionsIdGet(requestParameters: StackRevisionsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackRevision>;
-
-    /**
-     * 
-     * @summary List stack services
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof StacksApiInterface
-     */
-    stackRevisionsIdServicesGetRaw(requestParameters: StackRevisionsIdServicesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackService>>>;
-
-    /**
-     * List stack services
-     */
-    stackRevisionsIdServicesGet(requestParameters: StackRevisionsIdServicesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackService>>;
+    getStack(requestParameters: GetStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
 
     /**
      * 
@@ -98,12 +90,42 @@ export interface StacksApiInterface {
      * @throws {RequiredError}
      * @memberof StacksApiInterface
      */
-    stacksByNameNameGetRaw(requestParameters: StacksByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>>;
+    getStackByNameRaw(requestParameters: GetStackByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>>;
 
     /**
      * Get stack by name
      */
-    stacksByNameNameGet(requestParameters: StacksByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
+    getStackByName(requestParameters: GetStackByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
+
+    /**
+     * 
+     * @summary Get stack revision
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    getStackRevisionRaw(requestParameters: GetStackRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackRevision>>;
+
+    /**
+     * Get stack revision
+     */
+    getStackRevision(requestParameters: GetStackRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackRevision>;
+
+    /**
+     * 
+     * @summary List stack services
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    listStackRevisionServicesRaw(requestParameters: ListStackRevisionServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackService>>>;
+
+    /**
+     * List stack services
+     */
+    listStackRevisionServices(requestParameters: ListStackRevisionServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackService>>;
 
     /**
      * 
@@ -117,12 +139,12 @@ export interface StacksApiInterface {
      * @throws {RequiredError}
      * @memberof StacksApiInterface
      */
-    stacksGetRaw(requestParameters: StacksGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StacksResponse>>;
+    listStacksRaw(requestParameters: ListStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StacksResponse>>;
 
     /**
      * List stacks
      */
-    stacksGet(requestParameters: StacksGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StacksResponse>;
+    listStacks(requestParameters: ListStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StacksResponse>;
 
 }
 
@@ -132,13 +154,13 @@ export interface StacksApiInterface {
 export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
 
     /**
-     * Get stack revision
+     * Get stack
      */
-    async stackRevisionsIdGetRaw(requestParameters: StackRevisionsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackRevision>> {
+    async getStackRaw(requestParameters: GetStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling stackRevisionsIdGet().'
+                'Required parameter "id" was null or undefined when calling getStack().'
             );
         }
 
@@ -155,72 +177,31 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
         }
 
         const response = await this.request({
-            path: `/stack-revisions/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/stacks/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackRevisionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => StackFromJSON(jsonValue));
     }
 
     /**
-     * Get stack revision
+     * Get stack
      */
-    async stackRevisionsIdGet(requestParameters: StackRevisionsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackRevision> {
-        const response = await this.stackRevisionsIdGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * List stack services
-     */
-    async stackRevisionsIdServicesGetRaw(requestParameters: StackRevisionsIdServicesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackService>>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling stackRevisionsIdServicesGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/stack-revisions/{id}/services`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceFromJSON));
-    }
-
-    /**
-     * List stack services
-     */
-    async stackRevisionsIdServicesGet(requestParameters: StackRevisionsIdServicesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackService>> {
-        const response = await this.stackRevisionsIdServicesGetRaw(requestParameters, initOverrides);
+    async getStack(requestParameters: GetStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
+        const response = await this.getStackRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Get stack by name
      */
-    async stacksByNameNameGetRaw(requestParameters: StacksByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>> {
+    async getStackByNameRaw(requestParameters: GetStackByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling stacksByNameNameGet().'
+                'Required parameter "name" was null or undefined when calling getStackByName().'
             );
         }
 
@@ -253,19 +234,101 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     /**
      * Get stack by name
      */
-    async stacksByNameNameGet(requestParameters: StacksByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
-        const response = await this.stacksByNameNameGetRaw(requestParameters, initOverrides);
+    async getStackByName(requestParameters: GetStackByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
+        const response = await this.getStackByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get stack revision
+     */
+    async getStackRevisionRaw(requestParameters: GetStackRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackRevision>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getStackRevision().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-revisions/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StackRevisionFromJSON(jsonValue));
+    }
+
+    /**
+     * Get stack revision
+     */
+    async getStackRevision(requestParameters: GetStackRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackRevision> {
+        const response = await this.getStackRevisionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List stack services
+     */
+    async listStackRevisionServicesRaw(requestParameters: ListStackRevisionServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackService>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listStackRevisionServices().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-revisions/{id}/services`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceFromJSON));
+    }
+
+    /**
+     * List stack services
+     */
+    async listStackRevisionServices(requestParameters: ListStackRevisionServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackService>> {
+        const response = await this.listStackRevisionServicesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * List stacks
      */
-    async stacksGetRaw(requestParameters: StacksGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StacksResponse>> {
+    async listStacksRaw(requestParameters: ListStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StacksResponse>> {
         if (requestParameters['orgId'] == null) {
             throw new runtime.RequiredError(
                 'orgId',
-                'Required parameter "orgId" was null or undefined when calling stacksGet().'
+                'Required parameter "orgId" was null or undefined when calling listStacks().'
             );
         }
 
@@ -314,8 +377,8 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     /**
      * List stacks
      */
-    async stacksGet(requestParameters: StacksGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StacksResponse> {
-        const response = await this.stacksGetRaw(requestParameters, initOverrides);
+    async listStacks(requestParameters: ListStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StacksResponse> {
+        const response = await this.listStacksRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

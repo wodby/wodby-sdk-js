@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -15,11 +15,14 @@
 
 import * as runtime from '../runtime';
 import type {
+  ErrorResponse,
   Import,
   NewImportInput,
   OperationResult,
 } from '../models/index';
 import {
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     ImportFromJSON,
     ImportToJSON,
     NewImportInputFromJSON,
@@ -28,19 +31,19 @@ import {
     OperationResultToJSON,
 } from '../models/index';
 
-export interface ImportsGetRequest {
+export interface CreateImportRequest {
+    newImportInput: NewImportInput;
+}
+
+export interface GetImportRequest {
+    id: number;
+}
+
+export interface ListImportsRequest {
     appInstanceId?: number;
     appServiceId?: number;
     databaseId?: number;
     databaseDbId?: number;
-}
-
-export interface ImportsIdGetRequest {
-    id: number;
-}
-
-export interface ImportsPostRequest {
-    newImportInput: NewImportInput;
 }
 
 /**
@@ -52,21 +55,18 @@ export interface ImportsPostRequest {
 export interface ImportsApiInterface {
     /**
      * 
-     * @summary List imports
-     * @param {number} [appInstanceId] 
-     * @param {number} [appServiceId] 
-     * @param {number} [databaseId] 
-     * @param {number} [databaseDbId] 
+     * @summary Create import
+     * @param {NewImportInput} newImportInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ImportsApiInterface
      */
-    importsGetRaw(requestParameters: ImportsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Import>>>;
+    createImportRaw(requestParameters: CreateImportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
-     * List imports
+     * Create import
      */
-    importsGet(requestParameters: ImportsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Import>>;
+    createImport(requestParameters: CreateImportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * 
@@ -76,27 +76,30 @@ export interface ImportsApiInterface {
      * @throws {RequiredError}
      * @memberof ImportsApiInterface
      */
-    importsIdGetRaw(requestParameters: ImportsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Import>>;
+    getImportRaw(requestParameters: GetImportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Import>>;
 
     /**
      * Get import
      */
-    importsIdGet(requestParameters: ImportsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Import>;
+    getImport(requestParameters: GetImportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Import>;
 
     /**
      * 
-     * @summary Create import
-     * @param {NewImportInput} newImportInput 
+     * @summary List imports
+     * @param {number} [appInstanceId] 
+     * @param {number} [appServiceId] 
+     * @param {number} [databaseId] 
+     * @param {number} [databaseDbId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ImportsApiInterface
      */
-    importsPostRaw(requestParameters: ImportsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+    listImportsRaw(requestParameters: ListImportsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Import>>>;
 
     /**
-     * Create import
+     * List imports
      */
-    importsPost(requestParameters: ImportsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+    listImports(requestParameters: ListImportsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Import>>;
 
 }
 
@@ -106,9 +109,94 @@ export interface ImportsApiInterface {
 export class ImportsApi extends runtime.BaseAPI implements ImportsApiInterface {
 
     /**
+     * Create import
+     */
+    async createImportRaw(requestParameters: CreateImportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['newImportInput'] == null) {
+            throw new runtime.RequiredError(
+                'newImportInput',
+                'Required parameter "newImportInput" was null or undefined when calling createImport().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/imports`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewImportInputToJSON(requestParameters['newImportInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Create import
+     */
+    async createImport(requestParameters: CreateImportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.createImportRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get import
+     */
+    async getImportRaw(requestParameters: GetImportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Import>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getImport().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/imports/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ImportFromJSON(jsonValue));
+    }
+
+    /**
+     * Get import
+     */
+    async getImport(requestParameters: GetImportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Import> {
+        const response = await this.getImportRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * List imports
      */
-    async importsGetRaw(requestParameters: ImportsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Import>>> {
+    async listImportsRaw(requestParameters: ListImportsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Import>>> {
         const queryParameters: any = {};
 
         if (requestParameters['appInstanceId'] != null) {
@@ -150,93 +238,8 @@ export class ImportsApi extends runtime.BaseAPI implements ImportsApiInterface {
     /**
      * List imports
      */
-    async importsGet(requestParameters: ImportsGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Import>> {
-        const response = await this.importsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Get import
-     */
-    async importsIdGetRaw(requestParameters: ImportsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Import>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling importsIdGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/imports/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ImportFromJSON(jsonValue));
-    }
-
-    /**
-     * Get import
-     */
-    async importsIdGet(requestParameters: ImportsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Import> {
-        const response = await this.importsIdGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Create import
-     */
-    async importsPostRaw(requestParameters: ImportsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
-        if (requestParameters['newImportInput'] == null) {
-            throw new runtime.RequiredError(
-                'newImportInput',
-                'Required parameter "newImportInput" was null or undefined when calling importsPost().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/imports`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: NewImportInputToJSON(requestParameters['newImportInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
-    }
-
-    /**
-     * Create import
-     */
-    async importsPost(requestParameters: ImportsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
-        const response = await this.importsPostRaw(requestParameters, initOverrides);
+    async listImports(requestParameters: ListImportsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Import>> {
+        const response = await this.listImportsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

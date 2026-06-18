@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   AppService,
   AppServiceInput,
+  ErrorResponse,
   OperationResult,
 } from '../models/index';
 import {
@@ -24,24 +25,26 @@ import {
     AppServiceToJSON,
     AppServiceInputFromJSON,
     AppServiceInputToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
 } from '../models/index';
 
-export interface AppServicesGetRequest {
+export interface GetAppServiceRequest {
+    id: number;
+}
+
+export interface ListAppServicesRequest {
     appInstanceId: number;
 }
 
-export interface AppServicesIdActionsNamePostRequest {
+export interface RunAppServiceActionRequest {
     id: number;
     name: string;
 }
 
-export interface AppServicesIdGetRequest {
-    id: number;
-}
-
-export interface AppServicesIdPutRequest {
+export interface UpdateAppServiceRequest {
     id: number;
     appServiceInput: AppServiceInput;
 }
@@ -55,18 +58,33 @@ export interface AppServicesIdPutRequest {
 export interface AppServicesApiInterface {
     /**
      * 
+     * @summary Get app service
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    getAppServiceRaw(requestParameters: GetAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppService>>;
+
+    /**
+     * Get app service
+     */
+    getAppService(requestParameters: GetAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService>;
+
+    /**
+     * 
      * @summary List app services
      * @param {number} appInstanceId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AppServicesApiInterface
      */
-    appServicesGetRaw(requestParameters: AppServicesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppService>>>;
+    listAppServicesRaw(requestParameters: ListAppServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppService>>>;
 
     /**
      * List app services
      */
-    appServicesGet(requestParameters: AppServicesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppService>>;
+    listAppServices(requestParameters: ListAppServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppService>>;
 
     /**
      * 
@@ -77,27 +95,12 @@ export interface AppServicesApiInterface {
      * @throws {RequiredError}
      * @memberof AppServicesApiInterface
      */
-    appServicesIdActionsNamePostRaw(requestParameters: AppServicesIdActionsNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+    runAppServiceActionRaw(requestParameters: RunAppServiceActionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
      * Run app service action
      */
-    appServicesIdActionsNamePost(requestParameters: AppServicesIdActionsNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
-
-    /**
-     * 
-     * @summary Get app service
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppServicesApiInterface
-     */
-    appServicesIdGetRaw(requestParameters: AppServicesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppService>>;
-
-    /**
-     * Get app service
-     */
-    appServicesIdGet(requestParameters: AppServicesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService>;
+    runAppServiceAction(requestParameters: RunAppServiceActionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * 
@@ -108,12 +111,12 @@ export interface AppServicesApiInterface {
      * @throws {RequiredError}
      * @memberof AppServicesApiInterface
      */
-    appServicesIdPutRaw(requestParameters: AppServicesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppService>>;
+    updateAppServiceRaw(requestParameters: UpdateAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppService>>;
 
     /**
      * Update app service
      */
-    appServicesIdPut(requestParameters: AppServicesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService>;
+    updateAppService(requestParameters: UpdateAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService>;
 
 }
 
@@ -123,13 +126,54 @@ export interface AppServicesApiInterface {
 export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInterface {
 
     /**
+     * Get app service
+     */
+    async getAppServiceRaw(requestParameters: GetAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppService>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppService().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceFromJSON(jsonValue));
+    }
+
+    /**
+     * Get app service
+     */
+    async getAppService(requestParameters: GetAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService> {
+        const response = await this.getAppServiceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * List app services
      */
-    async appServicesGetRaw(requestParameters: AppServicesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppService>>> {
+    async listAppServicesRaw(requestParameters: ListAppServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppService>>> {
         if (requestParameters['appInstanceId'] == null) {
             throw new runtime.RequiredError(
                 'appInstanceId',
-                'Required parameter "appInstanceId" was null or undefined when calling appServicesGet().'
+                'Required parameter "appInstanceId" was null or undefined when calling listAppServices().'
             );
         }
 
@@ -162,26 +206,26 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     /**
      * List app services
      */
-    async appServicesGet(requestParameters: AppServicesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppService>> {
-        const response = await this.appServicesGetRaw(requestParameters, initOverrides);
+    async listAppServices(requestParameters: ListAppServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppService>> {
+        const response = await this.listAppServicesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Run app service action
      */
-    async appServicesIdActionsNamePostRaw(requestParameters: AppServicesIdActionsNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+    async runAppServiceActionRaw(requestParameters: RunAppServiceActionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling appServicesIdActionsNamePost().'
+                'Required parameter "id" was null or undefined when calling runAppServiceAction().'
             );
         }
 
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling appServicesIdActionsNamePost().'
+                'Required parameter "name" was null or undefined when calling runAppServiceAction().'
             );
         }
 
@@ -210,67 +254,26 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     /**
      * Run app service action
      */
-    async appServicesIdActionsNamePost(requestParameters: AppServicesIdActionsNamePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
-        const response = await this.appServicesIdActionsNamePostRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Get app service
-     */
-    async appServicesIdGetRaw(requestParameters: AppServicesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppService>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling appServicesIdGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/app-services/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceFromJSON(jsonValue));
-    }
-
-    /**
-     * Get app service
-     */
-    async appServicesIdGet(requestParameters: AppServicesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService> {
-        const response = await this.appServicesIdGetRaw(requestParameters, initOverrides);
+    async runAppServiceAction(requestParameters: RunAppServiceActionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.runAppServiceActionRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Update app service
      */
-    async appServicesIdPutRaw(requestParameters: AppServicesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppService>> {
+    async updateAppServiceRaw(requestParameters: UpdateAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppService>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling appServicesIdPut().'
+                'Required parameter "id" was null or undefined when calling updateAppService().'
             );
         }
 
         if (requestParameters['appServiceInput'] == null) {
             throw new runtime.RequiredError(
                 'appServiceInput',
-                'Required parameter "appServiceInput" was null or undefined when calling appServicesIdPut().'
+                'Required parameter "appServiceInput" was null or undefined when calling updateAppService().'
             );
         }
 
@@ -302,8 +305,8 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     /**
      * Update app service
      */
-    async appServicesIdPut(requestParameters: AppServicesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService> {
-        const response = await this.appServicesIdPutRaw(requestParameters, initOverrides);
+    async updateAppService(requestParameters: UpdateAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService> {
+        const response = await this.updateAppServiceRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   AppInstance,
+  ErrorResponse,
   NewAppInstanceInput,
   OperationResult,
   UpdateTitleRequest,
@@ -23,6 +24,8 @@ import type {
 import {
     AppInstanceFromJSON,
     AppInstanceToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     NewAppInstanceInputFromJSON,
     NewAppInstanceInputToJSON,
     OperationResultFromJSON,
@@ -31,13 +34,26 @@ import {
     UpdateTitleRequestToJSON,
 } from '../models/index';
 
-export interface AppInstancesByNameAppNameInstanceNameGetRequest {
+export interface CreateAppInstanceRequest {
+    newAppInstanceInput: NewAppInstanceInput;
+}
+
+export interface DeleteAppInstanceRequest {
+    id: number;
+    force?: boolean;
+}
+
+export interface GetAppInstanceRequest {
+    id: number;
+}
+
+export interface GetAppInstanceByNameRequest {
     appName: string;
     instanceName: string;
     orgId: number;
 }
 
-export interface AppInstancesGetRequest {
+export interface ListAppInstancesRequest {
     orgId: number;
     projectIds?: string;
     appId?: number;
@@ -45,22 +61,9 @@ export interface AppInstancesGetRequest {
     clusterApp?: boolean;
 }
 
-export interface AppInstancesIdDeleteRequest {
-    id: number;
-    force?: boolean;
-}
-
-export interface AppInstancesIdGetRequest {
-    id: number;
-}
-
-export interface AppInstancesIdPutRequest {
+export interface UpdateAppInstanceRequest {
     id: number;
     updateTitleRequest: UpdateTitleRequest;
-}
-
-export interface AppInstancesPostRequest {
-    newAppInstanceInput: NewAppInstanceInput;
 }
 
 /**
@@ -72,6 +75,52 @@ export interface AppInstancesPostRequest {
 export interface AppInstancesApiInterface {
     /**
      * 
+     * @summary Create app instance
+     * @param {NewAppInstanceInput} newAppInstanceInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    createAppInstanceRaw(requestParameters: CreateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>>;
+
+    /**
+     * Create app instance
+     */
+    createAppInstance(requestParameters: CreateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
+
+    /**
+     * 
+     * @summary Delete app instance
+     * @param {number} id 
+     * @param {boolean} [force] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    deleteAppInstanceRaw(requestParameters: DeleteAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Delete app instance
+     */
+    deleteAppInstance(requestParameters: DeleteAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * 
+     * @summary Get app instance
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    getAppInstanceRaw(requestParameters: GetAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>>;
+
+    /**
+     * Get app instance
+     */
+    getAppInstance(requestParameters: GetAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
+
+    /**
+     * 
      * @summary Get app instance by app and instance name
      * @param {string} appName 
      * @param {string} instanceName 
@@ -80,12 +129,12 @@ export interface AppInstancesApiInterface {
      * @throws {RequiredError}
      * @memberof AppInstancesApiInterface
      */
-    appInstancesByNameAppNameInstanceNameGetRaw(requestParameters: AppInstancesByNameAppNameInstanceNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>>;
+    getAppInstanceByNameRaw(requestParameters: GetAppInstanceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>>;
 
     /**
      * Get app instance by app and instance name
      */
-    appInstancesByNameAppNameInstanceNameGet(requestParameters: AppInstancesByNameAppNameInstanceNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
+    getAppInstanceByName(requestParameters: GetAppInstanceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
 
     /**
      * 
@@ -99,43 +148,12 @@ export interface AppInstancesApiInterface {
      * @throws {RequiredError}
      * @memberof AppInstancesApiInterface
      */
-    appInstancesGetRaw(requestParameters: AppInstancesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppInstance>>>;
+    listAppInstancesRaw(requestParameters: ListAppInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppInstance>>>;
 
     /**
      * List app instances
      */
-    appInstancesGet(requestParameters: AppInstancesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppInstance>>;
-
-    /**
-     * 
-     * @summary Delete app instance
-     * @param {number} id 
-     * @param {boolean} [force] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppInstancesApiInterface
-     */
-    appInstancesIdDeleteRaw(requestParameters: AppInstancesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
-
-    /**
-     * Delete app instance
-     */
-    appInstancesIdDelete(requestParameters: AppInstancesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
-
-    /**
-     * 
-     * @summary Get app instance
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppInstancesApiInterface
-     */
-    appInstancesIdGetRaw(requestParameters: AppInstancesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>>;
-
-    /**
-     * Get app instance
-     */
-    appInstancesIdGet(requestParameters: AppInstancesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
+    listAppInstances(requestParameters: ListAppInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppInstance>>;
 
     /**
      * 
@@ -146,27 +164,12 @@ export interface AppInstancesApiInterface {
      * @throws {RequiredError}
      * @memberof AppInstancesApiInterface
      */
-    appInstancesIdPutRaw(requestParameters: AppInstancesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>>;
+    updateAppInstanceRaw(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>>;
 
     /**
      * Update app instance
      */
-    appInstancesIdPut(requestParameters: AppInstancesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
-
-    /**
-     * 
-     * @summary Create app instance
-     * @param {NewAppInstanceInput} newAppInstanceInput 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppInstancesApiInterface
-     */
-    appInstancesPostRaw(requestParameters: AppInstancesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>>;
-
-    /**
-     * Create app instance
-     */
-    appInstancesPost(requestParameters: AppInstancesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
+    updateAppInstance(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
 
 }
 
@@ -176,27 +179,157 @@ export interface AppInstancesApiInterface {
 export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiInterface {
 
     /**
+     * Create app instance
+     */
+    async createAppInstanceRaw(requestParameters: CreateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
+        if (requestParameters['newAppInstanceInput'] == null) {
+            throw new runtime.RequiredError(
+                'newAppInstanceInput',
+                'Required parameter "newAppInstanceInput" was null or undefined when calling createAppInstance().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-instances`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewAppInstanceInputToJSON(requestParameters['newAppInstanceInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppInstanceFromJSON(jsonValue));
+    }
+
+    /**
+     * Create app instance
+     */
+    async createAppInstance(requestParameters: CreateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
+        const response = await this.createAppInstanceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Delete app instance
+     */
+    async deleteAppInstanceRaw(requestParameters: DeleteAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteAppInstance().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['force'] != null) {
+            queryParameters['force'] = requestParameters['force'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-instances/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Delete app instance
+     */
+    async deleteAppInstance(requestParameters: DeleteAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteAppInstanceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get app instance
+     */
+    async getAppInstanceRaw(requestParameters: GetAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppInstance().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-instances/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppInstanceFromJSON(jsonValue));
+    }
+
+    /**
+     * Get app instance
+     */
+    async getAppInstance(requestParameters: GetAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
+        const response = await this.getAppInstanceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Get app instance by app and instance name
      */
-    async appInstancesByNameAppNameInstanceNameGetRaw(requestParameters: AppInstancesByNameAppNameInstanceNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
+    async getAppInstanceByNameRaw(requestParameters: GetAppInstanceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
         if (requestParameters['appName'] == null) {
             throw new runtime.RequiredError(
                 'appName',
-                'Required parameter "appName" was null or undefined when calling appInstancesByNameAppNameInstanceNameGet().'
+                'Required parameter "appName" was null or undefined when calling getAppInstanceByName().'
             );
         }
 
         if (requestParameters['instanceName'] == null) {
             throw new runtime.RequiredError(
                 'instanceName',
-                'Required parameter "instanceName" was null or undefined when calling appInstancesByNameAppNameInstanceNameGet().'
+                'Required parameter "instanceName" was null or undefined when calling getAppInstanceByName().'
             );
         }
 
         if (requestParameters['orgId'] == null) {
             throw new runtime.RequiredError(
                 'orgId',
-                'Required parameter "orgId" was null or undefined when calling appInstancesByNameAppNameInstanceNameGet().'
+                'Required parameter "orgId" was null or undefined when calling getAppInstanceByName().'
             );
         }
 
@@ -229,19 +362,19 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Get app instance by app and instance name
      */
-    async appInstancesByNameAppNameInstanceNameGet(requestParameters: AppInstancesByNameAppNameInstanceNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
-        const response = await this.appInstancesByNameAppNameInstanceNameGetRaw(requestParameters, initOverrides);
+    async getAppInstanceByName(requestParameters: GetAppInstanceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
+        const response = await this.getAppInstanceByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * List app instances
      */
-    async appInstancesGetRaw(requestParameters: AppInstancesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppInstance>>> {
+    async listAppInstancesRaw(requestParameters: ListAppInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppInstance>>> {
         if (requestParameters['orgId'] == null) {
             throw new runtime.RequiredError(
                 'orgId',
-                'Required parameter "orgId" was null or undefined when calling appInstancesGet().'
+                'Required parameter "orgId" was null or undefined when calling listAppInstances().'
             );
         }
 
@@ -290,112 +423,26 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * List app instances
      */
-    async appInstancesGet(requestParameters: AppInstancesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppInstance>> {
-        const response = await this.appInstancesGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Delete app instance
-     */
-    async appInstancesIdDeleteRaw(requestParameters: AppInstancesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling appInstancesIdDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        if (requestParameters['force'] != null) {
-            queryParameters['force'] = requestParameters['force'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/app-instances/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
-    }
-
-    /**
-     * Delete app instance
-     */
-    async appInstancesIdDelete(requestParameters: AppInstancesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
-        const response = await this.appInstancesIdDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Get app instance
-     */
-    async appInstancesIdGetRaw(requestParameters: AppInstancesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling appInstancesIdGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/app-instances/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppInstanceFromJSON(jsonValue));
-    }
-
-    /**
-     * Get app instance
-     */
-    async appInstancesIdGet(requestParameters: AppInstancesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
-        const response = await this.appInstancesIdGetRaw(requestParameters, initOverrides);
+    async listAppInstances(requestParameters: ListAppInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppInstance>> {
+        const response = await this.listAppInstancesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Update app instance
      */
-    async appInstancesIdPutRaw(requestParameters: AppInstancesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
+    async updateAppInstanceRaw(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling appInstancesIdPut().'
+                'Required parameter "id" was null or undefined when calling updateAppInstance().'
             );
         }
 
         if (requestParameters['updateTitleRequest'] == null) {
             throw new runtime.RequiredError(
                 'updateTitleRequest',
-                'Required parameter "updateTitleRequest" was null or undefined when calling appInstancesIdPut().'
+                'Required parameter "updateTitleRequest" was null or undefined when calling updateAppInstance().'
             );
         }
 
@@ -427,52 +474,8 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Update app instance
      */
-    async appInstancesIdPut(requestParameters: AppInstancesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
-        const response = await this.appInstancesIdPutRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Create app instance
-     */
-    async appInstancesPostRaw(requestParameters: AppInstancesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
-        if (requestParameters['newAppInstanceInput'] == null) {
-            throw new runtime.RequiredError(
-                'newAppInstanceInput',
-                'Required parameter "newAppInstanceInput" was null or undefined when calling appInstancesPost().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/app-instances`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: NewAppInstanceInputToJSON(requestParameters['newAppInstanceInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppInstanceFromJSON(jsonValue));
-    }
-
-    /**
-     * Create app instance
-     */
-    async appInstancesPost(requestParameters: AppInstancesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
-        const response = await this.appInstancesPostRaw(requestParameters, initOverrides);
+    async updateAppInstance(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
+        const response = await this.updateAppInstanceRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

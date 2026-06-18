@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -50,7 +50,7 @@ export interface ImportInput {
      * @type {number}
      * @memberof ImportInput
      */
-    backupID?: number | null;
+    backupId?: number | null;
     /**
      * 
      * @type {ImportFromInput}
@@ -80,7 +80,7 @@ export function ImportInputFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'importName': json['importName'] == null ? undefined : json['importName'],
         'source': json['source'],
         'url': json['url'] == null ? undefined : json['url'],
-        'backupID': json['backupID'] == null ? undefined : json['backupID'],
+        'backupId': json['backupId'] == null ? undefined : json['backupId'],
         'from': json['from'] == null ? undefined : ImportFromInputFromJSON(json['from']),
     };
 }
@@ -99,7 +99,7 @@ export function ImportInputToJSONTyped(value?: ImportInput | null, ignoreDiscrim
         'importName': value['importName'],
         'source': value['source'],
         'url': value['url'],
-        'backupID': value['backupID'],
+        'backupId': value['backupId'],
         'from': ImportFromInputToJSON(value['from']),
     };
 }

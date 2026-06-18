@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -17,15 +17,23 @@ import * as runtime from '../runtime';
 import type {
   DatabaseType,
   DatabaseVersion,
+  ErrorResponse,
 } from '../models/index';
 import {
     DatabaseTypeFromJSON,
     DatabaseTypeToJSON,
     DatabaseVersionFromJSON,
     DatabaseVersionToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
 } from '../models/index';
 
-export interface IntegrationKindsIdDatabaseMachineTypesGetRequest {
+export interface GetIntegrationKindDatabaseSettingsRequest {
+    id: number;
+    dbType: string;
+}
+
+export interface ListIntegrationKindDatabaseMachineTypesRequest {
     id: number;
     dbType: string;
     version: string;
@@ -34,23 +42,18 @@ export interface IntegrationKindsIdDatabaseMachineTypesGetRequest {
     zone?: string;
 }
 
-export interface IntegrationKindsIdDatabaseRegionsGetRequest {
+export interface ListIntegrationKindDatabaseRegionsRequest {
     id: number;
     dbType: string;
     version: string;
     ha?: boolean;
 }
 
-export interface IntegrationKindsIdDatabaseSettingsGetRequest {
-    id: number;
-    dbType: string;
-}
-
-export interface IntegrationKindsIdDatabaseTypesGetRequest {
+export interface ListIntegrationKindDatabaseTypesRequest {
     id: number;
 }
 
-export interface IntegrationKindsIdDatabaseVersionsGetRequest {
+export interface ListIntegrationKindDatabaseVersionsRequest {
     id: number;
     dbType: string;
 }
@@ -64,6 +67,22 @@ export interface IntegrationKindsIdDatabaseVersionsGetRequest {
 export interface IntegrationKindsApiInterface {
     /**
      * 
+     * @summary Get database settings
+     * @param {number} id 
+     * @param {string} dbType 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationKindsApiInterface
+     */
+    getIntegrationKindDatabaseSettingsRaw(requestParameters: GetIntegrationKindDatabaseSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>>;
+
+    /**
+     * Get database settings
+     */
+    getIntegrationKindDatabaseSettings(requestParameters: GetIntegrationKindDatabaseSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }>;
+
+    /**
+     * 
      * @summary List database machine types
      * @param {number} id 
      * @param {string} dbType 
@@ -75,12 +94,12 @@ export interface IntegrationKindsApiInterface {
      * @throws {RequiredError}
      * @memberof IntegrationKindsApiInterface
      */
-    integrationKindsIdDatabaseMachineTypesGetRaw(requestParameters: IntegrationKindsIdDatabaseMachineTypesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
+    listIntegrationKindDatabaseMachineTypesRaw(requestParameters: ListIntegrationKindDatabaseMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
 
     /**
      * List database machine types
      */
-    integrationKindsIdDatabaseMachineTypesGet(requestParameters: IntegrationKindsIdDatabaseMachineTypesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
+    listIntegrationKindDatabaseMachineTypes(requestParameters: ListIntegrationKindDatabaseMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
 
     /**
      * 
@@ -93,28 +112,12 @@ export interface IntegrationKindsApiInterface {
      * @throws {RequiredError}
      * @memberof IntegrationKindsApiInterface
      */
-    integrationKindsIdDatabaseRegionsGetRaw(requestParameters: IntegrationKindsIdDatabaseRegionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
+    listIntegrationKindDatabaseRegionsRaw(requestParameters: ListIntegrationKindDatabaseRegionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
 
     /**
      * List database regions
      */
-    integrationKindsIdDatabaseRegionsGet(requestParameters: IntegrationKindsIdDatabaseRegionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
-
-    /**
-     * 
-     * @summary Get database settings
-     * @param {number} id 
-     * @param {string} dbType 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IntegrationKindsApiInterface
-     */
-    integrationKindsIdDatabaseSettingsGetRaw(requestParameters: IntegrationKindsIdDatabaseSettingsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>>;
-
-    /**
-     * Get database settings
-     */
-    integrationKindsIdDatabaseSettingsGet(requestParameters: IntegrationKindsIdDatabaseSettingsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }>;
+    listIntegrationKindDatabaseRegions(requestParameters: ListIntegrationKindDatabaseRegionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
 
     /**
      * 
@@ -124,12 +127,12 @@ export interface IntegrationKindsApiInterface {
      * @throws {RequiredError}
      * @memberof IntegrationKindsApiInterface
      */
-    integrationKindsIdDatabaseTypesGetRaw(requestParameters: IntegrationKindsIdDatabaseTypesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseType>>>;
+    listIntegrationKindDatabaseTypesRaw(requestParameters: ListIntegrationKindDatabaseTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseType>>>;
 
     /**
      * List database types
      */
-    integrationKindsIdDatabaseTypesGet(requestParameters: IntegrationKindsIdDatabaseTypesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseType>>;
+    listIntegrationKindDatabaseTypes(requestParameters: ListIntegrationKindDatabaseTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseType>>;
 
     /**
      * 
@@ -140,12 +143,12 @@ export interface IntegrationKindsApiInterface {
      * @throws {RequiredError}
      * @memberof IntegrationKindsApiInterface
      */
-    integrationKindsIdDatabaseVersionsGetRaw(requestParameters: IntegrationKindsIdDatabaseVersionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseVersion>>>;
+    listIntegrationKindDatabaseVersionsRaw(requestParameters: ListIntegrationKindDatabaseVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseVersion>>>;
 
     /**
      * List database versions
      */
-    integrationKindsIdDatabaseVersionsGet(requestParameters: IntegrationKindsIdDatabaseVersionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseVersion>>;
+    listIntegrationKindDatabaseVersions(requestParameters: ListIntegrationKindDatabaseVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseVersion>>;
 
 }
 
@@ -155,27 +158,79 @@ export interface IntegrationKindsApiInterface {
 export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationKindsApiInterface {
 
     /**
-     * List database machine types
+     * Get database settings
      */
-    async integrationKindsIdDatabaseMachineTypesGetRaw(requestParameters: IntegrationKindsIdDatabaseMachineTypesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
+    async getIntegrationKindDatabaseSettingsRaw(requestParameters: GetIntegrationKindDatabaseSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling integrationKindsIdDatabaseMachineTypesGet().'
+                'Required parameter "id" was null or undefined when calling getIntegrationKindDatabaseSettings().'
             );
         }
 
         if (requestParameters['dbType'] == null) {
             throw new runtime.RequiredError(
                 'dbType',
-                'Required parameter "dbType" was null or undefined when calling integrationKindsIdDatabaseMachineTypesGet().'
+                'Required parameter "dbType" was null or undefined when calling getIntegrationKindDatabaseSettings().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['dbType'] != null) {
+            queryParameters['dbType'] = requestParameters['dbType'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integration-kinds/{id}/database-settings`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Get database settings
+     */
+    async getIntegrationKindDatabaseSettings(requestParameters: GetIntegrationKindDatabaseSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }> {
+        const response = await this.getIntegrationKindDatabaseSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List database machine types
+     */
+    async listIntegrationKindDatabaseMachineTypesRaw(requestParameters: ListIntegrationKindDatabaseMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listIntegrationKindDatabaseMachineTypes().'
+            );
+        }
+
+        if (requestParameters['dbType'] == null) {
+            throw new runtime.RequiredError(
+                'dbType',
+                'Required parameter "dbType" was null or undefined when calling listIntegrationKindDatabaseMachineTypes().'
             );
         }
 
         if (requestParameters['version'] == null) {
             throw new runtime.RequiredError(
                 'version',
-                'Required parameter "version" was null or undefined when calling integrationKindsIdDatabaseMachineTypesGet().'
+                'Required parameter "version" was null or undefined when calling listIntegrationKindDatabaseMachineTypes().'
             );
         }
 
@@ -224,33 +279,33 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
     /**
      * List database machine types
      */
-    async integrationKindsIdDatabaseMachineTypesGet(requestParameters: IntegrationKindsIdDatabaseMachineTypesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
-        const response = await this.integrationKindsIdDatabaseMachineTypesGetRaw(requestParameters, initOverrides);
+    async listIntegrationKindDatabaseMachineTypes(requestParameters: ListIntegrationKindDatabaseMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
+        const response = await this.listIntegrationKindDatabaseMachineTypesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * List database regions
      */
-    async integrationKindsIdDatabaseRegionsGetRaw(requestParameters: IntegrationKindsIdDatabaseRegionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
+    async listIntegrationKindDatabaseRegionsRaw(requestParameters: ListIntegrationKindDatabaseRegionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling integrationKindsIdDatabaseRegionsGet().'
+                'Required parameter "id" was null or undefined when calling listIntegrationKindDatabaseRegions().'
             );
         }
 
         if (requestParameters['dbType'] == null) {
             throw new runtime.RequiredError(
                 'dbType',
-                'Required parameter "dbType" was null or undefined when calling integrationKindsIdDatabaseRegionsGet().'
+                'Required parameter "dbType" was null or undefined when calling listIntegrationKindDatabaseRegions().'
             );
         }
 
         if (requestParameters['version'] == null) {
             throw new runtime.RequiredError(
                 'version',
-                'Required parameter "version" was null or undefined when calling integrationKindsIdDatabaseRegionsGet().'
+                'Required parameter "version" was null or undefined when calling listIntegrationKindDatabaseRegions().'
             );
         }
 
@@ -291,71 +346,19 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
     /**
      * List database regions
      */
-    async integrationKindsIdDatabaseRegionsGet(requestParameters: IntegrationKindsIdDatabaseRegionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
-        const response = await this.integrationKindsIdDatabaseRegionsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Get database settings
-     */
-    async integrationKindsIdDatabaseSettingsGetRaw(requestParameters: IntegrationKindsIdDatabaseSettingsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling integrationKindsIdDatabaseSettingsGet().'
-            );
-        }
-
-        if (requestParameters['dbType'] == null) {
-            throw new runtime.RequiredError(
-                'dbType',
-                'Required parameter "dbType" was null or undefined when calling integrationKindsIdDatabaseSettingsGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        if (requestParameters['dbType'] != null) {
-            queryParameters['dbType'] = requestParameters['dbType'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/integration-kinds/{id}/database-settings`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     * Get database settings
-     */
-    async integrationKindsIdDatabaseSettingsGet(requestParameters: IntegrationKindsIdDatabaseSettingsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }> {
-        const response = await this.integrationKindsIdDatabaseSettingsGetRaw(requestParameters, initOverrides);
+    async listIntegrationKindDatabaseRegions(requestParameters: ListIntegrationKindDatabaseRegionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
+        const response = await this.listIntegrationKindDatabaseRegionsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * List database types
      */
-    async integrationKindsIdDatabaseTypesGetRaw(requestParameters: IntegrationKindsIdDatabaseTypesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseType>>> {
+    async listIntegrationKindDatabaseTypesRaw(requestParameters: ListIntegrationKindDatabaseTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseType>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling integrationKindsIdDatabaseTypesGet().'
+                'Required parameter "id" was null or undefined when calling listIntegrationKindDatabaseTypes().'
             );
         }
 
@@ -384,26 +387,26 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
     /**
      * List database types
      */
-    async integrationKindsIdDatabaseTypesGet(requestParameters: IntegrationKindsIdDatabaseTypesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseType>> {
-        const response = await this.integrationKindsIdDatabaseTypesGetRaw(requestParameters, initOverrides);
+    async listIntegrationKindDatabaseTypes(requestParameters: ListIntegrationKindDatabaseTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseType>> {
+        const response = await this.listIntegrationKindDatabaseTypesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * List database versions
      */
-    async integrationKindsIdDatabaseVersionsGetRaw(requestParameters: IntegrationKindsIdDatabaseVersionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseVersion>>> {
+    async listIntegrationKindDatabaseVersionsRaw(requestParameters: ListIntegrationKindDatabaseVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseVersion>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling integrationKindsIdDatabaseVersionsGet().'
+                'Required parameter "id" was null or undefined when calling listIntegrationKindDatabaseVersions().'
             );
         }
 
         if (requestParameters['dbType'] == null) {
             throw new runtime.RequiredError(
                 'dbType',
-                'Required parameter "dbType" was null or undefined when calling integrationKindsIdDatabaseVersionsGet().'
+                'Required parameter "dbType" was null or undefined when calling listIntegrationKindDatabaseVersions().'
             );
         }
 
@@ -436,8 +439,8 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
     /**
      * List database versions
      */
-    async integrationKindsIdDatabaseVersionsGet(requestParameters: IntegrationKindsIdDatabaseVersionsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseVersion>> {
-        const response = await this.integrationKindsIdDatabaseVersionsGetRaw(requestParameters, initOverrides);
+    async listIntegrationKindDatabaseVersions(requestParameters: ListIntegrationKindDatabaseVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseVersion>> {
+        const response = await this.listIntegrationKindDatabaseVersionsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

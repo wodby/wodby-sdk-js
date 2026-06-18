@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -15,11 +15,14 @@
 
 import * as runtime from '../runtime';
 import type {
+  ErrorResponse,
   Service,
   ServiceRevision,
   ServicesResponse,
 } from '../models/index';
 import {
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     ServiceFromJSON,
     ServiceToJSON,
     ServiceRevisionFromJSON,
@@ -28,25 +31,29 @@ import {
     ServicesResponseToJSON,
 } from '../models/index';
 
-export interface ServiceRevisionsIdGetRequest {
+export interface GetServiceRequest {
     id: number;
 }
 
-export interface ServicesByNameNameGetRequest {
+export interface GetServiceByNameRequest {
     name: string;
     revNumber?: number;
 }
 
-export interface ServicesGetRequest {
+export interface GetServiceRevisionRequest {
+    id: number;
+}
+
+export interface ListServiceLinkCandidatesRequest {
+    name: string;
+}
+
+export interface ListServicesRequest {
     orgId: number;
     projectIds?: string;
     search?: string;
     page?: number;
     pageSize?: number;
-}
-
-export interface ServicesNameLinkCandidatesGetRequest {
-    name: string;
 }
 
 /**
@@ -58,18 +65,18 @@ export interface ServicesNameLinkCandidatesGetRequest {
 export interface ServicesApiInterface {
     /**
      * 
-     * @summary Get service revision
+     * @summary Get service
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ServicesApiInterface
      */
-    serviceRevisionsIdGetRaw(requestParameters: ServiceRevisionsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ServiceRevision>>;
+    getServiceRaw(requestParameters: GetServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>>;
 
     /**
-     * Get service revision
+     * Get service
      */
-    serviceRevisionsIdGet(requestParameters: ServiceRevisionsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServiceRevision>;
+    getService(requestParameters: GetServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service>;
 
     /**
      * 
@@ -80,12 +87,42 @@ export interface ServicesApiInterface {
      * @throws {RequiredError}
      * @memberof ServicesApiInterface
      */
-    servicesByNameNameGetRaw(requestParameters: ServicesByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>>;
+    getServiceByNameRaw(requestParameters: GetServiceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>>;
 
     /**
      * Get service by name
      */
-    servicesByNameNameGet(requestParameters: ServicesByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service>;
+    getServiceByName(requestParameters: GetServiceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service>;
+
+    /**
+     * 
+     * @summary Get service revision
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServicesApiInterface
+     */
+    getServiceRevisionRaw(requestParameters: GetServiceRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ServiceRevision>>;
+
+    /**
+     * Get service revision
+     */
+    getServiceRevision(requestParameters: GetServiceRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServiceRevision>;
+
+    /**
+     * 
+     * @summary List service link candidates
+     * @param {string} name 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServicesApiInterface
+     */
+    listServiceLinkCandidatesRaw(requestParameters: ListServiceLinkCandidatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
+
+    /**
+     * List service link candidates
+     */
+    listServiceLinkCandidates(requestParameters: ListServiceLinkCandidatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
 
     /**
      * 
@@ -99,27 +136,12 @@ export interface ServicesApiInterface {
      * @throws {RequiredError}
      * @memberof ServicesApiInterface
      */
-    servicesGetRaw(requestParameters: ServicesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ServicesResponse>>;
+    listServicesRaw(requestParameters: ListServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ServicesResponse>>;
 
     /**
      * List services
      */
-    servicesGet(requestParameters: ServicesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServicesResponse>;
-
-    /**
-     * 
-     * @summary List service link candidates
-     * @param {string} name 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ServicesApiInterface
-     */
-    servicesNameLinkCandidatesGetRaw(requestParameters: ServicesNameLinkCandidatesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
-
-    /**
-     * List service link candidates
-     */
-    servicesNameLinkCandidatesGet(requestParameters: ServicesNameLinkCandidatesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
+    listServices(requestParameters: ListServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServicesResponse>;
 
 }
 
@@ -129,13 +151,13 @@ export interface ServicesApiInterface {
 export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface {
 
     /**
-     * Get service revision
+     * Get service
      */
-    async serviceRevisionsIdGetRaw(requestParameters: ServiceRevisionsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ServiceRevision>> {
+    async getServiceRaw(requestParameters: GetServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling serviceRevisionsIdGet().'
+                'Required parameter "id" was null or undefined when calling getService().'
             );
         }
 
@@ -152,31 +174,31 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
         }
 
         const response = await this.request({
-            path: `/service-revisions/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/services/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ServiceRevisionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ServiceFromJSON(jsonValue));
     }
 
     /**
-     * Get service revision
+     * Get service
      */
-    async serviceRevisionsIdGet(requestParameters: ServiceRevisionsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServiceRevision> {
-        const response = await this.serviceRevisionsIdGetRaw(requestParameters, initOverrides);
+    async getService(requestParameters: GetServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service> {
+        const response = await this.getServiceRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Get service by name
      */
-    async servicesByNameNameGetRaw(requestParameters: ServicesByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>> {
+    async getServiceByNameRaw(requestParameters: GetServiceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling servicesByNameNameGet().'
+                'Required parameter "name" was null or undefined when calling getServiceByName().'
             );
         }
 
@@ -209,19 +231,101 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
     /**
      * Get service by name
      */
-    async servicesByNameNameGet(requestParameters: ServicesByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service> {
-        const response = await this.servicesByNameNameGetRaw(requestParameters, initOverrides);
+    async getServiceByName(requestParameters: GetServiceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service> {
+        const response = await this.getServiceByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get service revision
+     */
+    async getServiceRevisionRaw(requestParameters: GetServiceRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ServiceRevision>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getServiceRevision().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/service-revisions/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ServiceRevisionFromJSON(jsonValue));
+    }
+
+    /**
+     * Get service revision
+     */
+    async getServiceRevision(requestParameters: GetServiceRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServiceRevision> {
+        const response = await this.getServiceRevisionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * List service link candidates
+     */
+    async listServiceLinkCandidatesRaw(requestParameters: ListServiceLinkCandidatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling listServiceLinkCandidates().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/services/{name}/options/link-candidates`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * List service link candidates
+     */
+    async listServiceLinkCandidates(requestParameters: ListServiceLinkCandidatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
+        const response = await this.listServiceLinkCandidatesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * List services
      */
-    async servicesGetRaw(requestParameters: ServicesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ServicesResponse>> {
+    async listServicesRaw(requestParameters: ListServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ServicesResponse>> {
         if (requestParameters['orgId'] == null) {
             throw new runtime.RequiredError(
                 'orgId',
-                'Required parameter "orgId" was null or undefined when calling servicesGet().'
+                'Required parameter "orgId" was null or undefined when calling listServices().'
             );
         }
 
@@ -270,49 +374,8 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
     /**
      * List services
      */
-    async servicesGet(requestParameters: ServicesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServicesResponse> {
-        const response = await this.servicesGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * List service link candidates
-     */
-    async servicesNameLinkCandidatesGetRaw(requestParameters: ServicesNameLinkCandidatesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
-        if (requestParameters['name'] == null) {
-            throw new runtime.RequiredError(
-                'name',
-                'Required parameter "name" was null or undefined when calling servicesNameLinkCandidatesGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/services/{name}/link-candidates`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     * List service link candidates
-     */
-    async servicesNameLinkCandidatesGet(requestParameters: ServicesNameLinkCandidatesGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
-        const response = await this.servicesNameLinkCandidatesGetRaw(requestParameters, initOverrides);
+    async listServices(requestParameters: ListServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServicesResponse> {
+        const response = await this.listServicesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

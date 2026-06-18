@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -24,7 +24,7 @@ export interface NewProjectInput {
      * @type {number}
      * @memberof NewProjectInput
      */
-    orgID: number;
+    orgId: number;
     /**
      * 
      * @type {string}
@@ -42,13 +42,13 @@ export interface NewProjectInput {
      * @type {Array<number>}
      * @memberof NewProjectInput
      */
-    teamIDs?: Array<number>;
+    teamIds?: Array<number>;
     /**
      * 
      * @type {Array<number>}
      * @memberof NewProjectInput
      */
-    orgMembershipIDs?: Array<number>;
+    orgMembershipIds?: Array<number>;
     /**
      * 
      * @type {string}
@@ -61,7 +61,7 @@ export interface NewProjectInput {
  * Check if a given object implements the NewProjectInput interface.
  */
 export function instanceOfNewProjectInput(value: object): value is NewProjectInput {
-    if (!('orgID' in value) || value['orgID'] === undefined) return false;
+    if (!('orgId' in value) || value['orgId'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('title' in value) || value['title'] === undefined) return false;
     return true;
@@ -77,11 +77,11 @@ export function NewProjectInputFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'orgID': json['orgID'],
+        'orgId': json['orgId'],
         'name': json['name'],
         'title': json['title'],
-        'teamIDs': json['teamIDs'] == null ? undefined : json['teamIDs'],
-        'orgMembershipIDs': json['orgMembershipIDs'] == null ? undefined : json['orgMembershipIDs'],
+        'teamIds': json['teamIds'] == null ? undefined : json['teamIds'],
+        'orgMembershipIds': json['orgMembershipIds'] == null ? undefined : json['orgMembershipIds'],
         'role': json['role'] == null ? undefined : json['role'],
     };
 }
@@ -97,11 +97,11 @@ export function NewProjectInputToJSONTyped(value?: NewProjectInput | null, ignor
 
     return {
         
-        'orgID': value['orgID'],
+        'orgId': value['orgId'],
         'name': value['name'],
         'title': value['title'],
-        'teamIDs': value['teamIDs'],
-        'orgMembershipIDs': value['orgMembershipIDs'],
+        'teamIds': value['teamIds'],
+        'orgMembershipIds': value['orgMembershipIds'],
         'role': value['role'],
     };
 }

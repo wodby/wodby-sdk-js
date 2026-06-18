@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -39,7 +39,7 @@ export interface NewAppInput {
      * @type {number}
      * @memberof NewAppInput
      */
-    orgID: number;
+    orgId: number;
     /**
      * 
      * @type {string}
@@ -75,13 +75,13 @@ export interface NewAppInput {
      * @type {number}
      * @memberof NewAppInput
      */
-    projectID?: number | null;
+    projectId?: number | null;
     /**
      * 
      * @type {number}
      * @memberof NewAppInput
      */
-    stackRevID: number;
+    stackRevId: number;
     /**
      * 
      * @type {Array<NewAppServiceInput>}
@@ -93,7 +93,7 @@ export interface NewAppInput {
      * @type {number}
      * @memberof NewAppInput
      */
-    clusterID?: number | null;
+    clusterId?: number | null;
     /**
      * 
      * @type {NewManagedClusterInput}
@@ -105,34 +105,34 @@ export interface NewAppInput {
      * @type {number}
      * @memberof NewAppInput
      */
-    envID: number;
+    envId: number;
     /**
      * 
      * @type {number}
      * @memberof NewAppInput
      */
-    ciIntegrationID?: number | null;
+    ciIntegrationId?: number | null;
     /**
      * 
      * @type {number}
      * @memberof NewAppInput
      */
-    registryIntegrationID?: number | null;
+    registryIntegrationId?: number | null;
 }
 
 /**
  * Check if a given object implements the NewAppInput interface.
  */
 export function instanceOfNewAppInput(value: object): value is NewAppInput {
-    if (!('orgID' in value) || value['orgID'] === undefined) return false;
+    if (!('orgId' in value) || value['orgId'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('title' in value) || value['title'] === undefined) return false;
     if (!('instanceName' in value) || value['instanceName'] === undefined) return false;
     if (!('instanceTitle' in value) || value['instanceTitle'] === undefined) return false;
     if (!('domain' in value) || value['domain'] === undefined) return false;
-    if (!('stackRevID' in value) || value['stackRevID'] === undefined) return false;
+    if (!('stackRevId' in value) || value['stackRevId'] === undefined) return false;
     if (!('services' in value) || value['services'] === undefined) return false;
-    if (!('envID' in value) || value['envID'] === undefined) return false;
+    if (!('envId' in value) || value['envId'] === undefined) return false;
     return true;
 }
 
@@ -146,20 +146,20 @@ export function NewAppInputFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'orgID': json['orgID'],
+        'orgId': json['orgId'],
         'name': json['name'],
         'title': json['title'],
         'instanceName': json['instanceName'],
         'instanceTitle': json['instanceTitle'],
         'domain': json['domain'],
-        'projectID': json['projectID'] == null ? undefined : json['projectID'],
-        'stackRevID': json['stackRevID'],
+        'projectId': json['projectId'] == null ? undefined : json['projectId'],
+        'stackRevId': json['stackRevId'],
         'services': ((json['services'] as Array<any>).map(NewAppServiceInputFromJSON)),
-        'clusterID': json['clusterID'] == null ? undefined : json['clusterID'],
+        'clusterId': json['clusterId'] == null ? undefined : json['clusterId'],
         'newCluster': json['newCluster'] == null ? undefined : NewManagedClusterInputFromJSON(json['newCluster']),
-        'envID': json['envID'],
-        'ciIntegrationID': json['ciIntegrationID'] == null ? undefined : json['ciIntegrationID'],
-        'registryIntegrationID': json['registryIntegrationID'] == null ? undefined : json['registryIntegrationID'],
+        'envId': json['envId'],
+        'ciIntegrationId': json['ciIntegrationId'] == null ? undefined : json['ciIntegrationId'],
+        'registryIntegrationId': json['registryIntegrationId'] == null ? undefined : json['registryIntegrationId'],
     };
 }
 
@@ -174,20 +174,20 @@ export function NewAppInputToJSONTyped(value?: NewAppInput | null, ignoreDiscrim
 
     return {
         
-        'orgID': value['orgID'],
+        'orgId': value['orgId'],
         'name': value['name'],
         'title': value['title'],
         'instanceName': value['instanceName'],
         'instanceTitle': value['instanceTitle'],
         'domain': value['domain'],
-        'projectID': value['projectID'],
-        'stackRevID': value['stackRevID'],
+        'projectId': value['projectId'],
+        'stackRevId': value['stackRevId'],
         'services': ((value['services'] as Array<any>).map(NewAppServiceInputToJSON)),
-        'clusterID': value['clusterID'],
+        'clusterId': value['clusterId'],
         'newCluster': NewManagedClusterInputToJSON(value['newCluster']),
-        'envID': value['envID'],
-        'ciIntegrationID': value['ciIntegrationID'],
-        'registryIntegrationID': value['registryIntegrationID'],
+        'envId': value['envId'],
+        'ciIntegrationId': value['ciIntegrationId'],
+        'registryIntegrationId': value['registryIntegrationId'],
     };
 }
 

@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -24,13 +24,13 @@ export interface ImportFromInput {
      * @type {number}
      * @memberof ImportFromInput
      */
-    databaseDBID?: number | null;
+    databaseDbId?: number | null;
     /**
      * 
      * @type {number}
      * @memberof ImportFromInput
      */
-    appServiceID?: number | null;
+    appServiceId?: number | null;
     /**
      * 
      * @type {string}
@@ -56,8 +56,8 @@ export function ImportFromInputFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'databaseDBID': json['databaseDBID'] == null ? undefined : json['databaseDBID'],
-        'appServiceID': json['appServiceID'] == null ? undefined : json['appServiceID'],
+        'databaseDbId': json['databaseDbId'] == null ? undefined : json['databaseDbId'],
+        'appServiceId': json['appServiceId'] == null ? undefined : json['appServiceId'],
         'backupName': json['backupName'] == null ? undefined : json['backupName'],
     };
 }
@@ -73,8 +73,8 @@ export function ImportFromInputToJSONTyped(value?: ImportFromInput | null, ignor
 
     return {
         
-        'databaseDBID': value['databaseDBID'],
-        'appServiceID': value['appServiceID'],
+        'databaseDbId': value['databaseDbId'],
+        'appServiceId': value['appServiceId'],
         'backupName': value['backupName'],
     };
 }

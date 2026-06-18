@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -30,13 +30,13 @@ export interface UpdateOrgRequest {
      * @type {number}
      * @memberof UpdateOrgRequest
      */
-    registryIntegrationID?: number | null;
+    registryIntegrationId?: number | null;
     /**
      * 
      * @type {number}
      * @memberof UpdateOrgRequest
      */
-    ciIntegrationID?: number | null;
+    ciIntegrationId?: number | null;
 }
 
 /**
@@ -58,8 +58,8 @@ export function UpdateOrgRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
     return {
         
         'title': json['title'],
-        'registryIntegrationID': json['registryIntegrationID'] == null ? undefined : json['registryIntegrationID'],
-        'ciIntegrationID': json['ciIntegrationID'] == null ? undefined : json['ciIntegrationID'],
+        'registryIntegrationId': json['registryIntegrationId'] == null ? undefined : json['registryIntegrationId'],
+        'ciIntegrationId': json['ciIntegrationId'] == null ? undefined : json['ciIntegrationId'],
     };
 }
 
@@ -75,8 +75,8 @@ export function UpdateOrgRequestToJSONTyped(value?: UpdateOrgRequest | null, ign
     return {
         
         'title': value['title'],
-        'registryIntegrationID': value['registryIntegrationID'],
-        'ciIntegrationID': value['ciIntegrationID'],
+        'registryIntegrationId': value['registryIntegrationId'],
+        'ciIntegrationId': value['ciIntegrationId'],
     };
 }
 

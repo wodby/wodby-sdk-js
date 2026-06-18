@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -24,20 +24,20 @@ export interface AppServiceDatabaseInput {
      * @type {number}
      * @memberof AppServiceDatabaseInput
      */
-    databaseID: number;
+    databaseId: number;
     /**
      * 
      * @type {number}
      * @memberof AppServiceDatabaseInput
      */
-    databaseDBID?: number | null;
+    databaseDbId?: number | null;
 }
 
 /**
  * Check if a given object implements the AppServiceDatabaseInput interface.
  */
 export function instanceOfAppServiceDatabaseInput(value: object): value is AppServiceDatabaseInput {
-    if (!('databaseID' in value) || value['databaseID'] === undefined) return false;
+    if (!('databaseId' in value) || value['databaseId'] === undefined) return false;
     return true;
 }
 
@@ -51,8 +51,8 @@ export function AppServiceDatabaseInputFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
-        'databaseID': json['databaseID'],
-        'databaseDBID': json['databaseDBID'] == null ? undefined : json['databaseDBID'],
+        'databaseId': json['databaseId'],
+        'databaseDbId': json['databaseDbId'] == null ? undefined : json['databaseDbId'],
     };
 }
 
@@ -67,8 +67,8 @@ export function AppServiceDatabaseInputToJSONTyped(value?: AppServiceDatabaseInp
 
     return {
         
-        'databaseID': value['databaseID'],
-        'databaseDBID': value['databaseDBID'],
+        'databaseId': value['databaseId'],
+        'databaseDbId': value['databaseDbId'],
     };
 }
 

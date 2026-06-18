@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -39,7 +39,7 @@ export interface NewAppInstanceInput {
      * @type {number}
      * @memberof NewAppInstanceInput
      */
-    appID: number;
+    appId: number;
     /**
      * 
      * @type {string}
@@ -63,7 +63,7 @@ export interface NewAppInstanceInput {
      * @type {number}
      * @memberof NewAppInstanceInput
      */
-    stackRevID: number;
+    stackRevId: number;
     /**
      * 
      * @type {Array<NewAppServiceInput>}
@@ -75,7 +75,7 @@ export interface NewAppInstanceInput {
      * @type {number}
      * @memberof NewAppInstanceInput
      */
-    clusterID?: number | null;
+    clusterId?: number | null;
     /**
      * 
      * @type {NewManagedClusterInput}
@@ -87,32 +87,32 @@ export interface NewAppInstanceInput {
      * @type {number}
      * @memberof NewAppInstanceInput
      */
-    envID: number;
+    envId: number;
     /**
      * 
      * @type {number}
      * @memberof NewAppInstanceInput
      */
-    ciIntegrationID?: number | null;
+    ciIntegrationId?: number | null;
     /**
      * 
      * @type {number}
      * @memberof NewAppInstanceInput
      */
-    registryIntegrationID?: number | null;
+    registryIntegrationId?: number | null;
 }
 
 /**
  * Check if a given object implements the NewAppInstanceInput interface.
  */
 export function instanceOfNewAppInstanceInput(value: object): value is NewAppInstanceInput {
-    if (!('appID' in value) || value['appID'] === undefined) return false;
+    if (!('appId' in value) || value['appId'] === undefined) return false;
     if (!('instanceName' in value) || value['instanceName'] === undefined) return false;
     if (!('instanceTitle' in value) || value['instanceTitle'] === undefined) return false;
     if (!('domain' in value) || value['domain'] === undefined) return false;
-    if (!('stackRevID' in value) || value['stackRevID'] === undefined) return false;
+    if (!('stackRevId' in value) || value['stackRevId'] === undefined) return false;
     if (!('services' in value) || value['services'] === undefined) return false;
-    if (!('envID' in value) || value['envID'] === undefined) return false;
+    if (!('envId' in value) || value['envId'] === undefined) return false;
     return true;
 }
 
@@ -126,17 +126,17 @@ export function NewAppInstanceInputFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'appID': json['appID'],
+        'appId': json['appId'],
         'instanceName': json['instanceName'],
         'instanceTitle': json['instanceTitle'],
         'domain': json['domain'],
-        'stackRevID': json['stackRevID'],
+        'stackRevId': json['stackRevId'],
         'services': ((json['services'] as Array<any>).map(NewAppServiceInputFromJSON)),
-        'clusterID': json['clusterID'] == null ? undefined : json['clusterID'],
+        'clusterId': json['clusterId'] == null ? undefined : json['clusterId'],
         'newCluster': json['newCluster'] == null ? undefined : NewManagedClusterInputFromJSON(json['newCluster']),
-        'envID': json['envID'],
-        'ciIntegrationID': json['ciIntegrationID'] == null ? undefined : json['ciIntegrationID'],
-        'registryIntegrationID': json['registryIntegrationID'] == null ? undefined : json['registryIntegrationID'],
+        'envId': json['envId'],
+        'ciIntegrationId': json['ciIntegrationId'] == null ? undefined : json['ciIntegrationId'],
+        'registryIntegrationId': json['registryIntegrationId'] == null ? undefined : json['registryIntegrationId'],
     };
 }
 
@@ -151,17 +151,17 @@ export function NewAppInstanceInputToJSONTyped(value?: NewAppInstanceInput | nul
 
     return {
         
-        'appID': value['appID'],
+        'appId': value['appId'],
         'instanceName': value['instanceName'],
         'instanceTitle': value['instanceTitle'],
         'domain': value['domain'],
-        'stackRevID': value['stackRevID'],
+        'stackRevId': value['stackRevId'],
         'services': ((value['services'] as Array<any>).map(NewAppServiceInputToJSON)),
-        'clusterID': value['clusterID'],
+        'clusterId': value['clusterId'],
         'newCluster': NewManagedClusterInputToJSON(value['newCluster']),
-        'envID': value['envID'],
-        'ciIntegrationID': value['ciIntegrationID'],
-        'registryIntegrationID': value['registryIntegrationID'],
+        'envId': value['envId'],
+        'ciIntegrationId': value['ciIntegrationId'],
+        'registryIntegrationId': value['registryIntegrationId'],
     };
 }
 

@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   App,
+  ErrorResponse,
   NewAppInput,
   OperationResult,
   UpdateTitleRequest,
@@ -23,6 +24,8 @@ import type {
 import {
     AppFromJSON,
     AppToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     NewAppInputFromJSON,
     NewAppInputToJSON,
     OperationResultFromJSON,
@@ -31,32 +34,32 @@ import {
     UpdateTitleRequestToJSON,
 } from '../models/index';
 
-export interface AppsByNameNameGetRequest {
+export interface CreateAppRequest {
+    newAppInput: NewAppInput;
+}
+
+export interface DeleteAppRequest {
+    id: number;
+}
+
+export interface GetAppRequest {
+    id: number;
+}
+
+export interface GetAppByNameRequest {
     name: string;
     orgId: number;
 }
 
-export interface AppsGetRequest {
+export interface ListAppsRequest {
     orgId: number;
     projectIds?: string;
     clusterApp?: boolean;
 }
 
-export interface AppsIdDeleteRequest {
-    id: number;
-}
-
-export interface AppsIdGetRequest {
-    id: number;
-}
-
-export interface AppsIdPutRequest {
+export interface UpdateAppRequest {
     id: number;
     updateTitleRequest: UpdateTitleRequest;
-}
-
-export interface AppsPostRequest {
-    newAppInput: NewAppInput;
 }
 
 /**
@@ -68,6 +71,51 @@ export interface AppsPostRequest {
 export interface AppsApiInterface {
     /**
      * 
+     * @summary Create app
+     * @param {NewAppInput} newAppInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppsApiInterface
+     */
+    createAppRaw(requestParameters: CreateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
+
+    /**
+     * Create app
+     */
+    createApp(requestParameters: CreateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
+
+    /**
+     * 
+     * @summary Delete app
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppsApiInterface
+     */
+    deleteAppRaw(requestParameters: DeleteAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Delete app
+     */
+    deleteApp(requestParameters: DeleteAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * 
+     * @summary Get app
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppsApiInterface
+     */
+    getAppRaw(requestParameters: GetAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
+
+    /**
+     * Get app
+     */
+    getApp(requestParameters: GetAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
+
+    /**
+     * 
      * @summary Get app by name
      * @param {string} name 
      * @param {number} orgId 
@@ -75,12 +123,12 @@ export interface AppsApiInterface {
      * @throws {RequiredError}
      * @memberof AppsApiInterface
      */
-    appsByNameNameGetRaw(requestParameters: AppsByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
+    getAppByNameRaw(requestParameters: GetAppByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
 
     /**
      * Get app by name
      */
-    appsByNameNameGet(requestParameters: AppsByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
+    getAppByName(requestParameters: GetAppByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
 
     /**
      * 
@@ -92,42 +140,12 @@ export interface AppsApiInterface {
      * @throws {RequiredError}
      * @memberof AppsApiInterface
      */
-    appsGetRaw(requestParameters: AppsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<App>>>;
+    listAppsRaw(requestParameters: ListAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<App>>>;
 
     /**
      * List apps
      */
-    appsGet(requestParameters: AppsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<App>>;
-
-    /**
-     * 
-     * @summary Delete app
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppsApiInterface
-     */
-    appsIdDeleteRaw(requestParameters: AppsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
-
-    /**
-     * Delete app
-     */
-    appsIdDelete(requestParameters: AppsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
-
-    /**
-     * 
-     * @summary Get app
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppsApiInterface
-     */
-    appsIdGetRaw(requestParameters: AppsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
-
-    /**
-     * Get app
-     */
-    appsIdGet(requestParameters: AppsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
+    listApps(requestParameters: ListAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<App>>;
 
     /**
      * 
@@ -138,27 +156,12 @@ export interface AppsApiInterface {
      * @throws {RequiredError}
      * @memberof AppsApiInterface
      */
-    appsIdPutRaw(requestParameters: AppsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
+    updateAppRaw(requestParameters: UpdateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
 
     /**
      * Update app
      */
-    appsIdPut(requestParameters: AppsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
-
-    /**
-     * 
-     * @summary Create app
-     * @param {NewAppInput} newAppInput 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppsApiInterface
-     */
-    appsPostRaw(requestParameters: AppsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
-
-    /**
-     * Create app
-     */
-    appsPost(requestParameters: AppsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
+    updateApp(requestParameters: UpdateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
 
 }
 
@@ -168,20 +171,146 @@ export interface AppsApiInterface {
 export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
 
     /**
+     * Create app
+     */
+    async createAppRaw(requestParameters: CreateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
+        if (requestParameters['newAppInput'] == null) {
+            throw new runtime.RequiredError(
+                'newAppInput',
+                'Required parameter "newAppInput" was null or undefined when calling createApp().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/apps`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewAppInputToJSON(requestParameters['newAppInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppFromJSON(jsonValue));
+    }
+
+    /**
+     * Create app
+     */
+    async createApp(requestParameters: CreateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
+        const response = await this.createAppRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Delete app
+     */
+    async deleteAppRaw(requestParameters: DeleteAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteApp().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/apps/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Delete app
+     */
+    async deleteApp(requestParameters: DeleteAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteAppRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get app
+     */
+    async getAppRaw(requestParameters: GetAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getApp().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/apps/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppFromJSON(jsonValue));
+    }
+
+    /**
+     * Get app
+     */
+    async getApp(requestParameters: GetAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
+        const response = await this.getAppRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Get app by name
      */
-    async appsByNameNameGetRaw(requestParameters: AppsByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
+    async getAppByNameRaw(requestParameters: GetAppByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling appsByNameNameGet().'
+                'Required parameter "name" was null or undefined when calling getAppByName().'
             );
         }
 
         if (requestParameters['orgId'] == null) {
             throw new runtime.RequiredError(
                 'orgId',
-                'Required parameter "orgId" was null or undefined when calling appsByNameNameGet().'
+                'Required parameter "orgId" was null or undefined when calling getAppByName().'
             );
         }
 
@@ -214,19 +343,19 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     /**
      * Get app by name
      */
-    async appsByNameNameGet(requestParameters: AppsByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
-        const response = await this.appsByNameNameGetRaw(requestParameters, initOverrides);
+    async getAppByName(requestParameters: GetAppByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
+        const response = await this.getAppByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * List apps
      */
-    async appsGetRaw(requestParameters: AppsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<App>>> {
+    async listAppsRaw(requestParameters: ListAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<App>>> {
         if (requestParameters['orgId'] == null) {
             throw new runtime.RequiredError(
                 'orgId',
-                'Required parameter "orgId" was null or undefined when calling appsGet().'
+                'Required parameter "orgId" was null or undefined when calling listApps().'
             );
         }
 
@@ -267,108 +396,26 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     /**
      * List apps
      */
-    async appsGet(requestParameters: AppsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<App>> {
-        const response = await this.appsGetRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Delete app
-     */
-    async appsIdDeleteRaw(requestParameters: AppsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling appsIdDelete().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/apps/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
-    }
-
-    /**
-     * Delete app
-     */
-    async appsIdDelete(requestParameters: AppsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
-        const response = await this.appsIdDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Get app
-     */
-    async appsIdGetRaw(requestParameters: AppsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling appsIdGet().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/apps/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppFromJSON(jsonValue));
-    }
-
-    /**
-     * Get app
-     */
-    async appsIdGet(requestParameters: AppsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
-        const response = await this.appsIdGetRaw(requestParameters, initOverrides);
+    async listApps(requestParameters: ListAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<App>> {
+        const response = await this.listAppsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Update app
      */
-    async appsIdPutRaw(requestParameters: AppsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
+    async updateAppRaw(requestParameters: UpdateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling appsIdPut().'
+                'Required parameter "id" was null or undefined when calling updateApp().'
             );
         }
 
         if (requestParameters['updateTitleRequest'] == null) {
             throw new runtime.RequiredError(
                 'updateTitleRequest',
-                'Required parameter "updateTitleRequest" was null or undefined when calling appsIdPut().'
+                'Required parameter "updateTitleRequest" was null or undefined when calling updateApp().'
             );
         }
 
@@ -400,52 +447,8 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     /**
      * Update app
      */
-    async appsIdPut(requestParameters: AppsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
-        const response = await this.appsIdPutRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Create app
-     */
-    async appsPostRaw(requestParameters: AppsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
-        if (requestParameters['newAppInput'] == null) {
-            throw new runtime.RequiredError(
-                'newAppInput',
-                'Required parameter "newAppInput" was null or undefined when calling appsPost().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/apps`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: NewAppInputToJSON(requestParameters['newAppInput']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppFromJSON(jsonValue));
-    }
-
-    /**
-     * Create app
-     */
-    async appsPost(requestParameters: AppsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
-        const response = await this.appsPostRaw(requestParameters, initOverrides);
+    async updateApp(requestParameters: UpdateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
+        const response = await this.updateAppRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

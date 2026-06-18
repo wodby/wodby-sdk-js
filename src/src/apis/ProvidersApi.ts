@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -15,11 +15,14 @@
 
 import * as runtime from '../runtime';
 import type {
+  ErrorResponse,
   Provider,
   ProviderRevision,
   ProvidersResponse,
 } from '../models/index';
 import {
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     ProviderFromJSON,
     ProviderToJSON,
     ProviderRevisionFromJSON,
@@ -28,15 +31,19 @@ import {
     ProvidersResponseToJSON,
 } from '../models/index';
 
-export interface ProviderRevisionsIdGetRequest {
+export interface GetProviderRequest {
     id: number;
 }
 
-export interface ProvidersByNameNameGetRequest {
+export interface GetProviderByNameRequest {
     name: string;
 }
 
-export interface ProvidersGetRequest {
+export interface GetProviderRevisionRequest {
+    id: number;
+}
+
+export interface ListProvidersRequest {
     orgId: number;
     projectIds?: string;
     excludePublic?: boolean;
@@ -54,18 +61,18 @@ export interface ProvidersGetRequest {
 export interface ProvidersApiInterface {
     /**
      * 
-     * @summary Get provider revision
+     * @summary Get provider
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProvidersApiInterface
      */
-    providerRevisionsIdGetRaw(requestParameters: ProviderRevisionsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProviderRevision>>;
+    getProviderRaw(requestParameters: GetProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>>;
 
     /**
-     * Get provider revision
+     * Get provider
      */
-    providerRevisionsIdGet(requestParameters: ProviderRevisionsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProviderRevision>;
+    getProvider(requestParameters: GetProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider>;
 
     /**
      * 
@@ -75,12 +82,27 @@ export interface ProvidersApiInterface {
      * @throws {RequiredError}
      * @memberof ProvidersApiInterface
      */
-    providersByNameNameGetRaw(requestParameters: ProvidersByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>>;
+    getProviderByNameRaw(requestParameters: GetProviderByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>>;
 
     /**
      * Get provider by name
      */
-    providersByNameNameGet(requestParameters: ProvidersByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider>;
+    getProviderByName(requestParameters: GetProviderByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider>;
+
+    /**
+     * 
+     * @summary Get provider revision
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProvidersApiInterface
+     */
+    getProviderRevisionRaw(requestParameters: GetProviderRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProviderRevision>>;
+
+    /**
+     * Get provider revision
+     */
+    getProviderRevision(requestParameters: GetProviderRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProviderRevision>;
 
     /**
      * 
@@ -95,12 +117,12 @@ export interface ProvidersApiInterface {
      * @throws {RequiredError}
      * @memberof ProvidersApiInterface
      */
-    providersGetRaw(requestParameters: ProvidersGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProvidersResponse>>;
+    listProvidersRaw(requestParameters: ListProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProvidersResponse>>;
 
     /**
      * List providers
      */
-    providersGet(requestParameters: ProvidersGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProvidersResponse>;
+    listProviders(requestParameters: ListProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProvidersResponse>;
 
 }
 
@@ -110,13 +132,13 @@ export interface ProvidersApiInterface {
 export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterface {
 
     /**
-     * Get provider revision
+     * Get provider
      */
-    async providerRevisionsIdGetRaw(requestParameters: ProviderRevisionsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProviderRevision>> {
+    async getProviderRaw(requestParameters: GetProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling providerRevisionsIdGet().'
+                'Required parameter "id" was null or undefined when calling getProvider().'
             );
         }
 
@@ -133,31 +155,31 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
         }
 
         const response = await this.request({
-            path: `/provider-revisions/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/providers/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProviderRevisionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProviderFromJSON(jsonValue));
     }
 
     /**
-     * Get provider revision
+     * Get provider
      */
-    async providerRevisionsIdGet(requestParameters: ProviderRevisionsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProviderRevision> {
-        const response = await this.providerRevisionsIdGetRaw(requestParameters, initOverrides);
+    async getProvider(requestParameters: GetProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider> {
+        const response = await this.getProviderRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Get provider by name
      */
-    async providersByNameNameGetRaw(requestParameters: ProvidersByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>> {
+    async getProviderByNameRaw(requestParameters: GetProviderByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>> {
         if (requestParameters['name'] == null) {
             throw new runtime.RequiredError(
                 'name',
-                'Required parameter "name" was null or undefined when calling providersByNameNameGet().'
+                'Required parameter "name" was null or undefined when calling getProviderByName().'
             );
         }
 
@@ -186,19 +208,60 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
     /**
      * Get provider by name
      */
-    async providersByNameNameGet(requestParameters: ProvidersByNameNameGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider> {
-        const response = await this.providersByNameNameGetRaw(requestParameters, initOverrides);
+    async getProviderByName(requestParameters: GetProviderByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider> {
+        const response = await this.getProviderByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get provider revision
+     */
+    async getProviderRevisionRaw(requestParameters: GetProviderRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProviderRevision>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getProviderRevision().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/provider-revisions/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProviderRevisionFromJSON(jsonValue));
+    }
+
+    /**
+     * Get provider revision
+     */
+    async getProviderRevision(requestParameters: GetProviderRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProviderRevision> {
+        const response = await this.getProviderRevisionRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * List providers
      */
-    async providersGetRaw(requestParameters: ProvidersGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProvidersResponse>> {
+    async listProvidersRaw(requestParameters: ListProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProvidersResponse>> {
         if (requestParameters['orgId'] == null) {
             throw new runtime.RequiredError(
                 'orgId',
-                'Required parameter "orgId" was null or undefined when calling providersGet().'
+                'Required parameter "orgId" was null or undefined when calling listProviders().'
             );
         }
 
@@ -251,8 +314,8 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
     /**
      * List providers
      */
-    async providersGet(requestParameters: ProvidersGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProvidersResponse> {
-        const response = await this.providersGetRaw(requestParameters, initOverrides);
+    async listProviders(requestParameters: ListProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProvidersResponse> {
+        const response = await this.listProvidersRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

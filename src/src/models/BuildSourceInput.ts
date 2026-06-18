@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Wodby 2.0 Public API
+ * Wodby 2 Public API
  * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
  *
  * The version of the OpenAPI document: 1.0.0
@@ -42,13 +42,13 @@ export interface BuildSourceInput {
      * @type {number}
      * @memberof BuildSourceInput
      */
-    integrationID?: number | null;
+    integrationId?: number | null;
     /**
      * 
      * @type {string}
      * @memberof BuildSourceInput
      */
-    remoteGitRepoID?: string | null;
+    remoteGitRepoId?: string | null;
     /**
      * 
      * @type {string}
@@ -84,8 +84,8 @@ export function BuildSourceInputFromJSONTyped(json: any, ignoreDiscriminator: bo
         'buildSourceType': json['buildSourceType'],
         'template': json['template'] == null ? undefined : json['template'],
         'newRepoName': json['newRepoName'] == null ? undefined : json['newRepoName'],
-        'integrationID': json['integrationID'] == null ? undefined : json['integrationID'],
-        'remoteGitRepoID': json['remoteGitRepoID'] == null ? undefined : json['remoteGitRepoID'],
+        'integrationId': json['integrationId'] == null ? undefined : json['integrationId'],
+        'remoteGitRepoId': json['remoteGitRepoId'] == null ? undefined : json['remoteGitRepoId'],
         'gitRef': json['gitRef'] == null ? undefined : json['gitRef'],
         'gitRefType': json['gitRefType'] == null ? undefined : json['gitRefType'],
     };
@@ -105,8 +105,8 @@ export function BuildSourceInputToJSONTyped(value?: BuildSourceInput | null, ign
         'buildSourceType': value['buildSourceType'],
         'template': value['template'],
         'newRepoName': value['newRepoName'],
-        'integrationID': value['integrationID'],
-        'remoteGitRepoID': value['remoteGitRepoID'],
+        'integrationId': value['integrationId'],
+        'remoteGitRepoId': value['remoteGitRepoId'],
         'gitRef': value['gitRef'],
         'gitRefType': value['gitRefType'],
     };
