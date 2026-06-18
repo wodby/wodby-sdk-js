@@ -49,11 +49,11 @@ export interface GetClusterRequest {
 
 export interface GetClusterByNameRequest {
     name: string;
-    orgId: number;
+    orgId?: number;
 }
 
 export interface ListClustersRequest {
-    orgId: number;
+    orgId?: number;
     projectIds?: string;
     integrationId?: number;
 }
@@ -120,7 +120,7 @@ export interface ClustersApiInterface {
      * 
      * @summary Get cluster by name
      * @param {string} name 
-     * @param {number} orgId 
+     * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ClustersApiInterface
@@ -135,7 +135,7 @@ export interface ClustersApiInterface {
     /**
      * 
      * @summary List clusters
-     * @param {number} orgId 
+     * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
      * @param {number} [integrationId] 
      * @param {*} [options] Override http request option.
@@ -190,10 +190,6 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
         headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -236,10 +232,6 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -277,10 +269,6 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -313,13 +301,6 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
             );
         }
 
-        if (requestParameters['orgId'] == null) {
-            throw new runtime.RequiredError(
-                'orgId',
-                'Required parameter "orgId" was null or undefined when calling getClusterByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         if (requestParameters['orgId'] != null) {
@@ -327,10 +308,6 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -358,13 +335,6 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      * List clusters
      */
     async listClustersRaw(requestParameters: ListClustersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Cluster>>> {
-        if (requestParameters['orgId'] == null) {
-            throw new runtime.RequiredError(
-                'orgId',
-                'Required parameter "orgId" was null or undefined when calling listClusters().'
-            );
-        }
-
         const queryParameters: any = {};
 
         if (requestParameters['orgId'] != null) {
@@ -380,10 +350,6 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -402,7 +368,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     /**
      * List clusters
      */
-    async listClusters(requestParameters: ListClustersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Cluster>> {
+    async listClusters(requestParameters: ListClustersRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Cluster>> {
         const response = await this.listClustersRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -430,10 +396,6 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication

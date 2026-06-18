@@ -107,7 +107,7 @@ export interface TasksApiInterface {
      * 
      * @summary List tasks
      * @param {'project_and_org' | 'org_only' | 'user_only'} [scope] 
-     * @param {number} [orgId] 
+     * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
      * @param {boolean} [withoutOrigin] 
      * @param {string} [statuses] Comma-separated task statuses
@@ -172,10 +172,6 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -211,10 +207,6 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -311,10 +303,6 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -359,10 +347,6 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication

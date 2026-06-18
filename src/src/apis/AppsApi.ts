@@ -48,11 +48,11 @@ export interface GetAppRequest {
 
 export interface GetAppByNameRequest {
     name: string;
-    orgId: number;
+    orgId?: number;
 }
 
 export interface ListAppsRequest {
-    orgId: number;
+    orgId?: number;
     projectIds?: string;
     clusterApp?: boolean;
 }
@@ -118,7 +118,7 @@ export interface AppsApiInterface {
      * 
      * @summary Get app by name
      * @param {string} name 
-     * @param {number} orgId 
+     * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AppsApiInterface
@@ -133,7 +133,7 @@ export interface AppsApiInterface {
     /**
      * 
      * @summary List apps
-     * @param {number} orgId 
+     * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
      * @param {boolean} [clusterApp] 
      * @param {*} [options] Override http request option.
@@ -188,10 +188,6 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
         headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -228,10 +224,6 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -271,10 +263,6 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -307,13 +295,6 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
             );
         }
 
-        if (requestParameters['orgId'] == null) {
-            throw new runtime.RequiredError(
-                'orgId',
-                'Required parameter "orgId" was null or undefined when calling getAppByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         if (requestParameters['orgId'] != null) {
@@ -321,10 +302,6 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -352,13 +329,6 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
      * List apps
      */
     async listAppsRaw(requestParameters: ListAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<App>>> {
-        if (requestParameters['orgId'] == null) {
-            throw new runtime.RequiredError(
-                'orgId',
-                'Required parameter "orgId" was null or undefined when calling listApps().'
-            );
-        }
-
         const queryParameters: any = {};
 
         if (requestParameters['orgId'] != null) {
@@ -374,10 +344,6 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -396,7 +362,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     /**
      * List apps
      */
-    async listApps(requestParameters: ListAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<App>> {
+    async listApps(requestParameters: ListAppsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<App>> {
         const response = await this.listAppsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -424,10 +390,6 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication

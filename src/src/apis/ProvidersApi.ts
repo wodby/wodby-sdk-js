@@ -44,7 +44,7 @@ export interface GetProviderRevisionRequest {
 }
 
 export interface ListProvidersRequest {
-    orgId: number;
+    orgId?: number;
     projectIds?: string;
     excludePublic?: boolean;
     search?: string;
@@ -107,7 +107,7 @@ export interface ProvidersApiInterface {
     /**
      * 
      * @summary List providers
-     * @param {number} orgId 
+     * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
      * @param {boolean} [excludePublic] 
      * @param {string} [search] 
@@ -147,10 +147,6 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -186,10 +182,6 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -229,10 +221,6 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -258,13 +246,6 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
      * List providers
      */
     async listProvidersRaw(requestParameters: ListProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProvidersResponse>> {
-        if (requestParameters['orgId'] == null) {
-            throw new runtime.RequiredError(
-                'orgId',
-                'Required parameter "orgId" was null or undefined when calling listProviders().'
-            );
-        }
-
         const queryParameters: any = {};
 
         if (requestParameters['orgId'] != null) {
@@ -294,10 +275,6 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -314,7 +291,7 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
     /**
      * List providers
      */
-    async listProviders(requestParameters: ListProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProvidersResponse> {
+    async listProviders(requestParameters: ListProvidersRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProvidersResponse> {
         const response = await this.listProvidersRaw(requestParameters, initOverrides);
         return await response.value();
     }

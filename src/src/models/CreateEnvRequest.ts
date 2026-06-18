@@ -20,11 +20,11 @@ import { mapValues } from '../runtime';
  */
 export interface CreateEnvRequest {
     /**
-     * 
+     * Optional for API-key requests; defaults to the API key's organization.
      * @type {number}
      * @memberof CreateEnvRequest
      */
-    orgId: number;
+    orgId?: number;
     /**
      * 
      * @type {string}
@@ -49,7 +49,6 @@ export interface CreateEnvRequest {
  * Check if a given object implements the CreateEnvRequest interface.
  */
 export function instanceOfCreateEnvRequest(value: object): value is CreateEnvRequest {
-    if (!('orgId' in value) || value['orgId'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('title' in value) || value['title'] === undefined) return false;
     if (!('type' in value) || value['type'] === undefined) return false;
@@ -66,7 +65,7 @@ export function CreateEnvRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'orgId': json['orgId'],
+        'orgId': json['orgId'] == null ? undefined : json['orgId'],
         'name': json['name'],
         'title': json['title'],
         'type': json['type'],

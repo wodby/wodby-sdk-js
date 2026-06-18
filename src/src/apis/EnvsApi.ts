@@ -48,11 +48,11 @@ export interface GetEnvRequest {
 
 export interface GetEnvByNameRequest {
     name: string;
-    orgId: number;
+    orgId?: number;
 }
 
 export interface ListEnvsRequest {
-    orgId: number;
+    orgId?: number;
 }
 
 export interface UpdateEnvOperationRequest {
@@ -116,7 +116,7 @@ export interface EnvsApiInterface {
      * 
      * @summary Get env by name
      * @param {string} name 
-     * @param {number} orgId 
+     * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EnvsApiInterface
@@ -131,7 +131,7 @@ export interface EnvsApiInterface {
     /**
      * 
      * @summary List envs
-     * @param {number} orgId 
+     * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EnvsApiInterface
@@ -184,10 +184,6 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
         headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -224,10 +220,6 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -267,10 +259,6 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -303,13 +291,6 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
             );
         }
 
-        if (requestParameters['orgId'] == null) {
-            throw new runtime.RequiredError(
-                'orgId',
-                'Required parameter "orgId" was null or undefined when calling getEnvByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         if (requestParameters['orgId'] != null) {
@@ -317,10 +298,6 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -348,13 +325,6 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
      * List envs
      */
     async listEnvsRaw(requestParameters: ListEnvsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Env>>> {
-        if (requestParameters['orgId'] == null) {
-            throw new runtime.RequiredError(
-                'orgId',
-                'Required parameter "orgId" was null or undefined when calling listEnvs().'
-            );
-        }
-
         const queryParameters: any = {};
 
         if (requestParameters['orgId'] != null) {
@@ -362,10 +332,6 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -384,7 +350,7 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
     /**
      * List envs
      */
-    async listEnvs(requestParameters: ListEnvsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Env>> {
+    async listEnvs(requestParameters: ListEnvsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Env>> {
         const response = await this.listEnvsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -412,10 +378,6 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication

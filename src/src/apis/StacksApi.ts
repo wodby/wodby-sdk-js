@@ -52,7 +52,7 @@ export interface ListStackRevisionServicesRequest {
 }
 
 export interface ListStacksRequest {
-    orgId: number;
+    orgId?: number;
     projectIds?: string;
     search?: string;
     page?: number;
@@ -130,7 +130,7 @@ export interface StacksApiInterface {
     /**
      * 
      * @summary List stacks
-     * @param {number} orgId 
+     * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
      * @param {string} [search] 
      * @param {number} [page] Page number, defaults to 1
@@ -167,10 +167,6 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -214,10 +210,6 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -253,10 +245,6 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -296,10 +284,6 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -325,13 +309,6 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
      * List stacks
      */
     async listStacksRaw(requestParameters: ListStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StacksResponse>> {
-        if (requestParameters['orgId'] == null) {
-            throw new runtime.RequiredError(
-                'orgId',
-                'Required parameter "orgId" was null or undefined when calling listStacks().'
-            );
-        }
-
         const queryParameters: any = {};
 
         if (requestParameters['orgId'] != null) {
@@ -357,10 +334,6 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -377,7 +350,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     /**
      * List stacks
      */
-    async listStacks(requestParameters: ListStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StacksResponse> {
+    async listStacks(requestParameters: ListStacksRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StacksResponse> {
         const response = await this.listStacksRaw(requestParameters, initOverrides);
         return await response.value();
     }

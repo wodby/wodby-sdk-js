@@ -48,11 +48,11 @@ export interface GetDatabaseRequest {
 
 export interface GetDatabaseByNameRequest {
     name: string;
-    orgId: number;
+    orgId?: number;
 }
 
 export interface ListDatabasesRequest {
-    orgId: number;
+    orgId?: number;
     projectIds?: string;
     kind?: string;
 }
@@ -118,7 +118,7 @@ export interface DatabasesApiInterface {
      * 
      * @summary Get database by name
      * @param {string} name 
-     * @param {number} orgId 
+     * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DatabasesApiInterface
@@ -133,7 +133,7 @@ export interface DatabasesApiInterface {
     /**
      * 
      * @summary List databases
-     * @param {number} orgId 
+     * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
      * @param {string} [kind] 
      * @param {*} [options] Override http request option.
@@ -188,10 +188,6 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
         headerParameters['Content-Type'] = 'application/json';
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -228,10 +224,6 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -271,10 +263,6 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -307,13 +295,6 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
             );
         }
 
-        if (requestParameters['orgId'] == null) {
-            throw new runtime.RequiredError(
-                'orgId',
-                'Required parameter "orgId" was null or undefined when calling getDatabaseByName().'
-            );
-        }
-
         const queryParameters: any = {};
 
         if (requestParameters['orgId'] != null) {
@@ -321,10 +302,6 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -352,13 +329,6 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
      * List databases
      */
     async listDatabasesRaw(requestParameters: ListDatabasesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Database>>> {
-        if (requestParameters['orgId'] == null) {
-            throw new runtime.RequiredError(
-                'orgId',
-                'Required parameter "orgId" was null or undefined when calling listDatabases().'
-            );
-        }
-
         const queryParameters: any = {};
 
         if (requestParameters['orgId'] != null) {
@@ -374,10 +344,6 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -396,7 +362,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
     /**
      * List databases
      */
-    async listDatabases(requestParameters: ListDatabasesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Database>> {
+    async listDatabases(requestParameters: ListDatabasesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Database>> {
         const response = await this.listDatabasesRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -424,10 +390,6 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication

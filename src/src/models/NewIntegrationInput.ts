@@ -28,11 +28,11 @@ import {
  */
 export interface NewIntegrationInput {
     /**
-     * 
+     * Optional for API-key requests; defaults to the API key's organization.
      * @type {number}
      * @memberof NewIntegrationInput
      */
-    orgId: number;
+    orgId?: number;
     /**
      * 
      * @type {number}
@@ -87,7 +87,6 @@ export interface NewIntegrationInput {
  * Check if a given object implements the NewIntegrationInput interface.
  */
 export function instanceOfNewIntegrationInput(value: object): value is NewIntegrationInput {
-    if (!('orgId' in value) || value['orgId'] === undefined) return false;
     if (!('providerId' in value) || value['providerId'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('title' in value) || value['title'] === undefined) return false;
@@ -105,7 +104,7 @@ export function NewIntegrationInputFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'orgId': json['orgId'],
+        'orgId': json['orgId'] == null ? undefined : json['orgId'],
         'providerId': json['providerId'],
         'name': json['name'],
         'title': json['title'],

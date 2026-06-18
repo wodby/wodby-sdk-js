@@ -49,7 +49,7 @@ export interface ListServiceLinkCandidatesRequest {
 }
 
 export interface ListServicesRequest {
-    orgId: number;
+    orgId?: number;
     projectIds?: string;
     search?: string;
     page?: number;
@@ -127,7 +127,7 @@ export interface ServicesApiInterface {
     /**
      * 
      * @summary List services
-     * @param {number} orgId 
+     * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
      * @param {string} [search] 
      * @param {number} [page] Page number, defaults to 1
@@ -164,10 +164,6 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -211,10 +207,6 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -250,10 +242,6 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -293,10 +281,6 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -322,13 +306,6 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
      * List services
      */
     async listServicesRaw(requestParameters: ListServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ServicesResponse>> {
-        if (requestParameters['orgId'] == null) {
-            throw new runtime.RequiredError(
-                'orgId',
-                'Required parameter "orgId" was null or undefined when calling listServices().'
-            );
-        }
-
         const queryParameters: any = {};
 
         if (requestParameters['orgId'] != null) {
@@ -354,10 +331,6 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -374,7 +347,7 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
     /**
      * List services
      */
-    async listServices(requestParameters: ListServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServicesResponse> {
+    async listServices(requestParameters: ListServicesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServicesResponse> {
         const response = await this.listServicesRaw(requestParameters, initOverrides);
         return await response.value();
     }

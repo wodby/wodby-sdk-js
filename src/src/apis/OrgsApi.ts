@@ -15,15 +15,12 @@
 
 import * as runtime from '../runtime';
 import type {
-  CreateOrgRequest,
   ErrorResponse,
   OperationResult,
   Org,
   UpdateOrgRequest,
 } from '../models/index';
 import {
-    CreateOrgRequestFromJSON,
-    CreateOrgRequestToJSON,
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
     OperationResultFromJSON,
@@ -33,10 +30,6 @@ import {
     UpdateOrgRequestFromJSON,
     UpdateOrgRequestToJSON,
 } from '../models/index';
-
-export interface CreateOrgOperationRequest {
-    createOrgRequest: CreateOrgRequest;
-}
 
 export interface DeleteOrgRequest {
     id: number;
@@ -58,21 +51,6 @@ export interface UpdateOrgOperationRequest {
  * @interface OrgsApiInterface
  */
 export interface OrgsApiInterface {
-    /**
-     * 
-     * @summary Create org
-     * @param {CreateOrgRequest} createOrgRequest 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OrgsApiInterface
-     */
-    createOrgRaw(requestParameters: CreateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>>;
-
-    /**
-     * Create org
-     */
-    createOrg(requestParameters: CreateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org>;
-
     /**
      * 
      * @summary Delete org
@@ -141,50 +119,6 @@ export interface OrgsApiInterface {
 export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
 
     /**
-     * Create org
-     */
-    async createOrgRaw(requestParameters: CreateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>> {
-        if (requestParameters['createOrgRequest'] == null) {
-            throw new runtime.RequiredError(
-                'createOrgRequest',
-                'Required parameter "createOrgRequest" was null or undefined when calling createOrg().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/orgs`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: CreateOrgRequestToJSON(requestParameters['createOrgRequest']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OrgFromJSON(jsonValue));
-    }
-
-    /**
-     * Create org
-     */
-    async createOrg(requestParameters: CreateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org> {
-        const response = await this.createOrgRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Delete org
      */
     async deleteOrgRaw(requestParameters: DeleteOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -198,10 +132,6 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -241,10 +171,6 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
-
-        if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
 
@@ -273,10 +199,6 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
@@ -323,10 +245,6 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // accessTokenHeader authentication
-        }
 
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication

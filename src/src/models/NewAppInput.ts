@@ -35,11 +35,11 @@ import {
  */
 export interface NewAppInput {
     /**
-     * 
+     * Optional for API-key requests; defaults to the API key's organization.
      * @type {number}
      * @memberof NewAppInput
      */
-    orgId: number;
+    orgId?: number;
     /**
      * 
      * @type {string}
@@ -124,7 +124,6 @@ export interface NewAppInput {
  * Check if a given object implements the NewAppInput interface.
  */
 export function instanceOfNewAppInput(value: object): value is NewAppInput {
-    if (!('orgId' in value) || value['orgId'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('title' in value) || value['title'] === undefined) return false;
     if (!('instanceName' in value) || value['instanceName'] === undefined) return false;
@@ -146,7 +145,7 @@ export function NewAppInputFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'orgId': json['orgId'],
+        'orgId': json['orgId'] == null ? undefined : json['orgId'],
         'name': json['name'],
         'title': json['title'],
         'instanceName': json['instanceName'],

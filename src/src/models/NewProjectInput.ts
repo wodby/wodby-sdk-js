@@ -20,11 +20,11 @@ import { mapValues } from '../runtime';
  */
 export interface NewProjectInput {
     /**
-     * 
+     * Optional for API-key requests; defaults to the API key's organization.
      * @type {number}
      * @memberof NewProjectInput
      */
-    orgId: number;
+    orgId?: number;
     /**
      * 
      * @type {string}
@@ -61,7 +61,6 @@ export interface NewProjectInput {
  * Check if a given object implements the NewProjectInput interface.
  */
 export function instanceOfNewProjectInput(value: object): value is NewProjectInput {
-    if (!('orgId' in value) || value['orgId'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('title' in value) || value['title'] === undefined) return false;
     return true;
@@ -77,7 +76,7 @@ export function NewProjectInputFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'orgId': json['orgId'],
+        'orgId': json['orgId'] == null ? undefined : json['orgId'],
         'name': json['name'],
         'title': json['title'],
         'teamIds': json['teamIds'] == null ? undefined : json['teamIds'],

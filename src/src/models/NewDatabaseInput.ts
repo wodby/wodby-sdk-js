@@ -20,11 +20,11 @@ import { mapValues } from '../runtime';
  */
 export interface NewDatabaseInput {
     /**
-     * 
+     * Optional for API-key requests; defaults to the API key's organization.
      * @type {number}
      * @memberof NewDatabaseInput
      */
-    orgId: number;
+    orgId?: number;
     /**
      * 
      * @type {number}
@@ -127,7 +127,6 @@ export interface NewDatabaseInput {
  * Check if a given object implements the NewDatabaseInput interface.
  */
 export function instanceOfNewDatabaseInput(value: object): value is NewDatabaseInput {
-    if (!('orgId' in value) || value['orgId'] === undefined) return false;
     if (!('envId' in value) || value['envId'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('title' in value) || value['title'] === undefined) return false;
@@ -148,7 +147,7 @@ export function NewDatabaseInputFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'orgId': json['orgId'],
+        'orgId': json['orgId'] == null ? undefined : json['orgId'],
         'projectId': json['projectId'] == null ? undefined : json['projectId'],
         'envId': json['envId'],
         'name': json['name'],

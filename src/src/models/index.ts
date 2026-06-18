@@ -20,7 +20,6 @@ export * from './Cluster';
 export * from './CreateBuildRequest';
 export * from './CreateDeploymentRequest';
 export * from './CreateEnvRequest';
-export * from './CreateOrgRequest';
 export * from './Database';
 export * from './DatabaseType';
 export * from './DatabaseVersion';

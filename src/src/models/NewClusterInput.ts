@@ -20,11 +20,11 @@ import { mapValues } from '../runtime';
  */
 export interface NewClusterInput {
     /**
-     * 
+     * Optional for API-key requests; defaults to the API key's organization.
      * @type {number}
      * @memberof NewClusterInput
      */
-    orgId: number;
+    orgId?: number;
     /**
      * 
      * @type {number}
@@ -121,7 +121,6 @@ export interface NewClusterInput {
  * Check if a given object implements the NewClusterInput interface.
  */
 export function instanceOfNewClusterInput(value: object): value is NewClusterInput {
-    if (!('orgId' in value) || value['orgId'] === undefined) return false;
     if (!('integrationId' in value) || value['integrationId'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('title' in value) || value['title'] === undefined) return false;
@@ -140,7 +139,7 @@ export function NewClusterInputFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'orgId': json['orgId'],
+        'orgId': json['orgId'] == null ? undefined : json['orgId'],
         'projectId': json['projectId'] == null ? undefined : json['projectId'],
         'integrationId': json['integrationId'],
         'name': json['name'],
