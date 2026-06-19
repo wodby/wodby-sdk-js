@@ -2,6 +2,7 @@
 /* eslint-disable */
 export * from './App';
 export * from './AppBuild';
+export * from './AppBuildConfig';
 export * from './AppBuildsResponse';
 export * from './AppDeployment';
 export * from './AppDeploymentsResponse';
@@ -9,6 +10,8 @@ export * from './AppEndpointOptionInput';
 export * from './AppInstance';
 export * from './AppRoute';
 export * from './AppService';
+export * from './AppServiceBuildArg';
+export * from './AppServiceBuildConfig';
 export * from './AppServiceDatabaseInput';
 export * from './AppServiceDeploymentRequest';
 export * from './AppServiceInput';

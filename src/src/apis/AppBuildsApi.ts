@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   AppBuild,
+  AppBuildConfig,
   AppBuildsResponse,
   AppDeployment,
   CreateBuildRequest,
@@ -26,6 +27,8 @@ import type {
 import {
     AppBuildFromJSON,
     AppBuildToJSON,
+    AppBuildConfigFromJSON,
+    AppBuildConfigToJSON,
     AppBuildsResponseFromJSON,
     AppBuildsResponseToJSON,
     AppDeploymentFromJSON,
@@ -53,6 +56,10 @@ export interface DeployAppBuildRequest {
 }
 
 export interface GetAppBuildRequest {
+    id: number;
+}
+
+export interface GetAppBuildConfigRequest {
     id: number;
 }
 
@@ -136,6 +143,21 @@ export interface AppBuildsApiInterface {
      * Get build
      */
     getAppBuild(requestParameters: GetAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild>;
+
+    /**
+     * 
+     * @summary Get build config
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppBuildsApiInterface
+     */
+    getAppBuildConfigRaw(requestParameters: GetAppBuildConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuildConfig>>;
+
+    /**
+     * Get build config
+     */
+    getAppBuildConfig(requestParameters: GetAppBuildConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildConfig>;
 
     /**
      * 
@@ -346,6 +368,47 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
      */
     async getAppBuild(requestParameters: GetAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild> {
         const response = await this.getAppBuildRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get build config
+     */
+    async getAppBuildConfigRaw(requestParameters: GetAppBuildConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuildConfig>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppBuildConfig().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-ACCESS-TOKEN"] = await this.configuration.apiKey("X-ACCESS-TOKEN"); // ciAccessTokenHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-builds/{id}/config`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppBuildConfigFromJSON(jsonValue));
+    }
+
+    /**
+     * Get build config
+     */
+    async getAppBuildConfig(requestParameters: GetAppBuildConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildConfig> {
+        const response = await this.getAppBuildConfigRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
