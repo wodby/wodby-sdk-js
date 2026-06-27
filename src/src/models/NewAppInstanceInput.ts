@@ -40,17 +40,17 @@ export interface NewAppInstanceInput {
      */
     instanceName: string;
     /**
-     * 
+     * Defaults to instanceName when omitted.
      * @type {string}
      * @memberof NewAppInstanceInput
      */
-    instanceTitle: string;
+    instanceTitle?: string;
     /**
-     * 
+     * Defaults to instanceName.appName.orgDomain when omitted.
      * @type {string}
      * @memberof NewAppInstanceInput
      */
-    domain: string;
+    domain?: string;
     /**
      * 
      * @type {number}
@@ -58,11 +58,11 @@ export interface NewAppInstanceInput {
      */
     stackRevId: number;
     /**
-     * 
+     * Defaults to the stack revision's service defaults when omitted.
      * @type {Array<NewAppServiceInput>}
      * @memberof NewAppInstanceInput
      */
-    services: Array<NewAppServiceInput>;
+    services?: Array<NewAppServiceInput>;
     /**
      * 
      * @type {number}
@@ -95,10 +95,7 @@ export interface NewAppInstanceInput {
 export function instanceOfNewAppInstanceInput(value: object): value is NewAppInstanceInput {
     if (!('appId' in value) || value['appId'] === undefined) return false;
     if (!('instanceName' in value) || value['instanceName'] === undefined) return false;
-    if (!('instanceTitle' in value) || value['instanceTitle'] === undefined) return false;
-    if (!('domain' in value) || value['domain'] === undefined) return false;
     if (!('stackRevId' in value) || value['stackRevId'] === undefined) return false;
-    if (!('services' in value) || value['services'] === undefined) return false;
     if (!('envId' in value) || value['envId'] === undefined) return false;
     return true;
 }
@@ -115,10 +112,10 @@ export function NewAppInstanceInputFromJSONTyped(json: any, ignoreDiscriminator:
         
         'appId': json['appId'],
         'instanceName': json['instanceName'],
-        'instanceTitle': json['instanceTitle'],
-        'domain': json['domain'],
+        'instanceTitle': json['instanceTitle'] == null ? undefined : json['instanceTitle'],
+        'domain': json['domain'] == null ? undefined : json['domain'],
         'stackRevId': json['stackRevId'],
-        'services': ((json['services'] as Array<any>).map(NewAppServiceInputFromJSON)),
+        'services': json['services'] == null ? undefined : ((json['services'] as Array<any>).map(NewAppServiceInputFromJSON)),
         'clusterId': json['clusterId'] == null ? undefined : json['clusterId'],
         'envId': json['envId'],
         'ciIntegrationId': json['ciIntegrationId'] == null ? undefined : json['ciIntegrationId'],
@@ -142,7 +139,7 @@ export function NewAppInstanceInputToJSONTyped(value?: NewAppInstanceInput | nul
         'instanceTitle': value['instanceTitle'],
         'domain': value['domain'],
         'stackRevId': value['stackRevId'],
-        'services': ((value['services'] as Array<any>).map(NewAppServiceInputToJSON)),
+        'services': value['services'] == null ? undefined : ((value['services'] as Array<any>).map(NewAppServiceInputToJSON)),
         'clusterId': value['clusterId'],
         'envId': value['envId'],
         'ciIntegrationId': value['ciIntegrationId'],

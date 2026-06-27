@@ -40,11 +40,11 @@ export interface NewAppInput {
      */
     name: string;
     /**
-     * 
+     * Defaults to name when omitted.
      * @type {string}
      * @memberof NewAppInput
      */
-    title: string;
+    title?: string;
     /**
      * 
      * @type {string}
@@ -52,17 +52,17 @@ export interface NewAppInput {
      */
     instanceName: string;
     /**
-     * 
+     * Defaults to instanceName when omitted.
      * @type {string}
      * @memberof NewAppInput
      */
-    instanceTitle: string;
+    instanceTitle?: string;
     /**
-     * 
+     * Defaults to instanceName.name.orgDomain when omitted.
      * @type {string}
      * @memberof NewAppInput
      */
-    domain: string;
+    domain?: string;
     /**
      * 
      * @type {number}
@@ -76,11 +76,11 @@ export interface NewAppInput {
      */
     stackRevId: number;
     /**
-     * 
+     * Defaults to the stack revision's service defaults when omitted.
      * @type {Array<NewAppServiceInput>}
      * @memberof NewAppInput
      */
-    services: Array<NewAppServiceInput>;
+    services?: Array<NewAppServiceInput>;
     /**
      * 
      * @type {number}
@@ -112,12 +112,8 @@ export interface NewAppInput {
  */
 export function instanceOfNewAppInput(value: object): value is NewAppInput {
     if (!('name' in value) || value['name'] === undefined) return false;
-    if (!('title' in value) || value['title'] === undefined) return false;
     if (!('instanceName' in value) || value['instanceName'] === undefined) return false;
-    if (!('instanceTitle' in value) || value['instanceTitle'] === undefined) return false;
-    if (!('domain' in value) || value['domain'] === undefined) return false;
     if (!('stackRevId' in value) || value['stackRevId'] === undefined) return false;
-    if (!('services' in value) || value['services'] === undefined) return false;
     if (!('envId' in value) || value['envId'] === undefined) return false;
     return true;
 }
@@ -134,13 +130,13 @@ export function NewAppInputFromJSONTyped(json: any, ignoreDiscriminator: boolean
         
         'orgId': json['orgId'] == null ? undefined : json['orgId'],
         'name': json['name'],
-        'title': json['title'],
+        'title': json['title'] == null ? undefined : json['title'],
         'instanceName': json['instanceName'],
-        'instanceTitle': json['instanceTitle'],
-        'domain': json['domain'],
+        'instanceTitle': json['instanceTitle'] == null ? undefined : json['instanceTitle'],
+        'domain': json['domain'] == null ? undefined : json['domain'],
         'projectId': json['projectId'] == null ? undefined : json['projectId'],
         'stackRevId': json['stackRevId'],
-        'services': ((json['services'] as Array<any>).map(NewAppServiceInputFromJSON)),
+        'services': json['services'] == null ? undefined : ((json['services'] as Array<any>).map(NewAppServiceInputFromJSON)),
         'clusterId': json['clusterId'] == null ? undefined : json['clusterId'],
         'envId': json['envId'],
         'ciIntegrationId': json['ciIntegrationId'] == null ? undefined : json['ciIntegrationId'],
@@ -167,7 +163,7 @@ export function NewAppInputToJSONTyped(value?: NewAppInput | null, ignoreDiscrim
         'domain': value['domain'],
         'projectId': value['projectId'],
         'stackRevId': value['stackRevId'],
-        'services': ((value['services'] as Array<any>).map(NewAppServiceInputToJSON)),
+        'services': value['services'] == null ? undefined : ((value['services'] as Array<any>).map(NewAppServiceInputToJSON)),
         'clusterId': value['clusterId'],
         'envId': value['envId'],
         'ciIntegrationId': value['ciIntegrationId'],
