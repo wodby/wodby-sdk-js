@@ -73,10 +73,6 @@ export interface ListAppBuildsRequest {
     pageSize?: number;
 }
 
-export interface VoidAppBuildRequest {
-    id: number;
-}
-
 /**
  * AppBuildsApi - interface
  * 
@@ -190,21 +186,6 @@ export interface AppBuildsApiInterface {
      * List app builds
      */
     listAppBuilds(requestParameters: ListAppBuildsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildsResponse>;
-
-    /**
-     * 
-     * @summary Void build images
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppBuildsApiInterface
-     */
-    voidAppBuildRaw(requestParameters: VoidAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>>;
-
-    /**
-     * Void build images
-     */
-    voidAppBuild(requestParameters: VoidAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild>;
 
 }
 
@@ -499,43 +480,6 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
      */
     async listAppBuilds(requestParameters: ListAppBuildsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildsResponse> {
         const response = await this.listAppBuildsRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Void build images
-     */
-    async voidAppBuildRaw(requestParameters: VoidAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling voidAppBuild().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/app-builds/{id}/void`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppBuildFromJSON(jsonValue));
-    }
-
-    /**
-     * Void build images
-     */
-    async voidAppBuild(requestParameters: VoidAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild> {
-        const response = await this.voidAppBuildRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
