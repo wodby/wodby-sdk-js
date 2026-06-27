@@ -51,10 +51,40 @@ export interface Cluster {
     serverless: boolean;
     /**
      * 
+     * @type {boolean}
+     * @memberof Cluster
+     */
+    demo: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Cluster
+     */
+    wodby: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Cluster
+     */
+    k3s: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Cluster
+     */
+    singleNode: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof Cluster
      */
     version?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Cluster
+     */
+    infraVersion: string;
     /**
      * 
      * @type {string}
@@ -67,6 +97,18 @@ export interface Cluster {
      * @memberof Cluster
      */
     zone?: string | null;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Cluster
+     */
+    ips?: Array<string> | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Cluster
+     */
+    hostname?: string | null;
     /**
      * 
      * @type {number}
@@ -102,6 +144,11 @@ export function instanceOfCluster(value: object): value is Cluster {
     if (!('title' in value) || value['title'] === undefined) return false;
     if (!('status' in value) || value['status'] === undefined) return false;
     if (!('serverless' in value) || value['serverless'] === undefined) return false;
+    if (!('demo' in value) || value['demo'] === undefined) return false;
+    if (!('wodby' in value) || value['wodby'] === undefined) return false;
+    if (!('k3s' in value) || value['k3s'] === undefined) return false;
+    if (!('singleNode' in value) || value['singleNode'] === undefined) return false;
+    if (!('infraVersion' in value) || value['infraVersion'] === undefined) return false;
     if (!('orgId' in value) || value['orgId'] === undefined) return false;
     if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
     if (!('updatedAt' in value) || value['updatedAt'] === undefined) return false;
@@ -123,9 +170,16 @@ export function ClusterFromJSONTyped(json: any, ignoreDiscriminator: boolean): C
         'title': json['title'],
         'status': json['status'],
         'serverless': json['serverless'],
+        'demo': json['demo'],
+        'wodby': json['wodby'],
+        'k3s': json['k3s'],
+        'singleNode': json['singleNode'],
         'version': json['version'] == null ? undefined : json['version'],
+        'infraVersion': json['infraVersion'],
         'region': json['region'] == null ? undefined : json['region'],
         'zone': json['zone'] == null ? undefined : json['zone'],
+        'ips': json['ips'] == null ? undefined : json['ips'],
+        'hostname': json['hostname'] == null ? undefined : json['hostname'],
         'integrationId': json['integrationId'] == null ? undefined : json['integrationId'],
         'orgId': json['orgId'],
         'createdAt': (new Date(json['createdAt'])),
@@ -149,9 +203,16 @@ export function ClusterToJSONTyped(value?: Cluster | null, ignoreDiscriminator: 
         'title': value['title'],
         'status': value['status'],
         'serverless': value['serverless'],
+        'demo': value['demo'],
+        'wodby': value['wodby'],
+        'k3s': value['k3s'],
+        'singleNode': value['singleNode'],
         'version': value['version'],
+        'infraVersion': value['infraVersion'],
         'region': value['region'],
         'zone': value['zone'],
+        'ips': value['ips'],
+        'hostname': value['hostname'],
         'integrationId': value['integrationId'],
         'orgId': value['orgId'],
         'createdAt': ((value['createdAt']).toISOString()),
