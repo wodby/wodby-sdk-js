@@ -16,29 +16,194 @@
 import * as runtime from '../runtime';
 import type {
   ErrorResponse,
+  IntegrationLinkInput,
+  NewStackServiceAnnotationInput,
+  NewStackServiceCronScheduleInput,
+  NewStackServiceEnvVarInput,
   NewStackServiceInput,
+  NewStackServiceScopedValueInput,
+  NewStackServiceTokenInput,
   OperationResult,
+  ResourcesInput,
+  SetNullableStringValueInput,
   StackService,
+  StackServiceAnnotation,
+  StackServiceConfig,
+  StackServiceConfigInput,
+  StackServiceCronSchedule,
+  StackServiceEnvVar,
+  StackServiceHelmValue,
   StackServiceInput,
+  StackServiceIntegration,
+  StackServiceLink,
+  StackServiceLinkInput,
+  StackServiceOptionsInput,
+  StackServiceToken,
+  StackServiceVolume,
+  StackServiceVolumeInput,
+  UpdateSecretValueInput,
+  UpdateStackServiceCronScheduleInput,
+  UpdateStackServiceEnvVarInput,
+  UpdateStackServiceTokenInput,
 } from '../models/index';
 import {
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
+    IntegrationLinkInputFromJSON,
+    IntegrationLinkInputToJSON,
+    NewStackServiceAnnotationInputFromJSON,
+    NewStackServiceAnnotationInputToJSON,
+    NewStackServiceCronScheduleInputFromJSON,
+    NewStackServiceCronScheduleInputToJSON,
+    NewStackServiceEnvVarInputFromJSON,
+    NewStackServiceEnvVarInputToJSON,
     NewStackServiceInputFromJSON,
     NewStackServiceInputToJSON,
+    NewStackServiceScopedValueInputFromJSON,
+    NewStackServiceScopedValueInputToJSON,
+    NewStackServiceTokenInputFromJSON,
+    NewStackServiceTokenInputToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
+    ResourcesInputFromJSON,
+    ResourcesInputToJSON,
+    SetNullableStringValueInputFromJSON,
+    SetNullableStringValueInputToJSON,
     StackServiceFromJSON,
     StackServiceToJSON,
+    StackServiceAnnotationFromJSON,
+    StackServiceAnnotationToJSON,
+    StackServiceConfigFromJSON,
+    StackServiceConfigToJSON,
+    StackServiceConfigInputFromJSON,
+    StackServiceConfigInputToJSON,
+    StackServiceCronScheduleFromJSON,
+    StackServiceCronScheduleToJSON,
+    StackServiceEnvVarFromJSON,
+    StackServiceEnvVarToJSON,
+    StackServiceHelmValueFromJSON,
+    StackServiceHelmValueToJSON,
     StackServiceInputFromJSON,
     StackServiceInputToJSON,
+    StackServiceIntegrationFromJSON,
+    StackServiceIntegrationToJSON,
+    StackServiceLinkFromJSON,
+    StackServiceLinkToJSON,
+    StackServiceLinkInputFromJSON,
+    StackServiceLinkInputToJSON,
+    StackServiceOptionsInputFromJSON,
+    StackServiceOptionsInputToJSON,
+    StackServiceTokenFromJSON,
+    StackServiceTokenToJSON,
+    StackServiceVolumeFromJSON,
+    StackServiceVolumeToJSON,
+    StackServiceVolumeInputFromJSON,
+    StackServiceVolumeInputToJSON,
+    UpdateSecretValueInputFromJSON,
+    UpdateSecretValueInputToJSON,
+    UpdateStackServiceCronScheduleInputFromJSON,
+    UpdateStackServiceCronScheduleInputToJSON,
+    UpdateStackServiceEnvVarInputFromJSON,
+    UpdateStackServiceEnvVarInputToJSON,
+    UpdateStackServiceTokenInputFromJSON,
+    UpdateStackServiceTokenInputToJSON,
 } from '../models/index';
 
 export interface CreateStackServiceRequest {
     newStackServiceInput: NewStackServiceInput;
 }
 
+export interface CreateStackServiceAnnotationRequest {
+    id: number;
+    newStackServiceAnnotationInput: NewStackServiceAnnotationInput;
+}
+
+export interface CreateStackServiceCronScheduleRequest {
+    id: number;
+    newStackServiceCronScheduleInput: NewStackServiceCronScheduleInput;
+}
+
+export interface CreateStackServiceEnvVarRequest {
+    id: number;
+    newStackServiceEnvVarInput: NewStackServiceEnvVarInput;
+}
+
+export interface CreateStackServiceHelmValueRequest {
+    id: number;
+    newStackServiceScopedValueInput: NewStackServiceScopedValueInput;
+}
+
+export interface CreateStackServiceIntegrationRequest {
+    id: number;
+    integrationLinkInput: IntegrationLinkInput;
+}
+
+export interface CreateStackServiceTokenRequest {
+    id: number;
+    newStackServiceTokenInput: NewStackServiceTokenInput;
+}
+
 export interface DeleteStackServiceRequest {
+    id: number;
+}
+
+export interface DeleteStackServiceAnnotationRequest {
+    id: number;
+}
+
+export interface DeleteStackServiceCronScheduleRequest {
+    id: number;
+}
+
+export interface DeleteStackServiceEnvVarRequest {
+    id: number;
+}
+
+export interface DeleteStackServiceHelmValueRequest {
+    id: number;
+}
+
+export interface DeleteStackServiceIntegrationRequest {
+    id: number;
+}
+
+export interface DeleteStackServiceTokenRequest {
+    id: number;
+}
+
+export interface ListStackServiceAnnotationsRequest {
+    id: number;
+}
+
+export interface ListStackServiceConfigsRequest {
+    id: number;
+}
+
+export interface ListStackServiceCronSchedulesRequest {
+    id: number;
+}
+
+export interface ListStackServiceEnvVarsRequest {
+    id: number;
+}
+
+export interface ListStackServiceHelmValuesRequest {
+    id: number;
+}
+
+export interface ListStackServiceIntegrationsRequest {
+    id: number;
+}
+
+export interface ListStackServiceLinksRequest {
+    id: number;
+}
+
+export interface ListStackServiceTokensRequest {
+    id: number;
+}
+
+export interface ListStackServiceVolumesRequest {
     id: number;
 }
 
@@ -46,9 +211,63 @@ export interface ListStackServicesRequest {
     stackRevId: number;
 }
 
+export interface SetStackServiceConfigRequest {
+    id: number;
+    name: string;
+    stackServiceConfigInput: StackServiceConfigInput;
+}
+
+export interface SetStackServiceLinkRequest {
+    id: number;
+    name: string;
+    stackServiceLinkInput: StackServiceLinkInput;
+}
+
+export interface SetStackServiceOptionsRequest {
+    id: number;
+    stackServiceOptionsInput: StackServiceOptionsInput;
+}
+
+export interface SetStackServiceResourcesRequest {
+    id: number;
+    resourcesInput: ResourcesInput;
+}
+
+export interface SetStackServiceSettingRequest {
+    id: number;
+    name: string;
+    setNullableStringValueInput: SetNullableStringValueInput;
+}
+
+export interface SetStackServiceVolumeRequest {
+    id: number;
+    name: string;
+    stackServiceVolumeInput: StackServiceVolumeInput;
+}
+
 export interface UpdateStackServiceRequest {
     id: number;
     stackServiceInput: StackServiceInput;
+}
+
+export interface UpdateStackServiceCronScheduleRequest {
+    id: number;
+    updateStackServiceCronScheduleInput: UpdateStackServiceCronScheduleInput;
+}
+
+export interface UpdateStackServiceEnvVarRequest {
+    id: number;
+    updateStackServiceEnvVarInput: UpdateStackServiceEnvVarInput;
+}
+
+export interface UpdateStackServiceHelmValueRequest {
+    id: number;
+    updateSecretValueInput: UpdateSecretValueInput;
+}
+
+export interface UpdateStackServiceTokenRequest {
+    id: number;
+    updateStackServiceTokenInput: UpdateStackServiceTokenInput;
 }
 
 /**
@@ -75,6 +294,108 @@ export interface StackServicesApiInterface {
     createStackService(requestParameters: CreateStackServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackService>;
 
     /**
+     * Creates an annotation for a stack service.
+     * @summary Create stack service annotation
+     * @param {number} id 
+     * @param {NewStackServiceAnnotationInput} newStackServiceAnnotationInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    createStackServiceAnnotationRaw(requestParameters: CreateStackServiceAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceAnnotation>>;
+
+    /**
+     * Creates an annotation for a stack service.
+     * Create stack service annotation
+     */
+    createStackServiceAnnotation(requestParameters: CreateStackServiceAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceAnnotation>;
+
+    /**
+     * Creates a cron schedule for a stack service.
+     * @summary Create stack service cron schedule
+     * @param {number} id 
+     * @param {NewStackServiceCronScheduleInput} newStackServiceCronScheduleInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    createStackServiceCronScheduleRaw(requestParameters: CreateStackServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceCronSchedule>>;
+
+    /**
+     * Creates a cron schedule for a stack service.
+     * Create stack service cron schedule
+     */
+    createStackServiceCronSchedule(requestParameters: CreateStackServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceCronSchedule>;
+
+    /**
+     * Creates an environment variable for a stack service.
+     * @summary Create stack service env var
+     * @param {number} id 
+     * @param {NewStackServiceEnvVarInput} newStackServiceEnvVarInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    createStackServiceEnvVarRaw(requestParameters: CreateStackServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceEnvVar>>;
+
+    /**
+     * Creates an environment variable for a stack service.
+     * Create stack service env var
+     */
+    createStackServiceEnvVar(requestParameters: CreateStackServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceEnvVar>;
+
+    /**
+     * Creates a Helm value override for a stack service.
+     * @summary Create stack service Helm value
+     * @param {number} id 
+     * @param {NewStackServiceScopedValueInput} newStackServiceScopedValueInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    createStackServiceHelmValueRaw(requestParameters: CreateStackServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceHelmValue>>;
+
+    /**
+     * Creates a Helm value override for a stack service.
+     * Create stack service Helm value
+     */
+    createStackServiceHelmValue(requestParameters: CreateStackServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceHelmValue>;
+
+    /**
+     * Links an integration to a stack service integration slot.
+     * @summary Create stack service integration
+     * @param {number} id 
+     * @param {IntegrationLinkInput} integrationLinkInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    createStackServiceIntegrationRaw(requestParameters: CreateStackServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceIntegration>>;
+
+    /**
+     * Links an integration to a stack service integration slot.
+     * Create stack service integration
+     */
+    createStackServiceIntegration(requestParameters: CreateStackServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceIntegration>;
+
+    /**
+     * Creates a token for a stack service.
+     * @summary Create stack service token
+     * @param {number} id 
+     * @param {NewStackServiceTokenInput} newStackServiceTokenInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    createStackServiceTokenRaw(requestParameters: CreateStackServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceToken>>;
+
+    /**
+     * Creates a token for a stack service.
+     * Create stack service token
+     */
+    createStackServiceToken(requestParameters: CreateStackServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceToken>;
+
+    /**
      * Deletes the stack service and returns the operation result.
      * @summary Delete stack service
      * @param {number} id 
@@ -89,6 +410,246 @@ export interface StackServicesApiInterface {
      * Delete stack service
      */
     deleteStackService(requestParameters: DeleteStackServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Deletes a stack service annotation.
+     * @summary Delete stack service annotation
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    deleteStackServiceAnnotationRaw(requestParameters: DeleteStackServiceAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes a stack service annotation.
+     * Delete stack service annotation
+     */
+    deleteStackServiceAnnotation(requestParameters: DeleteStackServiceAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Deletes a stack service cron schedule.
+     * @summary Delete stack service cron schedule
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    deleteStackServiceCronScheduleRaw(requestParameters: DeleteStackServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes a stack service cron schedule.
+     * Delete stack service cron schedule
+     */
+    deleteStackServiceCronSchedule(requestParameters: DeleteStackServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Deletes a stack service environment variable.
+     * @summary Delete stack service env var
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    deleteStackServiceEnvVarRaw(requestParameters: DeleteStackServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes a stack service environment variable.
+     * Delete stack service env var
+     */
+    deleteStackServiceEnvVar(requestParameters: DeleteStackServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Deletes a stack service Helm value override.
+     * @summary Delete stack service Helm value
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    deleteStackServiceHelmValueRaw(requestParameters: DeleteStackServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes a stack service Helm value override.
+     * Delete stack service Helm value
+     */
+    deleteStackServiceHelmValue(requestParameters: DeleteStackServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Removes an integration link from a stack service.
+     * @summary Delete stack service integration
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    deleteStackServiceIntegrationRaw(requestParameters: DeleteStackServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Removes an integration link from a stack service.
+     * Delete stack service integration
+     */
+    deleteStackServiceIntegration(requestParameters: DeleteStackServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Deletes a stack service token.
+     * @summary Delete stack service token
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    deleteStackServiceTokenRaw(requestParameters: DeleteStackServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes a stack service token.
+     * Delete stack service token
+     */
+    deleteStackServiceToken(requestParameters: DeleteStackServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Returns annotations configured for a stack service.
+     * @summary List stack service annotations
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    listStackServiceAnnotationsRaw(requestParameters: ListStackServiceAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceAnnotation>>>;
+
+    /**
+     * Returns annotations configured for a stack service.
+     * List stack service annotations
+     */
+    listStackServiceAnnotations(requestParameters: ListStackServiceAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceAnnotation>>;
+
+    /**
+     * Returns config overrides for a stack service.
+     * @summary List stack service configs
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    listStackServiceConfigsRaw(requestParameters: ListStackServiceConfigsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceConfig>>>;
+
+    /**
+     * Returns config overrides for a stack service.
+     * List stack service configs
+     */
+    listStackServiceConfigs(requestParameters: ListStackServiceConfigsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceConfig>>;
+
+    /**
+     * Returns cron schedules configured for a stack service.
+     * @summary List stack service cron schedules
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    listStackServiceCronSchedulesRaw(requestParameters: ListStackServiceCronSchedulesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceCronSchedule>>>;
+
+    /**
+     * Returns cron schedules configured for a stack service.
+     * List stack service cron schedules
+     */
+    listStackServiceCronSchedules(requestParameters: ListStackServiceCronSchedulesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceCronSchedule>>;
+
+    /**
+     * Returns environment variables configured for a stack service.
+     * @summary List stack service env vars
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    listStackServiceEnvVarsRaw(requestParameters: ListStackServiceEnvVarsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceEnvVar>>>;
+
+    /**
+     * Returns environment variables configured for a stack service.
+     * List stack service env vars
+     */
+    listStackServiceEnvVars(requestParameters: ListStackServiceEnvVarsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceEnvVar>>;
+
+    /**
+     * Returns Helm values configured for a stack service.
+     * @summary List stack service Helm values
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    listStackServiceHelmValuesRaw(requestParameters: ListStackServiceHelmValuesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceHelmValue>>>;
+
+    /**
+     * Returns Helm values configured for a stack service.
+     * List stack service Helm values
+     */
+    listStackServiceHelmValues(requestParameters: ListStackServiceHelmValuesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceHelmValue>>;
+
+    /**
+     * Returns integration links configured for a stack service.
+     * @summary List stack service integrations
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    listStackServiceIntegrationsRaw(requestParameters: ListStackServiceIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceIntegration>>>;
+
+    /**
+     * Returns integration links configured for a stack service.
+     * List stack service integrations
+     */
+    listStackServiceIntegrations(requestParameters: ListStackServiceIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceIntegration>>;
+
+    /**
+     * Returns service links configured for a stack service.
+     * @summary List stack service links
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    listStackServiceLinksRaw(requestParameters: ListStackServiceLinksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceLink>>>;
+
+    /**
+     * Returns service links configured for a stack service.
+     * List stack service links
+     */
+    listStackServiceLinks(requestParameters: ListStackServiceLinksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceLink>>;
+
+    /**
+     * Returns tokens configured for a stack service without revealing secret values.
+     * @summary List stack service tokens
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    listStackServiceTokensRaw(requestParameters: ListStackServiceTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceToken>>>;
+
+    /**
+     * Returns tokens configured for a stack service without revealing secret values.
+     * List stack service tokens
+     */
+    listStackServiceTokens(requestParameters: ListStackServiceTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceToken>>;
+
+    /**
+     * Returns volumes configured for a stack service.
+     * @summary List stack service volumes
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    listStackServiceVolumesRaw(requestParameters: ListStackServiceVolumesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceVolume>>>;
+
+    /**
+     * Returns volumes configured for a stack service.
+     * List stack service volumes
+     */
+    listStackServiceVolumes(requestParameters: ListStackServiceVolumesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceVolume>>;
 
     /**
      * Returns stack services matching the request filters.
@@ -107,6 +668,112 @@ export interface StackServicesApiInterface {
     listStackServices(requestParameters: ListStackServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackService>>;
 
     /**
+     * Sets a named config override for a stack service.
+     * @summary Set stack service config
+     * @param {number} id 
+     * @param {string} name 
+     * @param {StackServiceConfigInput} stackServiceConfigInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    setStackServiceConfigRaw(requestParameters: SetStackServiceConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Sets a named config override for a stack service.
+     * Set stack service config
+     */
+    setStackServiceConfig(requestParameters: SetStackServiceConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Links or unlinks another stack service for a named link slot.
+     * @summary Set stack service link
+     * @param {number} id 
+     * @param {string} name 
+     * @param {StackServiceLinkInput} stackServiceLinkInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    setStackServiceLinkRaw(requestParameters: SetStackServiceLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Links or unlinks another stack service for a named link slot.
+     * Set stack service link
+     */
+    setStackServiceLink(requestParameters: SetStackServiceLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Replaces stack service option settings.
+     * @summary Update stack service options
+     * @param {number} id 
+     * @param {StackServiceOptionsInput} stackServiceOptionsInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    setStackServiceOptionsRaw(requestParameters: SetStackServiceOptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Replaces stack service option settings.
+     * Update stack service options
+     */
+    setStackServiceOptions(requestParameters: SetStackServiceOptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Sets CPU and memory requests or limits for a stack service container.
+     * @summary Set stack service resources
+     * @param {number} id 
+     * @param {ResourcesInput} resourcesInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    setStackServiceResourcesRaw(requestParameters: SetStackServiceResourcesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Sets CPU and memory requests or limits for a stack service container.
+     * Set stack service resources
+     */
+    setStackServiceResources(requestParameters: SetStackServiceResourcesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Sets or clears a named setting value for a stack service.
+     * @summary Set stack service setting
+     * @param {number} id 
+     * @param {string} name 
+     * @param {SetNullableStringValueInput} setNullableStringValueInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    setStackServiceSettingRaw(requestParameters: SetStackServiceSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Sets or clears a named setting value for a stack service.
+     * Set stack service setting
+     */
+    setStackServiceSetting(requestParameters: SetStackServiceSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Sets or clears a stack service volume size.
+     * @summary Set stack service volume
+     * @param {number} id 
+     * @param {string} name 
+     * @param {StackServiceVolumeInput} stackServiceVolumeInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    setStackServiceVolumeRaw(requestParameters: SetStackServiceVolumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Sets or clears a stack service volume size.
+     * Set stack service volume
+     */
+    setStackServiceVolume(requestParameters: SetStackServiceVolumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
      * Updates the stack service and returns the updated resource.
      * @summary Update stack service
      * @param {number} id 
@@ -122,6 +789,74 @@ export interface StackServicesApiInterface {
      * Update stack service
      */
     updateStackService(requestParameters: UpdateStackServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackService>;
+
+    /**
+     * Updates a stack service cron schedule.
+     * @summary Update stack service cron schedule
+     * @param {number} id 
+     * @param {UpdateStackServiceCronScheduleInput} updateStackServiceCronScheduleInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    updateStackServiceCronScheduleRaw(requestParameters: UpdateStackServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceCronSchedule>>;
+
+    /**
+     * Updates a stack service cron schedule.
+     * Update stack service cron schedule
+     */
+    updateStackServiceCronSchedule(requestParameters: UpdateStackServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceCronSchedule>;
+
+    /**
+     * Updates a stack service environment variable.
+     * @summary Update stack service env var
+     * @param {number} id 
+     * @param {UpdateStackServiceEnvVarInput} updateStackServiceEnvVarInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    updateStackServiceEnvVarRaw(requestParameters: UpdateStackServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceEnvVar>>;
+
+    /**
+     * Updates a stack service environment variable.
+     * Update stack service env var
+     */
+    updateStackServiceEnvVar(requestParameters: UpdateStackServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceEnvVar>;
+
+    /**
+     * Updates a stack service Helm value override.
+     * @summary Update stack service Helm value
+     * @param {number} id 
+     * @param {UpdateSecretValueInput} updateSecretValueInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    updateStackServiceHelmValueRaw(requestParameters: UpdateStackServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceHelmValue>>;
+
+    /**
+     * Updates a stack service Helm value override.
+     * Update stack service Helm value
+     */
+    updateStackServiceHelmValue(requestParameters: UpdateStackServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceHelmValue>;
+
+    /**
+     * Updates a stack service token value, secret flag, or regex.
+     * @summary Update stack service token
+     * @param {number} id 
+     * @param {UpdateStackServiceTokenInput} updateStackServiceTokenInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StackServicesApiInterface
+     */
+    updateStackServiceTokenRaw(requestParameters: UpdateStackServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceToken>>;
+
+    /**
+     * Updates a stack service token value, secret flag, or regex.
+     * Update stack service token
+     */
+    updateStackServiceToken(requestParameters: UpdateStackServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceToken>;
 
 }
 
@@ -173,6 +908,300 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
     }
 
     /**
+     * Creates an annotation for a stack service.
+     * Create stack service annotation
+     */
+    async createStackServiceAnnotationRaw(requestParameters: CreateStackServiceAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceAnnotation>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createStackServiceAnnotation().'
+            );
+        }
+
+        if (requestParameters['newStackServiceAnnotationInput'] == null) {
+            throw new runtime.RequiredError(
+                'newStackServiceAnnotationInput',
+                'Required parameter "newStackServiceAnnotationInput" was null or undefined when calling createStackServiceAnnotation().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/annotations`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewStackServiceAnnotationInputToJSON(requestParameters['newStackServiceAnnotationInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceAnnotationFromJSON(jsonValue));
+    }
+
+    /**
+     * Creates an annotation for a stack service.
+     * Create stack service annotation
+     */
+    async createStackServiceAnnotation(requestParameters: CreateStackServiceAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceAnnotation> {
+        const response = await this.createStackServiceAnnotationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates a cron schedule for a stack service.
+     * Create stack service cron schedule
+     */
+    async createStackServiceCronScheduleRaw(requestParameters: CreateStackServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceCronSchedule>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createStackServiceCronSchedule().'
+            );
+        }
+
+        if (requestParameters['newStackServiceCronScheduleInput'] == null) {
+            throw new runtime.RequiredError(
+                'newStackServiceCronScheduleInput',
+                'Required parameter "newStackServiceCronScheduleInput" was null or undefined when calling createStackServiceCronSchedule().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/cron-schedules`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewStackServiceCronScheduleInputToJSON(requestParameters['newStackServiceCronScheduleInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceCronScheduleFromJSON(jsonValue));
+    }
+
+    /**
+     * Creates a cron schedule for a stack service.
+     * Create stack service cron schedule
+     */
+    async createStackServiceCronSchedule(requestParameters: CreateStackServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceCronSchedule> {
+        const response = await this.createStackServiceCronScheduleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates an environment variable for a stack service.
+     * Create stack service env var
+     */
+    async createStackServiceEnvVarRaw(requestParameters: CreateStackServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceEnvVar>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createStackServiceEnvVar().'
+            );
+        }
+
+        if (requestParameters['newStackServiceEnvVarInput'] == null) {
+            throw new runtime.RequiredError(
+                'newStackServiceEnvVarInput',
+                'Required parameter "newStackServiceEnvVarInput" was null or undefined when calling createStackServiceEnvVar().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/env-vars`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewStackServiceEnvVarInputToJSON(requestParameters['newStackServiceEnvVarInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceEnvVarFromJSON(jsonValue));
+    }
+
+    /**
+     * Creates an environment variable for a stack service.
+     * Create stack service env var
+     */
+    async createStackServiceEnvVar(requestParameters: CreateStackServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceEnvVar> {
+        const response = await this.createStackServiceEnvVarRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates a Helm value override for a stack service.
+     * Create stack service Helm value
+     */
+    async createStackServiceHelmValueRaw(requestParameters: CreateStackServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceHelmValue>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createStackServiceHelmValue().'
+            );
+        }
+
+        if (requestParameters['newStackServiceScopedValueInput'] == null) {
+            throw new runtime.RequiredError(
+                'newStackServiceScopedValueInput',
+                'Required parameter "newStackServiceScopedValueInput" was null or undefined when calling createStackServiceHelmValue().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/helm-values`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewStackServiceScopedValueInputToJSON(requestParameters['newStackServiceScopedValueInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceHelmValueFromJSON(jsonValue));
+    }
+
+    /**
+     * Creates a Helm value override for a stack service.
+     * Create stack service Helm value
+     */
+    async createStackServiceHelmValue(requestParameters: CreateStackServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceHelmValue> {
+        const response = await this.createStackServiceHelmValueRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Links an integration to a stack service integration slot.
+     * Create stack service integration
+     */
+    async createStackServiceIntegrationRaw(requestParameters: CreateStackServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceIntegration>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createStackServiceIntegration().'
+            );
+        }
+
+        if (requestParameters['integrationLinkInput'] == null) {
+            throw new runtime.RequiredError(
+                'integrationLinkInput',
+                'Required parameter "integrationLinkInput" was null or undefined when calling createStackServiceIntegration().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/integrations`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IntegrationLinkInputToJSON(requestParameters['integrationLinkInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceIntegrationFromJSON(jsonValue));
+    }
+
+    /**
+     * Links an integration to a stack service integration slot.
+     * Create stack service integration
+     */
+    async createStackServiceIntegration(requestParameters: CreateStackServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceIntegration> {
+        const response = await this.createStackServiceIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates a token for a stack service.
+     * Create stack service token
+     */
+    async createStackServiceTokenRaw(requestParameters: CreateStackServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceToken>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createStackServiceToken().'
+            );
+        }
+
+        if (requestParameters['newStackServiceTokenInput'] == null) {
+            throw new runtime.RequiredError(
+                'newStackServiceTokenInput',
+                'Required parameter "newStackServiceTokenInput" was null or undefined when calling createStackServiceToken().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/tokens`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewStackServiceTokenInputToJSON(requestParameters['newStackServiceTokenInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceTokenFromJSON(jsonValue));
+    }
+
+    /**
+     * Creates a token for a stack service.
+     * Create stack service token
+     */
+    async createStackServiceToken(requestParameters: CreateStackServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceToken> {
+        const response = await this.createStackServiceTokenRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Deletes the stack service and returns the operation result.
      * Delete stack service
      */
@@ -208,6 +1237,591 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
      */
     async deleteStackService(requestParameters: DeleteStackServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.deleteStackServiceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes a stack service annotation.
+     * Delete stack service annotation
+     */
+    async deleteStackServiceAnnotationRaw(requestParameters: DeleteStackServiceAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteStackServiceAnnotation().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-service-annotations/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Deletes a stack service annotation.
+     * Delete stack service annotation
+     */
+    async deleteStackServiceAnnotation(requestParameters: DeleteStackServiceAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteStackServiceAnnotationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes a stack service cron schedule.
+     * Delete stack service cron schedule
+     */
+    async deleteStackServiceCronScheduleRaw(requestParameters: DeleteStackServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteStackServiceCronSchedule().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-service-cron-schedules/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Deletes a stack service cron schedule.
+     * Delete stack service cron schedule
+     */
+    async deleteStackServiceCronSchedule(requestParameters: DeleteStackServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteStackServiceCronScheduleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes a stack service environment variable.
+     * Delete stack service env var
+     */
+    async deleteStackServiceEnvVarRaw(requestParameters: DeleteStackServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteStackServiceEnvVar().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-service-env-vars/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Deletes a stack service environment variable.
+     * Delete stack service env var
+     */
+    async deleteStackServiceEnvVar(requestParameters: DeleteStackServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteStackServiceEnvVarRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes a stack service Helm value override.
+     * Delete stack service Helm value
+     */
+    async deleteStackServiceHelmValueRaw(requestParameters: DeleteStackServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteStackServiceHelmValue().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-service-helm-values/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Deletes a stack service Helm value override.
+     * Delete stack service Helm value
+     */
+    async deleteStackServiceHelmValue(requestParameters: DeleteStackServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteStackServiceHelmValueRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Removes an integration link from a stack service.
+     * Delete stack service integration
+     */
+    async deleteStackServiceIntegrationRaw(requestParameters: DeleteStackServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteStackServiceIntegration().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-service-integrations/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Removes an integration link from a stack service.
+     * Delete stack service integration
+     */
+    async deleteStackServiceIntegration(requestParameters: DeleteStackServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteStackServiceIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes a stack service token.
+     * Delete stack service token
+     */
+    async deleteStackServiceTokenRaw(requestParameters: DeleteStackServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteStackServiceToken().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-service-tokens/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Deletes a stack service token.
+     * Delete stack service token
+     */
+    async deleteStackServiceToken(requestParameters: DeleteStackServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteStackServiceTokenRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns annotations configured for a stack service.
+     * List stack service annotations
+     */
+    async listStackServiceAnnotationsRaw(requestParameters: ListStackServiceAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceAnnotation>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listStackServiceAnnotations().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/annotations`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceAnnotationFromJSON));
+    }
+
+    /**
+     * Returns annotations configured for a stack service.
+     * List stack service annotations
+     */
+    async listStackServiceAnnotations(requestParameters: ListStackServiceAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceAnnotation>> {
+        const response = await this.listStackServiceAnnotationsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns config overrides for a stack service.
+     * List stack service configs
+     */
+    async listStackServiceConfigsRaw(requestParameters: ListStackServiceConfigsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceConfig>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listStackServiceConfigs().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/configs`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceConfigFromJSON));
+    }
+
+    /**
+     * Returns config overrides for a stack service.
+     * List stack service configs
+     */
+    async listStackServiceConfigs(requestParameters: ListStackServiceConfigsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceConfig>> {
+        const response = await this.listStackServiceConfigsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns cron schedules configured for a stack service.
+     * List stack service cron schedules
+     */
+    async listStackServiceCronSchedulesRaw(requestParameters: ListStackServiceCronSchedulesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceCronSchedule>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listStackServiceCronSchedules().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/cron-schedules`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceCronScheduleFromJSON));
+    }
+
+    /**
+     * Returns cron schedules configured for a stack service.
+     * List stack service cron schedules
+     */
+    async listStackServiceCronSchedules(requestParameters: ListStackServiceCronSchedulesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceCronSchedule>> {
+        const response = await this.listStackServiceCronSchedulesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns environment variables configured for a stack service.
+     * List stack service env vars
+     */
+    async listStackServiceEnvVarsRaw(requestParameters: ListStackServiceEnvVarsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceEnvVar>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listStackServiceEnvVars().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/env-vars`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceEnvVarFromJSON));
+    }
+
+    /**
+     * Returns environment variables configured for a stack service.
+     * List stack service env vars
+     */
+    async listStackServiceEnvVars(requestParameters: ListStackServiceEnvVarsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceEnvVar>> {
+        const response = await this.listStackServiceEnvVarsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns Helm values configured for a stack service.
+     * List stack service Helm values
+     */
+    async listStackServiceHelmValuesRaw(requestParameters: ListStackServiceHelmValuesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceHelmValue>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listStackServiceHelmValues().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/helm-values`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceHelmValueFromJSON));
+    }
+
+    /**
+     * Returns Helm values configured for a stack service.
+     * List stack service Helm values
+     */
+    async listStackServiceHelmValues(requestParameters: ListStackServiceHelmValuesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceHelmValue>> {
+        const response = await this.listStackServiceHelmValuesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns integration links configured for a stack service.
+     * List stack service integrations
+     */
+    async listStackServiceIntegrationsRaw(requestParameters: ListStackServiceIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceIntegration>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listStackServiceIntegrations().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/integrations`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceIntegrationFromJSON));
+    }
+
+    /**
+     * Returns integration links configured for a stack service.
+     * List stack service integrations
+     */
+    async listStackServiceIntegrations(requestParameters: ListStackServiceIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceIntegration>> {
+        const response = await this.listStackServiceIntegrationsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns service links configured for a stack service.
+     * List stack service links
+     */
+    async listStackServiceLinksRaw(requestParameters: ListStackServiceLinksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceLink>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listStackServiceLinks().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/links`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceLinkFromJSON));
+    }
+
+    /**
+     * Returns service links configured for a stack service.
+     * List stack service links
+     */
+    async listStackServiceLinks(requestParameters: ListStackServiceLinksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceLink>> {
+        const response = await this.listStackServiceLinksRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns tokens configured for a stack service without revealing secret values.
+     * List stack service tokens
+     */
+    async listStackServiceTokensRaw(requestParameters: ListStackServiceTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceToken>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listStackServiceTokens().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/tokens`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceTokenFromJSON));
+    }
+
+    /**
+     * Returns tokens configured for a stack service without revealing secret values.
+     * List stack service tokens
+     */
+    async listStackServiceTokens(requestParameters: ListStackServiceTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceToken>> {
+        const response = await this.listStackServiceTokensRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns volumes configured for a stack service.
+     * List stack service volumes
+     */
+    async listStackServiceVolumesRaw(requestParameters: ListStackServiceVolumesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackServiceVolume>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listStackServiceVolumes().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/volumes`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceVolumeFromJSON));
+    }
+
+    /**
+     * Returns volumes configured for a stack service.
+     * List stack service volumes
+     */
+    async listStackServiceVolumes(requestParameters: ListStackServiceVolumesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceVolume>> {
+        const response = await this.listStackServiceVolumesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -251,6 +1865,328 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
      */
     async listStackServices(requestParameters: ListStackServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackService>> {
         const response = await this.listStackServicesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Sets a named config override for a stack service.
+     * Set stack service config
+     */
+    async setStackServiceConfigRaw(requestParameters: SetStackServiceConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling setStackServiceConfig().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling setStackServiceConfig().'
+            );
+        }
+
+        if (requestParameters['stackServiceConfigInput'] == null) {
+            throw new runtime.RequiredError(
+                'stackServiceConfigInput',
+                'Required parameter "stackServiceConfigInput" was null or undefined when calling setStackServiceConfig().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/configs/{name}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))).replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: StackServiceConfigInputToJSON(requestParameters['stackServiceConfigInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Sets a named config override for a stack service.
+     * Set stack service config
+     */
+    async setStackServiceConfig(requestParameters: SetStackServiceConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.setStackServiceConfigRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Links or unlinks another stack service for a named link slot.
+     * Set stack service link
+     */
+    async setStackServiceLinkRaw(requestParameters: SetStackServiceLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling setStackServiceLink().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling setStackServiceLink().'
+            );
+        }
+
+        if (requestParameters['stackServiceLinkInput'] == null) {
+            throw new runtime.RequiredError(
+                'stackServiceLinkInput',
+                'Required parameter "stackServiceLinkInput" was null or undefined when calling setStackServiceLink().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/links/{name}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))).replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: StackServiceLinkInputToJSON(requestParameters['stackServiceLinkInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Links or unlinks another stack service for a named link slot.
+     * Set stack service link
+     */
+    async setStackServiceLink(requestParameters: SetStackServiceLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.setStackServiceLinkRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Replaces stack service option settings.
+     * Update stack service options
+     */
+    async setStackServiceOptionsRaw(requestParameters: SetStackServiceOptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling setStackServiceOptions().'
+            );
+        }
+
+        if (requestParameters['stackServiceOptionsInput'] == null) {
+            throw new runtime.RequiredError(
+                'stackServiceOptionsInput',
+                'Required parameter "stackServiceOptionsInput" was null or undefined when calling setStackServiceOptions().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/options`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: StackServiceOptionsInputToJSON(requestParameters['stackServiceOptionsInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Replaces stack service option settings.
+     * Update stack service options
+     */
+    async setStackServiceOptions(requestParameters: SetStackServiceOptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.setStackServiceOptionsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Sets CPU and memory requests or limits for a stack service container.
+     * Set stack service resources
+     */
+    async setStackServiceResourcesRaw(requestParameters: SetStackServiceResourcesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling setStackServiceResources().'
+            );
+        }
+
+        if (requestParameters['resourcesInput'] == null) {
+            throw new runtime.RequiredError(
+                'resourcesInput',
+                'Required parameter "resourcesInput" was null or undefined when calling setStackServiceResources().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/resources`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ResourcesInputToJSON(requestParameters['resourcesInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Sets CPU and memory requests or limits for a stack service container.
+     * Set stack service resources
+     */
+    async setStackServiceResources(requestParameters: SetStackServiceResourcesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.setStackServiceResourcesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Sets or clears a named setting value for a stack service.
+     * Set stack service setting
+     */
+    async setStackServiceSettingRaw(requestParameters: SetStackServiceSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling setStackServiceSetting().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling setStackServiceSetting().'
+            );
+        }
+
+        if (requestParameters['setNullableStringValueInput'] == null) {
+            throw new runtime.RequiredError(
+                'setNullableStringValueInput',
+                'Required parameter "setNullableStringValueInput" was null or undefined when calling setStackServiceSetting().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/settings/{name}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))).replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: SetNullableStringValueInputToJSON(requestParameters['setNullableStringValueInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Sets or clears a named setting value for a stack service.
+     * Set stack service setting
+     */
+    async setStackServiceSetting(requestParameters: SetStackServiceSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.setStackServiceSettingRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Sets or clears a stack service volume size.
+     * Set stack service volume
+     */
+    async setStackServiceVolumeRaw(requestParameters: SetStackServiceVolumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling setStackServiceVolume().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling setStackServiceVolume().'
+            );
+        }
+
+        if (requestParameters['stackServiceVolumeInput'] == null) {
+            throw new runtime.RequiredError(
+                'stackServiceVolumeInput',
+                'Required parameter "stackServiceVolumeInput" was null or undefined when calling setStackServiceVolume().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-services/{id}/volumes/{name}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))).replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: StackServiceVolumeInputToJSON(requestParameters['stackServiceVolumeInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Sets or clears a stack service volume size.
+     * Set stack service volume
+     */
+    async setStackServiceVolume(requestParameters: SetStackServiceVolumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.setStackServiceVolumeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -300,6 +2236,202 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
      */
     async updateStackService(requestParameters: UpdateStackServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackService> {
         const response = await this.updateStackServiceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates a stack service cron schedule.
+     * Update stack service cron schedule
+     */
+    async updateStackServiceCronScheduleRaw(requestParameters: UpdateStackServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceCronSchedule>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateStackServiceCronSchedule().'
+            );
+        }
+
+        if (requestParameters['updateStackServiceCronScheduleInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateStackServiceCronScheduleInput',
+                'Required parameter "updateStackServiceCronScheduleInput" was null or undefined when calling updateStackServiceCronSchedule().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-service-cron-schedules/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateStackServiceCronScheduleInputToJSON(requestParameters['updateStackServiceCronScheduleInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceCronScheduleFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates a stack service cron schedule.
+     * Update stack service cron schedule
+     */
+    async updateStackServiceCronSchedule(requestParameters: UpdateStackServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceCronSchedule> {
+        const response = await this.updateStackServiceCronScheduleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates a stack service environment variable.
+     * Update stack service env var
+     */
+    async updateStackServiceEnvVarRaw(requestParameters: UpdateStackServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceEnvVar>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateStackServiceEnvVar().'
+            );
+        }
+
+        if (requestParameters['updateStackServiceEnvVarInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateStackServiceEnvVarInput',
+                'Required parameter "updateStackServiceEnvVarInput" was null or undefined when calling updateStackServiceEnvVar().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-service-env-vars/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateStackServiceEnvVarInputToJSON(requestParameters['updateStackServiceEnvVarInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceEnvVarFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates a stack service environment variable.
+     * Update stack service env var
+     */
+    async updateStackServiceEnvVar(requestParameters: UpdateStackServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceEnvVar> {
+        const response = await this.updateStackServiceEnvVarRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates a stack service Helm value override.
+     * Update stack service Helm value
+     */
+    async updateStackServiceHelmValueRaw(requestParameters: UpdateStackServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceHelmValue>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateStackServiceHelmValue().'
+            );
+        }
+
+        if (requestParameters['updateSecretValueInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateSecretValueInput',
+                'Required parameter "updateSecretValueInput" was null or undefined when calling updateStackServiceHelmValue().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-service-helm-values/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateSecretValueInputToJSON(requestParameters['updateSecretValueInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceHelmValueFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates a stack service Helm value override.
+     * Update stack service Helm value
+     */
+    async updateStackServiceHelmValue(requestParameters: UpdateStackServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceHelmValue> {
+        const response = await this.updateStackServiceHelmValueRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates a stack service token value, secret flag, or regex.
+     * Update stack service token
+     */
+    async updateStackServiceTokenRaw(requestParameters: UpdateStackServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackServiceToken>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateStackServiceToken().'
+            );
+        }
+
+        if (requestParameters['updateStackServiceTokenInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateStackServiceTokenInput',
+                'Required parameter "updateStackServiceTokenInput" was null or undefined when calling updateStackServiceToken().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-service-tokens/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateStackServiceTokenInputToJSON(requestParameters['updateStackServiceTokenInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceTokenFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates a stack service token value, secret flag, or regex.
+     * Update stack service token
+     */
+    async updateStackServiceToken(requestParameters: UpdateStackServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackServiceToken> {
+        const response = await this.updateStackServiceTokenRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

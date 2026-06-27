@@ -69,6 +69,48 @@ export interface AppInstance {
     envId: number;
     /**
      * 
+     * @type {number}
+     * @memberof AppInstance
+     */
+    stackId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppInstance
+     */
+    stackRevId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppInstance
+     */
+    stackName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppInstance
+     */
+    stackTitle: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppInstance
+     */
+    stackIcon: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppInstance
+     */
+    stackRevNumber: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppInstance
+     */
+    stackVersion: string;
+    /**
+     * 
      * @type {Date}
      * @memberof AppInstance
      */
@@ -92,6 +134,13 @@ export function instanceOfAppInstance(value: object): value is AppInstance {
     if (!('appId' in value) || value['appId'] === undefined) return false;
     if (!('clusterId' in value) || value['clusterId'] === undefined) return false;
     if (!('envId' in value) || value['envId'] === undefined) return false;
+    if (!('stackId' in value) || value['stackId'] === undefined) return false;
+    if (!('stackRevId' in value) || value['stackRevId'] === undefined) return false;
+    if (!('stackName' in value) || value['stackName'] === undefined) return false;
+    if (!('stackTitle' in value) || value['stackTitle'] === undefined) return false;
+    if (!('stackIcon' in value) || value['stackIcon'] === undefined) return false;
+    if (!('stackRevNumber' in value) || value['stackRevNumber'] === undefined) return false;
+    if (!('stackVersion' in value) || value['stackVersion'] === undefined) return false;
     if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
     if (!('updatedAt' in value) || value['updatedAt'] === undefined) return false;
     return true;
@@ -115,6 +164,13 @@ export function AppInstanceFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'appId': json['appId'],
         'clusterId': json['clusterId'],
         'envId': json['envId'],
+        'stackId': json['stackId'],
+        'stackRevId': json['stackRevId'],
+        'stackName': json['stackName'],
+        'stackTitle': json['stackTitle'],
+        'stackIcon': json['stackIcon'],
+        'stackRevNumber': json['stackRevNumber'],
+        'stackVersion': json['stackVersion'],
         'createdAt': (new Date(json['createdAt'])),
         'updatedAt': (new Date(json['updatedAt'])),
     };
@@ -139,6 +195,13 @@ export function AppInstanceToJSONTyped(value?: AppInstance | null, ignoreDiscrim
         'appId': value['appId'],
         'clusterId': value['clusterId'],
         'envId': value['envId'],
+        'stackId': value['stackId'],
+        'stackRevId': value['stackRevId'],
+        'stackName': value['stackName'],
+        'stackTitle': value['stackTitle'],
+        'stackIcon': value['stackIcon'],
+        'stackRevNumber': value['stackRevNumber'],
+        'stackVersion': value['stackVersion'],
         'createdAt': ((value['createdAt']).toISOString()),
         'updatedAt': ((value['updatedAt']).toISOString()),
     };

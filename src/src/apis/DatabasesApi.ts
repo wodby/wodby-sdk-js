@@ -16,20 +16,38 @@
 import * as runtime from '../runtime';
 import type {
   Database,
+  DatabaseCharset,
+  DatabaseDB,
+  DatabaseUser,
   ErrorResponse,
+  NewDatabaseDBInput,
   NewDatabaseInput,
+  NewDatabaseUserInput,
   OperationResult,
+  UpdateDatabaseUserDBsInput,
   UpdateTitleRequest,
 } from '../models/index';
 import {
     DatabaseFromJSON,
     DatabaseToJSON,
+    DatabaseCharsetFromJSON,
+    DatabaseCharsetToJSON,
+    DatabaseDBFromJSON,
+    DatabaseDBToJSON,
+    DatabaseUserFromJSON,
+    DatabaseUserToJSON,
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
+    NewDatabaseDBInputFromJSON,
+    NewDatabaseDBInputToJSON,
     NewDatabaseInputFromJSON,
     NewDatabaseInputToJSON,
+    NewDatabaseUserInputFromJSON,
+    NewDatabaseUserInputToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
+    UpdateDatabaseUserDBsInputFromJSON,
+    UpdateDatabaseUserDBsInputToJSON,
     UpdateTitleRequestFromJSON,
     UpdateTitleRequestToJSON,
 } from '../models/index';
@@ -38,7 +56,23 @@ export interface CreateDatabaseRequest {
     newDatabaseInput: NewDatabaseInput;
 }
 
+export interface CreateDatabaseDBRequest {
+    newDatabaseDBInput: NewDatabaseDBInput;
+}
+
+export interface CreateDatabaseUserRequest {
+    newDatabaseUserInput: NewDatabaseUserInput;
+}
+
 export interface DeleteDatabaseRequest {
+    id: number;
+}
+
+export interface DeleteDatabaseDBRequest {
+    id: number;
+}
+
+export interface DeleteDatabaseUserRequest {
     id: number;
 }
 
@@ -51,6 +85,22 @@ export interface GetDatabaseByNameRequest {
     orgId?: number;
 }
 
+export interface GetDatabaseDBRequest {
+    id: number;
+}
+
+export interface ListDatabaseCharsetsRequest {
+    id: number;
+}
+
+export interface ListDatabaseDBsRequest {
+    databaseId: number;
+}
+
+export interface ListDatabaseUsersRequest {
+    databaseId: number;
+}
+
 export interface ListDatabasesRequest {
     orgId?: number;
     projectIds?: string;
@@ -60,6 +110,11 @@ export interface ListDatabasesRequest {
 export interface UpdateDatabaseRequest {
     id: number;
     updateTitleRequest: UpdateTitleRequest;
+}
+
+export interface UpdateDatabaseUserDBsRequest {
+    id: number;
+    updateDatabaseUserDBsInput: UpdateDatabaseUserDBsInput;
 }
 
 /**
@@ -86,6 +141,38 @@ export interface DatabasesApiInterface {
     createDatabase(requestParameters: CreateDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Database>;
 
     /**
+     * Creates a DB inside a database.
+     * @summary Create database DB
+     * @param {NewDatabaseDBInput} newDatabaseDBInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DatabasesApiInterface
+     */
+    createDatabaseDBRaw(requestParameters: CreateDatabaseDBRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DatabaseDB>>;
+
+    /**
+     * Creates a DB inside a database.
+     * Create database DB
+     */
+    createDatabaseDB(requestParameters: CreateDatabaseDBRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DatabaseDB>;
+
+    /**
+     * Creates a database user and optionally grants it access to DBs.
+     * @summary Create database user
+     * @param {NewDatabaseUserInput} newDatabaseUserInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DatabasesApiInterface
+     */
+    createDatabaseUserRaw(requestParameters: CreateDatabaseUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DatabaseUser>>;
+
+    /**
+     * Creates a database user and optionally grants it access to DBs.
+     * Create database user
+     */
+    createDatabaseUser(requestParameters: CreateDatabaseUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DatabaseUser>;
+
+    /**
      * Deletes the database and returns the operation result.
      * @summary Delete database
      * @param {number} id 
@@ -100,6 +187,38 @@ export interface DatabasesApiInterface {
      * Delete database
      */
     deleteDatabase(requestParameters: DeleteDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Deletes a database DB and returns the operation result.
+     * @summary Delete database DB
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DatabasesApiInterface
+     */
+    deleteDatabaseDBRaw(requestParameters: DeleteDatabaseDBRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes a database DB and returns the operation result.
+     * Delete database DB
+     */
+    deleteDatabaseDB(requestParameters: DeleteDatabaseDBRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Deletes a database user and returns the operation result.
+     * @summary Delete database user
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DatabasesApiInterface
+     */
+    deleteDatabaseUserRaw(requestParameters: DeleteDatabaseUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes a database user and returns the operation result.
+     * Delete database user
+     */
+    deleteDatabaseUser(requestParameters: DeleteDatabaseUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Returns the database identified by the request path.
@@ -135,6 +254,70 @@ export interface DatabasesApiInterface {
     getDatabaseByName(requestParameters: GetDatabaseByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Database>;
 
     /**
+     * Returns the database DB identified by the request path.
+     * @summary Get database DB
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DatabasesApiInterface
+     */
+    getDatabaseDBRaw(requestParameters: GetDatabaseDBRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DatabaseDB>>;
+
+    /**
+     * Returns the database DB identified by the request path.
+     * Get database DB
+     */
+    getDatabaseDB(requestParameters: GetDatabaseDBRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DatabaseDB>;
+
+    /**
+     * Returns charset and default collation options supported by a database.
+     * @summary List database charsets
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DatabasesApiInterface
+     */
+    listDatabaseCharsetsRaw(requestParameters: ListDatabaseCharsetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseCharset>>>;
+
+    /**
+     * Returns charset and default collation options supported by a database.
+     * List database charsets
+     */
+    listDatabaseCharsets(requestParameters: ListDatabaseCharsetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseCharset>>;
+
+    /**
+     * Returns DBs that belong to a database.
+     * @summary List database DBs
+     * @param {number} databaseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DatabasesApiInterface
+     */
+    listDatabaseDBsRaw(requestParameters: ListDatabaseDBsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseDB>>>;
+
+    /**
+     * Returns DBs that belong to a database.
+     * List database DBs
+     */
+    listDatabaseDBs(requestParameters: ListDatabaseDBsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseDB>>;
+
+    /**
+     * Returns users that belong to a database without revealing passwords.
+     * @summary List database users
+     * @param {number} databaseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DatabasesApiInterface
+     */
+    listDatabaseUsersRaw(requestParameters: ListDatabaseUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseUser>>>;
+
+    /**
+     * Returns users that belong to a database without revealing passwords.
+     * List database users
+     */
+    listDatabaseUsers(requestParameters: ListDatabaseUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseUser>>;
+
+    /**
      * Returns databases matching the request filters.
      * @summary List databases
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -168,6 +351,23 @@ export interface DatabasesApiInterface {
      * Update database
      */
     updateDatabase(requestParameters: UpdateDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Database>;
+
+    /**
+     * Replaces the DB grants for a database user.
+     * @summary Update database user DB grants
+     * @param {number} id 
+     * @param {UpdateDatabaseUserDBsInput} updateDatabaseUserDBsInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DatabasesApiInterface
+     */
+    updateDatabaseUserDBsRaw(requestParameters: UpdateDatabaseUserDBsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DatabaseUser>>;
+
+    /**
+     * Replaces the DB grants for a database user.
+     * Update database user DB grants
+     */
+    updateDatabaseUserDBs(requestParameters: UpdateDatabaseUserDBsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DatabaseUser>;
 
 }
 
@@ -219,6 +419,90 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
     }
 
     /**
+     * Creates a DB inside a database.
+     * Create database DB
+     */
+    async createDatabaseDBRaw(requestParameters: CreateDatabaseDBRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DatabaseDB>> {
+        if (requestParameters['newDatabaseDBInput'] == null) {
+            throw new runtime.RequiredError(
+                'newDatabaseDBInput',
+                'Required parameter "newDatabaseDBInput" was null or undefined when calling createDatabaseDB().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/database-dbs`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewDatabaseDBInputToJSON(requestParameters['newDatabaseDBInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DatabaseDBFromJSON(jsonValue));
+    }
+
+    /**
+     * Creates a DB inside a database.
+     * Create database DB
+     */
+    async createDatabaseDB(requestParameters: CreateDatabaseDBRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DatabaseDB> {
+        const response = await this.createDatabaseDBRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates a database user and optionally grants it access to DBs.
+     * Create database user
+     */
+    async createDatabaseUserRaw(requestParameters: CreateDatabaseUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DatabaseUser>> {
+        if (requestParameters['newDatabaseUserInput'] == null) {
+            throw new runtime.RequiredError(
+                'newDatabaseUserInput',
+                'Required parameter "newDatabaseUserInput" was null or undefined when calling createDatabaseUser().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/database-users`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewDatabaseUserInputToJSON(requestParameters['newDatabaseUserInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DatabaseUserFromJSON(jsonValue));
+    }
+
+    /**
+     * Creates a database user and optionally grants it access to DBs.
+     * Create database user
+     */
+    async createDatabaseUser(requestParameters: CreateDatabaseUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DatabaseUser> {
+        const response = await this.createDatabaseUserRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Deletes the database and returns the operation result.
      * Delete database
      */
@@ -254,6 +538,84 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
      */
     async deleteDatabase(requestParameters: DeleteDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.deleteDatabaseRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes a database DB and returns the operation result.
+     * Delete database DB
+     */
+    async deleteDatabaseDBRaw(requestParameters: DeleteDatabaseDBRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteDatabaseDB().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/database-dbs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Deletes a database DB and returns the operation result.
+     * Delete database DB
+     */
+    async deleteDatabaseDB(requestParameters: DeleteDatabaseDBRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteDatabaseDBRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes a database user and returns the operation result.
+     * Delete database user
+     */
+    async deleteDatabaseUserRaw(requestParameters: DeleteDatabaseUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteDatabaseUser().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/database-users/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Deletes a database user and returns the operation result.
+     * Delete database user
+     */
+    async deleteDatabaseUser(requestParameters: DeleteDatabaseUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteDatabaseUserRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -336,6 +698,170 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
      */
     async getDatabaseByName(requestParameters: GetDatabaseByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Database> {
         const response = await this.getDatabaseByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the database DB identified by the request path.
+     * Get database DB
+     */
+    async getDatabaseDBRaw(requestParameters: GetDatabaseDBRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DatabaseDB>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getDatabaseDB().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/database-dbs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DatabaseDBFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns the database DB identified by the request path.
+     * Get database DB
+     */
+    async getDatabaseDB(requestParameters: GetDatabaseDBRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DatabaseDB> {
+        const response = await this.getDatabaseDBRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns charset and default collation options supported by a database.
+     * List database charsets
+     */
+    async listDatabaseCharsetsRaw(requestParameters: ListDatabaseCharsetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseCharset>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listDatabaseCharsets().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/databases/{id}/options/charsets`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(DatabaseCharsetFromJSON));
+    }
+
+    /**
+     * Returns charset and default collation options supported by a database.
+     * List database charsets
+     */
+    async listDatabaseCharsets(requestParameters: ListDatabaseCharsetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseCharset>> {
+        const response = await this.listDatabaseCharsetsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns DBs that belong to a database.
+     * List database DBs
+     */
+    async listDatabaseDBsRaw(requestParameters: ListDatabaseDBsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseDB>>> {
+        if (requestParameters['databaseId'] == null) {
+            throw new runtime.RequiredError(
+                'databaseId',
+                'Required parameter "databaseId" was null or undefined when calling listDatabaseDBs().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['databaseId'] != null) {
+            queryParameters['databaseId'] = requestParameters['databaseId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/database-dbs`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(DatabaseDBFromJSON));
+    }
+
+    /**
+     * Returns DBs that belong to a database.
+     * List database DBs
+     */
+    async listDatabaseDBs(requestParameters: ListDatabaseDBsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseDB>> {
+        const response = await this.listDatabaseDBsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns users that belong to a database without revealing passwords.
+     * List database users
+     */
+    async listDatabaseUsersRaw(requestParameters: ListDatabaseUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseUser>>> {
+        if (requestParameters['databaseId'] == null) {
+            throw new runtime.RequiredError(
+                'databaseId',
+                'Required parameter "databaseId" was null or undefined when calling listDatabaseUsers().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['databaseId'] != null) {
+            queryParameters['databaseId'] = requestParameters['databaseId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/database-users`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(DatabaseUserFromJSON));
+    }
+
+    /**
+     * Returns users that belong to a database without revealing passwords.
+     * List database users
+     */
+    async listDatabaseUsers(requestParameters: ListDatabaseUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseUser>> {
+        const response = await this.listDatabaseUsersRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -429,6 +955,55 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
      */
     async updateDatabase(requestParameters: UpdateDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Database> {
         const response = await this.updateDatabaseRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Replaces the DB grants for a database user.
+     * Update database user DB grants
+     */
+    async updateDatabaseUserDBsRaw(requestParameters: UpdateDatabaseUserDBsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DatabaseUser>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateDatabaseUserDBs().'
+            );
+        }
+
+        if (requestParameters['updateDatabaseUserDBsInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateDatabaseUserDBsInput',
+                'Required parameter "updateDatabaseUserDBsInput" was null or undefined when calling updateDatabaseUserDBs().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/database-users/{id}/dbs`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateDatabaseUserDBsInputToJSON(requestParameters['updateDatabaseUserDBsInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DatabaseUserFromJSON(jsonValue));
+    }
+
+    /**
+     * Replaces the DB grants for a database user.
+     * Update database user DB grants
+     */
+    async updateDatabaseUserDBs(requestParameters: UpdateDatabaseUserDBsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DatabaseUser> {
+        const response = await this.updateDatabaseUserDBsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

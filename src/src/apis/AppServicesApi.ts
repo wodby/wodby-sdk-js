@@ -16,22 +16,221 @@
 import * as runtime from '../runtime';
 import type {
   AppService,
+  AppServiceAnnotation,
+  AppServiceConfig,
+  AppServiceContainer,
+  AppServiceCronJob,
+  AppServiceCronJobsResponse,
+  AppServiceCronSchedule,
+  AppServiceEnvVar,
+  AppServiceHelmValue,
   AppServiceInput,
+  AppServiceIntegration,
+  AppServiceLink,
+  AppServiceLinkInput,
+  AppServiceSetting,
+  AppServiceToken,
+  ConfigOverrideInput,
   ErrorResponse,
+  IntegrationLinkInput,
+  LogStream,
+  NamedSecretValueInput,
+  NewAnnotationInput,
+  NewAppServiceCronScheduleInput,
+  NewAppServiceEnvVarInput,
+  NewAppServiceLogStreamInput,
   OperationResult,
+  ResourcesInput,
+  SetStringValueInput,
+  Task,
+  UpdateAppServiceCronScheduleInput,
+  UpdateAppServiceDatabaseInput,
+  UpdateAppServiceEnvVarInput,
+  UpdateSecretValueInput,
 } from '../models/index';
 import {
     AppServiceFromJSON,
     AppServiceToJSON,
+    AppServiceAnnotationFromJSON,
+    AppServiceAnnotationToJSON,
+    AppServiceConfigFromJSON,
+    AppServiceConfigToJSON,
+    AppServiceContainerFromJSON,
+    AppServiceContainerToJSON,
+    AppServiceCronJobFromJSON,
+    AppServiceCronJobToJSON,
+    AppServiceCronJobsResponseFromJSON,
+    AppServiceCronJobsResponseToJSON,
+    AppServiceCronScheduleFromJSON,
+    AppServiceCronScheduleToJSON,
+    AppServiceEnvVarFromJSON,
+    AppServiceEnvVarToJSON,
+    AppServiceHelmValueFromJSON,
+    AppServiceHelmValueToJSON,
     AppServiceInputFromJSON,
     AppServiceInputToJSON,
+    AppServiceIntegrationFromJSON,
+    AppServiceIntegrationToJSON,
+    AppServiceLinkFromJSON,
+    AppServiceLinkToJSON,
+    AppServiceLinkInputFromJSON,
+    AppServiceLinkInputToJSON,
+    AppServiceSettingFromJSON,
+    AppServiceSettingToJSON,
+    AppServiceTokenFromJSON,
+    AppServiceTokenToJSON,
+    ConfigOverrideInputFromJSON,
+    ConfigOverrideInputToJSON,
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
+    IntegrationLinkInputFromJSON,
+    IntegrationLinkInputToJSON,
+    LogStreamFromJSON,
+    LogStreamToJSON,
+    NamedSecretValueInputFromJSON,
+    NamedSecretValueInputToJSON,
+    NewAnnotationInputFromJSON,
+    NewAnnotationInputToJSON,
+    NewAppServiceCronScheduleInputFromJSON,
+    NewAppServiceCronScheduleInputToJSON,
+    NewAppServiceEnvVarInputFromJSON,
+    NewAppServiceEnvVarInputToJSON,
+    NewAppServiceLogStreamInputFromJSON,
+    NewAppServiceLogStreamInputToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
+    ResourcesInputFromJSON,
+    ResourcesInputToJSON,
+    SetStringValueInputFromJSON,
+    SetStringValueInputToJSON,
+    TaskFromJSON,
+    TaskToJSON,
+    UpdateAppServiceCronScheduleInputFromJSON,
+    UpdateAppServiceCronScheduleInputToJSON,
+    UpdateAppServiceDatabaseInputFromJSON,
+    UpdateAppServiceDatabaseInputToJSON,
+    UpdateAppServiceEnvVarInputFromJSON,
+    UpdateAppServiceEnvVarInputToJSON,
+    UpdateSecretValueInputFromJSON,
+    UpdateSecretValueInputToJSON,
 } from '../models/index';
 
+export interface CreateAppServiceAnnotationRequest {
+    id: number;
+    newAnnotationInput: NewAnnotationInput;
+}
+
+export interface CreateAppServiceCronScheduleRequest {
+    id: number;
+    newAppServiceCronScheduleInput: NewAppServiceCronScheduleInput;
+}
+
+export interface CreateAppServiceEnvVarRequest {
+    id: number;
+    newAppServiceEnvVarInput: NewAppServiceEnvVarInput;
+}
+
+export interface CreateAppServiceHelmValueRequest {
+    id: number;
+    namedSecretValueInput: NamedSecretValueInput;
+}
+
+export interface CreateAppServiceIntegrationRequest {
+    id: number;
+    integrationLinkInput: IntegrationLinkInput;
+}
+
+export interface CreateAppServiceLogStreamRequest {
+    id: number;
+    newAppServiceLogStreamInput?: NewAppServiceLogStreamInput;
+}
+
+export interface CreateAppServiceTokenRequest {
+    id: number;
+    namedSecretValueInput: NamedSecretValueInput;
+}
+
+export interface DeleteAppServiceAnnotationRequest {
+    id: number;
+}
+
+export interface DeleteAppServiceCronScheduleRequest {
+    id: number;
+}
+
+export interface DeleteAppServiceEnvVarRequest {
+    id: number;
+}
+
+export interface DeleteAppServiceHelmValueRequest {
+    id: number;
+}
+
+export interface DeleteAppServiceIntegrationRequest {
+    id: number;
+}
+
+export interface DeleteAppServiceTokenRequest {
+    id: number;
+}
+
 export interface GetAppServiceRequest {
+    id: number;
+}
+
+export interface GetAppServiceCronJobRequest {
+    id: number;
+}
+
+export interface KeepLogStreamAliveRequest {
+    id: number;
+}
+
+export interface ListAppServiceAnnotationsRequest {
+    id: number;
+}
+
+export interface ListAppServiceConfigsRequest {
+    id: number;
+}
+
+export interface ListAppServiceContainersRequest {
+    id: number;
+}
+
+export interface ListAppServiceCronJobsRequest {
+    appInstanceId?: number;
+    appServiceId?: number;
+    scheduleId?: number;
+    page?: number;
+    pageSize?: number;
+}
+
+export interface ListAppServiceCronSchedulesRequest {
+    id: number;
+}
+
+export interface ListAppServiceEnvVarsRequest {
+    id: number;
+}
+
+export interface ListAppServiceHelmValuesRequest {
+    id: number;
+}
+
+export interface ListAppServiceIntegrationsRequest {
+    id: number;
+}
+
+export interface ListAppServiceLinksRequest {
+    id: number;
+}
+
+export interface ListAppServiceSettingsRequest {
+    id: number;
+}
+
+export interface ListAppServiceTokensRequest {
     id: number;
 }
 
@@ -44,9 +243,69 @@ export interface RunAppServiceActionRequest {
     name: string;
 }
 
+export interface RunAppServiceCronScheduleRequest {
+    id: number;
+}
+
+export interface SetAppServiceConfigRequest {
+    id: number;
+    name: string;
+    configOverrideInput: ConfigOverrideInput;
+}
+
+export interface SetAppServiceLinkRequest {
+    id: number;
+    name: string;
+    appServiceLinkInput: AppServiceLinkInput;
+}
+
+export interface SetAppServiceResourcesRequest {
+    id: number;
+    resourcesInput: ResourcesInput;
+}
+
+export interface SetAppServiceSettingRequest {
+    id: number;
+    name: string;
+    setStringValueInput: SetStringValueInput;
+}
+
+export interface StartLogStreamRequest {
+    id: number;
+}
+
+export interface StopLogStreamRequest {
+    id: number;
+}
+
 export interface UpdateAppServiceRequest {
     id: number;
     appServiceInput: AppServiceInput;
+}
+
+export interface UpdateAppServiceCronScheduleRequest {
+    id: number;
+    updateAppServiceCronScheduleInput: UpdateAppServiceCronScheduleInput;
+}
+
+export interface UpdateAppServiceDatabaseRequest {
+    id: number;
+    updateAppServiceDatabaseInput: UpdateAppServiceDatabaseInput;
+}
+
+export interface UpdateAppServiceEnvVarRequest {
+    id: number;
+    updateAppServiceEnvVarInput: UpdateAppServiceEnvVarInput;
+}
+
+export interface UpdateAppServiceHelmValueRequest {
+    id: number;
+    updateSecretValueInput: UpdateSecretValueInput;
+}
+
+export interface UpdateAppServiceTokenRequest {
+    id: number;
+    updateSecretValueInput: UpdateSecretValueInput;
 }
 
 /**
@@ -56,6 +315,221 @@ export interface UpdateAppServiceRequest {
  * @interface AppServicesApiInterface
  */
 export interface AppServicesApiInterface {
+    /**
+     * Creates an annotation for an app service.
+     * @summary Create app service annotation
+     * @param {number} id 
+     * @param {NewAnnotationInput} newAnnotationInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    createAppServiceAnnotationRaw(requestParameters: CreateAppServiceAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceAnnotation>>;
+
+    /**
+     * Creates an annotation for an app service.
+     * Create app service annotation
+     */
+    createAppServiceAnnotation(requestParameters: CreateAppServiceAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceAnnotation>;
+
+    /**
+     * Creates a cron schedule for an app service.
+     * @summary Create app service cron schedule
+     * @param {number} id 
+     * @param {NewAppServiceCronScheduleInput} newAppServiceCronScheduleInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    createAppServiceCronScheduleRaw(requestParameters: CreateAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceCronSchedule>>;
+
+    /**
+     * Creates a cron schedule for an app service.
+     * Create app service cron schedule
+     */
+    createAppServiceCronSchedule(requestParameters: CreateAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceCronSchedule>;
+
+    /**
+     * Creates an environment variable for an app service.
+     * @summary Create app service env var
+     * @param {number} id 
+     * @param {NewAppServiceEnvVarInput} newAppServiceEnvVarInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    createAppServiceEnvVarRaw(requestParameters: CreateAppServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceEnvVar>>;
+
+    /**
+     * Creates an environment variable for an app service.
+     * Create app service env var
+     */
+    createAppServiceEnvVar(requestParameters: CreateAppServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceEnvVar>;
+
+    /**
+     * Creates a Helm value override for an app service.
+     * @summary Create app service Helm value
+     * @param {number} id 
+     * @param {NamedSecretValueInput} namedSecretValueInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    createAppServiceHelmValueRaw(requestParameters: CreateAppServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceHelmValue>>;
+
+    /**
+     * Creates a Helm value override for an app service.
+     * Create app service Helm value
+     */
+    createAppServiceHelmValue(requestParameters: CreateAppServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceHelmValue>;
+
+    /**
+     * Links an integration to an app service integration slot.
+     * @summary Create app service integration
+     * @param {number} id 
+     * @param {IntegrationLinkInput} integrationLinkInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    createAppServiceIntegrationRaw(requestParameters: CreateAppServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceIntegration>>;
+
+    /**
+     * Links an integration to an app service integration slot.
+     * Create app service integration
+     */
+    createAppServiceIntegration(requestParameters: CreateAppServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceIntegration>;
+
+    /**
+     * Creates a log stream for an app service container and returns the stream id.
+     * @summary Create app service log stream
+     * @param {number} id 
+     * @param {NewAppServiceLogStreamInput} [newAppServiceLogStreamInput] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    createAppServiceLogStreamRaw(requestParameters: CreateAppServiceLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LogStream>>;
+
+    /**
+     * Creates a log stream for an app service container and returns the stream id.
+     * Create app service log stream
+     */
+    createAppServiceLogStream(requestParameters: CreateAppServiceLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LogStream>;
+
+    /**
+     * Creates a token for an app service.
+     * @summary Create app service token
+     * @param {number} id 
+     * @param {NamedSecretValueInput} namedSecretValueInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    createAppServiceTokenRaw(requestParameters: CreateAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceToken>>;
+
+    /**
+     * Creates a token for an app service.
+     * Create app service token
+     */
+    createAppServiceToken(requestParameters: CreateAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceToken>;
+
+    /**
+     * Deletes an app service annotation.
+     * @summary Delete app service annotation
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    deleteAppServiceAnnotationRaw(requestParameters: DeleteAppServiceAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes an app service annotation.
+     * Delete app service annotation
+     */
+    deleteAppServiceAnnotation(requestParameters: DeleteAppServiceAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Deletes an app service cron schedule.
+     * @summary Delete app service cron schedule
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    deleteAppServiceCronScheduleRaw(requestParameters: DeleteAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes an app service cron schedule.
+     * Delete app service cron schedule
+     */
+    deleteAppServiceCronSchedule(requestParameters: DeleteAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Deletes an app service environment variable.
+     * @summary Delete app service env var
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    deleteAppServiceEnvVarRaw(requestParameters: DeleteAppServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes an app service environment variable.
+     * Delete app service env var
+     */
+    deleteAppServiceEnvVar(requestParameters: DeleteAppServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Deletes an app service Helm value override.
+     * @summary Delete app service Helm value
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    deleteAppServiceHelmValueRaw(requestParameters: DeleteAppServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes an app service Helm value override.
+     * Delete app service Helm value
+     */
+    deleteAppServiceHelmValue(requestParameters: DeleteAppServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Removes an integration link from an app service.
+     * @summary Delete app service integration
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    deleteAppServiceIntegrationRaw(requestParameters: DeleteAppServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Removes an integration link from an app service.
+     * Delete app service integration
+     */
+    deleteAppServiceIntegration(requestParameters: DeleteAppServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Deletes an app service token.
+     * @summary Delete app service token
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    deleteAppServiceTokenRaw(requestParameters: DeleteAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes an app service token.
+     * Delete app service token
+     */
+    deleteAppServiceToken(requestParameters: DeleteAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
     /**
      * Returns the app service identified by the request path.
      * @summary Get app service
@@ -71,6 +545,218 @@ export interface AppServicesApiInterface {
      * Get app service
      */
     getAppService(requestParameters: GetAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService>;
+
+    /**
+     * Returns the app service cron job identified by the request path.
+     * @summary Get app service cron job
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    getAppServiceCronJobRaw(requestParameters: GetAppServiceCronJobRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceCronJob>>;
+
+    /**
+     * Returns the app service cron job identified by the request path.
+     * Get app service cron job
+     */
+    getAppServiceCronJob(requestParameters: GetAppServiceCronJobRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceCronJob>;
+
+    /**
+     * Extends an existing log stream lease.
+     * @summary Keep log stream alive
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    keepLogStreamAliveRaw(requestParameters: KeepLogStreamAliveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Extends an existing log stream lease.
+     * Keep log stream alive
+     */
+    keepLogStreamAlive(requestParameters: KeepLogStreamAliveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Returns annotations configured for an app service.
+     * @summary List app service annotations
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServiceAnnotationsRaw(requestParameters: ListAppServiceAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceAnnotation>>>;
+
+    /**
+     * Returns annotations configured for an app service.
+     * List app service annotations
+     */
+    listAppServiceAnnotations(requestParameters: ListAppServiceAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceAnnotation>>;
+
+    /**
+     * Returns config overrides for an app service.
+     * @summary List app service configs
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServiceConfigsRaw(requestParameters: ListAppServiceConfigsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceConfig>>>;
+
+    /**
+     * Returns config overrides for an app service.
+     * List app service configs
+     */
+    listAppServiceConfigs(requestParameters: ListAppServiceConfigsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceConfig>>;
+
+    /**
+     * Returns container resource settings for an app service.
+     * @summary List app service containers
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServiceContainersRaw(requestParameters: ListAppServiceContainersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceContainer>>>;
+
+    /**
+     * Returns container resource settings for an app service.
+     * List app service containers
+     */
+    listAppServiceContainers(requestParameters: ListAppServiceContainersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceContainer>>;
+
+    /**
+     * Returns app service cron jobs matching the request filters.
+     * @summary List app service cron jobs
+     * @param {number} [appInstanceId] 
+     * @param {number} [appServiceId] 
+     * @param {number} [scheduleId] 
+     * @param {number} [page] Page number, defaults to 1
+     * @param {number} [pageSize] Page size, defaults to 30
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServiceCronJobsRaw(requestParameters: ListAppServiceCronJobsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceCronJobsResponse>>;
+
+    /**
+     * Returns app service cron jobs matching the request filters.
+     * List app service cron jobs
+     */
+    listAppServiceCronJobs(requestParameters: ListAppServiceCronJobsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceCronJobsResponse>;
+
+    /**
+     * Returns cron schedules configured for an app service.
+     * @summary List app service cron schedules
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServiceCronSchedulesRaw(requestParameters: ListAppServiceCronSchedulesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceCronSchedule>>>;
+
+    /**
+     * Returns cron schedules configured for an app service.
+     * List app service cron schedules
+     */
+    listAppServiceCronSchedules(requestParameters: ListAppServiceCronSchedulesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceCronSchedule>>;
+
+    /**
+     * Returns environment variables configured for an app service.
+     * @summary List app service env vars
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServiceEnvVarsRaw(requestParameters: ListAppServiceEnvVarsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceEnvVar>>>;
+
+    /**
+     * Returns environment variables configured for an app service.
+     * List app service env vars
+     */
+    listAppServiceEnvVars(requestParameters: ListAppServiceEnvVarsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceEnvVar>>;
+
+    /**
+     * Returns Helm values configured for an app service.
+     * @summary List app service Helm values
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServiceHelmValuesRaw(requestParameters: ListAppServiceHelmValuesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceHelmValue>>>;
+
+    /**
+     * Returns Helm values configured for an app service.
+     * List app service Helm values
+     */
+    listAppServiceHelmValues(requestParameters: ListAppServiceHelmValuesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceHelmValue>>;
+
+    /**
+     * Returns integration links configured for an app service.
+     * @summary List app service integrations
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServiceIntegrationsRaw(requestParameters: ListAppServiceIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceIntegration>>>;
+
+    /**
+     * Returns integration links configured for an app service.
+     * List app service integrations
+     */
+    listAppServiceIntegrations(requestParameters: ListAppServiceIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceIntegration>>;
+
+    /**
+     * Returns service links configured for an app service.
+     * @summary List app service links
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServiceLinksRaw(requestParameters: ListAppServiceLinksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceLink>>>;
+
+    /**
+     * Returns service links configured for an app service.
+     * List app service links
+     */
+    listAppServiceLinks(requestParameters: ListAppServiceLinksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceLink>>;
+
+    /**
+     * Returns settings configured for an app service.
+     * @summary List app service settings
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServiceSettingsRaw(requestParameters: ListAppServiceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceSetting>>>;
+
+    /**
+     * Returns settings configured for an app service.
+     * List app service settings
+     */
+    listAppServiceSettings(requestParameters: ListAppServiceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceSetting>>;
+
+    /**
+     * Returns tokens configured for an app service without revealing secret values.
+     * @summary List app service tokens
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServiceTokensRaw(requestParameters: ListAppServiceTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceToken>>>;
+
+    /**
+     * Returns tokens configured for an app service without revealing secret values.
+     * List app service tokens
+     */
+    listAppServiceTokens(requestParameters: ListAppServiceTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceToken>>;
 
     /**
      * Returns app services matching the request filters.
@@ -106,6 +792,125 @@ export interface AppServicesApiInterface {
     runAppServiceAction(requestParameters: RunAppServiceActionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
+     * Runs an app service cron schedule immediately and returns the created task.
+     * @summary Run app service cron schedule
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    runAppServiceCronScheduleRaw(requestParameters: RunAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>>;
+
+    /**
+     * Runs an app service cron schedule immediately and returns the created task.
+     * Run app service cron schedule
+     */
+    runAppServiceCronSchedule(requestParameters: RunAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task>;
+
+    /**
+     * Sets or disables a named config override for an app service.
+     * @summary Set app service config
+     * @param {number} id 
+     * @param {string} name 
+     * @param {ConfigOverrideInput} configOverrideInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    setAppServiceConfigRaw(requestParameters: SetAppServiceConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Sets or disables a named config override for an app service.
+     * Set app service config
+     */
+    setAppServiceConfig(requestParameters: SetAppServiceConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Links or unlinks another app service for a named link slot.
+     * @summary Set app service link
+     * @param {number} id 
+     * @param {string} name 
+     * @param {AppServiceLinkInput} appServiceLinkInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    setAppServiceLinkRaw(requestParameters: SetAppServiceLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Links or unlinks another app service for a named link slot.
+     * Set app service link
+     */
+    setAppServiceLink(requestParameters: SetAppServiceLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Sets CPU and memory requests or limits for an app service container.
+     * @summary Set app service resources
+     * @param {number} id 
+     * @param {ResourcesInput} resourcesInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    setAppServiceResourcesRaw(requestParameters: SetAppServiceResourcesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Sets CPU and memory requests or limits for an app service container.
+     * Set app service resources
+     */
+    setAppServiceResources(requestParameters: SetAppServiceResourcesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Sets a named setting value for an app service.
+     * @summary Set app service setting
+     * @param {number} id 
+     * @param {string} name 
+     * @param {SetStringValueInput} setStringValueInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    setAppServiceSettingRaw(requestParameters: SetAppServiceSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceSetting>>;
+
+    /**
+     * Sets a named setting value for an app service.
+     * Set app service setting
+     */
+    setAppServiceSetting(requestParameters: SetAppServiceSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceSetting>;
+
+    /**
+     * Starts an existing log stream.
+     * @summary Start log stream
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    startLogStreamRaw(requestParameters: StartLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Starts an existing log stream.
+     * Start log stream
+     */
+    startLogStream(requestParameters: StartLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Stops an existing log stream.
+     * @summary Stop log stream
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    stopLogStreamRaw(requestParameters: StopLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Stops an existing log stream.
+     * Stop log stream
+     */
+    stopLogStream(requestParameters: StopLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
      * Updates the app service and returns the updated resource.
      * @summary Update app service
      * @param {number} id 
@@ -122,12 +927,667 @@ export interface AppServicesApiInterface {
      */
     updateAppService(requestParameters: UpdateAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService>;
 
+    /**
+     * Updates an app service cron schedule.
+     * @summary Update app service cron schedule
+     * @param {number} id 
+     * @param {UpdateAppServiceCronScheduleInput} updateAppServiceCronScheduleInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    updateAppServiceCronScheduleRaw(requestParameters: UpdateAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceCronSchedule>>;
+
+    /**
+     * Updates an app service cron schedule.
+     * Update app service cron schedule
+     */
+    updateAppServiceCronSchedule(requestParameters: UpdateAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceCronSchedule>;
+
+    /**
+     * Updates the database DB and user references used by an app service.
+     * @summary Update app service database references
+     * @param {number} id 
+     * @param {UpdateAppServiceDatabaseInput} updateAppServiceDatabaseInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    updateAppServiceDatabaseRaw(requestParameters: UpdateAppServiceDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppService>>;
+
+    /**
+     * Updates the database DB and user references used by an app service.
+     * Update app service database references
+     */
+    updateAppServiceDatabase(requestParameters: UpdateAppServiceDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService>;
+
+    /**
+     * Updates an app service environment variable.
+     * @summary Update app service env var
+     * @param {number} id 
+     * @param {UpdateAppServiceEnvVarInput} updateAppServiceEnvVarInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    updateAppServiceEnvVarRaw(requestParameters: UpdateAppServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceEnvVar>>;
+
+    /**
+     * Updates an app service environment variable.
+     * Update app service env var
+     */
+    updateAppServiceEnvVar(requestParameters: UpdateAppServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceEnvVar>;
+
+    /**
+     * Updates an app service Helm value override.
+     * @summary Update app service Helm value
+     * @param {number} id 
+     * @param {UpdateSecretValueInput} updateSecretValueInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    updateAppServiceHelmValueRaw(requestParameters: UpdateAppServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceHelmValue>>;
+
+    /**
+     * Updates an app service Helm value override.
+     * Update app service Helm value
+     */
+    updateAppServiceHelmValue(requestParameters: UpdateAppServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceHelmValue>;
+
+    /**
+     * Updates an app service token value or secret flag.
+     * @summary Update app service token
+     * @param {number} id 
+     * @param {UpdateSecretValueInput} updateSecretValueInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    updateAppServiceTokenRaw(requestParameters: UpdateAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceToken>>;
+
+    /**
+     * Updates an app service token value or secret flag.
+     * Update app service token
+     */
+    updateAppServiceToken(requestParameters: UpdateAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceToken>;
+
 }
 
 /**
  * 
  */
 export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInterface {
+
+    /**
+     * Creates an annotation for an app service.
+     * Create app service annotation
+     */
+    async createAppServiceAnnotationRaw(requestParameters: CreateAppServiceAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceAnnotation>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createAppServiceAnnotation().'
+            );
+        }
+
+        if (requestParameters['newAnnotationInput'] == null) {
+            throw new runtime.RequiredError(
+                'newAnnotationInput',
+                'Required parameter "newAnnotationInput" was null or undefined when calling createAppServiceAnnotation().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/annotations`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewAnnotationInputToJSON(requestParameters['newAnnotationInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceAnnotationFromJSON(jsonValue));
+    }
+
+    /**
+     * Creates an annotation for an app service.
+     * Create app service annotation
+     */
+    async createAppServiceAnnotation(requestParameters: CreateAppServiceAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceAnnotation> {
+        const response = await this.createAppServiceAnnotationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates a cron schedule for an app service.
+     * Create app service cron schedule
+     */
+    async createAppServiceCronScheduleRaw(requestParameters: CreateAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceCronSchedule>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createAppServiceCronSchedule().'
+            );
+        }
+
+        if (requestParameters['newAppServiceCronScheduleInput'] == null) {
+            throw new runtime.RequiredError(
+                'newAppServiceCronScheduleInput',
+                'Required parameter "newAppServiceCronScheduleInput" was null or undefined when calling createAppServiceCronSchedule().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/cron-schedules`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewAppServiceCronScheduleInputToJSON(requestParameters['newAppServiceCronScheduleInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceCronScheduleFromJSON(jsonValue));
+    }
+
+    /**
+     * Creates a cron schedule for an app service.
+     * Create app service cron schedule
+     */
+    async createAppServiceCronSchedule(requestParameters: CreateAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceCronSchedule> {
+        const response = await this.createAppServiceCronScheduleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates an environment variable for an app service.
+     * Create app service env var
+     */
+    async createAppServiceEnvVarRaw(requestParameters: CreateAppServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceEnvVar>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createAppServiceEnvVar().'
+            );
+        }
+
+        if (requestParameters['newAppServiceEnvVarInput'] == null) {
+            throw new runtime.RequiredError(
+                'newAppServiceEnvVarInput',
+                'Required parameter "newAppServiceEnvVarInput" was null or undefined when calling createAppServiceEnvVar().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/env-vars`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewAppServiceEnvVarInputToJSON(requestParameters['newAppServiceEnvVarInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceEnvVarFromJSON(jsonValue));
+    }
+
+    /**
+     * Creates an environment variable for an app service.
+     * Create app service env var
+     */
+    async createAppServiceEnvVar(requestParameters: CreateAppServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceEnvVar> {
+        const response = await this.createAppServiceEnvVarRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates a Helm value override for an app service.
+     * Create app service Helm value
+     */
+    async createAppServiceHelmValueRaw(requestParameters: CreateAppServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceHelmValue>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createAppServiceHelmValue().'
+            );
+        }
+
+        if (requestParameters['namedSecretValueInput'] == null) {
+            throw new runtime.RequiredError(
+                'namedSecretValueInput',
+                'Required parameter "namedSecretValueInput" was null or undefined when calling createAppServiceHelmValue().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/helm-values`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NamedSecretValueInputToJSON(requestParameters['namedSecretValueInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceHelmValueFromJSON(jsonValue));
+    }
+
+    /**
+     * Creates a Helm value override for an app service.
+     * Create app service Helm value
+     */
+    async createAppServiceHelmValue(requestParameters: CreateAppServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceHelmValue> {
+        const response = await this.createAppServiceHelmValueRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Links an integration to an app service integration slot.
+     * Create app service integration
+     */
+    async createAppServiceIntegrationRaw(requestParameters: CreateAppServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceIntegration>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createAppServiceIntegration().'
+            );
+        }
+
+        if (requestParameters['integrationLinkInput'] == null) {
+            throw new runtime.RequiredError(
+                'integrationLinkInput',
+                'Required parameter "integrationLinkInput" was null or undefined when calling createAppServiceIntegration().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/integrations`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: IntegrationLinkInputToJSON(requestParameters['integrationLinkInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceIntegrationFromJSON(jsonValue));
+    }
+
+    /**
+     * Links an integration to an app service integration slot.
+     * Create app service integration
+     */
+    async createAppServiceIntegration(requestParameters: CreateAppServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceIntegration> {
+        const response = await this.createAppServiceIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates a log stream for an app service container and returns the stream id.
+     * Create app service log stream
+     */
+    async createAppServiceLogStreamRaw(requestParameters: CreateAppServiceLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LogStream>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createAppServiceLogStream().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/log-streams`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NewAppServiceLogStreamInputToJSON(requestParameters['newAppServiceLogStreamInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => LogStreamFromJSON(jsonValue));
+    }
+
+    /**
+     * Creates a log stream for an app service container and returns the stream id.
+     * Create app service log stream
+     */
+    async createAppServiceLogStream(requestParameters: CreateAppServiceLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LogStream> {
+        const response = await this.createAppServiceLogStreamRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates a token for an app service.
+     * Create app service token
+     */
+    async createAppServiceTokenRaw(requestParameters: CreateAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceToken>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createAppServiceToken().'
+            );
+        }
+
+        if (requestParameters['namedSecretValueInput'] == null) {
+            throw new runtime.RequiredError(
+                'namedSecretValueInput',
+                'Required parameter "namedSecretValueInput" was null or undefined when calling createAppServiceToken().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/tokens`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NamedSecretValueInputToJSON(requestParameters['namedSecretValueInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceTokenFromJSON(jsonValue));
+    }
+
+    /**
+     * Creates a token for an app service.
+     * Create app service token
+     */
+    async createAppServiceToken(requestParameters: CreateAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceToken> {
+        const response = await this.createAppServiceTokenRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes an app service annotation.
+     * Delete app service annotation
+     */
+    async deleteAppServiceAnnotationRaw(requestParameters: DeleteAppServiceAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteAppServiceAnnotation().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-service-annotations/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Deletes an app service annotation.
+     * Delete app service annotation
+     */
+    async deleteAppServiceAnnotation(requestParameters: DeleteAppServiceAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteAppServiceAnnotationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes an app service cron schedule.
+     * Delete app service cron schedule
+     */
+    async deleteAppServiceCronScheduleRaw(requestParameters: DeleteAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteAppServiceCronSchedule().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-service-cron-schedules/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Deletes an app service cron schedule.
+     * Delete app service cron schedule
+     */
+    async deleteAppServiceCronSchedule(requestParameters: DeleteAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteAppServiceCronScheduleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes an app service environment variable.
+     * Delete app service env var
+     */
+    async deleteAppServiceEnvVarRaw(requestParameters: DeleteAppServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteAppServiceEnvVar().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-service-env-vars/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Deletes an app service environment variable.
+     * Delete app service env var
+     */
+    async deleteAppServiceEnvVar(requestParameters: DeleteAppServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteAppServiceEnvVarRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes an app service Helm value override.
+     * Delete app service Helm value
+     */
+    async deleteAppServiceHelmValueRaw(requestParameters: DeleteAppServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteAppServiceHelmValue().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-service-helm-values/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Deletes an app service Helm value override.
+     * Delete app service Helm value
+     */
+    async deleteAppServiceHelmValue(requestParameters: DeleteAppServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteAppServiceHelmValueRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Removes an integration link from an app service.
+     * Delete app service integration
+     */
+    async deleteAppServiceIntegrationRaw(requestParameters: DeleteAppServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteAppServiceIntegration().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-service-integrations/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Removes an integration link from an app service.
+     * Delete app service integration
+     */
+    async deleteAppServiceIntegration(requestParameters: DeleteAppServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteAppServiceIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes an app service token.
+     * Delete app service token
+     */
+    async deleteAppServiceTokenRaw(requestParameters: DeleteAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteAppServiceToken().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-service-tokens/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Deletes an app service token.
+     * Delete app service token
+     */
+    async deleteAppServiceToken(requestParameters: DeleteAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteAppServiceTokenRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Returns the app service identified by the request path.
@@ -165,6 +1625,526 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
      */
     async getAppService(requestParameters: GetAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService> {
         const response = await this.getAppServiceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the app service cron job identified by the request path.
+     * Get app service cron job
+     */
+    async getAppServiceCronJobRaw(requestParameters: GetAppServiceCronJobRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceCronJob>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppServiceCronJob().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-service-cron-jobs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceCronJobFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns the app service cron job identified by the request path.
+     * Get app service cron job
+     */
+    async getAppServiceCronJob(requestParameters: GetAppServiceCronJobRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceCronJob> {
+        const response = await this.getAppServiceCronJobRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Extends an existing log stream lease.
+     * Keep log stream alive
+     */
+    async keepLogStreamAliveRaw(requestParameters: KeepLogStreamAliveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling keepLogStreamAlive().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/log-streams/{id}/keep-alive`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Extends an existing log stream lease.
+     * Keep log stream alive
+     */
+    async keepLogStreamAlive(requestParameters: KeepLogStreamAliveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.keepLogStreamAliveRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns annotations configured for an app service.
+     * List app service annotations
+     */
+    async listAppServiceAnnotationsRaw(requestParameters: ListAppServiceAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceAnnotation>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppServiceAnnotations().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/annotations`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceAnnotationFromJSON));
+    }
+
+    /**
+     * Returns annotations configured for an app service.
+     * List app service annotations
+     */
+    async listAppServiceAnnotations(requestParameters: ListAppServiceAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceAnnotation>> {
+        const response = await this.listAppServiceAnnotationsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns config overrides for an app service.
+     * List app service configs
+     */
+    async listAppServiceConfigsRaw(requestParameters: ListAppServiceConfigsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceConfig>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppServiceConfigs().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/configs`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceConfigFromJSON));
+    }
+
+    /**
+     * Returns config overrides for an app service.
+     * List app service configs
+     */
+    async listAppServiceConfigs(requestParameters: ListAppServiceConfigsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceConfig>> {
+        const response = await this.listAppServiceConfigsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns container resource settings for an app service.
+     * List app service containers
+     */
+    async listAppServiceContainersRaw(requestParameters: ListAppServiceContainersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceContainer>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppServiceContainers().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/containers`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceContainerFromJSON));
+    }
+
+    /**
+     * Returns container resource settings for an app service.
+     * List app service containers
+     */
+    async listAppServiceContainers(requestParameters: ListAppServiceContainersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceContainer>> {
+        const response = await this.listAppServiceContainersRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns app service cron jobs matching the request filters.
+     * List app service cron jobs
+     */
+    async listAppServiceCronJobsRaw(requestParameters: ListAppServiceCronJobsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceCronJobsResponse>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['appInstanceId'] != null) {
+            queryParameters['appInstanceId'] = requestParameters['appInstanceId'];
+        }
+
+        if (requestParameters['appServiceId'] != null) {
+            queryParameters['appServiceId'] = requestParameters['appServiceId'];
+        }
+
+        if (requestParameters['scheduleId'] != null) {
+            queryParameters['scheduleId'] = requestParameters['scheduleId'];
+        }
+
+        if (requestParameters['page'] != null) {
+            queryParameters['page'] = requestParameters['page'];
+        }
+
+        if (requestParameters['pageSize'] != null) {
+            queryParameters['pageSize'] = requestParameters['pageSize'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-service-cron-jobs`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceCronJobsResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns app service cron jobs matching the request filters.
+     * List app service cron jobs
+     */
+    async listAppServiceCronJobs(requestParameters: ListAppServiceCronJobsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceCronJobsResponse> {
+        const response = await this.listAppServiceCronJobsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns cron schedules configured for an app service.
+     * List app service cron schedules
+     */
+    async listAppServiceCronSchedulesRaw(requestParameters: ListAppServiceCronSchedulesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceCronSchedule>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppServiceCronSchedules().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/cron-schedules`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceCronScheduleFromJSON));
+    }
+
+    /**
+     * Returns cron schedules configured for an app service.
+     * List app service cron schedules
+     */
+    async listAppServiceCronSchedules(requestParameters: ListAppServiceCronSchedulesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceCronSchedule>> {
+        const response = await this.listAppServiceCronSchedulesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns environment variables configured for an app service.
+     * List app service env vars
+     */
+    async listAppServiceEnvVarsRaw(requestParameters: ListAppServiceEnvVarsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceEnvVar>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppServiceEnvVars().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/env-vars`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceEnvVarFromJSON));
+    }
+
+    /**
+     * Returns environment variables configured for an app service.
+     * List app service env vars
+     */
+    async listAppServiceEnvVars(requestParameters: ListAppServiceEnvVarsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceEnvVar>> {
+        const response = await this.listAppServiceEnvVarsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns Helm values configured for an app service.
+     * List app service Helm values
+     */
+    async listAppServiceHelmValuesRaw(requestParameters: ListAppServiceHelmValuesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceHelmValue>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppServiceHelmValues().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/helm-values`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceHelmValueFromJSON));
+    }
+
+    /**
+     * Returns Helm values configured for an app service.
+     * List app service Helm values
+     */
+    async listAppServiceHelmValues(requestParameters: ListAppServiceHelmValuesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceHelmValue>> {
+        const response = await this.listAppServiceHelmValuesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns integration links configured for an app service.
+     * List app service integrations
+     */
+    async listAppServiceIntegrationsRaw(requestParameters: ListAppServiceIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceIntegration>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppServiceIntegrations().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/integrations`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceIntegrationFromJSON));
+    }
+
+    /**
+     * Returns integration links configured for an app service.
+     * List app service integrations
+     */
+    async listAppServiceIntegrations(requestParameters: ListAppServiceIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceIntegration>> {
+        const response = await this.listAppServiceIntegrationsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns service links configured for an app service.
+     * List app service links
+     */
+    async listAppServiceLinksRaw(requestParameters: ListAppServiceLinksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceLink>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppServiceLinks().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/links`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceLinkFromJSON));
+    }
+
+    /**
+     * Returns service links configured for an app service.
+     * List app service links
+     */
+    async listAppServiceLinks(requestParameters: ListAppServiceLinksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceLink>> {
+        const response = await this.listAppServiceLinksRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns settings configured for an app service.
+     * List app service settings
+     */
+    async listAppServiceSettingsRaw(requestParameters: ListAppServiceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceSetting>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppServiceSettings().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/settings`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceSettingFromJSON));
+    }
+
+    /**
+     * Returns settings configured for an app service.
+     * List app service settings
+     */
+    async listAppServiceSettings(requestParameters: ListAppServiceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceSetting>> {
+        const response = await this.listAppServiceSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns tokens configured for an app service without revealing secret values.
+     * List app service tokens
+     */
+    async listAppServiceTokensRaw(requestParameters: ListAppServiceTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceToken>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppServiceTokens().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/tokens`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceTokenFromJSON));
+    }
+
+    /**
+     * Returns tokens configured for an app service without revealing secret values.
+     * List app service tokens
+     */
+    async listAppServiceTokens(requestParameters: ListAppServiceTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceToken>> {
+        const response = await this.listAppServiceTokensRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -258,6 +2238,340 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
+     * Runs an app service cron schedule immediately and returns the created task.
+     * Run app service cron schedule
+     */
+    async runAppServiceCronScheduleRaw(requestParameters: RunAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling runAppServiceCronSchedule().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-service-cron-schedules/{id}/run`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TaskFromJSON(jsonValue));
+    }
+
+    /**
+     * Runs an app service cron schedule immediately and returns the created task.
+     * Run app service cron schedule
+     */
+    async runAppServiceCronSchedule(requestParameters: RunAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task> {
+        const response = await this.runAppServiceCronScheduleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Sets or disables a named config override for an app service.
+     * Set app service config
+     */
+    async setAppServiceConfigRaw(requestParameters: SetAppServiceConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling setAppServiceConfig().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling setAppServiceConfig().'
+            );
+        }
+
+        if (requestParameters['configOverrideInput'] == null) {
+            throw new runtime.RequiredError(
+                'configOverrideInput',
+                'Required parameter "configOverrideInput" was null or undefined when calling setAppServiceConfig().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/configs/{name}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))).replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ConfigOverrideInputToJSON(requestParameters['configOverrideInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Sets or disables a named config override for an app service.
+     * Set app service config
+     */
+    async setAppServiceConfig(requestParameters: SetAppServiceConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.setAppServiceConfigRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Links or unlinks another app service for a named link slot.
+     * Set app service link
+     */
+    async setAppServiceLinkRaw(requestParameters: SetAppServiceLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling setAppServiceLink().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling setAppServiceLink().'
+            );
+        }
+
+        if (requestParameters['appServiceLinkInput'] == null) {
+            throw new runtime.RequiredError(
+                'appServiceLinkInput',
+                'Required parameter "appServiceLinkInput" was null or undefined when calling setAppServiceLink().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/links/{name}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))).replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AppServiceLinkInputToJSON(requestParameters['appServiceLinkInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Links or unlinks another app service for a named link slot.
+     * Set app service link
+     */
+    async setAppServiceLink(requestParameters: SetAppServiceLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.setAppServiceLinkRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Sets CPU and memory requests or limits for an app service container.
+     * Set app service resources
+     */
+    async setAppServiceResourcesRaw(requestParameters: SetAppServiceResourcesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling setAppServiceResources().'
+            );
+        }
+
+        if (requestParameters['resourcesInput'] == null) {
+            throw new runtime.RequiredError(
+                'resourcesInput',
+                'Required parameter "resourcesInput" was null or undefined when calling setAppServiceResources().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/resources`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ResourcesInputToJSON(requestParameters['resourcesInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Sets CPU and memory requests or limits for an app service container.
+     * Set app service resources
+     */
+    async setAppServiceResources(requestParameters: SetAppServiceResourcesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.setAppServiceResourcesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Sets a named setting value for an app service.
+     * Set app service setting
+     */
+    async setAppServiceSettingRaw(requestParameters: SetAppServiceSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceSetting>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling setAppServiceSetting().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling setAppServiceSetting().'
+            );
+        }
+
+        if (requestParameters['setStringValueInput'] == null) {
+            throw new runtime.RequiredError(
+                'setStringValueInput',
+                'Required parameter "setStringValueInput" was null or undefined when calling setAppServiceSetting().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/settings/{name}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))).replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: SetStringValueInputToJSON(requestParameters['setStringValueInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceSettingFromJSON(jsonValue));
+    }
+
+    /**
+     * Sets a named setting value for an app service.
+     * Set app service setting
+     */
+    async setAppServiceSetting(requestParameters: SetAppServiceSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceSetting> {
+        const response = await this.setAppServiceSettingRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Starts an existing log stream.
+     * Start log stream
+     */
+    async startLogStreamRaw(requestParameters: StartLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling startLogStream().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/log-streams/{id}/start`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Starts an existing log stream.
+     * Start log stream
+     */
+    async startLogStream(requestParameters: StartLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.startLogStreamRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Stops an existing log stream.
+     * Stop log stream
+     */
+    async stopLogStreamRaw(requestParameters: StopLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling stopLogStream().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/log-streams/{id}/stop`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Stops an existing log stream.
+     * Stop log stream
+     */
+    async stopLogStream(requestParameters: StopLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.stopLogStreamRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Updates the app service and returns the updated resource.
      * Update app service
      */
@@ -303,6 +2617,251 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
      */
     async updateAppService(requestParameters: UpdateAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService> {
         const response = await this.updateAppServiceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates an app service cron schedule.
+     * Update app service cron schedule
+     */
+    async updateAppServiceCronScheduleRaw(requestParameters: UpdateAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceCronSchedule>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateAppServiceCronSchedule().'
+            );
+        }
+
+        if (requestParameters['updateAppServiceCronScheduleInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateAppServiceCronScheduleInput',
+                'Required parameter "updateAppServiceCronScheduleInput" was null or undefined when calling updateAppServiceCronSchedule().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-service-cron-schedules/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateAppServiceCronScheduleInputToJSON(requestParameters['updateAppServiceCronScheduleInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceCronScheduleFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates an app service cron schedule.
+     * Update app service cron schedule
+     */
+    async updateAppServiceCronSchedule(requestParameters: UpdateAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceCronSchedule> {
+        const response = await this.updateAppServiceCronScheduleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates the database DB and user references used by an app service.
+     * Update app service database references
+     */
+    async updateAppServiceDatabaseRaw(requestParameters: UpdateAppServiceDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppService>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateAppServiceDatabase().'
+            );
+        }
+
+        if (requestParameters['updateAppServiceDatabaseInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateAppServiceDatabaseInput',
+                'Required parameter "updateAppServiceDatabaseInput" was null or undefined when calling updateAppServiceDatabase().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/database`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateAppServiceDatabaseInputToJSON(requestParameters['updateAppServiceDatabaseInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates the database DB and user references used by an app service.
+     * Update app service database references
+     */
+    async updateAppServiceDatabase(requestParameters: UpdateAppServiceDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService> {
+        const response = await this.updateAppServiceDatabaseRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates an app service environment variable.
+     * Update app service env var
+     */
+    async updateAppServiceEnvVarRaw(requestParameters: UpdateAppServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceEnvVar>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateAppServiceEnvVar().'
+            );
+        }
+
+        if (requestParameters['updateAppServiceEnvVarInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateAppServiceEnvVarInput',
+                'Required parameter "updateAppServiceEnvVarInput" was null or undefined when calling updateAppServiceEnvVar().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-service-env-vars/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateAppServiceEnvVarInputToJSON(requestParameters['updateAppServiceEnvVarInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceEnvVarFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates an app service environment variable.
+     * Update app service env var
+     */
+    async updateAppServiceEnvVar(requestParameters: UpdateAppServiceEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceEnvVar> {
+        const response = await this.updateAppServiceEnvVarRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates an app service Helm value override.
+     * Update app service Helm value
+     */
+    async updateAppServiceHelmValueRaw(requestParameters: UpdateAppServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceHelmValue>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateAppServiceHelmValue().'
+            );
+        }
+
+        if (requestParameters['updateSecretValueInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateSecretValueInput',
+                'Required parameter "updateSecretValueInput" was null or undefined when calling updateAppServiceHelmValue().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-service-helm-values/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateSecretValueInputToJSON(requestParameters['updateSecretValueInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceHelmValueFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates an app service Helm value override.
+     * Update app service Helm value
+     */
+    async updateAppServiceHelmValue(requestParameters: UpdateAppServiceHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceHelmValue> {
+        const response = await this.updateAppServiceHelmValueRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates an app service token value or secret flag.
+     * Update app service token
+     */
+    async updateAppServiceTokenRaw(requestParameters: UpdateAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceToken>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateAppServiceToken().'
+            );
+        }
+
+        if (requestParameters['updateSecretValueInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateSecretValueInput',
+                'Required parameter "updateSecretValueInput" was null or undefined when calling updateAppServiceToken().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-service-tokens/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateSecretValueInputToJSON(requestParameters['updateSecretValueInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceTokenFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates an app service token value or secret flag.
+     * Update app service token
+     */
+    async updateAppServiceToken(requestParameters: UpdateAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceToken> {
+        const response = await this.updateAppServiceTokenRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

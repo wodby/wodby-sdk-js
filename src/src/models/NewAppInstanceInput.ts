@@ -13,13 +13,6 @@
  */
 
 import { mapValues } from '../runtime';
-import type { NewManagedClusterInput } from './NewManagedClusterInput';
-import {
-    NewManagedClusterInputFromJSON,
-    NewManagedClusterInputFromJSONTyped,
-    NewManagedClusterInputToJSON,
-    NewManagedClusterInputToJSONTyped,
-} from './NewManagedClusterInput';
 import type { NewAppServiceInput } from './NewAppServiceInput';
 import {
     NewAppServiceInputFromJSON,
@@ -78,12 +71,6 @@ export interface NewAppInstanceInput {
     clusterId?: number | null;
     /**
      * 
-     * @type {NewManagedClusterInput}
-     * @memberof NewAppInstanceInput
-     */
-    newCluster?: NewManagedClusterInput;
-    /**
-     * 
      * @type {number}
      * @memberof NewAppInstanceInput
      */
@@ -133,7 +120,6 @@ export function NewAppInstanceInputFromJSONTyped(json: any, ignoreDiscriminator:
         'stackRevId': json['stackRevId'],
         'services': ((json['services'] as Array<any>).map(NewAppServiceInputFromJSON)),
         'clusterId': json['clusterId'] == null ? undefined : json['clusterId'],
-        'newCluster': json['newCluster'] == null ? undefined : NewManagedClusterInputFromJSON(json['newCluster']),
         'envId': json['envId'],
         'ciIntegrationId': json['ciIntegrationId'] == null ? undefined : json['ciIntegrationId'],
         'registryIntegrationId': json['registryIntegrationId'] == null ? undefined : json['registryIntegrationId'],
@@ -158,7 +144,6 @@ export function NewAppInstanceInputToJSONTyped(value?: NewAppInstanceInput | nul
         'stackRevId': value['stackRevId'],
         'services': ((value['services'] as Array<any>).map(NewAppServiceInputToJSON)),
         'clusterId': value['clusterId'],
-        'newCluster': NewManagedClusterInputToJSON(value['newCluster']),
         'envId': value['envId'],
         'ciIntegrationId': value['ciIntegrationId'],
         'registryIntegrationId': value['registryIntegrationId'],

@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   AppInstance,
+  AppInstanceStackUpgradeInput,
   ErrorResponse,
   NewAppInstanceInput,
   OperationResult,
@@ -24,6 +25,8 @@ import type {
 import {
     AppInstanceFromJSON,
     AppInstanceToJSON,
+    AppInstanceStackUpgradeInputFromJSON,
+    AppInstanceStackUpgradeInputToJSON,
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
     NewAppInstanceInputFromJSON,
@@ -64,6 +67,11 @@ export interface ListAppInstancesRequest {
 export interface UpdateAppInstanceRequest {
     id: number;
     updateTitleRequest: UpdateTitleRequest;
+}
+
+export interface UpgradeAppInstanceStackRequest {
+    id: number;
+    appInstanceStackUpgradeInput: AppInstanceStackUpgradeInput;
 }
 
 /**
@@ -176,6 +184,23 @@ export interface AppInstancesApiInterface {
      * Update app instance
      */
     updateAppInstance(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
+
+    /**
+     * Upgrades an app instance stack using the selected upgrade sections.
+     * @summary Upgrade app instance stack
+     * @param {number} id 
+     * @param {AppInstanceStackUpgradeInput} appInstanceStackUpgradeInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    upgradeAppInstanceStackRaw(requestParameters: UpgradeAppInstanceStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Upgrades an app instance stack using the selected upgrade sections.
+     * Upgrade app instance stack
+     */
+    upgradeAppInstanceStack(requestParameters: UpgradeAppInstanceStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
 }
 
@@ -456,6 +481,55 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
      */
     async updateAppInstance(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
         const response = await this.updateAppInstanceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Upgrades an app instance stack using the selected upgrade sections.
+     * Upgrade app instance stack
+     */
+    async upgradeAppInstanceStackRaw(requestParameters: UpgradeAppInstanceStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling upgradeAppInstanceStack().'
+            );
+        }
+
+        if (requestParameters['appInstanceStackUpgradeInput'] == null) {
+            throw new runtime.RequiredError(
+                'appInstanceStackUpgradeInput',
+                'Required parameter "appInstanceStackUpgradeInput" was null or undefined when calling upgradeAppInstanceStack().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-instances/{id}/actions/upgrade-stack`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AppInstanceStackUpgradeInputToJSON(requestParameters['appInstanceStackUpgradeInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Upgrades an app instance stack using the selected upgrade sections.
+     * Upgrade app instance stack
+     */
+    async upgradeAppInstanceStack(requestParameters: UpgradeAppInstanceStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.upgradeAppInstanceStackRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
