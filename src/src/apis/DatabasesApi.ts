@@ -70,7 +70,7 @@ export interface UpdateDatabaseRequest {
  */
 export interface DatabasesApiInterface {
     /**
-     * 
+     * Creates a database and returns the created resource.
      * @summary Create database
      * @param {NewDatabaseInput} newDatabaseInput 
      * @param {*} [options] Override http request option.
@@ -80,12 +80,13 @@ export interface DatabasesApiInterface {
     createDatabaseRaw(requestParameters: CreateDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Database>>;
 
     /**
+     * Creates a database and returns the created resource.
      * Create database
      */
     createDatabase(requestParameters: CreateDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Database>;
 
     /**
-     * 
+     * Deletes the database and returns the operation result.
      * @summary Delete database
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -95,12 +96,13 @@ export interface DatabasesApiInterface {
     deleteDatabaseRaw(requestParameters: DeleteDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
+     * Deletes the database and returns the operation result.
      * Delete database
      */
     deleteDatabase(requestParameters: DeleteDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * 
+     * Returns the database identified by the request path.
      * @summary Get database
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -110,12 +112,13 @@ export interface DatabasesApiInterface {
     getDatabaseRaw(requestParameters: GetDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Database>>;
 
     /**
+     * Returns the database identified by the request path.
      * Get database
      */
     getDatabase(requestParameters: GetDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Database>;
 
     /**
-     * 
+     * Returns the database identified by name.
      * @summary Get database by name
      * @param {string} name 
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -126,12 +129,13 @@ export interface DatabasesApiInterface {
     getDatabaseByNameRaw(requestParameters: GetDatabaseByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Database>>;
 
     /**
+     * Returns the database identified by name.
      * Get database by name
      */
     getDatabaseByName(requestParameters: GetDatabaseByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Database>;
 
     /**
-     * 
+     * Returns databases matching the request filters.
      * @summary List databases
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
@@ -143,12 +147,13 @@ export interface DatabasesApiInterface {
     listDatabasesRaw(requestParameters: ListDatabasesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Database>>>;
 
     /**
+     * Returns databases matching the request filters.
      * List databases
      */
     listDatabases(requestParameters: ListDatabasesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Database>>;
 
     /**
-     * 
+     * Updates the database and returns the updated resource.
      * @summary Update database
      * @param {number} id 
      * @param {UpdateTitleRequest} updateTitleRequest 
@@ -159,6 +164,7 @@ export interface DatabasesApiInterface {
     updateDatabaseRaw(requestParameters: UpdateDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Database>>;
 
     /**
+     * Updates the database and returns the updated resource.
      * Update database
      */
     updateDatabase(requestParameters: UpdateDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Database>;
@@ -171,6 +177,7 @@ export interface DatabasesApiInterface {
 export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterface {
 
     /**
+     * Creates a database and returns the created resource.
      * Create database
      */
     async createDatabaseRaw(requestParameters: CreateDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Database>> {
@@ -203,6 +210,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
     }
 
     /**
+     * Creates a database and returns the created resource.
      * Create database
      */
     async createDatabase(requestParameters: CreateDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Database> {
@@ -211,6 +219,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
     }
 
     /**
+     * Deletes the database and returns the operation result.
      * Delete database
      */
     async deleteDatabaseRaw(requestParameters: DeleteDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -240,6 +249,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
     }
 
     /**
+     * Deletes the database and returns the operation result.
      * Delete database
      */
     async deleteDatabase(requestParameters: DeleteDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -248,6 +258,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
     }
 
     /**
+     * Returns the database identified by the request path.
      * Get database
      */
     async getDatabaseRaw(requestParameters: GetDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Database>> {
@@ -277,6 +288,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
     }
 
     /**
+     * Returns the database identified by the request path.
      * Get database
      */
     async getDatabase(requestParameters: GetDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Database> {
@@ -285,6 +297,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
     }
 
     /**
+     * Returns the database identified by name.
      * Get database by name
      */
     async getDatabaseByNameRaw(requestParameters: GetDatabaseByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Database>> {
@@ -318,6 +331,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
     }
 
     /**
+     * Returns the database identified by name.
      * Get database by name
      */
     async getDatabaseByName(requestParameters: GetDatabaseByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Database> {
@@ -326,6 +340,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
     }
 
     /**
+     * Returns databases matching the request filters.
      * List databases
      */
     async listDatabasesRaw(requestParameters: ListDatabasesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Database>>> {
@@ -360,6 +375,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
     }
 
     /**
+     * Returns databases matching the request filters.
      * List databases
      */
     async listDatabases(requestParameters: ListDatabasesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Database>> {
@@ -368,6 +384,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
     }
 
     /**
+     * Updates the database and returns the updated resource.
      * Update database
      */
     async updateDatabaseRaw(requestParameters: UpdateDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Database>> {
@@ -407,6 +424,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
     }
 
     /**
+     * Updates the database and returns the updated resource.
      * Update database
      */
     async updateDatabase(requestParameters: UpdateDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Database> {

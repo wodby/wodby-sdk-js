@@ -63,7 +63,7 @@ export interface UpdateAppRouteRequest {
  */
 export interface AppRoutesApiInterface {
     /**
-     * 
+     * Creates an app route and returns the created resource.
      * @summary Create app route
      * @param {NewAppRouteInput} newAppRouteInput 
      * @param {*} [options] Override http request option.
@@ -73,12 +73,13 @@ export interface AppRoutesApiInterface {
     createAppRouteRaw(requestParameters: CreateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>>;
 
     /**
+     * Creates an app route and returns the created resource.
      * Create app route
      */
     createAppRoute(requestParameters: CreateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute>;
 
     /**
-     * 
+     * Deletes the app route and returns the operation result.
      * @summary Delete app route
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -88,12 +89,13 @@ export interface AppRoutesApiInterface {
     deleteAppRouteRaw(requestParameters: DeleteAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
+     * Deletes the app route and returns the operation result.
      * Delete app route
      */
     deleteAppRoute(requestParameters: DeleteAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * 
+     * Returns the app route identified by the request path.
      * @summary Get app route
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -103,12 +105,13 @@ export interface AppRoutesApiInterface {
     getAppRouteRaw(requestParameters: GetAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>>;
 
     /**
+     * Returns the app route identified by the request path.
      * Get app route
      */
     getAppRoute(requestParameters: GetAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute>;
 
     /**
-     * 
+     * Returns app routes matching the request filters.
      * @summary List app routes
      * @param {number} appInstanceId 
      * @param {*} [options] Override http request option.
@@ -118,12 +121,13 @@ export interface AppRoutesApiInterface {
     listAppRoutesRaw(requestParameters: ListAppRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppRoute>>>;
 
     /**
+     * Returns app routes matching the request filters.
      * List app routes
      */
     listAppRoutes(requestParameters: ListAppRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppRoute>>;
 
     /**
-     * 
+     * Updates the app route and returns the updated resource.
      * @summary Update app route
      * @param {number} id 
      * @param {UpdateAppRouteInput} updateAppRouteInput 
@@ -134,6 +138,7 @@ export interface AppRoutesApiInterface {
     updateAppRouteRaw(requestParameters: UpdateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>>;
 
     /**
+     * Updates the app route and returns the updated resource.
      * Update app route
      */
     updateAppRoute(requestParameters: UpdateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute>;
@@ -146,6 +151,7 @@ export interface AppRoutesApiInterface {
 export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterface {
 
     /**
+     * Creates an app route and returns the created resource.
      * Create app route
      */
     async createAppRouteRaw(requestParameters: CreateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>> {
@@ -178,6 +184,7 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
     }
 
     /**
+     * Creates an app route and returns the created resource.
      * Create app route
      */
     async createAppRoute(requestParameters: CreateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute> {
@@ -186,6 +193,7 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
     }
 
     /**
+     * Deletes the app route and returns the operation result.
      * Delete app route
      */
     async deleteAppRouteRaw(requestParameters: DeleteAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -215,6 +223,7 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
     }
 
     /**
+     * Deletes the app route and returns the operation result.
      * Delete app route
      */
     async deleteAppRoute(requestParameters: DeleteAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -223,6 +232,7 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
     }
 
     /**
+     * Returns the app route identified by the request path.
      * Get app route
      */
     async getAppRouteRaw(requestParameters: GetAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>> {
@@ -252,6 +262,7 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
     }
 
     /**
+     * Returns the app route identified by the request path.
      * Get app route
      */
     async getAppRoute(requestParameters: GetAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute> {
@@ -260,6 +271,7 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
     }
 
     /**
+     * Returns app routes matching the request filters.
      * List app routes
      */
     async listAppRoutesRaw(requestParameters: ListAppRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppRoute>>> {
@@ -293,6 +305,7 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
     }
 
     /**
+     * Returns app routes matching the request filters.
      * List app routes
      */
     async listAppRoutes(requestParameters: ListAppRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppRoute>> {
@@ -301,6 +314,7 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
     }
 
     /**
+     * Updates the app route and returns the updated resource.
      * Update app route
      */
     async updateAppRouteRaw(requestParameters: UpdateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRoute>> {
@@ -340,6 +354,7 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
     }
 
     /**
+     * Updates the app route and returns the updated resource.
      * Update app route
      */
     async updateAppRoute(requestParameters: UpdateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute> {

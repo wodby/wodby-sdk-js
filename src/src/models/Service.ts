@@ -72,7 +72,73 @@ export interface Service {
      * @type {number}
      * @memberof Service
      */
+    draftRevId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Service
+     */
     latestRevNumber: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Service
+     */
+    gitRepoId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Service
+     */
+    gitRepoRemoteId?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Service
+     */
+    gitRepoRef?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Service
+     */
+    gitRepoRefType?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Service
+     */
+    originStackRevId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Service
+     */
+    originStackRevStackId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Service
+     */
+    originStackRevName?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Service
+     */
+    originStackRevNumber?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Service
+     */
+    originStackRevVersion?: string | null;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Service
+     */
+    originStackRevCreatedAt?: Date | null;
     /**
      * 
      * @type {number}
@@ -130,7 +196,18 @@ export function ServiceFromJSONTyped(json: any, ignoreDiscriminator: boolean): S
         'external': json['external'],
         '_public': json['public'],
         'revId': json['revId'],
+        'draftRevId': json['draftRevId'] == null ? undefined : json['draftRevId'],
         'latestRevNumber': json['latestRevNumber'],
+        'gitRepoId': json['gitRepoId'] == null ? undefined : json['gitRepoId'],
+        'gitRepoRemoteId': json['gitRepoRemoteId'] == null ? undefined : json['gitRepoRemoteId'],
+        'gitRepoRef': json['gitRepoRef'] == null ? undefined : json['gitRepoRef'],
+        'gitRepoRefType': json['gitRepoRefType'] == null ? undefined : json['gitRepoRefType'],
+        'originStackRevId': json['originStackRevId'] == null ? undefined : json['originStackRevId'],
+        'originStackRevStackId': json['originStackRevStackId'] == null ? undefined : json['originStackRevStackId'],
+        'originStackRevName': json['originStackRevName'] == null ? undefined : json['originStackRevName'],
+        'originStackRevNumber': json['originStackRevNumber'] == null ? undefined : json['originStackRevNumber'],
+        'originStackRevVersion': json['originStackRevVersion'] == null ? undefined : json['originStackRevVersion'],
+        'originStackRevCreatedAt': json['originStackRevCreatedAt'] == null ? undefined : (new Date(json['originStackRevCreatedAt'])),
         'orgId': json['orgId'],
         'createdAt': (new Date(json['createdAt'])),
         'updatedAt': (new Date(json['updatedAt'])),
@@ -156,7 +233,18 @@ export function ServiceToJSONTyped(value?: Service | null, ignoreDiscriminator: 
         'external': value['external'],
         'public': value['_public'],
         'revId': value['revId'],
+        'draftRevId': value['draftRevId'],
         'latestRevNumber': value['latestRevNumber'],
+        'gitRepoId': value['gitRepoId'],
+        'gitRepoRemoteId': value['gitRepoRemoteId'],
+        'gitRepoRef': value['gitRepoRef'],
+        'gitRepoRefType': value['gitRepoRefType'],
+        'originStackRevId': value['originStackRevId'],
+        'originStackRevStackId': value['originStackRevStackId'],
+        'originStackRevName': value['originStackRevName'],
+        'originStackRevNumber': value['originStackRevNumber'],
+        'originStackRevVersion': value['originStackRevVersion'],
+        'originStackRevCreatedAt': value['originStackRevCreatedAt'] == null ? undefined : ((value['originStackRevCreatedAt'] as any).toISOString()),
         'orgId': value['orgId'],
         'createdAt': ((value['createdAt']).toISOString()),
         'updatedAt': ((value['updatedAt']).toISOString()),

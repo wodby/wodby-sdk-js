@@ -57,7 +57,7 @@ export interface UpdateAppServiceRequest {
  */
 export interface AppServicesApiInterface {
     /**
-     * 
+     * Returns the app service identified by the request path.
      * @summary Get app service
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -67,12 +67,13 @@ export interface AppServicesApiInterface {
     getAppServiceRaw(requestParameters: GetAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppService>>;
 
     /**
+     * Returns the app service identified by the request path.
      * Get app service
      */
     getAppService(requestParameters: GetAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService>;
 
     /**
-     * 
+     * Returns app services matching the request filters.
      * @summary List app services
      * @param {number} appInstanceId 
      * @param {*} [options] Override http request option.
@@ -82,12 +83,13 @@ export interface AppServicesApiInterface {
     listAppServicesRaw(requestParameters: ListAppServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppService>>>;
 
     /**
+     * Returns app services matching the request filters.
      * List app services
      */
     listAppServices(requestParameters: ListAppServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppService>>;
 
     /**
-     * 
+     * Runs the named action for an app service.
      * @summary Run app service action
      * @param {number} id 
      * @param {string} name 
@@ -98,12 +100,13 @@ export interface AppServicesApiInterface {
     runAppServiceActionRaw(requestParameters: RunAppServiceActionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
+     * Runs the named action for an app service.
      * Run app service action
      */
     runAppServiceAction(requestParameters: RunAppServiceActionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * 
+     * Updates the app service and returns the updated resource.
      * @summary Update app service
      * @param {number} id 
      * @param {AppServiceInput} appServiceInput 
@@ -114,6 +117,7 @@ export interface AppServicesApiInterface {
     updateAppServiceRaw(requestParameters: UpdateAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppService>>;
 
     /**
+     * Updates the app service and returns the updated resource.
      * Update app service
      */
     updateAppService(requestParameters: UpdateAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService>;
@@ -126,6 +130,7 @@ export interface AppServicesApiInterface {
 export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInterface {
 
     /**
+     * Returns the app service identified by the request path.
      * Get app service
      */
     async getAppServiceRaw(requestParameters: GetAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppService>> {
@@ -155,6 +160,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
+     * Returns the app service identified by the request path.
      * Get app service
      */
     async getAppService(requestParameters: GetAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService> {
@@ -163,6 +169,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
+     * Returns app services matching the request filters.
      * List app services
      */
     async listAppServicesRaw(requestParameters: ListAppServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppService>>> {
@@ -196,6 +203,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
+     * Returns app services matching the request filters.
      * List app services
      */
     async listAppServices(requestParameters: ListAppServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppService>> {
@@ -204,6 +212,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
+     * Runs the named action for an app service.
      * Run app service action
      */
     async runAppServiceActionRaw(requestParameters: RunAppServiceActionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -240,6 +249,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
+     * Runs the named action for an app service.
      * Run app service action
      */
     async runAppServiceAction(requestParameters: RunAppServiceActionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -248,6 +258,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
+     * Updates the app service and returns the updated resource.
      * Update app service
      */
     async updateAppServiceRaw(requestParameters: UpdateAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppService>> {
@@ -287,6 +298,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
+     * Updates the app service and returns the updated resource.
      * Update app service
      */
     async updateAppService(requestParameters: UpdateAppServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppService> {

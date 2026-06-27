@@ -44,7 +44,7 @@ export interface GetTaskStepLogsRequest {
  */
 export interface TaskStepsApiInterface {
     /**
-     * 
+     * Returns a temporary log URL for the task step.
      * @summary Get task step log URL
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -54,12 +54,13 @@ export interface TaskStepsApiInterface {
     getTaskStepLogUrlRaw(requestParameters: GetTaskStepLogUrlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<URLResponse>>;
 
     /**
+     * Returns a temporary log URL for the task step.
      * Get task step log URL
      */
     getTaskStepLogUrl(requestParameters: GetTaskStepLogUrlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<URLResponse>;
 
     /**
-     * 
+     * Returns logs captured for the task step.
      * @summary Get task step logs
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -69,6 +70,7 @@ export interface TaskStepsApiInterface {
     getTaskStepLogsRaw(requestParameters: GetTaskStepLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TaskStepLogs>>;
 
     /**
+     * Returns logs captured for the task step.
      * Get task step logs
      */
     getTaskStepLogs(requestParameters: GetTaskStepLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TaskStepLogs>;
@@ -81,6 +83,7 @@ export interface TaskStepsApiInterface {
 export class TaskStepsApi extends runtime.BaseAPI implements TaskStepsApiInterface {
 
     /**
+     * Returns a temporary log URL for the task step.
      * Get task step log URL
      */
     async getTaskStepLogUrlRaw(requestParameters: GetTaskStepLogUrlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<URLResponse>> {
@@ -110,6 +113,7 @@ export class TaskStepsApi extends runtime.BaseAPI implements TaskStepsApiInterfa
     }
 
     /**
+     * Returns a temporary log URL for the task step.
      * Get task step log URL
      */
     async getTaskStepLogUrl(requestParameters: GetTaskStepLogUrlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<URLResponse> {
@@ -118,6 +122,7 @@ export class TaskStepsApi extends runtime.BaseAPI implements TaskStepsApiInterfa
     }
 
     /**
+     * Returns logs captured for the task step.
      * Get task step logs
      */
     async getTaskStepLogsRaw(requestParameters: GetTaskStepLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TaskStepLogs>> {
@@ -147,6 +152,7 @@ export class TaskStepsApi extends runtime.BaseAPI implements TaskStepsApiInterfa
     }
 
     /**
+     * Returns logs captured for the task step.
      * Get task step logs
      */
     async getTaskStepLogs(requestParameters: GetTaskStepLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TaskStepLogs> {

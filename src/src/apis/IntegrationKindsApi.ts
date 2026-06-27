@@ -66,7 +66,7 @@ export interface ListIntegrationKindDatabaseVersionsRequest {
  */
 export interface IntegrationKindsApiInterface {
     /**
-     * 
+     * Returns the database settings identified by the request path.
      * @summary Get database settings
      * @param {number} id 
      * @param {string} dbType 
@@ -77,12 +77,13 @@ export interface IntegrationKindsApiInterface {
     getIntegrationKindDatabaseSettingsRaw(requestParameters: GetIntegrationKindDatabaseSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>>;
 
     /**
+     * Returns the database settings identified by the request path.
      * Get database settings
      */
     getIntegrationKindDatabaseSettings(requestParameters: GetIntegrationKindDatabaseSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }>;
 
     /**
-     * 
+     * Returns database machine types matching the request filters.
      * @summary List database machine types
      * @param {number} id 
      * @param {string} dbType 
@@ -97,12 +98,13 @@ export interface IntegrationKindsApiInterface {
     listIntegrationKindDatabaseMachineTypesRaw(requestParameters: ListIntegrationKindDatabaseMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
 
     /**
+     * Returns database machine types matching the request filters.
      * List database machine types
      */
     listIntegrationKindDatabaseMachineTypes(requestParameters: ListIntegrationKindDatabaseMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
 
     /**
-     * 
+     * Returns database regions matching the request filters.
      * @summary List database regions
      * @param {number} id 
      * @param {string} dbType 
@@ -115,12 +117,13 @@ export interface IntegrationKindsApiInterface {
     listIntegrationKindDatabaseRegionsRaw(requestParameters: ListIntegrationKindDatabaseRegionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
 
     /**
+     * Returns database regions matching the request filters.
      * List database regions
      */
     listIntegrationKindDatabaseRegions(requestParameters: ListIntegrationKindDatabaseRegionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
 
     /**
-     * 
+     * Returns database types matching the request filters.
      * @summary List database types
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -130,12 +133,13 @@ export interface IntegrationKindsApiInterface {
     listIntegrationKindDatabaseTypesRaw(requestParameters: ListIntegrationKindDatabaseTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseType>>>;
 
     /**
+     * Returns database types matching the request filters.
      * List database types
      */
     listIntegrationKindDatabaseTypes(requestParameters: ListIntegrationKindDatabaseTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseType>>;
 
     /**
-     * 
+     * Returns database versions matching the request filters.
      * @summary List database versions
      * @param {number} id 
      * @param {string} dbType 
@@ -146,6 +150,7 @@ export interface IntegrationKindsApiInterface {
     listIntegrationKindDatabaseVersionsRaw(requestParameters: ListIntegrationKindDatabaseVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseVersion>>>;
 
     /**
+     * Returns database versions matching the request filters.
      * List database versions
      */
     listIntegrationKindDatabaseVersions(requestParameters: ListIntegrationKindDatabaseVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseVersion>>;
@@ -158,6 +163,7 @@ export interface IntegrationKindsApiInterface {
 export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationKindsApiInterface {
 
     /**
+     * Returns the database settings identified by the request path.
      * Get database settings
      */
     async getIntegrationKindDatabaseSettingsRaw(requestParameters: GetIntegrationKindDatabaseSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>> {
@@ -198,6 +204,7 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
     }
 
     /**
+     * Returns the database settings identified by the request path.
      * Get database settings
      */
     async getIntegrationKindDatabaseSettings(requestParameters: GetIntegrationKindDatabaseSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }> {
@@ -206,6 +213,7 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
     }
 
     /**
+     * Returns database machine types matching the request filters.
      * List database machine types
      */
     async listIntegrationKindDatabaseMachineTypesRaw(requestParameters: ListIntegrationKindDatabaseMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
@@ -269,6 +277,7 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
     }
 
     /**
+     * Returns database machine types matching the request filters.
      * List database machine types
      */
     async listIntegrationKindDatabaseMachineTypes(requestParameters: ListIntegrationKindDatabaseMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
@@ -277,6 +286,7 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
     }
 
     /**
+     * Returns database regions matching the request filters.
      * List database regions
      */
     async listIntegrationKindDatabaseRegionsRaw(requestParameters: ListIntegrationKindDatabaseRegionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
@@ -332,6 +342,7 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
     }
 
     /**
+     * Returns database regions matching the request filters.
      * List database regions
      */
     async listIntegrationKindDatabaseRegions(requestParameters: ListIntegrationKindDatabaseRegionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
@@ -340,6 +351,7 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
     }
 
     /**
+     * Returns database types matching the request filters.
      * List database types
      */
     async listIntegrationKindDatabaseTypesRaw(requestParameters: ListIntegrationKindDatabaseTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseType>>> {
@@ -369,6 +381,7 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
     }
 
     /**
+     * Returns database types matching the request filters.
      * List database types
      */
     async listIntegrationKindDatabaseTypes(requestParameters: ListIntegrationKindDatabaseTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseType>> {
@@ -377,6 +390,7 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
     }
 
     /**
+     * Returns database versions matching the request filters.
      * List database versions
      */
     async listIntegrationKindDatabaseVersionsRaw(requestParameters: ListIntegrationKindDatabaseVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DatabaseVersion>>> {
@@ -417,6 +431,7 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
     }
 
     /**
+     * Returns database versions matching the request filters.
      * List database versions
      */
     async listIntegrationKindDatabaseVersions(requestParameters: ListIntegrationKindDatabaseVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DatabaseVersion>> {

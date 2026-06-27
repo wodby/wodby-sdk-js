@@ -16,14 +16,18 @@
 import * as runtime from '../runtime';
 import type {
   ErrorResponse,
+  OperationResult,
   Stack,
   StackRevision,
   StackService,
   StacksResponse,
+  UpdateStackFromGitRequest,
 } from '../models/index';
 import {
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
+    OperationResultFromJSON,
+    OperationResultToJSON,
     StackFromJSON,
     StackToJSON,
     StackRevisionFromJSON,
@@ -32,6 +36,8 @@ import {
     StackServiceToJSON,
     StacksResponseFromJSON,
     StacksResponseToJSON,
+    UpdateStackFromGitRequestFromJSON,
+    UpdateStackFromGitRequestToJSON,
 } from '../models/index';
 
 export interface GetStackRequest {
@@ -59,6 +65,15 @@ export interface ListStacksRequest {
     pageSize?: number;
 }
 
+export interface PublishStackDraftRequest {
+    id: number;
+}
+
+export interface UpdateStackFromGitOperationRequest {
+    id: number;
+    updateStackFromGitRequest: UpdateStackFromGitRequest;
+}
+
 /**
  * StacksApi - interface
  * 
@@ -67,7 +82,7 @@ export interface ListStacksRequest {
  */
 export interface StacksApiInterface {
     /**
-     * 
+     * Returns the stack identified by the request path.
      * @summary Get stack
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -77,12 +92,13 @@ export interface StacksApiInterface {
     getStackRaw(requestParameters: GetStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>>;
 
     /**
+     * Returns the stack identified by the request path.
      * Get stack
      */
     getStack(requestParameters: GetStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
 
     /**
-     * 
+     * Returns the stack identified by name.
      * @summary Get stack by name
      * @param {string} name 
      * @param {number} [revNumber] 
@@ -93,12 +109,13 @@ export interface StacksApiInterface {
     getStackByNameRaw(requestParameters: GetStackByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>>;
 
     /**
+     * Returns the stack identified by name.
      * Get stack by name
      */
     getStackByName(requestParameters: GetStackByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
 
     /**
-     * 
+     * Returns the stack revision identified by the request path.
      * @summary Get stack revision
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -108,12 +125,13 @@ export interface StacksApiInterface {
     getStackRevisionRaw(requestParameters: GetStackRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackRevision>>;
 
     /**
+     * Returns the stack revision identified by the request path.
      * Get stack revision
      */
     getStackRevision(requestParameters: GetStackRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackRevision>;
 
     /**
-     * 
+     * Returns stack services matching the request filters.
      * @summary List stack services
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -123,12 +141,13 @@ export interface StacksApiInterface {
     listStackRevisionServicesRaw(requestParameters: ListStackRevisionServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackService>>>;
 
     /**
+     * Returns stack services matching the request filters.
      * List stack services
      */
     listStackRevisionServices(requestParameters: ListStackRevisionServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackService>>;
 
     /**
-     * 
+     * Returns stacks matching the request filters.
      * @summary List stacks
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
@@ -142,9 +161,43 @@ export interface StacksApiInterface {
     listStacksRaw(requestParameters: ListStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StacksResponse>>;
 
     /**
+     * Returns stacks matching the request filters.
      * List stacks
      */
     listStacks(requestParameters: ListStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StacksResponse>;
+
+    /**
+     * Publishes the current stack draft as the active stack revision.
+     * @summary Publish stack draft
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    publishStackDraftRaw(requestParameters: PublishStackDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>>;
+
+    /**
+     * Publishes the current stack draft as the active stack revision.
+     * Publish stack draft
+     */
+    publishStackDraft(requestParameters: PublishStackDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
+
+    /**
+     * Starts a task that updates the stack from its configured Git source.
+     * @summary Update stack from git
+     * @param {number} id 
+     * @param {UpdateStackFromGitRequest} updateStackFromGitRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    updateStackFromGitRaw(requestParameters: UpdateStackFromGitOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Starts a task that updates the stack from its configured Git source.
+     * Update stack from git
+     */
+    updateStackFromGit(requestParameters: UpdateStackFromGitOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
 }
 
@@ -154,6 +207,7 @@ export interface StacksApiInterface {
 export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
 
     /**
+     * Returns the stack identified by the request path.
      * Get stack
      */
     async getStackRaw(requestParameters: GetStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>> {
@@ -183,6 +237,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Returns the stack identified by the request path.
      * Get stack
      */
     async getStack(requestParameters: GetStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
@@ -191,6 +246,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Returns the stack identified by name.
      * Get stack by name
      */
     async getStackByNameRaw(requestParameters: GetStackByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>> {
@@ -224,6 +280,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Returns the stack identified by name.
      * Get stack by name
      */
     async getStackByName(requestParameters: GetStackByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
@@ -232,6 +289,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Returns the stack revision identified by the request path.
      * Get stack revision
      */
     async getStackRevisionRaw(requestParameters: GetStackRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackRevision>> {
@@ -261,6 +319,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Returns the stack revision identified by the request path.
      * Get stack revision
      */
     async getStackRevision(requestParameters: GetStackRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackRevision> {
@@ -269,6 +328,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Returns stack services matching the request filters.
      * List stack services
      */
     async listStackRevisionServicesRaw(requestParameters: ListStackRevisionServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackService>>> {
@@ -298,6 +358,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Returns stack services matching the request filters.
      * List stack services
      */
     async listStackRevisionServices(requestParameters: ListStackRevisionServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackService>> {
@@ -306,6 +367,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Returns stacks matching the request filters.
      * List stacks
      */
     async listStacksRaw(requestParameters: ListStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StacksResponse>> {
@@ -348,10 +410,99 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Returns stacks matching the request filters.
      * List stacks
      */
     async listStacks(requestParameters: ListStacksRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StacksResponse> {
         const response = await this.listStacksRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Publishes the current stack draft as the active stack revision.
+     * Publish stack draft
+     */
+    async publishStackDraftRaw(requestParameters: PublishStackDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling publishStackDraft().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/{id}/actions/publish-draft`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StackFromJSON(jsonValue));
+    }
+
+    /**
+     * Publishes the current stack draft as the active stack revision.
+     * Publish stack draft
+     */
+    async publishStackDraft(requestParameters: PublishStackDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
+        const response = await this.publishStackDraftRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Starts a task that updates the stack from its configured Git source.
+     * Update stack from git
+     */
+    async updateStackFromGitRaw(requestParameters: UpdateStackFromGitOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateStackFromGit().'
+            );
+        }
+
+        if (requestParameters['updateStackFromGitRequest'] == null) {
+            throw new runtime.RequiredError(
+                'updateStackFromGitRequest',
+                'Required parameter "updateStackFromGitRequest" was null or undefined when calling updateStackFromGit().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/{id}/actions/update-from-git`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateStackFromGitRequestToJSON(requestParameters['updateStackFromGitRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Starts a task that updates the stack from its configured Git source.
+     * Update stack from git
+     */
+    async updateStackFromGit(requestParameters: UpdateStackFromGitOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.updateStackFromGitRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

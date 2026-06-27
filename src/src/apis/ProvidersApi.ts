@@ -60,7 +60,7 @@ export interface ListProvidersRequest {
  */
 export interface ProvidersApiInterface {
     /**
-     * 
+     * Returns the provider identified by the request path.
      * @summary Get provider
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -70,12 +70,13 @@ export interface ProvidersApiInterface {
     getProviderRaw(requestParameters: GetProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>>;
 
     /**
+     * Returns the provider identified by the request path.
      * Get provider
      */
     getProvider(requestParameters: GetProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider>;
 
     /**
-     * 
+     * Returns the provider identified by name.
      * @summary Get provider by name
      * @param {string} name 
      * @param {*} [options] Override http request option.
@@ -85,12 +86,13 @@ export interface ProvidersApiInterface {
     getProviderByNameRaw(requestParameters: GetProviderByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>>;
 
     /**
+     * Returns the provider identified by name.
      * Get provider by name
      */
     getProviderByName(requestParameters: GetProviderByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider>;
 
     /**
-     * 
+     * Returns the provider revision identified by the request path.
      * @summary Get provider revision
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -100,12 +102,13 @@ export interface ProvidersApiInterface {
     getProviderRevisionRaw(requestParameters: GetProviderRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProviderRevision>>;
 
     /**
+     * Returns the provider revision identified by the request path.
      * Get provider revision
      */
     getProviderRevision(requestParameters: GetProviderRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProviderRevision>;
 
     /**
-     * 
+     * Returns providers matching the request filters.
      * @summary List providers
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
@@ -120,6 +123,7 @@ export interface ProvidersApiInterface {
     listProvidersRaw(requestParameters: ListProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProvidersResponse>>;
 
     /**
+     * Returns providers matching the request filters.
      * List providers
      */
     listProviders(requestParameters: ListProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProvidersResponse>;
@@ -132,6 +136,7 @@ export interface ProvidersApiInterface {
 export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterface {
 
     /**
+     * Returns the provider identified by the request path.
      * Get provider
      */
     async getProviderRaw(requestParameters: GetProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>> {
@@ -161,6 +166,7 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
     }
 
     /**
+     * Returns the provider identified by the request path.
      * Get provider
      */
     async getProvider(requestParameters: GetProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider> {
@@ -169,6 +175,7 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
     }
 
     /**
+     * Returns the provider identified by name.
      * Get provider by name
      */
     async getProviderByNameRaw(requestParameters: GetProviderByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>> {
@@ -198,6 +205,7 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
     }
 
     /**
+     * Returns the provider identified by name.
      * Get provider by name
      */
     async getProviderByName(requestParameters: GetProviderByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider> {
@@ -206,6 +214,7 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
     }
 
     /**
+     * Returns the provider revision identified by the request path.
      * Get provider revision
      */
     async getProviderRevisionRaw(requestParameters: GetProviderRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProviderRevision>> {
@@ -235,6 +244,7 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
     }
 
     /**
+     * Returns the provider revision identified by the request path.
      * Get provider revision
      */
     async getProviderRevision(requestParameters: GetProviderRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProviderRevision> {
@@ -243,6 +253,7 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
     }
 
     /**
+     * Returns providers matching the request filters.
      * List providers
      */
     async listProvidersRaw(requestParameters: ListProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProvidersResponse>> {
@@ -289,6 +300,7 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
     }
 
     /**
+     * Returns providers matching the request filters.
      * List providers
      */
     async listProviders(requestParameters: ListProvidersRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProvidersResponse> {

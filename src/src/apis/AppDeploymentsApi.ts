@@ -64,7 +64,7 @@ export interface RedeployAppDeploymentRequest {
  */
 export interface AppDeploymentsApiInterface {
     /**
-     * 
+     * Creates a deployment and returns the created resource.
      * @summary Create deployment
      * @param {CreateDeploymentRequest} createDeploymentRequest 
      * @param {*} [options] Override http request option.
@@ -74,12 +74,13 @@ export interface AppDeploymentsApiInterface {
     createAppDeploymentRaw(requestParameters: CreateAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
 
     /**
+     * Creates a deployment and returns the created resource.
      * Create deployment
      */
     createAppDeployment(requestParameters: CreateAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
 
     /**
-     * 
+     * Creates a deployment from a CI workflow request.
      * @summary Create deployment from CI
      * @param {DeploymentFromCIInput} deploymentFromCIInput 
      * @param {*} [options] Override http request option.
@@ -89,12 +90,13 @@ export interface AppDeploymentsApiInterface {
     createAppDeploymentFromCiRaw(requestParameters: CreateAppDeploymentFromCiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
 
     /**
+     * Creates a deployment from a CI workflow request.
      * Create deployment from CI
      */
     createAppDeploymentFromCi(requestParameters: CreateAppDeploymentFromCiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
 
     /**
-     * 
+     * Returns the deployment identified by the request path.
      * @summary Get deployment
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -104,12 +106,13 @@ export interface AppDeploymentsApiInterface {
     getAppDeploymentRaw(requestParameters: GetAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
 
     /**
+     * Returns the deployment identified by the request path.
      * Get deployment
      */
     getAppDeployment(requestParameters: GetAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
 
     /**
-     * 
+     * Returns app deployments matching the request filters.
      * @summary List app deployments
      * @param {number} appInstanceId 
      * @param {number} [page] Page number, defaults to 1
@@ -121,12 +124,13 @@ export interface AppDeploymentsApiInterface {
     listAppDeploymentsRaw(requestParameters: ListAppDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeploymentsResponse>>;
 
     /**
+     * Returns app deployments matching the request filters.
      * List app deployments
      */
     listAppDeployments(requestParameters: ListAppDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeploymentsResponse>;
 
     /**
-     * 
+     * Creates a redeployment task for an existing deployment.
      * @summary Redeploy deployment
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -136,6 +140,7 @@ export interface AppDeploymentsApiInterface {
     redeployAppDeploymentRaw(requestParameters: RedeployAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
 
     /**
+     * Creates a redeployment task for an existing deployment.
      * Redeploy deployment
      */
     redeployAppDeployment(requestParameters: RedeployAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
@@ -148,6 +153,7 @@ export interface AppDeploymentsApiInterface {
 export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeploymentsApiInterface {
 
     /**
+     * Creates a deployment and returns the created resource.
      * Create deployment
      */
     async createAppDeploymentRaw(requestParameters: CreateAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
@@ -180,6 +186,7 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
     }
 
     /**
+     * Creates a deployment and returns the created resource.
      * Create deployment
      */
     async createAppDeployment(requestParameters: CreateAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
@@ -188,6 +195,7 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
     }
 
     /**
+     * Creates a deployment from a CI workflow request.
      * Create deployment from CI
      */
     async createAppDeploymentFromCiRaw(requestParameters: CreateAppDeploymentFromCiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
@@ -224,6 +232,7 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
     }
 
     /**
+     * Creates a deployment from a CI workflow request.
      * Create deployment from CI
      */
     async createAppDeploymentFromCi(requestParameters: CreateAppDeploymentFromCiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
@@ -232,6 +241,7 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
     }
 
     /**
+     * Returns the deployment identified by the request path.
      * Get deployment
      */
     async getAppDeploymentRaw(requestParameters: GetAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
@@ -261,6 +271,7 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
     }
 
     /**
+     * Returns the deployment identified by the request path.
      * Get deployment
      */
     async getAppDeployment(requestParameters: GetAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
@@ -269,6 +280,7 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
     }
 
     /**
+     * Returns app deployments matching the request filters.
      * List app deployments
      */
     async listAppDeploymentsRaw(requestParameters: ListAppDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeploymentsResponse>> {
@@ -310,6 +322,7 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
     }
 
     /**
+     * Returns app deployments matching the request filters.
      * List app deployments
      */
     async listAppDeployments(requestParameters: ListAppDeploymentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeploymentsResponse> {
@@ -318,6 +331,7 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
     }
 
     /**
+     * Creates a redeployment task for an existing deployment.
      * Redeploy deployment
      */
     async redeployAppDeploymentRaw(requestParameters: RedeployAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
@@ -347,6 +361,7 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
     }
 
     /**
+     * Creates a redeployment task for an existing deployment.
      * Redeploy deployment
      */
     async redeployAppDeployment(requestParameters: RedeployAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {

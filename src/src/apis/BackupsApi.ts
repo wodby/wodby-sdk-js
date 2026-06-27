@@ -55,7 +55,7 @@ export interface ListBackupsRequest {
  */
 export interface BackupsApiInterface {
     /**
-     * 
+     * Creates a backup and returns the created resource.
      * @summary Create backup
      * @param {NewBackupInput} newBackupInput 
      * @param {*} [options] Override http request option.
@@ -65,12 +65,13 @@ export interface BackupsApiInterface {
     createBackupRaw(requestParameters: CreateBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
+     * Creates a backup and returns the created resource.
      * Create backup
      */
     createBackup(requestParameters: CreateBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * 
+     * Returns the backup identified by the request path.
      * @summary Get backup
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -80,12 +81,13 @@ export interface BackupsApiInterface {
     getBackupRaw(requestParameters: GetBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Backup>>;
 
     /**
+     * Returns the backup identified by the request path.
      * Get backup
      */
     getBackup(requestParameters: GetBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Backup>;
 
     /**
-     * 
+     * Returns backups matching the request filters.
      * @summary List backups
      * @param {number} [appInstanceId] 
      * @param {number} [appServiceId] 
@@ -99,6 +101,7 @@ export interface BackupsApiInterface {
     listBackupsRaw(requestParameters: ListBackupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Backup>>>;
 
     /**
+     * Returns backups matching the request filters.
      * List backups
      */
     listBackups(requestParameters: ListBackupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Backup>>;
@@ -111,6 +114,7 @@ export interface BackupsApiInterface {
 export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
 
     /**
+     * Creates a backup and returns the created resource.
      * Create backup
      */
     async createBackupRaw(requestParameters: CreateBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -143,6 +147,7 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
     }
 
     /**
+     * Creates a backup and returns the created resource.
      * Create backup
      */
     async createBackup(requestParameters: CreateBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -151,6 +156,7 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
     }
 
     /**
+     * Returns the backup identified by the request path.
      * Get backup
      */
     async getBackupRaw(requestParameters: GetBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Backup>> {
@@ -180,6 +186,7 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
     }
 
     /**
+     * Returns the backup identified by the request path.
      * Get backup
      */
     async getBackup(requestParameters: GetBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Backup> {
@@ -188,6 +195,7 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
     }
 
     /**
+     * Returns backups matching the request filters.
      * List backups
      */
     async listBackupsRaw(requestParameters: ListBackupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Backup>>> {
@@ -230,6 +238,7 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
     }
 
     /**
+     * Returns backups matching the request filters.
      * List backups
      */
     async listBackups(requestParameters: ListBackupsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Backup>> {

@@ -81,7 +81,7 @@ export interface ListAppBuildsRequest {
  */
 export interface AppBuildsApiInterface {
     /**
-     * 
+     * Creates a build and returns the created resource.
      * @summary Create build
      * @param {CreateBuildRequest} createBuildRequest 
      * @param {*} [options] Override http request option.
@@ -91,12 +91,13 @@ export interface AppBuildsApiInterface {
     createAppBuildRaw(requestParameters: CreateAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppBuild>>>;
 
     /**
+     * Creates a build and returns the created resource.
      * Create build
      */
     createAppBuild(requestParameters: CreateAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppBuild>>;
 
     /**
-     * 
+     * Creates a build from a CI workflow request.
      * @summary Create build from CI
      * @param {NewBuildFromCIInput} newBuildFromCIInput 
      * @param {*} [options] Override http request option.
@@ -106,12 +107,13 @@ export interface AppBuildsApiInterface {
     createAppBuildFromCiRaw(requestParameters: CreateAppBuildFromCiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>>;
 
     /**
+     * Creates a build from a CI workflow request.
      * Create build from CI
      */
     createAppBuildFromCi(requestParameters: CreateAppBuildFromCiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild>;
 
     /**
-     * 
+     * Creates a deployment from the completed app build.
      * @summary Deploy build
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -121,12 +123,13 @@ export interface AppBuildsApiInterface {
     deployAppBuildRaw(requestParameters: DeployAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
 
     /**
+     * Creates a deployment from the completed app build.
      * Deploy build
      */
     deployAppBuild(requestParameters: DeployAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
 
     /**
-     * 
+     * Returns the build identified by the request path.
      * @summary Get build
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -136,12 +139,13 @@ export interface AppBuildsApiInterface {
     getAppBuildRaw(requestParameters: GetAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>>;
 
     /**
+     * Returns the build identified by the request path.
      * Get build
      */
     getAppBuild(requestParameters: GetAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild>;
 
     /**
-     * 
+     * Returns CI build configuration for the app build.
      * @summary Get build config
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -151,12 +155,13 @@ export interface AppBuildsApiInterface {
     getAppBuildConfigRaw(requestParameters: GetAppBuildConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuildConfig>>;
 
     /**
+     * Returns CI build configuration for the app build.
      * Get build config
      */
     getAppBuildConfig(requestParameters: GetAppBuildConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildConfig>;
 
     /**
-     * 
+     * Returns Docker registry credentials for the app build.
      * @summary Get Docker registry credentials for build
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -166,12 +171,13 @@ export interface AppBuildsApiInterface {
     getAppBuildDockerRegistryCredentialsRaw(requestParameters: GetAppBuildDockerRegistryCredentialsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DockerRegistryCredentials>>;
 
     /**
+     * Returns Docker registry credentials for the app build.
      * Get Docker registry credentials for build
      */
     getAppBuildDockerRegistryCredentials(requestParameters: GetAppBuildDockerRegistryCredentialsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockerRegistryCredentials>;
 
     /**
-     * 
+     * Returns app builds matching the request filters.
      * @summary List app builds
      * @param {number} appInstanceId 
      * @param {number} [page] Page number, defaults to 1
@@ -183,6 +189,7 @@ export interface AppBuildsApiInterface {
     listAppBuildsRaw(requestParameters: ListAppBuildsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuildsResponse>>;
 
     /**
+     * Returns app builds matching the request filters.
      * List app builds
      */
     listAppBuilds(requestParameters: ListAppBuildsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildsResponse>;
@@ -195,6 +202,7 @@ export interface AppBuildsApiInterface {
 export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterface {
 
     /**
+     * Creates a build and returns the created resource.
      * Create build
      */
     async createAppBuildRaw(requestParameters: CreateAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppBuild>>> {
@@ -227,6 +235,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     }
 
     /**
+     * Creates a build and returns the created resource.
      * Create build
      */
     async createAppBuild(requestParameters: CreateAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppBuild>> {
@@ -235,6 +244,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     }
 
     /**
+     * Creates a build from a CI workflow request.
      * Create build from CI
      */
     async createAppBuildFromCiRaw(requestParameters: CreateAppBuildFromCiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>> {
@@ -267,6 +277,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     }
 
     /**
+     * Creates a build from a CI workflow request.
      * Create build from CI
      */
     async createAppBuildFromCi(requestParameters: CreateAppBuildFromCiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild> {
@@ -275,6 +286,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     }
 
     /**
+     * Creates a deployment from the completed app build.
      * Deploy build
      */
     async deployAppBuildRaw(requestParameters: DeployAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
@@ -304,6 +316,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     }
 
     /**
+     * Creates a deployment from the completed app build.
      * Deploy build
      */
     async deployAppBuild(requestParameters: DeployAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
@@ -312,6 +325,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     }
 
     /**
+     * Returns the build identified by the request path.
      * Get build
      */
     async getAppBuildRaw(requestParameters: GetAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>> {
@@ -345,6 +359,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     }
 
     /**
+     * Returns the build identified by the request path.
      * Get build
      */
     async getAppBuild(requestParameters: GetAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild> {
@@ -353,6 +368,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     }
 
     /**
+     * Returns CI build configuration for the app build.
      * Get build config
      */
     async getAppBuildConfigRaw(requestParameters: GetAppBuildConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuildConfig>> {
@@ -386,6 +402,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     }
 
     /**
+     * Returns CI build configuration for the app build.
      * Get build config
      */
     async getAppBuildConfig(requestParameters: GetAppBuildConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildConfig> {
@@ -394,6 +411,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     }
 
     /**
+     * Returns Docker registry credentials for the app build.
      * Get Docker registry credentials for build
      */
     async getAppBuildDockerRegistryCredentialsRaw(requestParameters: GetAppBuildDockerRegistryCredentialsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DockerRegistryCredentials>> {
@@ -427,6 +445,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     }
 
     /**
+     * Returns Docker registry credentials for the app build.
      * Get Docker registry credentials for build
      */
     async getAppBuildDockerRegistryCredentials(requestParameters: GetAppBuildDockerRegistryCredentialsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DockerRegistryCredentials> {
@@ -435,6 +454,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     }
 
     /**
+     * Returns app builds matching the request filters.
      * List app builds
      */
     async listAppBuildsRaw(requestParameters: ListAppBuildsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuildsResponse>> {
@@ -476,6 +496,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     }
 
     /**
+     * Returns app builds matching the request filters.
      * List app builds
      */
     async listAppBuilds(requestParameters: ListAppBuildsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildsResponse> {

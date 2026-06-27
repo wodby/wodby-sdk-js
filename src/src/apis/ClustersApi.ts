@@ -71,7 +71,7 @@ export interface UpdateClusterRequest {
  */
 export interface ClustersApiInterface {
     /**
-     * 
+     * Creates a cluster and returns the created resource.
      * @summary Create cluster
      * @param {NewClusterInput} newClusterInput 
      * @param {*} [options] Override http request option.
@@ -81,12 +81,13 @@ export interface ClustersApiInterface {
     createClusterRaw(requestParameters: CreateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
 
     /**
+     * Creates a cluster and returns the created resource.
      * Create cluster
      */
     createCluster(requestParameters: CreateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
 
     /**
-     * 
+     * Deletes the cluster and returns the operation result.
      * @summary Delete cluster
      * @param {number} id 
      * @param {boolean} [force] 
@@ -97,12 +98,13 @@ export interface ClustersApiInterface {
     deleteClusterRaw(requestParameters: DeleteClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
+     * Deletes the cluster and returns the operation result.
      * Delete cluster
      */
     deleteCluster(requestParameters: DeleteClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * 
+     * Returns the cluster identified by the request path.
      * @summary Get cluster
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -112,12 +114,13 @@ export interface ClustersApiInterface {
     getClusterRaw(requestParameters: GetClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
 
     /**
+     * Returns the cluster identified by the request path.
      * Get cluster
      */
     getCluster(requestParameters: GetClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
 
     /**
-     * 
+     * Returns the cluster identified by name.
      * @summary Get cluster by name
      * @param {string} name 
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -128,12 +131,13 @@ export interface ClustersApiInterface {
     getClusterByNameRaw(requestParameters: GetClusterByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
 
     /**
+     * Returns the cluster identified by name.
      * Get cluster by name
      */
     getClusterByName(requestParameters: GetClusterByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
 
     /**
-     * 
+     * Returns clusters matching the request filters.
      * @summary List clusters
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
@@ -145,12 +149,13 @@ export interface ClustersApiInterface {
     listClustersRaw(requestParameters: ListClustersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Cluster>>>;
 
     /**
+     * Returns clusters matching the request filters.
      * List clusters
      */
     listClusters(requestParameters: ListClustersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Cluster>>;
 
     /**
-     * 
+     * Updates the cluster and returns the updated resource.
      * @summary Update cluster
      * @param {number} id 
      * @param {UpdateTitleRequest} updateTitleRequest 
@@ -161,6 +166,7 @@ export interface ClustersApiInterface {
     updateClusterRaw(requestParameters: UpdateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
 
     /**
+     * Updates the cluster and returns the updated resource.
      * Update cluster
      */
     updateCluster(requestParameters: UpdateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
@@ -173,6 +179,7 @@ export interface ClustersApiInterface {
 export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface {
 
     /**
+     * Creates a cluster and returns the created resource.
      * Create cluster
      */
     async createClusterRaw(requestParameters: CreateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
@@ -205,6 +212,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Creates a cluster and returns the created resource.
      * Create cluster
      */
     async createCluster(requestParameters: CreateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
@@ -213,6 +221,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Deletes the cluster and returns the operation result.
      * Delete cluster
      */
     async deleteClusterRaw(requestParameters: DeleteClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -246,6 +255,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Deletes the cluster and returns the operation result.
      * Delete cluster
      */
     async deleteCluster(requestParameters: DeleteClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -254,6 +264,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Returns the cluster identified by the request path.
      * Get cluster
      */
     async getClusterRaw(requestParameters: GetClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
@@ -283,6 +294,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Returns the cluster identified by the request path.
      * Get cluster
      */
     async getCluster(requestParameters: GetClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
@@ -291,6 +303,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Returns the cluster identified by name.
      * Get cluster by name
      */
     async getClusterByNameRaw(requestParameters: GetClusterByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
@@ -324,6 +337,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Returns the cluster identified by name.
      * Get cluster by name
      */
     async getClusterByName(requestParameters: GetClusterByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
@@ -332,6 +346,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Returns clusters matching the request filters.
      * List clusters
      */
     async listClustersRaw(requestParameters: ListClustersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Cluster>>> {
@@ -366,6 +381,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Returns clusters matching the request filters.
      * List clusters
      */
     async listClusters(requestParameters: ListClustersRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Cluster>> {
@@ -374,6 +390,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Updates the cluster and returns the updated resource.
      * Update cluster
      */
     async updateClusterRaw(requestParameters: UpdateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
@@ -413,6 +430,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Updates the cluster and returns the updated resource.
      * Update cluster
      */
     async updateCluster(requestParameters: UpdateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {

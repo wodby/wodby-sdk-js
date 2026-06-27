@@ -84,6 +84,12 @@ export interface Database {
      * @type {number}
      * @memberof Database
      */
+    appServiceId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Database
+     */
     envId: number;
     /**
      * 
@@ -143,6 +149,7 @@ export function DatabaseFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'region': json['region'] == null ? undefined : json['region'],
         'zone': json['zone'] == null ? undefined : json['zone'],
         'integrationId': json['integrationId'] == null ? undefined : json['integrationId'],
+        'appServiceId': json['appServiceId'] == null ? undefined : json['appServiceId'],
         'envId': json['envId'],
         'orgId': json['orgId'],
         'createdAt': (new Date(json['createdAt'])),
@@ -171,6 +178,7 @@ export function DatabaseToJSONTyped(value?: Database | null, ignoreDiscriminator
         'region': value['region'],
         'zone': value['zone'],
         'integrationId': value['integrationId'],
+        'appServiceId': value['appServiceId'],
         'envId': value['envId'],
         'orgId': value['orgId'],
         'createdAt': ((value['createdAt']).toISOString()),

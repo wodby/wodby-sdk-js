@@ -70,7 +70,7 @@ export interface UpdateAppRequest {
  */
 export interface AppsApiInterface {
     /**
-     * 
+     * Creates an app and returns the created resource.
      * @summary Create app
      * @param {NewAppInput} newAppInput 
      * @param {*} [options] Override http request option.
@@ -80,12 +80,13 @@ export interface AppsApiInterface {
     createAppRaw(requestParameters: CreateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
 
     /**
+     * Creates an app and returns the created resource.
      * Create app
      */
     createApp(requestParameters: CreateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
 
     /**
-     * 
+     * Deletes the app and returns the operation result.
      * @summary Delete app
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -95,12 +96,13 @@ export interface AppsApiInterface {
     deleteAppRaw(requestParameters: DeleteAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
+     * Deletes the app and returns the operation result.
      * Delete app
      */
     deleteApp(requestParameters: DeleteAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * 
+     * Returns the app identified by the request path.
      * @summary Get app
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -110,12 +112,13 @@ export interface AppsApiInterface {
     getAppRaw(requestParameters: GetAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
 
     /**
+     * Returns the app identified by the request path.
      * Get app
      */
     getApp(requestParameters: GetAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
 
     /**
-     * 
+     * Returns the app identified by name.
      * @summary Get app by name
      * @param {string} name 
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -126,12 +129,13 @@ export interface AppsApiInterface {
     getAppByNameRaw(requestParameters: GetAppByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
 
     /**
+     * Returns the app identified by name.
      * Get app by name
      */
     getAppByName(requestParameters: GetAppByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
 
     /**
-     * 
+     * Returns apps matching the request filters.
      * @summary List apps
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
@@ -143,12 +147,13 @@ export interface AppsApiInterface {
     listAppsRaw(requestParameters: ListAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<App>>>;
 
     /**
+     * Returns apps matching the request filters.
      * List apps
      */
     listApps(requestParameters: ListAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<App>>;
 
     /**
-     * 
+     * Updates the app and returns the updated resource.
      * @summary Update app
      * @param {number} id 
      * @param {UpdateTitleRequest} updateTitleRequest 
@@ -159,6 +164,7 @@ export interface AppsApiInterface {
     updateAppRaw(requestParameters: UpdateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
 
     /**
+     * Updates the app and returns the updated resource.
      * Update app
      */
     updateApp(requestParameters: UpdateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
@@ -171,6 +177,7 @@ export interface AppsApiInterface {
 export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
 
     /**
+     * Creates an app and returns the created resource.
      * Create app
      */
     async createAppRaw(requestParameters: CreateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
@@ -203,6 +210,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
+     * Creates an app and returns the created resource.
      * Create app
      */
     async createApp(requestParameters: CreateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
@@ -211,6 +219,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
+     * Deletes the app and returns the operation result.
      * Delete app
      */
     async deleteAppRaw(requestParameters: DeleteAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -240,6 +249,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
+     * Deletes the app and returns the operation result.
      * Delete app
      */
     async deleteApp(requestParameters: DeleteAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -248,6 +258,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
+     * Returns the app identified by the request path.
      * Get app
      */
     async getAppRaw(requestParameters: GetAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
@@ -277,6 +288,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
+     * Returns the app identified by the request path.
      * Get app
      */
     async getApp(requestParameters: GetAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
@@ -285,6 +297,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
+     * Returns the app identified by name.
      * Get app by name
      */
     async getAppByNameRaw(requestParameters: GetAppByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
@@ -318,6 +331,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
+     * Returns the app identified by name.
      * Get app by name
      */
     async getAppByName(requestParameters: GetAppByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
@@ -326,6 +340,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
+     * Returns apps matching the request filters.
      * List apps
      */
     async listAppsRaw(requestParameters: ListAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<App>>> {
@@ -360,6 +375,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
+     * Returns apps matching the request filters.
      * List apps
      */
     async listApps(requestParameters: ListAppsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<App>> {
@@ -368,6 +384,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
+     * Updates the app and returns the updated resource.
      * Update app
      */
     async updateAppRaw(requestParameters: UpdateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
@@ -407,6 +424,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
+     * Updates the app and returns the updated resource.
      * Update app
      */
     async updateApp(requestParameters: UpdateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {

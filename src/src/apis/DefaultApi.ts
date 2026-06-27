@@ -30,7 +30,7 @@ import {
  */
 export interface DefaultApiInterface {
     /**
-     * 
+     * Returns the public OpenAPI schema in JSON format.
      * @summary Get OpenAPI JSON
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -39,12 +39,13 @@ export interface DefaultApiInterface {
     getOpenApiJsonRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
     /**
+     * Returns the public OpenAPI schema in JSON format.
      * Get OpenAPI JSON
      */
     getOpenApiJson(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
-     * 
+     * Returns the public OpenAPI schema in YAML format.
      * @summary Get OpenAPI YAML
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -53,6 +54,7 @@ export interface DefaultApiInterface {
     getOpenApiYamlRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
 
     /**
+     * Returns the public OpenAPI schema in YAML format.
      * Get OpenAPI YAML
      */
     getOpenApiYaml(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
@@ -65,6 +67,7 @@ export interface DefaultApiInterface {
 export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
     /**
+     * Returns the public OpenAPI schema in JSON format.
      * Get OpenAPI JSON
      */
     async getOpenApiJsonRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
@@ -83,6 +86,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     }
 
     /**
+     * Returns the public OpenAPI schema in JSON format.
      * Get OpenAPI JSON
      */
     async getOpenApiJson(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
@@ -91,6 +95,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     }
 
     /**
+     * Returns the public OpenAPI schema in YAML format.
      * Get OpenAPI YAML
      */
     async getOpenApiYamlRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
@@ -113,6 +118,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     }
 
     /**
+     * Returns the public OpenAPI schema in YAML format.
      * Get OpenAPI YAML
      */
     async getOpenApiYaml(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {

@@ -52,7 +52,7 @@ export interface UpdateOrgOperationRequest {
  */
 export interface OrgsApiInterface {
     /**
-     * 
+     * Deletes the org and returns the operation result.
      * @summary Delete org
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -62,12 +62,13 @@ export interface OrgsApiInterface {
     deleteOrgRaw(requestParameters: DeleteOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
+     * Deletes the org and returns the operation result.
      * Delete org
      */
     deleteOrg(requestParameters: DeleteOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * 
+     * Returns the org identified by the request path.
      * @summary Get org
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -77,12 +78,13 @@ export interface OrgsApiInterface {
     getOrgRaw(requestParameters: GetOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>>;
 
     /**
+     * Returns the org identified by the request path.
      * Get org
      */
     getOrg(requestParameters: GetOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org>;
 
     /**
-     * 
+     * Returns orgs matching the request filters.
      * @summary List orgs
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -91,12 +93,13 @@ export interface OrgsApiInterface {
     listOrgsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Org>>>;
 
     /**
+     * Returns orgs matching the request filters.
      * List orgs
      */
     listOrgs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Org>>;
 
     /**
-     * 
+     * Updates the org and returns the updated resource.
      * @summary Update org
      * @param {number} id 
      * @param {UpdateOrgRequest} updateOrgRequest 
@@ -107,6 +110,7 @@ export interface OrgsApiInterface {
     updateOrgRaw(requestParameters: UpdateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>>;
 
     /**
+     * Updates the org and returns the updated resource.
      * Update org
      */
     updateOrg(requestParameters: UpdateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org>;
@@ -119,6 +123,7 @@ export interface OrgsApiInterface {
 export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
 
     /**
+     * Deletes the org and returns the operation result.
      * Delete org
      */
     async deleteOrgRaw(requestParameters: DeleteOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -148,6 +153,7 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
     }
 
     /**
+     * Deletes the org and returns the operation result.
      * Delete org
      */
     async deleteOrg(requestParameters: DeleteOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -156,6 +162,7 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
     }
 
     /**
+     * Returns the org identified by the request path.
      * Get org
      */
     async getOrgRaw(requestParameters: GetOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>> {
@@ -185,6 +192,7 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
     }
 
     /**
+     * Returns the org identified by the request path.
      * Get org
      */
     async getOrg(requestParameters: GetOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org> {
@@ -193,6 +201,7 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
     }
 
     /**
+     * Returns orgs matching the request filters.
      * List orgs
      */
     async listOrgsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Org>>> {
@@ -215,6 +224,7 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
     }
 
     /**
+     * Returns orgs matching the request filters.
      * List orgs
      */
     async listOrgs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Org>> {
@@ -223,6 +233,7 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
     }
 
     /**
+     * Updates the org and returns the updated resource.
      * Update org
      */
     async updateOrgRaw(requestParameters: UpdateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>> {
@@ -262,6 +273,7 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
     }
 
     /**
+     * Updates the org and returns the updated resource.
      * Update org
      */
     async updateOrg(requestParameters: UpdateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org> {

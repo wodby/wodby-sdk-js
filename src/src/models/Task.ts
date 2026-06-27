@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { User } from './User';
+import {
+    UserFromJSON,
+    UserFromJSONTyped,
+    UserToJSON,
+    UserToJSONTyped,
+} from './User';
 import type { TaskJob } from './TaskJob';
 import {
     TaskJobFromJSON,
@@ -75,6 +82,12 @@ export interface Task {
      * @memberof Task
      */
     userId: number;
+    /**
+     * 
+     * @type {User}
+     * @memberof Task
+     */
+    user?: User | null;
     /**
      * 
      * @type {number}
@@ -215,6 +228,7 @@ export function TaskFromJSONTyped(json: any, ignoreDiscriminator: boolean): Task
         'silent': json['silent'],
         'system': json['system'],
         'userId': json['userId'],
+        'user': json['user'] == null ? undefined : UserFromJSON(json['user']),
         'orgId': json['orgId'] == null ? undefined : json['orgId'],
         'projectIds': json['projectIds'] == null ? undefined : json['projectIds'],
         'appId': json['appId'] == null ? undefined : json['appId'],
@@ -254,6 +268,7 @@ export function TaskToJSONTyped(value?: Task | null, ignoreDiscriminator: boolea
         'silent': value['silent'],
         'system': value['system'],
         'userId': value['userId'],
+        'user': UserToJSON(value['user']),
         'orgId': value['orgId'],
         'projectIds': value['projectIds'],
         'appId': value['appId'],

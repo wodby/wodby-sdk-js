@@ -127,7 +127,7 @@ export interface UpdateIntegrationRequest {
  */
 export interface IntegrationsApiInterface {
     /**
-     * 
+     * Creates an integration and returns the created resource.
      * @summary Create integration
      * @param {NewIntegrationInput} newIntegrationInput 
      * @param {*} [options] Override http request option.
@@ -137,12 +137,13 @@ export interface IntegrationsApiInterface {
     createIntegrationRaw(requestParameters: CreateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>>;
 
     /**
+     * Creates an integration and returns the created resource.
      * Create integration
      */
     createIntegration(requestParameters: CreateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
 
     /**
-     * 
+     * Deletes the integration and returns the operation result.
      * @summary Delete integration
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -152,12 +153,13 @@ export interface IntegrationsApiInterface {
     deleteIntegrationRaw(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
+     * Deletes the integration and returns the operation result.
      * Delete integration
      */
     deleteIntegration(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * 
+     * Returns the integration identified by the request path.
      * @summary Get integration
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -167,12 +169,13 @@ export interface IntegrationsApiInterface {
     getIntegrationRaw(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>>;
 
     /**
+     * Returns the integration identified by the request path.
      * Get integration
      */
     getIntegration(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
 
     /**
-     * 
+     * Returns the integration identified by name.
      * @summary Get integration by name
      * @param {string} name 
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -183,12 +186,13 @@ export interface IntegrationsApiInterface {
     getIntegrationByNameRaw(requestParameters: GetIntegrationByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>>;
 
     /**
+     * Returns the integration identified by name.
      * Get integration by name
      */
     getIntegrationByName(requestParameters: GetIntegrationByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
 
     /**
-     * 
+     * Returns the Kubernetes settings identified by the request path.
      * @summary Get Kubernetes settings
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -198,12 +202,13 @@ export interface IntegrationsApiInterface {
     getIntegrationKubeSettingsRaw(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>>;
 
     /**
+     * Returns the Kubernetes settings identified by the request path.
      * Get Kubernetes settings
      */
     getIntegrationKubeSettings(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }>;
 
     /**
-     * 
+     * Returns Kubernetes machine types matching the request filters.
      * @summary List Kubernetes machine types
      * @param {number} id 
      * @param {string} location 
@@ -214,12 +219,13 @@ export interface IntegrationsApiInterface {
     listIntegrationKubeMachineTypesRaw(requestParameters: ListIntegrationKubeMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
 
     /**
+     * Returns Kubernetes machine types matching the request filters.
      * List Kubernetes machine types
      */
     listIntegrationKubeMachineTypes(requestParameters: ListIntegrationKubeMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
 
     /**
-     * 
+     * Returns Kubernetes regions matching the request filters.
      * @summary List Kubernetes regions
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -229,12 +235,13 @@ export interface IntegrationsApiInterface {
     listIntegrationKubeRegionsRaw(requestParameters: ListIntegrationKubeRegionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
 
     /**
+     * Returns Kubernetes regions matching the request filters.
      * List Kubernetes regions
      */
     listIntegrationKubeRegions(requestParameters: ListIntegrationKubeRegionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
 
     /**
-     * 
+     * Returns Kubernetes versions matching the request filters.
      * @summary List Kubernetes versions
      * @param {number} id 
      * @param {string} location 
@@ -245,12 +252,13 @@ export interface IntegrationsApiInterface {
     listIntegrationKubeVersionsRaw(requestParameters: ListIntegrationKubeVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<KubeVersion>>>;
 
     /**
+     * Returns Kubernetes versions matching the request filters.
      * List Kubernetes versions
      */
     listIntegrationKubeVersions(requestParameters: ListIntegrationKubeVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<KubeVersion>>;
 
     /**
-     * 
+     * Returns Kubernetes zones matching the request filters.
      * @summary List Kubernetes zones
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -260,12 +268,13 @@ export interface IntegrationsApiInterface {
     listIntegrationKubeZonesRaw(requestParameters: ListIntegrationKubeZonesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
 
     /**
+     * Returns Kubernetes zones matching the request filters.
      * List Kubernetes zones
      */
     listIntegrationKubeZones(requestParameters: ListIntegrationKubeZonesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
 
     /**
-     * 
+     * Returns remote Git repository branches matching the request filters.
      * @summary List remote Git repository branches
      * @param {number} id 
      * @param {string} remoteGitRepoId 
@@ -276,12 +285,13 @@ export interface IntegrationsApiInterface {
     listIntegrationRemoteGitRepoBranchesRaw(requestParameters: ListIntegrationRemoteGitRepoBranchesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>>;
 
     /**
+     * Returns remote Git repository branches matching the request filters.
      * List remote Git repository branches
      */
     listIntegrationRemoteGitRepoBranches(requestParameters: ListIntegrationRemoteGitRepoBranchesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>>;
 
     /**
-     * 
+     * Returns remote Git repository tags matching the request filters.
      * @summary List remote Git repository tags
      * @param {number} id 
      * @param {string} remoteGitRepoId 
@@ -292,12 +302,13 @@ export interface IntegrationsApiInterface {
     listIntegrationRemoteGitRepoTagsRaw(requestParameters: ListIntegrationRemoteGitRepoTagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>>;
 
     /**
+     * Returns remote Git repository tags matching the request filters.
      * List remote Git repository tags
      */
     listIntegrationRemoteGitRepoTags(requestParameters: ListIntegrationRemoteGitRepoTagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>>;
 
     /**
-     * 
+     * Returns remote Git repositories matching the request filters.
      * @summary List remote Git repositories
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -307,12 +318,13 @@ export interface IntegrationsApiInterface {
     listIntegrationRemoteGitReposRaw(requestParameters: ListIntegrationRemoteGitReposRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<RemoteGitRepo>>>;
 
     /**
+     * Returns remote Git repositories matching the request filters.
      * List remote Git repositories
      */
     listIntegrationRemoteGitRepos(requestParameters: ListIntegrationRemoteGitReposRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<RemoteGitRepo>>;
 
     /**
-     * 
+     * Returns integration scopes matching the request filters.
      * @summary List integration scopes
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -322,12 +334,13 @@ export interface IntegrationsApiInterface {
     listIntegrationScopesRaw(requestParameters: ListIntegrationScopesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<IntegrationScope>>>;
 
     /**
+     * Returns integration scopes matching the request filters.
      * List integration scopes
      */
     listIntegrationScopes(requestParameters: ListIntegrationScopesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<IntegrationScope>>;
 
     /**
-     * 
+     * Returns storage buckets matching the request filters.
      * @summary List storage buckets
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -337,12 +350,13 @@ export interface IntegrationsApiInterface {
     listIntegrationStorageBucketsRaw(requestParameters: ListIntegrationStorageBucketsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>>;
 
     /**
+     * Returns storage buckets matching the request filters.
      * List storage buckets
      */
     listIntegrationStorageBuckets(requestParameters: ListIntegrationStorageBucketsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>>;
 
     /**
-     * 
+     * Returns storage classes matching the request filters.
      * @summary List storage classes
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -352,12 +366,13 @@ export interface IntegrationsApiInterface {
     listIntegrationStorageClassesRaw(requestParameters: ListIntegrationStorageClassesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>>;
 
     /**
+     * Returns storage classes matching the request filters.
      * List storage classes
      */
     listIntegrationStorageClasses(requestParameters: ListIntegrationStorageClassesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>>;
 
     /**
-     * 
+     * Returns integrations matching the request filters.
      * @summary List integrations
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
@@ -369,12 +384,13 @@ export interface IntegrationsApiInterface {
     listIntegrationsRaw(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>>;
 
     /**
+     * Returns integrations matching the request filters.
      * List integrations
      */
     listIntegrations(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>>;
 
     /**
-     * 
+     * Updates the integration and returns the updated resource.
      * @summary Update integration
      * @param {number} id 
      * @param {UpdateIntegrationInput} updateIntegrationInput 
@@ -385,6 +401,7 @@ export interface IntegrationsApiInterface {
     updateIntegrationRaw(requestParameters: UpdateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>>;
 
     /**
+     * Updates the integration and returns the updated resource.
      * Update integration
      */
     updateIntegration(requestParameters: UpdateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
@@ -397,6 +414,7 @@ export interface IntegrationsApiInterface {
 export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiInterface {
 
     /**
+     * Creates an integration and returns the created resource.
      * Create integration
      */
     async createIntegrationRaw(requestParameters: CreateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>> {
@@ -429,6 +447,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Creates an integration and returns the created resource.
      * Create integration
      */
     async createIntegration(requestParameters: CreateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
@@ -437,6 +456,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Deletes the integration and returns the operation result.
      * Delete integration
      */
     async deleteIntegrationRaw(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -466,6 +486,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Deletes the integration and returns the operation result.
      * Delete integration
      */
     async deleteIntegration(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -474,6 +495,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns the integration identified by the request path.
      * Get integration
      */
     async getIntegrationRaw(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>> {
@@ -503,6 +525,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns the integration identified by the request path.
      * Get integration
      */
     async getIntegration(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
@@ -511,6 +534,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns the integration identified by name.
      * Get integration by name
      */
     async getIntegrationByNameRaw(requestParameters: GetIntegrationByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>> {
@@ -544,6 +568,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns the integration identified by name.
      * Get integration by name
      */
     async getIntegrationByName(requestParameters: GetIntegrationByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
@@ -552,6 +577,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns the Kubernetes settings identified by the request path.
      * Get Kubernetes settings
      */
     async getIntegrationKubeSettingsRaw(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>> {
@@ -581,6 +607,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns the Kubernetes settings identified by the request path.
      * Get Kubernetes settings
      */
     async getIntegrationKubeSettings(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }> {
@@ -589,6 +616,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns Kubernetes machine types matching the request filters.
      * List Kubernetes machine types
      */
     async listIntegrationKubeMachineTypesRaw(requestParameters: ListIntegrationKubeMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
@@ -629,6 +657,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns Kubernetes machine types matching the request filters.
      * List Kubernetes machine types
      */
     async listIntegrationKubeMachineTypes(requestParameters: ListIntegrationKubeMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
@@ -637,6 +666,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns Kubernetes regions matching the request filters.
      * List Kubernetes regions
      */
     async listIntegrationKubeRegionsRaw(requestParameters: ListIntegrationKubeRegionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
@@ -666,6 +696,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns Kubernetes regions matching the request filters.
      * List Kubernetes regions
      */
     async listIntegrationKubeRegions(requestParameters: ListIntegrationKubeRegionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
@@ -674,6 +705,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns Kubernetes versions matching the request filters.
      * List Kubernetes versions
      */
     async listIntegrationKubeVersionsRaw(requestParameters: ListIntegrationKubeVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<KubeVersion>>> {
@@ -714,6 +746,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns Kubernetes versions matching the request filters.
      * List Kubernetes versions
      */
     async listIntegrationKubeVersions(requestParameters: ListIntegrationKubeVersionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<KubeVersion>> {
@@ -722,6 +755,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns Kubernetes zones matching the request filters.
      * List Kubernetes zones
      */
     async listIntegrationKubeZonesRaw(requestParameters: ListIntegrationKubeZonesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
@@ -751,6 +785,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns Kubernetes zones matching the request filters.
      * List Kubernetes zones
      */
     async listIntegrationKubeZones(requestParameters: ListIntegrationKubeZonesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
@@ -759,6 +794,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns remote Git repository branches matching the request filters.
      * List remote Git repository branches
      */
     async listIntegrationRemoteGitRepoBranchesRaw(requestParameters: ListIntegrationRemoteGitRepoBranchesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
@@ -799,6 +835,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns remote Git repository branches matching the request filters.
      * List remote Git repository branches
      */
     async listIntegrationRemoteGitRepoBranches(requestParameters: ListIntegrationRemoteGitRepoBranchesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
@@ -807,6 +844,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns remote Git repository tags matching the request filters.
      * List remote Git repository tags
      */
     async listIntegrationRemoteGitRepoTagsRaw(requestParameters: ListIntegrationRemoteGitRepoTagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
@@ -847,6 +885,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns remote Git repository tags matching the request filters.
      * List remote Git repository tags
      */
     async listIntegrationRemoteGitRepoTags(requestParameters: ListIntegrationRemoteGitRepoTagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
@@ -855,6 +894,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns remote Git repositories matching the request filters.
      * List remote Git repositories
      */
     async listIntegrationRemoteGitReposRaw(requestParameters: ListIntegrationRemoteGitReposRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<RemoteGitRepo>>> {
@@ -884,6 +924,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns remote Git repositories matching the request filters.
      * List remote Git repositories
      */
     async listIntegrationRemoteGitRepos(requestParameters: ListIntegrationRemoteGitReposRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<RemoteGitRepo>> {
@@ -892,6 +933,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns integration scopes matching the request filters.
      * List integration scopes
      */
     async listIntegrationScopesRaw(requestParameters: ListIntegrationScopesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<IntegrationScope>>> {
@@ -921,6 +963,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns integration scopes matching the request filters.
      * List integration scopes
      */
     async listIntegrationScopes(requestParameters: ListIntegrationScopesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<IntegrationScope>> {
@@ -929,6 +972,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns storage buckets matching the request filters.
      * List storage buckets
      */
     async listIntegrationStorageBucketsRaw(requestParameters: ListIntegrationStorageBucketsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
@@ -958,6 +1002,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns storage buckets matching the request filters.
      * List storage buckets
      */
     async listIntegrationStorageBuckets(requestParameters: ListIntegrationStorageBucketsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
@@ -966,6 +1011,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns storage classes matching the request filters.
      * List storage classes
      */
     async listIntegrationStorageClassesRaw(requestParameters: ListIntegrationStorageClassesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
@@ -995,6 +1041,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns storage classes matching the request filters.
      * List storage classes
      */
     async listIntegrationStorageClasses(requestParameters: ListIntegrationStorageClassesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
@@ -1003,6 +1050,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns integrations matching the request filters.
      * List integrations
      */
     async listIntegrationsRaw(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>> {
@@ -1037,6 +1085,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns integrations matching the request filters.
      * List integrations
      */
     async listIntegrations(requestParameters: ListIntegrationsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>> {
@@ -1045,6 +1094,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Updates the integration and returns the updated resource.
      * Update integration
      */
     async updateIntegrationRaw(requestParameters: UpdateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>> {
@@ -1084,6 +1134,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Updates the integration and returns the updated resource.
      * Update integration
      */
     async updateIntegration(requestParameters: UpdateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {

@@ -68,7 +68,7 @@ export interface UpdateProjectRequest {
  */
 export interface ProjectsApiInterface {
     /**
-     * 
+     * Creates a project and returns the created resource.
      * @summary Create project
      * @param {NewProjectInput} newProjectInput 
      * @param {*} [options] Override http request option.
@@ -78,12 +78,13 @@ export interface ProjectsApiInterface {
     createProjectRaw(requestParameters: CreateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>>;
 
     /**
+     * Creates a project and returns the created resource.
      * Create project
      */
     createProject(requestParameters: CreateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project>;
 
     /**
-     * 
+     * Deletes the project and returns the operation result.
      * @summary Delete project
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -93,12 +94,13 @@ export interface ProjectsApiInterface {
     deleteProjectRaw(requestParameters: DeleteProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
+     * Deletes the project and returns the operation result.
      * Delete project
      */
     deleteProject(requestParameters: DeleteProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * 
+     * Returns the project identified by the request path.
      * @summary Get project
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -108,12 +110,13 @@ export interface ProjectsApiInterface {
     getProjectRaw(requestParameters: GetProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>>;
 
     /**
+     * Returns the project identified by the request path.
      * Get project
      */
     getProject(requestParameters: GetProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project>;
 
     /**
-     * 
+     * Returns the project identified by name.
      * @summary Get project by name
      * @param {string} name 
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -124,12 +127,13 @@ export interface ProjectsApiInterface {
     getProjectByNameRaw(requestParameters: GetProjectByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>>;
 
     /**
+     * Returns the project identified by name.
      * Get project by name
      */
     getProjectByName(requestParameters: GetProjectByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project>;
 
     /**
-     * 
+     * Returns projects matching the request filters.
      * @summary List projects
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {*} [options] Override http request option.
@@ -139,12 +143,13 @@ export interface ProjectsApiInterface {
     listProjectsRaw(requestParameters: ListProjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Project>>>;
 
     /**
+     * Returns projects matching the request filters.
      * List projects
      */
     listProjects(requestParameters: ListProjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Project>>;
 
     /**
-     * 
+     * Updates the project and returns the updated resource.
      * @summary Update project
      * @param {number} id 
      * @param {UpdateProjectInput} updateProjectInput 
@@ -155,6 +160,7 @@ export interface ProjectsApiInterface {
     updateProjectRaw(requestParameters: UpdateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>>;
 
     /**
+     * Updates the project and returns the updated resource.
      * Update project
      */
     updateProject(requestParameters: UpdateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project>;
@@ -167,6 +173,7 @@ export interface ProjectsApiInterface {
 export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface {
 
     /**
+     * Creates a project and returns the created resource.
      * Create project
      */
     async createProjectRaw(requestParameters: CreateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
@@ -199,6 +206,7 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
     }
 
     /**
+     * Creates a project and returns the created resource.
      * Create project
      */
     async createProject(requestParameters: CreateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project> {
@@ -207,6 +215,7 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
     }
 
     /**
+     * Deletes the project and returns the operation result.
      * Delete project
      */
     async deleteProjectRaw(requestParameters: DeleteProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -236,6 +245,7 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
     }
 
     /**
+     * Deletes the project and returns the operation result.
      * Delete project
      */
     async deleteProject(requestParameters: DeleteProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -244,6 +254,7 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
     }
 
     /**
+     * Returns the project identified by the request path.
      * Get project
      */
     async getProjectRaw(requestParameters: GetProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
@@ -273,6 +284,7 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
     }
 
     /**
+     * Returns the project identified by the request path.
      * Get project
      */
     async getProject(requestParameters: GetProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project> {
@@ -281,6 +293,7 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
     }
 
     /**
+     * Returns the project identified by name.
      * Get project by name
      */
     async getProjectByNameRaw(requestParameters: GetProjectByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
@@ -314,6 +327,7 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
     }
 
     /**
+     * Returns the project identified by name.
      * Get project by name
      */
     async getProjectByName(requestParameters: GetProjectByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project> {
@@ -322,6 +336,7 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
     }
 
     /**
+     * Returns projects matching the request filters.
      * List projects
      */
     async listProjectsRaw(requestParameters: ListProjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Project>>> {
@@ -348,6 +363,7 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
     }
 
     /**
+     * Returns projects matching the request filters.
      * List projects
      */
     async listProjects(requestParameters: ListProjectsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Project>> {
@@ -356,6 +372,7 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
     }
 
     /**
+     * Updates the project and returns the updated resource.
      * Update project
      */
     async updateProjectRaw(requestParameters: UpdateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
@@ -395,6 +412,7 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
     }
 
     /**
+     * Updates the project and returns the updated resource.
      * Update project
      */
     async updateProject(requestParameters: UpdateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Project> {

@@ -64,7 +64,7 @@ export interface ListServicesRequest {
  */
 export interface ServicesApiInterface {
     /**
-     * 
+     * Returns the service identified by the request path.
      * @summary Get service
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -74,12 +74,13 @@ export interface ServicesApiInterface {
     getServiceRaw(requestParameters: GetServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>>;
 
     /**
+     * Returns the service identified by the request path.
      * Get service
      */
     getService(requestParameters: GetServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service>;
 
     /**
-     * 
+     * Returns the service identified by name.
      * @summary Get service by name
      * @param {string} name 
      * @param {number} [revNumber] 
@@ -90,12 +91,13 @@ export interface ServicesApiInterface {
     getServiceByNameRaw(requestParameters: GetServiceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>>;
 
     /**
+     * Returns the service identified by name.
      * Get service by name
      */
     getServiceByName(requestParameters: GetServiceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service>;
 
     /**
-     * 
+     * Returns the service revision identified by the request path.
      * @summary Get service revision
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -105,12 +107,13 @@ export interface ServicesApiInterface {
     getServiceRevisionRaw(requestParameters: GetServiceRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ServiceRevision>>;
 
     /**
+     * Returns the service revision identified by the request path.
      * Get service revision
      */
     getServiceRevision(requestParameters: GetServiceRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServiceRevision>;
 
     /**
-     * 
+     * Returns service link candidates matching the request filters.
      * @summary List service link candidates
      * @param {string} name 
      * @param {*} [options] Override http request option.
@@ -120,12 +123,13 @@ export interface ServicesApiInterface {
     listServiceLinkCandidatesRaw(requestParameters: ListServiceLinkCandidatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
 
     /**
+     * Returns service link candidates matching the request filters.
      * List service link candidates
      */
     listServiceLinkCandidates(requestParameters: ListServiceLinkCandidatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
 
     /**
-     * 
+     * Returns services matching the request filters.
      * @summary List services
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
@@ -139,6 +143,7 @@ export interface ServicesApiInterface {
     listServicesRaw(requestParameters: ListServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ServicesResponse>>;
 
     /**
+     * Returns services matching the request filters.
      * List services
      */
     listServices(requestParameters: ListServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServicesResponse>;
@@ -151,6 +156,7 @@ export interface ServicesApiInterface {
 export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface {
 
     /**
+     * Returns the service identified by the request path.
      * Get service
      */
     async getServiceRaw(requestParameters: GetServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>> {
@@ -180,6 +186,7 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
     }
 
     /**
+     * Returns the service identified by the request path.
      * Get service
      */
     async getService(requestParameters: GetServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service> {
@@ -188,6 +195,7 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
     }
 
     /**
+     * Returns the service identified by name.
      * Get service by name
      */
     async getServiceByNameRaw(requestParameters: GetServiceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>> {
@@ -221,6 +229,7 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
     }
 
     /**
+     * Returns the service identified by name.
      * Get service by name
      */
     async getServiceByName(requestParameters: GetServiceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service> {
@@ -229,6 +238,7 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
     }
 
     /**
+     * Returns the service revision identified by the request path.
      * Get service revision
      */
     async getServiceRevisionRaw(requestParameters: GetServiceRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ServiceRevision>> {
@@ -258,6 +268,7 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
     }
 
     /**
+     * Returns the service revision identified by the request path.
      * Get service revision
      */
     async getServiceRevision(requestParameters: GetServiceRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServiceRevision> {
@@ -266,6 +277,7 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
     }
 
     /**
+     * Returns service link candidates matching the request filters.
      * List service link candidates
      */
     async listServiceLinkCandidatesRaw(requestParameters: ListServiceLinkCandidatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
@@ -295,6 +307,7 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
     }
 
     /**
+     * Returns service link candidates matching the request filters.
      * List service link candidates
      */
     async listServiceLinkCandidates(requestParameters: ListServiceLinkCandidatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
@@ -303,6 +316,7 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
     }
 
     /**
+     * Returns services matching the request filters.
      * List services
      */
     async listServicesRaw(requestParameters: ListServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ServicesResponse>> {
@@ -345,6 +359,7 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
     }
 
     /**
+     * Returns services matching the request filters.
      * List services
      */
     async listServices(requestParameters: ListServicesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServicesResponse> {

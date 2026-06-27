@@ -68,7 +68,7 @@ export interface UpdateEnvOperationRequest {
  */
 export interface EnvsApiInterface {
     /**
-     * 
+     * Creates an env and returns the created resource.
      * @summary Create env
      * @param {CreateEnvRequest} createEnvRequest 
      * @param {*} [options] Override http request option.
@@ -78,12 +78,13 @@ export interface EnvsApiInterface {
     createEnvRaw(requestParameters: CreateEnvOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>>;
 
     /**
+     * Creates an env and returns the created resource.
      * Create env
      */
     createEnv(requestParameters: CreateEnvOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env>;
 
     /**
-     * 
+     * Deletes the env and returns the operation result.
      * @summary Delete env
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -93,12 +94,13 @@ export interface EnvsApiInterface {
     deleteEnvRaw(requestParameters: DeleteEnvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
+     * Deletes the env and returns the operation result.
      * Delete env
      */
     deleteEnv(requestParameters: DeleteEnvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * 
+     * Returns the env identified by the request path.
      * @summary Get env
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -108,12 +110,13 @@ export interface EnvsApiInterface {
     getEnvRaw(requestParameters: GetEnvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>>;
 
     /**
+     * Returns the env identified by the request path.
      * Get env
      */
     getEnv(requestParameters: GetEnvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env>;
 
     /**
-     * 
+     * Returns the env identified by name.
      * @summary Get env by name
      * @param {string} name 
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -124,12 +127,13 @@ export interface EnvsApiInterface {
     getEnvByNameRaw(requestParameters: GetEnvByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>>;
 
     /**
+     * Returns the env identified by name.
      * Get env by name
      */
     getEnvByName(requestParameters: GetEnvByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env>;
 
     /**
-     * 
+     * Returns envs matching the request filters.
      * @summary List envs
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {*} [options] Override http request option.
@@ -139,12 +143,13 @@ export interface EnvsApiInterface {
     listEnvsRaw(requestParameters: ListEnvsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Env>>>;
 
     /**
+     * Returns envs matching the request filters.
      * List envs
      */
     listEnvs(requestParameters: ListEnvsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Env>>;
 
     /**
-     * 
+     * Updates the env and returns the updated resource.
      * @summary Update env
      * @param {number} id 
      * @param {UpdateEnvRequest} updateEnvRequest 
@@ -155,6 +160,7 @@ export interface EnvsApiInterface {
     updateEnvRaw(requestParameters: UpdateEnvOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>>;
 
     /**
+     * Updates the env and returns the updated resource.
      * Update env
      */
     updateEnv(requestParameters: UpdateEnvOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env>;
@@ -167,6 +173,7 @@ export interface EnvsApiInterface {
 export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
 
     /**
+     * Creates an env and returns the created resource.
      * Create env
      */
     async createEnvRaw(requestParameters: CreateEnvOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>> {
@@ -199,6 +206,7 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
     }
 
     /**
+     * Creates an env and returns the created resource.
      * Create env
      */
     async createEnv(requestParameters: CreateEnvOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env> {
@@ -207,6 +215,7 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
     }
 
     /**
+     * Deletes the env and returns the operation result.
      * Delete env
      */
     async deleteEnvRaw(requestParameters: DeleteEnvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -236,6 +245,7 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
     }
 
     /**
+     * Deletes the env and returns the operation result.
      * Delete env
      */
     async deleteEnv(requestParameters: DeleteEnvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -244,6 +254,7 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
     }
 
     /**
+     * Returns the env identified by the request path.
      * Get env
      */
     async getEnvRaw(requestParameters: GetEnvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>> {
@@ -273,6 +284,7 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
     }
 
     /**
+     * Returns the env identified by the request path.
      * Get env
      */
     async getEnv(requestParameters: GetEnvRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env> {
@@ -281,6 +293,7 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
     }
 
     /**
+     * Returns the env identified by name.
      * Get env by name
      */
     async getEnvByNameRaw(requestParameters: GetEnvByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>> {
@@ -314,6 +327,7 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
     }
 
     /**
+     * Returns the env identified by name.
      * Get env by name
      */
     async getEnvByName(requestParameters: GetEnvByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env> {
@@ -322,6 +336,7 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
     }
 
     /**
+     * Returns envs matching the request filters.
      * List envs
      */
     async listEnvsRaw(requestParameters: ListEnvsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Env>>> {
@@ -348,6 +363,7 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
     }
 
     /**
+     * Returns envs matching the request filters.
      * List envs
      */
     async listEnvs(requestParameters: ListEnvsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Env>> {
@@ -356,6 +372,7 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
     }
 
     /**
+     * Updates the env and returns the updated resource.
      * Update env
      */
     async updateEnvRaw(requestParameters: UpdateEnvOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Env>> {
@@ -395,6 +412,7 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
     }
 
     /**
+     * Updates the env and returns the updated resource.
      * Update env
      */
     async updateEnv(requestParameters: UpdateEnvOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Env> {

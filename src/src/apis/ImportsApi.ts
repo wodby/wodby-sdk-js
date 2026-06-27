@@ -54,7 +54,7 @@ export interface ListImportsRequest {
  */
 export interface ImportsApiInterface {
     /**
-     * 
+     * Creates an import and returns the created resource.
      * @summary Create import
      * @param {NewImportInput} newImportInput 
      * @param {*} [options] Override http request option.
@@ -64,12 +64,13 @@ export interface ImportsApiInterface {
     createImportRaw(requestParameters: CreateImportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
+     * Creates an import and returns the created resource.
      * Create import
      */
     createImport(requestParameters: CreateImportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * 
+     * Returns the import identified by the request path.
      * @summary Get import
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -79,12 +80,13 @@ export interface ImportsApiInterface {
     getImportRaw(requestParameters: GetImportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Import>>;
 
     /**
+     * Returns the import identified by the request path.
      * Get import
      */
     getImport(requestParameters: GetImportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Import>;
 
     /**
-     * 
+     * Returns imports matching the request filters.
      * @summary List imports
      * @param {number} [appInstanceId] 
      * @param {number} [appServiceId] 
@@ -97,6 +99,7 @@ export interface ImportsApiInterface {
     listImportsRaw(requestParameters: ListImportsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Import>>>;
 
     /**
+     * Returns imports matching the request filters.
      * List imports
      */
     listImports(requestParameters: ListImportsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Import>>;
@@ -109,6 +112,7 @@ export interface ImportsApiInterface {
 export class ImportsApi extends runtime.BaseAPI implements ImportsApiInterface {
 
     /**
+     * Creates an import and returns the created resource.
      * Create import
      */
     async createImportRaw(requestParameters: CreateImportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -141,6 +145,7 @@ export class ImportsApi extends runtime.BaseAPI implements ImportsApiInterface {
     }
 
     /**
+     * Creates an import and returns the created resource.
      * Create import
      */
     async createImport(requestParameters: CreateImportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -149,6 +154,7 @@ export class ImportsApi extends runtime.BaseAPI implements ImportsApiInterface {
     }
 
     /**
+     * Returns the import identified by the request path.
      * Get import
      */
     async getImportRaw(requestParameters: GetImportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Import>> {
@@ -178,6 +184,7 @@ export class ImportsApi extends runtime.BaseAPI implements ImportsApiInterface {
     }
 
     /**
+     * Returns the import identified by the request path.
      * Get import
      */
     async getImport(requestParameters: GetImportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Import> {
@@ -186,6 +193,7 @@ export class ImportsApi extends runtime.BaseAPI implements ImportsApiInterface {
     }
 
     /**
+     * Returns imports matching the request filters.
      * List imports
      */
     async listImportsRaw(requestParameters: ListImportsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Import>>> {
@@ -224,6 +232,7 @@ export class ImportsApi extends runtime.BaseAPI implements ImportsApiInterface {
     }
 
     /**
+     * Returns imports matching the request filters.
      * List imports
      */
     async listImports(requestParameters: ListImportsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Import>> {

@@ -74,7 +74,7 @@ export interface RepeatTaskOperationRequest {
  */
 export interface TasksApiInterface {
     /**
-     * 
+     * Requests cancellation for the task.
      * @summary Cancel task
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -84,12 +84,13 @@ export interface TasksApiInterface {
     cancelTaskRaw(requestParameters: CancelTaskRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
+     * Requests cancellation for the task.
      * Cancel task
      */
     cancelTask(requestParameters: CancelTaskRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * 
+     * Returns the task identified by the request path.
      * @summary Get task
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -99,12 +100,13 @@ export interface TasksApiInterface {
     getTaskRaw(requestParameters: GetTaskRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>>;
 
     /**
+     * Returns the task identified by the request path.
      * Get task
      */
     getTask(requestParameters: GetTaskRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task>;
 
     /**
-     * 
+     * Returns tasks matching the request filters.
      * @summary List tasks
      * @param {'project_and_org' | 'org_only' | 'user_only'} [scope] 
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -129,12 +131,13 @@ export interface TasksApiInterface {
     listTasksRaw(requestParameters: ListTasksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TasksResponse>>;
 
     /**
+     * Returns tasks matching the request filters.
      * List tasks
      */
     listTasks(requestParameters: ListTasksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TasksResponse>;
 
     /**
-     * 
+     * Creates a repeated run for the task.
      * @summary Repeat task
      * @param {number} id 
      * @param {RepeatTaskRequest} repeatTaskRequest 
@@ -145,6 +148,7 @@ export interface TasksApiInterface {
     repeatTaskRaw(requestParameters: RepeatTaskOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
+     * Creates a repeated run for the task.
      * Repeat task
      */
     repeatTask(requestParameters: RepeatTaskOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
@@ -157,6 +161,7 @@ export interface TasksApiInterface {
 export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
 
     /**
+     * Requests cancellation for the task.
      * Cancel task
      */
     async cancelTaskRaw(requestParameters: CancelTaskRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -186,6 +191,7 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
     }
 
     /**
+     * Requests cancellation for the task.
      * Cancel task
      */
     async cancelTask(requestParameters: CancelTaskRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -194,6 +200,7 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
     }
 
     /**
+     * Returns the task identified by the request path.
      * Get task
      */
     async getTaskRaw(requestParameters: GetTaskRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>> {
@@ -223,6 +230,7 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
     }
 
     /**
+     * Returns the task identified by the request path.
      * Get task
      */
     async getTask(requestParameters: GetTaskRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task> {
@@ -231,6 +239,7 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
     }
 
     /**
+     * Returns tasks matching the request filters.
      * List tasks
      */
     async listTasksRaw(requestParameters: ListTasksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TasksResponse>> {
@@ -317,6 +326,7 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
     }
 
     /**
+     * Returns tasks matching the request filters.
      * List tasks
      */
     async listTasks(requestParameters: ListTasksRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TasksResponse> {
@@ -325,6 +335,7 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
     }
 
     /**
+     * Creates a repeated run for the task.
      * Repeat task
      */
     async repeatTaskRaw(requestParameters: RepeatTaskOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -364,6 +375,7 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
     }
 
     /**
+     * Creates a repeated run for the task.
      * Repeat task
      */
     async repeatTask(requestParameters: RepeatTaskOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {

@@ -74,7 +74,7 @@ export interface UpdateAppInstanceRequest {
  */
 export interface AppInstancesApiInterface {
     /**
-     * 
+     * Creates an app instance and returns the created resource.
      * @summary Create app instance
      * @param {NewAppInstanceInput} newAppInstanceInput 
      * @param {*} [options] Override http request option.
@@ -84,12 +84,13 @@ export interface AppInstancesApiInterface {
     createAppInstanceRaw(requestParameters: CreateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>>;
 
     /**
+     * Creates an app instance and returns the created resource.
      * Create app instance
      */
     createAppInstance(requestParameters: CreateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
 
     /**
-     * 
+     * Deletes the app instance and returns the operation result.
      * @summary Delete app instance
      * @param {number} id 
      * @param {boolean} [force] 
@@ -100,12 +101,13 @@ export interface AppInstancesApiInterface {
     deleteAppInstanceRaw(requestParameters: DeleteAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
+     * Deletes the app instance and returns the operation result.
      * Delete app instance
      */
     deleteAppInstance(requestParameters: DeleteAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * 
+     * Returns the app instance identified by the request path.
      * @summary Get app instance
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -115,12 +117,13 @@ export interface AppInstancesApiInterface {
     getAppInstanceRaw(requestParameters: GetAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>>;
 
     /**
+     * Returns the app instance identified by the request path.
      * Get app instance
      */
     getAppInstance(requestParameters: GetAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
 
     /**
-     * 
+     * Returns the app instance identified by app and instance name.
      * @summary Get app instance by app and instance name
      * @param {string} appName 
      * @param {string} instanceName 
@@ -132,12 +135,13 @@ export interface AppInstancesApiInterface {
     getAppInstanceByNameRaw(requestParameters: GetAppInstanceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>>;
 
     /**
+     * Returns the app instance identified by app and instance name.
      * Get app instance by app and instance name
      */
     getAppInstanceByName(requestParameters: GetAppInstanceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
 
     /**
-     * 
+     * Returns app instances matching the request filters.
      * @summary List app instances
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
@@ -151,12 +155,13 @@ export interface AppInstancesApiInterface {
     listAppInstancesRaw(requestParameters: ListAppInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppInstance>>>;
 
     /**
+     * Returns app instances matching the request filters.
      * List app instances
      */
     listAppInstances(requestParameters: ListAppInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppInstance>>;
 
     /**
-     * 
+     * Updates the app instance and returns the updated resource.
      * @summary Update app instance
      * @param {number} id 
      * @param {UpdateTitleRequest} updateTitleRequest 
@@ -167,6 +172,7 @@ export interface AppInstancesApiInterface {
     updateAppInstanceRaw(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>>;
 
     /**
+     * Updates the app instance and returns the updated resource.
      * Update app instance
      */
     updateAppInstance(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
@@ -179,6 +185,7 @@ export interface AppInstancesApiInterface {
 export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiInterface {
 
     /**
+     * Creates an app instance and returns the created resource.
      * Create app instance
      */
     async createAppInstanceRaw(requestParameters: CreateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
@@ -211,6 +218,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
+     * Creates an app instance and returns the created resource.
      * Create app instance
      */
     async createAppInstance(requestParameters: CreateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
@@ -219,6 +227,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
+     * Deletes the app instance and returns the operation result.
      * Delete app instance
      */
     async deleteAppInstanceRaw(requestParameters: DeleteAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -252,6 +261,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
+     * Deletes the app instance and returns the operation result.
      * Delete app instance
      */
     async deleteAppInstance(requestParameters: DeleteAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -260,6 +270,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
+     * Returns the app instance identified by the request path.
      * Get app instance
      */
     async getAppInstanceRaw(requestParameters: GetAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
@@ -289,6 +300,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
+     * Returns the app instance identified by the request path.
      * Get app instance
      */
     async getAppInstance(requestParameters: GetAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
@@ -297,6 +309,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
+     * Returns the app instance identified by app and instance name.
      * Get app instance by app and instance name
      */
     async getAppInstanceByNameRaw(requestParameters: GetAppInstanceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
@@ -337,6 +350,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
+     * Returns the app instance identified by app and instance name.
      * Get app instance by app and instance name
      */
     async getAppInstanceByName(requestParameters: GetAppInstanceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
@@ -345,6 +359,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
+     * Returns app instances matching the request filters.
      * List app instances
      */
     async listAppInstancesRaw(requestParameters: ListAppInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppInstance>>> {
@@ -387,6 +402,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
+     * Returns app instances matching the request filters.
      * List app instances
      */
     async listAppInstances(requestParameters: ListAppInstancesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppInstance>> {
@@ -395,6 +411,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
+     * Updates the app instance and returns the updated resource.
      * Update app instance
      */
     async updateAppInstanceRaw(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
@@ -434,6 +451,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
+     * Updates the app instance and returns the updated resource.
      * Update app instance
      */
     async updateAppInstance(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
