@@ -34,6 +34,7 @@ export interface GetTaskStepLogUrlRequest {
 
 export interface GetTaskStepLogsRequest {
     id: number;
+    delivery?: GetTaskStepLogsDeliveryEnum;
 }
 
 /**
@@ -60,9 +61,10 @@ export interface TaskStepsApiInterface {
     getTaskStepLogUrl(requestParameters: GetTaskStepLogUrlRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<URLResponse>;
 
     /**
-     * Returns logs captured for the task step.
+     * Returns current inline logs for pending task steps and a temporary log URL for persisted task steps.
      * @summary Get task step logs
      * @param {number} id 
+     * @param {'auto' | 'inline' | 'url'} [delivery] Delivery mode. Auto returns a URL for persisted logs and inline lines for pending or empty logs.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TaskStepsApiInterface
@@ -70,7 +72,7 @@ export interface TaskStepsApiInterface {
     getTaskStepLogsRaw(requestParameters: GetTaskStepLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TaskStepLogs>>;
 
     /**
-     * Returns logs captured for the task step.
+     * Returns current inline logs for pending task steps and a temporary log URL for persisted task steps.
      * Get task step logs
      */
     getTaskStepLogs(requestParameters: GetTaskStepLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TaskStepLogs>;
@@ -122,7 +124,7 @@ export class TaskStepsApi extends runtime.BaseAPI implements TaskStepsApiInterfa
     }
 
     /**
-     * Returns logs captured for the task step.
+     * Returns current inline logs for pending task steps and a temporary log URL for persisted task steps.
      * Get task step logs
      */
     async getTaskStepLogsRaw(requestParameters: GetTaskStepLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TaskStepLogs>> {
@@ -134,6 +136,10 @@ export class TaskStepsApi extends runtime.BaseAPI implements TaskStepsApiInterfa
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters['delivery'] != null) {
+            queryParameters['delivery'] = requestParameters['delivery'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -152,7 +158,7 @@ export class TaskStepsApi extends runtime.BaseAPI implements TaskStepsApiInterfa
     }
 
     /**
-     * Returns logs captured for the task step.
+     * Returns current inline logs for pending task steps and a temporary log URL for persisted task steps.
      * Get task step logs
      */
     async getTaskStepLogs(requestParameters: GetTaskStepLogsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TaskStepLogs> {
@@ -161,3 +167,13 @@ export class TaskStepsApi extends runtime.BaseAPI implements TaskStepsApiInterfa
     }
 
 }
+
+/**
+ * @export
+ */
+export const GetTaskStepLogsDeliveryEnum = {
+    Auto: 'auto',
+    Inline: 'inline',
+    Url: 'url'
+} as const;
+export type GetTaskStepLogsDeliveryEnum = typeof GetTaskStepLogsDeliveryEnum[keyof typeof GetTaskStepLogsDeliveryEnum];

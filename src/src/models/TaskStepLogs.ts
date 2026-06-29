@@ -29,10 +29,22 @@ import {
 export interface TaskStepLogs {
     /**
      * 
+     * @type {string}
+     * @memberof TaskStepLogs
+     */
+    status: TaskStepLogsStatusEnum;
+    /**
+     * 
      * @type {number}
      * @memberof TaskStepLogs
      */
     streamId?: number | null;
+    /**
+     * Temporary URL for persisted logs when URL delivery is selected or auto-selected.
+     * @type {string}
+     * @memberof TaskStepLogs
+     */
+    url?: string | null;
     /**
      * 
      * @type {Array<LogLine>}
@@ -41,10 +53,23 @@ export interface TaskStepLogs {
     lines: Array<LogLine>;
 }
 
+
+/**
+ * @export
+ */
+export const TaskStepLogsStatusEnum = {
+    Persisted: 'persisted',
+    Empty: 'empty',
+    Pending: 'pending'
+} as const;
+export type TaskStepLogsStatusEnum = typeof TaskStepLogsStatusEnum[keyof typeof TaskStepLogsStatusEnum];
+
+
 /**
  * Check if a given object implements the TaskStepLogs interface.
  */
 export function instanceOfTaskStepLogs(value: object): value is TaskStepLogs {
+    if (!('status' in value) || value['status'] === undefined) return false;
     if (!('lines' in value) || value['lines'] === undefined) return false;
     return true;
 }
@@ -59,7 +84,9 @@ export function TaskStepLogsFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
+        'status': json['status'],
         'streamId': json['streamId'] == null ? undefined : json['streamId'],
+        'url': json['url'] == null ? undefined : json['url'],
         'lines': ((json['lines'] as Array<any>).map(LogLineFromJSON)),
     };
 }
@@ -75,7 +102,9 @@ export function TaskStepLogsToJSONTyped(value?: TaskStepLogs | null, ignoreDiscr
 
     return {
         
+        'status': value['status'],
         'streamId': value['streamId'],
+        'url': value['url'],
         'lines': ((value['lines'] as Array<any>).map(LogLineToJSON)),
     };
 }
