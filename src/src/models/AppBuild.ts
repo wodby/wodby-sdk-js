@@ -13,6 +13,21 @@
  */
 
 import { mapValues } from '../runtime';
+import type { AppServiceBuild } from './AppServiceBuild';
+import {
+    AppServiceBuildFromJSON,
+    AppServiceBuildFromJSONTyped,
+    AppServiceBuildToJSON,
+    AppServiceBuildToJSONTyped,
+} from './AppServiceBuild';
+import type { Task } from './Task';
+import {
+    TaskFromJSON,
+    TaskFromJSONTyped,
+    TaskToJSON,
+    TaskToJSONTyped,
+} from './Task';
+
 /**
  * 
  * @export
@@ -49,6 +64,18 @@ export interface AppBuild {
      * @memberof AppBuild
      */
     appServiceId: number;
+    /**
+     * 
+     * @type {Task}
+     * @memberof AppBuild
+     */
+    task?: Task | null;
+    /**
+     * 
+     * @type {Array<AppServiceBuild>}
+     * @memberof AppBuild
+     */
+    appServiceBuilds: Array<AppServiceBuild>;
     /**
      * 
      * @type {string}
@@ -108,6 +135,7 @@ export function instanceOfAppBuild(value: object): value is AppBuild {
     if (!('status' in value) || value['status'] === undefined) return false;
     if (!('appInstanceId' in value) || value['appInstanceId'] === undefined) return false;
     if (!('appServiceId' in value) || value['appServiceId'] === undefined) return false;
+    if (!('appServiceBuilds' in value) || value['appServiceBuilds'] === undefined) return false;
     if (!('gitRefType' in value) || value['gitRefType'] === undefined) return false;
     if (!('gitRef' in value) || value['gitRef'] === undefined) return false;
     if (!('commitHash' in value) || value['commitHash'] === undefined) return false;
@@ -132,6 +160,8 @@ export function AppBuildFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'status': json['status'],
         'appInstanceId': json['appInstanceId'],
         'appServiceId': json['appServiceId'],
+        'task': json['task'] == null ? undefined : TaskFromJSON(json['task']),
+        'appServiceBuilds': ((json['appServiceBuilds'] as Array<any>).map(AppServiceBuildFromJSON)),
         'gitRefType': json['gitRefType'],
         'gitRef': json['gitRef'],
         'commitHash': json['commitHash'],
@@ -159,6 +189,8 @@ export function AppBuildToJSONTyped(value?: AppBuild | null, ignoreDiscriminator
         'status': value['status'],
         'appInstanceId': value['appInstanceId'],
         'appServiceId': value['appServiceId'],
+        'task': TaskToJSON(value['task']),
+        'appServiceBuilds': ((value['appServiceBuilds'] as Array<any>).map(AppServiceBuildToJSON)),
         'gitRefType': value['gitRefType'],
         'gitRef': value['gitRef'],
         'commitHash': value['commitHash'],

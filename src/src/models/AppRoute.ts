@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { Cert } from './Cert';
+import {
+    CertFromJSON,
+    CertFromJSONTyped,
+    CertToJSON,
+    CertToJSONTyped,
+} from './Cert';
+
 /**
  * 
  * @export
@@ -123,6 +131,12 @@ export interface AppRoute {
     portId: number;
     /**
      * 
+     * @type {Cert}
+     * @memberof AppRoute
+     */
+    cert?: Cert | null;
+    /**
+     * 
      * @type {Date}
      * @memberof AppRoute
      */
@@ -190,6 +204,7 @@ export function AppRouteFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'appInstanceId': json['appInstanceId'],
         'appServiceId': json['appServiceId'],
         'portId': json['portId'],
+        'cert': json['cert'] == null ? undefined : CertFromJSON(json['cert']),
         'createdAt': (new Date(json['createdAt'])),
         'updatedAt': (new Date(json['updatedAt'])),
         'lastSyncedAt': json['lastSyncedAt'] == null ? undefined : (new Date(json['lastSyncedAt'])),
@@ -224,6 +239,7 @@ export function AppRouteToJSONTyped(value?: AppRoute | null, ignoreDiscriminator
         'appInstanceId': value['appInstanceId'],
         'appServiceId': value['appServiceId'],
         'portId': value['portId'],
+        'cert': CertToJSON(value['cert']),
         'createdAt': ((value['createdAt']).toISOString()),
         'updatedAt': ((value['updatedAt']).toISOString()),
         'lastSyncedAt': value['lastSyncedAt'] == null ? undefined : ((value['lastSyncedAt'] as any).toISOString()),

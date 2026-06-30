@@ -8,6 +8,7 @@ export * from './AppRoutesApi';
 export * from './AppServicesApi';
 export * from './AppsApi';
 export * from './BackupsApi';
+export * from './CertsApi';
 export * from './ClustersApi';
 export * from './DatabasesApi';
 export * from './DefaultApi';

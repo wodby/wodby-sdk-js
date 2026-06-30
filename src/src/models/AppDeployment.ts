@@ -13,6 +13,28 @@
  */
 
 import { mapValues } from '../runtime';
+import type { AppBuild } from './AppBuild';
+import {
+    AppBuildFromJSON,
+    AppBuildFromJSONTyped,
+    AppBuildToJSON,
+    AppBuildToJSONTyped,
+} from './AppBuild';
+import type { Task } from './Task';
+import {
+    TaskFromJSON,
+    TaskFromJSONTyped,
+    TaskToJSON,
+    TaskToJSONTyped,
+} from './Task';
+import type { AppServiceDeployment } from './AppServiceDeployment';
+import {
+    AppServiceDeploymentFromJSON,
+    AppServiceDeploymentFromJSONTyped,
+    AppServiceDeploymentToJSON,
+    AppServiceDeploymentToJSONTyped,
+} from './AppServiceDeployment';
+
 /**
  * 
  * @export
@@ -51,6 +73,24 @@ export interface AppDeployment {
     appInstanceId: number;
     /**
      * 
+     * @type {Array<AppBuild>}
+     * @memberof AppDeployment
+     */
+    builds: Array<AppBuild>;
+    /**
+     * 
+     * @type {Task}
+     * @memberof AppDeployment
+     */
+    task?: Task | null;
+    /**
+     * 
+     * @type {Array<AppServiceDeployment>}
+     * @memberof AppDeployment
+     */
+    appServiceDeployments: Array<AppServiceDeployment>;
+    /**
+     * 
      * @type {Date}
      * @memberof AppDeployment
      */
@@ -84,6 +124,8 @@ export function instanceOfAppDeployment(value: object): value is AppDeployment {
     if (!('status' in value) || value['status'] === undefined) return false;
     if (!('skipRollback' in value) || value['skipRollback'] === undefined) return false;
     if (!('appInstanceId' in value) || value['appInstanceId'] === undefined) return false;
+    if (!('builds' in value) || value['builds'] === undefined) return false;
+    if (!('appServiceDeployments' in value) || value['appServiceDeployments'] === undefined) return false;
     if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
     if (!('updatedAt' in value) || value['updatedAt'] === undefined) return false;
     return true;
@@ -104,6 +146,9 @@ export function AppDeploymentFromJSONTyped(json: any, ignoreDiscriminator: boole
         'status': json['status'],
         'skipRollback': json['skipRollback'],
         'appInstanceId': json['appInstanceId'],
+        'builds': ((json['builds'] as Array<any>).map(AppBuildFromJSON)),
+        'task': json['task'] == null ? undefined : TaskFromJSON(json['task']),
+        'appServiceDeployments': ((json['appServiceDeployments'] as Array<any>).map(AppServiceDeploymentFromJSON)),
         'createdAt': (new Date(json['createdAt'])),
         'updatedAt': (new Date(json['updatedAt'])),
         'startedAt': json['startedAt'] == null ? undefined : (new Date(json['startedAt'])),
@@ -127,6 +172,9 @@ export function AppDeploymentToJSONTyped(value?: AppDeployment | null, ignoreDis
         'status': value['status'],
         'skipRollback': value['skipRollback'],
         'appInstanceId': value['appInstanceId'],
+        'builds': ((value['builds'] as Array<any>).map(AppBuildToJSON)),
+        'task': TaskToJSON(value['task']),
+        'appServiceDeployments': ((value['appServiceDeployments'] as Array<any>).map(AppServiceDeploymentToJSON)),
         'createdAt': ((value['createdAt']).toISOString()),
         'updatedAt': ((value['updatedAt']).toISOString()),
         'startedAt': value['startedAt'] == null ? undefined : ((value['startedAt'] as any).toISOString()),
