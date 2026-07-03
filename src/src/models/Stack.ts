@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { StackSettings } from './StackSettings';
+import {
+    StackSettingsFromJSON,
+    StackSettingsFromJSONTyped,
+    StackSettingsToJSON,
+    StackSettingsToJSONTyped,
+} from './StackSettings';
+
 /**
  * 
  * @export
@@ -75,6 +83,12 @@ export interface Stack {
     orgId: number;
     /**
      * 
+     * @type {StackSettings}
+     * @memberof Stack
+     */
+    settings?: StackSettings;
+    /**
+     * 
      * @type {Date}
      * @memberof Stack
      */
@@ -124,6 +138,7 @@ export function StackFromJSONTyped(json: any, ignoreDiscriminator: boolean): Sta
         'revId': json['revId'],
         'latestRevNumber': json['latestRevNumber'],
         'orgId': json['orgId'],
+        'settings': json['settings'] == null ? undefined : StackSettingsFromJSON(json['settings']),
         'createdAt': (new Date(json['createdAt'])),
         'updatedAt': (new Date(json['updatedAt'])),
     };
@@ -149,6 +164,7 @@ export function StackToJSONTyped(value?: Stack | null, ignoreDiscriminator: bool
         'revId': value['revId'],
         'latestRevNumber': value['latestRevNumber'],
         'orgId': value['orgId'],
+        'settings': StackSettingsToJSON(value['settings']),
         'createdAt': ((value['createdAt']).toISOString()),
         'updatedAt': ((value['updatedAt']).toISOString()),
     };

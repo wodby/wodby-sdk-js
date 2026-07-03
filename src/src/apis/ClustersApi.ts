@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   Cluster,
+  ClusterSettingsInput,
   ErrorResponse,
   NewClusterInput,
   OperationResult,
@@ -24,6 +25,8 @@ import type {
 import {
     ClusterFromJSON,
     ClusterToJSON,
+    ClusterSettingsInputFromJSON,
+    ClusterSettingsInputToJSON,
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
     NewClusterInputFromJSON,
@@ -61,6 +64,11 @@ export interface ListClustersRequest {
 export interface UpdateClusterRequest {
     id: number;
     updateTitleRequest: UpdateTitleRequest;
+}
+
+export interface UpdateClusterSettingsRequest {
+    id: number;
+    clusterSettingsInput: ClusterSettingsInput;
 }
 
 /**
@@ -170,6 +178,23 @@ export interface ClustersApiInterface {
      * Update cluster
      */
     updateCluster(requestParameters: UpdateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
+
+    /**
+     * Updates cluster settings and returns the updated cluster.
+     * @summary Update cluster settings
+     * @param {number} id 
+     * @param {ClusterSettingsInput} clusterSettingsInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    updateClusterSettingsRaw(requestParameters: UpdateClusterSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
+
+    /**
+     * Updates cluster settings and returns the updated cluster.
+     * Update cluster settings
+     */
+    updateClusterSettings(requestParameters: UpdateClusterSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
 
 }
 
@@ -435,6 +460,55 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async updateCluster(requestParameters: UpdateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
         const response = await this.updateClusterRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates cluster settings and returns the updated cluster.
+     * Update cluster settings
+     */
+    async updateClusterSettingsRaw(requestParameters: UpdateClusterSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateClusterSettings().'
+            );
+        }
+
+        if (requestParameters['clusterSettingsInput'] == null) {
+            throw new runtime.RequiredError(
+                'clusterSettingsInput',
+                'Required parameter "clusterSettingsInput" was null or undefined when calling updateClusterSettings().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/settings/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ClusterSettingsInputToJSON(requestParameters['clusterSettingsInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ClusterFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates cluster settings and returns the updated cluster.
+     * Update cluster settings
+     */
+    async updateClusterSettings(requestParameters: UpdateClusterSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
+        const response = await this.updateClusterSettingsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

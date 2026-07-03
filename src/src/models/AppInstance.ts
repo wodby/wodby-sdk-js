@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { AppInstanceSettings } from './AppInstanceSettings';
+import {
+    AppInstanceSettingsFromJSON,
+    AppInstanceSettingsFromJSONTyped,
+    AppInstanceSettingsToJSON,
+    AppInstanceSettingsToJSONTyped,
+} from './AppInstanceSettings';
+
 /**
  * 
  * @export
@@ -111,6 +119,12 @@ export interface AppInstance {
     stackVersion: string;
     /**
      * 
+     * @type {AppInstanceSettings}
+     * @memberof AppInstance
+     */
+    settings?: AppInstanceSettings;
+    /**
+     * 
      * @type {Date}
      * @memberof AppInstance
      */
@@ -171,6 +185,7 @@ export function AppInstanceFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'stackIcon': json['stackIcon'],
         'stackRevNumber': json['stackRevNumber'],
         'stackVersion': json['stackVersion'],
+        'settings': json['settings'] == null ? undefined : AppInstanceSettingsFromJSON(json['settings']),
         'createdAt': (new Date(json['createdAt'])),
         'updatedAt': (new Date(json['updatedAt'])),
     };
@@ -202,6 +217,7 @@ export function AppInstanceToJSONTyped(value?: AppInstance | null, ignoreDiscrim
         'stackIcon': value['stackIcon'],
         'stackRevNumber': value['stackRevNumber'],
         'stackVersion': value['stackVersion'],
+        'settings': AppInstanceSettingsToJSON(value['settings']),
         'createdAt': ((value['createdAt']).toISOString()),
         'updatedAt': ((value['updatedAt']).toISOString()),
     };

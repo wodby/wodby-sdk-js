@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { ClusterSettings } from './ClusterSettings';
+import {
+    ClusterSettingsFromJSON,
+    ClusterSettingsFromJSONTyped,
+    ClusterSettingsToJSON,
+    ClusterSettingsToJSONTyped,
+} from './ClusterSettings';
+
 /**
  * 
  * @export
@@ -141,6 +149,12 @@ export interface Cluster {
     orgId: number;
     /**
      * 
+     * @type {ClusterSettings}
+     * @memberof Cluster
+     */
+    settings?: ClusterSettings;
+    /**
+     * 
      * @type {Date}
      * @memberof Cluster
      */
@@ -203,6 +217,7 @@ export function ClusterFromJSONTyped(json: any, ignoreDiscriminator: boolean): C
         'hostname': json['hostname'] == null ? undefined : json['hostname'],
         'integrationId': json['integrationId'] == null ? undefined : json['integrationId'],
         'orgId': json['orgId'],
+        'settings': json['settings'] == null ? undefined : ClusterSettingsFromJSON(json['settings']),
         'createdAt': (new Date(json['createdAt'])),
         'updatedAt': (new Date(json['updatedAt'])),
     };
@@ -239,6 +254,7 @@ export function ClusterToJSONTyped(value?: Cluster | null, ignoreDiscriminator: 
         'hostname': value['hostname'],
         'integrationId': value['integrationId'],
         'orgId': value['orgId'],
+        'settings': ClusterSettingsToJSON(value['settings']),
         'createdAt': ((value['createdAt']).toISOString()),
         'updatedAt': ((value['updatedAt']).toISOString()),
     };

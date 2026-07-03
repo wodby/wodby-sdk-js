@@ -16,17 +16,26 @@
 import * as runtime from '../runtime';
 import type {
   ErrorResponse,
+  ImportCatalogFromGitInput,
+  OperationResult,
   Service,
   ServiceRevision,
+  ServiceSettingsInput,
   ServicesResponse,
 } from '../models/index';
 import {
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
+    ImportCatalogFromGitInputFromJSON,
+    ImportCatalogFromGitInputToJSON,
+    OperationResultFromJSON,
+    OperationResultToJSON,
     ServiceFromJSON,
     ServiceToJSON,
     ServiceRevisionFromJSON,
     ServiceRevisionToJSON,
+    ServiceSettingsInputFromJSON,
+    ServiceSettingsInputToJSON,
     ServicesResponseFromJSON,
     ServicesResponseToJSON,
 } from '../models/index';
@@ -44,6 +53,10 @@ export interface GetServiceRevisionRequest {
     id: number;
 }
 
+export interface ImportServicesRequest {
+    importCatalogFromGitInput: ImportCatalogFromGitInput;
+}
+
 export interface ListServiceLinkCandidatesRequest {
     name: string;
 }
@@ -54,6 +67,11 @@ export interface ListServicesRequest {
     search?: string;
     page?: number;
     pageSize?: number;
+}
+
+export interface UpdateServiceSettingsRequest {
+    id: number;
+    serviceSettingsInput: ServiceSettingsInput;
 }
 
 /**
@@ -113,6 +131,22 @@ export interface ServicesApiInterface {
     getServiceRevision(requestParameters: GetServiceRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServiceRevision>;
 
     /**
+     * Starts a task that imports services from a Git repository.
+     * @summary Import services from Git
+     * @param {ImportCatalogFromGitInput} importCatalogFromGitInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServicesApiInterface
+     */
+    importServicesRaw(requestParameters: ImportServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Starts a task that imports services from a Git repository.
+     * Import services from Git
+     */
+    importServices(requestParameters: ImportServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
      * Returns service link candidates matching the request filters.
      * @summary List service link candidates
      * @param {string} name 
@@ -147,6 +181,23 @@ export interface ServicesApiInterface {
      * List services
      */
     listServices(requestParameters: ListServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServicesResponse>;
+
+    /**
+     * Updates service settings and returns the updated service.
+     * @summary Update service settings
+     * @param {number} id 
+     * @param {ServiceSettingsInput} serviceSettingsInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServicesApiInterface
+     */
+    updateServiceSettingsRaw(requestParameters: UpdateServiceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>>;
+
+    /**
+     * Updates service settings and returns the updated service.
+     * Update service settings
+     */
+    updateServiceSettings(requestParameters: UpdateServiceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service>;
 
 }
 
@@ -277,6 +328,48 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
     }
 
     /**
+     * Starts a task that imports services from a Git repository.
+     * Import services from Git
+     */
+    async importServicesRaw(requestParameters: ImportServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['importCatalogFromGitInput'] == null) {
+            throw new runtime.RequiredError(
+                'importCatalogFromGitInput',
+                'Required parameter "importCatalogFromGitInput" was null or undefined when calling importServices().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/services/actions/import`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ImportCatalogFromGitInputToJSON(requestParameters['importCatalogFromGitInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Starts a task that imports services from a Git repository.
+     * Import services from Git
+     */
+    async importServices(requestParameters: ImportServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.importServicesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns service link candidates matching the request filters.
      * List service link candidates
      */
@@ -364,6 +457,55 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
      */
     async listServices(requestParameters: ListServicesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServicesResponse> {
         const response = await this.listServicesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates service settings and returns the updated service.
+     * Update service settings
+     */
+    async updateServiceSettingsRaw(requestParameters: UpdateServiceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateServiceSettings().'
+            );
+        }
+
+        if (requestParameters['serviceSettingsInput'] == null) {
+            throw new runtime.RequiredError(
+                'serviceSettingsInput',
+                'Required parameter "serviceSettingsInput" was null or undefined when calling updateServiceSettings().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/services/settings/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ServiceSettingsInputToJSON(requestParameters['serviceSettingsInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ServiceFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates service settings and returns the updated service.
+     * Update service settings
+     */
+    async updateServiceSettings(requestParameters: UpdateServiceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service> {
+        const response = await this.updateServiceSettingsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

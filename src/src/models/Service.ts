@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { ServiceSettings } from './ServiceSettings';
+import {
+    ServiceSettingsFromJSON,
+    ServiceSettingsFromJSONTyped,
+    ServiceSettingsToJSON,
+    ServiceSettingsToJSONTyped,
+} from './ServiceSettings';
+
 /**
  * 
  * @export
@@ -147,6 +155,12 @@ export interface Service {
     orgId: number;
     /**
      * 
+     * @type {ServiceSettings}
+     * @memberof Service
+     */
+    settings?: ServiceSettings;
+    /**
+     * 
      * @type {Date}
      * @memberof Service
      */
@@ -209,6 +223,7 @@ export function ServiceFromJSONTyped(json: any, ignoreDiscriminator: boolean): S
         'originStackRevVersion': json['originStackRevVersion'] == null ? undefined : json['originStackRevVersion'],
         'originStackRevCreatedAt': json['originStackRevCreatedAt'] == null ? undefined : (new Date(json['originStackRevCreatedAt'])),
         'orgId': json['orgId'],
+        'settings': json['settings'] == null ? undefined : ServiceSettingsFromJSON(json['settings']),
         'createdAt': (new Date(json['createdAt'])),
         'updatedAt': (new Date(json['updatedAt'])),
     };
@@ -246,6 +261,7 @@ export function ServiceToJSONTyped(value?: Service | null, ignoreDiscriminator: 
         'originStackRevVersion': value['originStackRevVersion'],
         'originStackRevCreatedAt': value['originStackRevCreatedAt'] == null ? undefined : ((value['originStackRevCreatedAt'] as any).toISOString()),
         'orgId': value['orgId'],
+        'settings': ServiceSettingsToJSON(value['settings']),
         'createdAt': ((value['createdAt']).toISOString()),
         'updatedAt': ((value['updatedAt']).toISOString()),
     };

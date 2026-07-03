@@ -16,16 +16,20 @@
 import * as runtime from '../runtime';
 import type {
   ErrorResponse,
+  ImportCatalogFromGitInput,
   OperationResult,
   Stack,
   StackRevision,
   StackService,
+  StackSettingsInput,
   StacksResponse,
   UpdateStackFromGitRequest,
 } from '../models/index';
 import {
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
+    ImportCatalogFromGitInputFromJSON,
+    ImportCatalogFromGitInputToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
     StackFromJSON,
@@ -34,6 +38,8 @@ import {
     StackRevisionToJSON,
     StackServiceFromJSON,
     StackServiceToJSON,
+    StackSettingsInputFromJSON,
+    StackSettingsInputToJSON,
     StacksResponseFromJSON,
     StacksResponseToJSON,
     UpdateStackFromGitRequestFromJSON,
@@ -51,6 +57,10 @@ export interface GetStackByNameRequest {
 
 export interface GetStackRevisionRequest {
     id: number;
+}
+
+export interface ImportStacksRequest {
+    importCatalogFromGitInput: ImportCatalogFromGitInput;
 }
 
 export interface ListStackRevisionServicesRequest {
@@ -72,6 +82,11 @@ export interface PublishStackDraftRequest {
 export interface UpdateStackFromGitOperationRequest {
     id: number;
     updateStackFromGitRequest: UpdateStackFromGitRequest;
+}
+
+export interface UpdateStackSettingsRequest {
+    id: number;
+    stackSettingsInput: StackSettingsInput;
 }
 
 /**
@@ -129,6 +144,22 @@ export interface StacksApiInterface {
      * Get stack revision
      */
     getStackRevision(requestParameters: GetStackRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackRevision>;
+
+    /**
+     * Starts a task that imports stacks from a Git repository.
+     * @summary Import stacks from Git
+     * @param {ImportCatalogFromGitInput} importCatalogFromGitInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    importStacksRaw(requestParameters: ImportStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Starts a task that imports stacks from a Git repository.
+     * Import stacks from Git
+     */
+    importStacks(requestParameters: ImportStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Returns stack services matching the request filters.
@@ -198,6 +229,23 @@ export interface StacksApiInterface {
      * Update stack from git
      */
     updateStackFromGit(requestParameters: UpdateStackFromGitOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Updates stack settings and returns the updated stack.
+     * @summary Update stack settings
+     * @param {number} id 
+     * @param {StackSettingsInput} stackSettingsInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    updateStackSettingsRaw(requestParameters: UpdateStackSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>>;
+
+    /**
+     * Updates stack settings and returns the updated stack.
+     * Update stack settings
+     */
+    updateStackSettings(requestParameters: UpdateStackSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
 
 }
 
@@ -324,6 +372,48 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
      */
     async getStackRevision(requestParameters: GetStackRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackRevision> {
         const response = await this.getStackRevisionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Starts a task that imports stacks from a Git repository.
+     * Import stacks from Git
+     */
+    async importStacksRaw(requestParameters: ImportStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['importCatalogFromGitInput'] == null) {
+            throw new runtime.RequiredError(
+                'importCatalogFromGitInput',
+                'Required parameter "importCatalogFromGitInput" was null or undefined when calling importStacks().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/actions/import`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ImportCatalogFromGitInputToJSON(requestParameters['importCatalogFromGitInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Starts a task that imports stacks from a Git repository.
+     * Import stacks from Git
+     */
+    async importStacks(requestParameters: ImportStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.importStacksRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -503,6 +593,55 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
      */
     async updateStackFromGit(requestParameters: UpdateStackFromGitOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.updateStackFromGitRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates stack settings and returns the updated stack.
+     * Update stack settings
+     */
+    async updateStackSettingsRaw(requestParameters: UpdateStackSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateStackSettings().'
+            );
+        }
+
+        if (requestParameters['stackSettingsInput'] == null) {
+            throw new runtime.RequiredError(
+                'stackSettingsInput',
+                'Required parameter "stackSettingsInput" was null or undefined when calling updateStackSettings().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/settings/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: StackSettingsInputToJSON(requestParameters['stackSettingsInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StackFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates stack settings and returns the updated stack.
+     * Update stack settings
+     */
+    async updateStackSettings(requestParameters: UpdateStackSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
+        const response = await this.updateStackSettingsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   AppInstance,
+  AppInstanceSettingsInput,
   AppInstanceStackUpgradeInput,
   ErrorResponse,
   NewAppInstanceInput,
@@ -25,6 +26,8 @@ import type {
 import {
     AppInstanceFromJSON,
     AppInstanceToJSON,
+    AppInstanceSettingsInputFromJSON,
+    AppInstanceSettingsInputToJSON,
     AppInstanceStackUpgradeInputFromJSON,
     AppInstanceStackUpgradeInputToJSON,
     ErrorResponseFromJSON,
@@ -67,6 +70,11 @@ export interface ListAppInstancesRequest {
 export interface UpdateAppInstanceRequest {
     id: number;
     updateTitleRequest: UpdateTitleRequest;
+}
+
+export interface UpdateAppInstanceSettingsRequest {
+    id: number;
+    appInstanceSettingsInput: AppInstanceSettingsInput;
 }
 
 export interface UpgradeAppInstanceStackRequest {
@@ -184,6 +192,23 @@ export interface AppInstancesApiInterface {
      * Update app instance
      */
     updateAppInstance(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
+
+    /**
+     * Updates app instance settings and returns the updated app instance.
+     * @summary Update app instance settings
+     * @param {number} id 
+     * @param {AppInstanceSettingsInput} appInstanceSettingsInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    updateAppInstanceSettingsRaw(requestParameters: UpdateAppInstanceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>>;
+
+    /**
+     * Updates app instance settings and returns the updated app instance.
+     * Update app instance settings
+     */
+    updateAppInstanceSettings(requestParameters: UpdateAppInstanceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
 
     /**
      * Upgrades an app instance stack using the selected upgrade sections.
@@ -481,6 +506,55 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
      */
     async updateAppInstance(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
         const response = await this.updateAppInstanceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates app instance settings and returns the updated app instance.
+     * Update app instance settings
+     */
+    async updateAppInstanceSettingsRaw(requestParameters: UpdateAppInstanceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateAppInstanceSettings().'
+            );
+        }
+
+        if (requestParameters['appInstanceSettingsInput'] == null) {
+            throw new runtime.RequiredError(
+                'appInstanceSettingsInput',
+                'Required parameter "appInstanceSettingsInput" was null or undefined when calling updateAppInstanceSettings().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-instances/settings/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AppInstanceSettingsInputToJSON(requestParameters['appInstanceSettingsInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppInstanceFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates app instance settings and returns the updated app instance.
+     * Update app instance settings
+     */
+    async updateAppInstanceSettings(requestParameters: UpdateAppInstanceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
+        const response = await this.updateAppInstanceSettingsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
