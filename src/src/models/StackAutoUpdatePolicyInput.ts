@@ -35,12 +35,6 @@ export interface StackAutoUpdatePolicyInput {
     scope?: string | null;
     /**
      * 
-     * @type {boolean}
-     * @memberof StackAutoUpdatePolicyInput
-     */
-    includeDisabled?: boolean | null;
-    /**
-     * 
      * @type {StackAutoUpdateVersionPolicyInput}
      * @memberof StackAutoUpdatePolicyInput
      */
@@ -65,7 +59,6 @@ export function StackAutoUpdatePolicyInputFromJSONTyped(json: any, ignoreDiscrim
     return {
         
         'scope': json['scope'] == null ? undefined : json['scope'],
-        'includeDisabled': json['includeDisabled'] == null ? undefined : json['includeDisabled'],
         'versionPolicy': json['versionPolicy'] == null ? undefined : StackAutoUpdateVersionPolicyInputFromJSON(json['versionPolicy']),
     };
 }
@@ -82,7 +75,6 @@ export function StackAutoUpdatePolicyInputToJSONTyped(value?: StackAutoUpdatePol
     return {
         
         'scope': value['scope'],
-        'includeDisabled': value['includeDisabled'],
         'versionPolicy': StackAutoUpdateVersionPolicyInputToJSON(value['versionPolicy']),
     };
 }

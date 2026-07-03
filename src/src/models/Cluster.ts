@@ -110,7 +110,13 @@ export interface Cluster {
      * @type {number}
      * @memberof Cluster
      */
-    lastNodeCount?: number | null;
+    lastNodesReady?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Cluster
+     */
+    lastNodesTotal?: number | null;
     /**
      * 
      * @type {string}
@@ -210,7 +216,8 @@ export function ClusterFromJSONTyped(json: any, ignoreDiscriminator: boolean): C
         'infraVersion': json['infraVersion'],
         'minNodeCount': json['minNodeCount'] == null ? undefined : json['minNodeCount'],
         'maxNodeCount': json['maxNodeCount'] == null ? undefined : json['maxNodeCount'],
-        'lastNodeCount': json['lastNodeCount'] == null ? undefined : json['lastNodeCount'],
+        'lastNodesReady': json['lastNodesReady'] == null ? undefined : json['lastNodesReady'],
+        'lastNodesTotal': json['lastNodesTotal'] == null ? undefined : json['lastNodesTotal'],
         'region': json['region'] == null ? undefined : json['region'],
         'zone': json['zone'] == null ? undefined : json['zone'],
         'ips': json['ips'] == null ? undefined : json['ips'],
@@ -247,7 +254,8 @@ export function ClusterToJSONTyped(value?: Cluster | null, ignoreDiscriminator: 
         'infraVersion': value['infraVersion'],
         'minNodeCount': value['minNodeCount'],
         'maxNodeCount': value['maxNodeCount'],
-        'lastNodeCount': value['lastNodeCount'],
+        'lastNodesReady': value['lastNodesReady'],
+        'lastNodesTotal': value['lastNodesTotal'],
         'region': value['region'],
         'zone': value['zone'],
         'ips': value['ips'],

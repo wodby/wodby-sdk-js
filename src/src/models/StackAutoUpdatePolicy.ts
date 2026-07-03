@@ -35,12 +35,6 @@ export interface StackAutoUpdatePolicy {
     scope: string;
     /**
      * 
-     * @type {boolean}
-     * @memberof StackAutoUpdatePolicy
-     */
-    includeDisabled: boolean;
-    /**
-     * 
      * @type {StackAutoUpdateVersionPolicy}
      * @memberof StackAutoUpdatePolicy
      */
@@ -52,7 +46,6 @@ export interface StackAutoUpdatePolicy {
  */
 export function instanceOfStackAutoUpdatePolicy(value: object): value is StackAutoUpdatePolicy {
     if (!('scope' in value) || value['scope'] === undefined) return false;
-    if (!('includeDisabled' in value) || value['includeDisabled'] === undefined) return false;
     return true;
 }
 
@@ -67,7 +60,6 @@ export function StackAutoUpdatePolicyFromJSONTyped(json: any, ignoreDiscriminato
     return {
         
         'scope': json['scope'],
-        'includeDisabled': json['includeDisabled'],
         'versionPolicy': json['versionPolicy'] == null ? undefined : StackAutoUpdateVersionPolicyFromJSON(json['versionPolicy']),
     };
 }
@@ -84,7 +76,6 @@ export function StackAutoUpdatePolicyToJSONTyped(value?: StackAutoUpdatePolicy |
     return {
         
         'scope': value['scope'],
-        'includeDisabled': value['includeDisabled'],
         'versionPolicy': StackAutoUpdateVersionPolicyToJSON(value['versionPolicy']),
     };
 }
