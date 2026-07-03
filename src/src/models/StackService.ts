@@ -69,6 +69,12 @@ export interface StackService {
     replicas: number;
     /**
      * 
+     * @type {boolean}
+     * @memberof StackService
+     */
+    outdated: boolean;
+    /**
+     * 
      * @type {number}
      * @memberof StackService
      */
@@ -129,6 +135,7 @@ export function instanceOfStackService(value: object): value is StackService {
     if (!('disabled' in value) || value['disabled'] === undefined) return false;
     if (!('required' in value) || value['required'] === undefined) return false;
     if (!('replicas' in value) || value['replicas'] === undefined) return false;
+    if (!('outdated' in value) || value['outdated'] === undefined) return false;
     if (!('serviceRevId' in value) || value['serviceRevId'] === undefined) return false;
     if (!('serviceRevName' in value) || value['serviceRevName'] === undefined) return false;
     if (!('serviceRevTitle' in value) || value['serviceRevTitle'] === undefined) return false;
@@ -156,6 +163,7 @@ export function StackServiceFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'disabled': json['disabled'],
         'required': json['required'],
         'replicas': json['replicas'],
+        'outdated': json['outdated'],
         'serviceRevId': json['serviceRevId'],
         'serviceRevName': json['serviceRevName'],
         'serviceRevTitle': json['serviceRevTitle'],
@@ -186,6 +194,7 @@ export function StackServiceToJSONTyped(value?: StackService | null, ignoreDiscr
         'disabled': value['disabled'],
         'required': value['required'],
         'replicas': value['replicas'],
+        'outdated': value['outdated'],
         'serviceRevId': value['serviceRevId'],
         'serviceRevName': value['serviceRevName'],
         'serviceRevTitle': value['serviceRevTitle'],
