@@ -15,7 +15,6 @@
 
 import * as runtime from '../runtime';
 import type {
-  ErrorResponse,
   IntegrationLinkInput,
   NewStackServiceAnnotationInput,
   NewStackServiceCronScheduleInput,
@@ -24,6 +23,7 @@ import type {
   NewStackServiceScopedValueInput,
   NewStackServiceTokenInput,
   OperationResult,
+  ProblemDetails,
   ResourcesInput,
   SetNullableStringValueInput,
   StackService,
@@ -47,8 +47,6 @@ import type {
   UpdateStackServiceTokenInput,
 } from '../models/index';
 import {
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
     IntegrationLinkInputFromJSON,
     IntegrationLinkInputToJSON,
     NewStackServiceAnnotationInputFromJSON,
@@ -65,6 +63,8 @@ import {
     NewStackServiceTokenInputToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     ResourcesInputFromJSON,
     ResourcesInputToJSON,
     SetNullableStringValueInputFromJSON,

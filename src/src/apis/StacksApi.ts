@@ -15,23 +15,27 @@
 
 import * as runtime from '../runtime';
 import type {
-  ErrorResponse,
+  DuplicateStackRequest,
   ImportCatalogFromGitInput,
   OperationResult,
+  ProblemDetails,
   Stack,
   StackRevision,
   StackService,
   StackSettingsInput,
+  StackSyncOptionsInput,
   StacksResponse,
   UpdateStackFromGitRequest,
 } from '../models/index';
 import {
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
+    DuplicateStackRequestFromJSON,
+    DuplicateStackRequestToJSON,
     ImportCatalogFromGitInputFromJSON,
     ImportCatalogFromGitInputToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     StackFromJSON,
     StackToJSON,
     StackRevisionFromJSON,
@@ -40,11 +44,18 @@ import {
     StackServiceToJSON,
     StackSettingsInputFromJSON,
     StackSettingsInputToJSON,
+    StackSyncOptionsInputFromJSON,
+    StackSyncOptionsInputToJSON,
     StacksResponseFromJSON,
     StacksResponseToJSON,
     UpdateStackFromGitRequestFromJSON,
     UpdateStackFromGitRequestToJSON,
 } from '../models/index';
+
+export interface DuplicateStackOperationRequest {
+    id: number;
+    duplicateStackRequest: DuplicateStackRequest;
+}
 
 export interface GetStackRequest {
     id: number;
@@ -79,6 +90,11 @@ export interface PublishStackDraftRequest {
     id: number;
 }
 
+export interface SyncStackWithOriginRequest {
+    id: number;
+    stackSyncOptionsInput?: StackSyncOptionsInput;
+}
+
 export interface UpdateStackFromGitOperationRequest {
     id: number;
     updateStackFromGitRequest: UpdateStackFromGitRequest;
@@ -96,6 +112,23 @@ export interface UpdateStackSettingsRequest {
  * @interface StacksApiInterface
  */
 export interface StacksApiInterface {
+    /**
+     * Duplicates the stack into the target organization or project.
+     * @summary Duplicate stack
+     * @param {number} id 
+     * @param {DuplicateStackRequest} duplicateStackRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    duplicateStackRaw(requestParameters: DuplicateStackOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>>;
+
+    /**
+     * Duplicates the stack into the target organization or project.
+     * Duplicate stack
+     */
+    duplicateStack(requestParameters: DuplicateStackOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
+
     /**
      * Returns the stack identified by the request path.
      * @summary Get stack
@@ -214,6 +247,23 @@ export interface StacksApiInterface {
     publishStackDraft(requestParameters: PublishStackDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
 
     /**
+     * Syncs the stack with its origin stack revision.
+     * @summary Sync stack with origin
+     * @param {number} id 
+     * @param {StackSyncOptionsInput} [stackSyncOptionsInput] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    syncStackWithOriginRaw(requestParameters: SyncStackWithOriginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>>;
+
+    /**
+     * Syncs the stack with its origin stack revision.
+     * Sync stack with origin
+     */
+    syncStackWithOrigin(requestParameters: SyncStackWithOriginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
+
+    /**
      * Starts a task that updates the stack from its configured Git source.
      * @summary Update stack from git
      * @param {number} id 
@@ -253,6 +303,55 @@ export interface StacksApiInterface {
  * 
  */
 export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
+
+    /**
+     * Duplicates the stack into the target organization or project.
+     * Duplicate stack
+     */
+    async duplicateStackRaw(requestParameters: DuplicateStackOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling duplicateStack().'
+            );
+        }
+
+        if (requestParameters['duplicateStackRequest'] == null) {
+            throw new runtime.RequiredError(
+                'duplicateStackRequest',
+                'Required parameter "duplicateStackRequest" was null or undefined when calling duplicateStack().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/{id}/actions/duplicate`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: DuplicateStackRequestToJSON(requestParameters['duplicateStackRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StackFromJSON(jsonValue));
+    }
+
+    /**
+     * Duplicates the stack into the target organization or project.
+     * Duplicate stack
+     */
+    async duplicateStack(requestParameters: DuplicateStackOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
+        const response = await this.duplicateStackRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Returns the stack identified by the request path.
@@ -544,6 +643,48 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
      */
     async publishStackDraft(requestParameters: PublishStackDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
         const response = await this.publishStackDraftRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Syncs the stack with its origin stack revision.
+     * Sync stack with origin
+     */
+    async syncStackWithOriginRaw(requestParameters: SyncStackWithOriginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling syncStackWithOrigin().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/{id}/actions/sync-origin`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: StackSyncOptionsInputToJSON(requestParameters['stackSyncOptionsInput']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StackFromJSON(jsonValue));
+    }
+
+    /**
+     * Syncs the stack with its origin stack revision.
+     * Sync stack with origin
+     */
+    async syncStackWithOrigin(requestParameters: SyncStackWithOriginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
+        const response = await this.syncStackWithOriginRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

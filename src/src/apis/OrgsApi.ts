@@ -15,25 +15,18 @@
 
 import * as runtime from '../runtime';
 import type {
-  ErrorResponse,
-  OperationResult,
   Org,
+  ProblemDetails,
   UpdateOrgRequest,
 } from '../models/index';
 import {
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
-    OperationResultFromJSON,
-    OperationResultToJSON,
     OrgFromJSON,
     OrgToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     UpdateOrgRequestFromJSON,
     UpdateOrgRequestToJSON,
 } from '../models/index';
-
-export interface DeleteOrgRequest {
-    id: number;
-}
 
 export interface GetOrgRequest {
     id: number;
@@ -51,22 +44,6 @@ export interface UpdateOrgOperationRequest {
  * @interface OrgsApiInterface
  */
 export interface OrgsApiInterface {
-    /**
-     * Deletes the org and returns the operation result.
-     * @summary Delete org
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof OrgsApiInterface
-     */
-    deleteOrgRaw(requestParameters: DeleteOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
-
-    /**
-     * Deletes the org and returns the operation result.
-     * Delete org
-     */
-    deleteOrg(requestParameters: DeleteOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
-
     /**
      * Returns the org identified by the request path.
      * @summary Get org
@@ -121,45 +98,6 @@ export interface OrgsApiInterface {
  * 
  */
 export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
-
-    /**
-     * Deletes the org and returns the operation result.
-     * Delete org
-     */
-    async deleteOrgRaw(requestParameters: DeleteOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling deleteOrg().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/orgs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
-    }
-
-    /**
-     * Deletes the org and returns the operation result.
-     * Delete org
-     */
-    async deleteOrg(requestParameters: DeleteOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
-        const response = await this.deleteOrgRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
 
     /**
      * Returns the org identified by the request path.

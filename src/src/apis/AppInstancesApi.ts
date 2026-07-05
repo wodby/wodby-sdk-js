@@ -18,9 +18,9 @@ import type {
   AppInstance,
   AppInstanceSettingsInput,
   AppInstanceStackUpgradeInput,
-  ErrorResponse,
   NewAppInstanceInput,
   OperationResult,
+  ProblemDetails,
   UpdateTitleRequest,
 } from '../models/index';
 import {
@@ -30,12 +30,12 @@ import {
     AppInstanceSettingsInputToJSON,
     AppInstanceStackUpgradeInputFromJSON,
     AppInstanceStackUpgradeInputToJSON,
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
     NewAppInstanceInputFromJSON,
     NewAppInstanceInputToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     UpdateTitleRequestFromJSON,
     UpdateTitleRequestToJSON,
 } from '../models/index';

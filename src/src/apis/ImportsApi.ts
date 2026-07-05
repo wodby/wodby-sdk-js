@@ -15,20 +15,20 @@
 
 import * as runtime from '../runtime';
 import type {
-  ErrorResponse,
   Import,
   NewImportInput,
   OperationResult,
+  ProblemDetails,
 } from '../models/index';
 import {
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
     ImportFromJSON,
     ImportToJSON,
     NewImportInputFromJSON,
     NewImportInputToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
 } from '../models/index';
 
 export interface CreateImportRequest {

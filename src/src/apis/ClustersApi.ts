@@ -17,9 +17,9 @@ import * as runtime from '../runtime';
 import type {
   Cluster,
   ClusterSettingsInput,
-  ErrorResponse,
   NewClusterInput,
   OperationResult,
+  ProblemDetails,
   UpdateTitleRequest,
 } from '../models/index';
 import {
@@ -27,12 +27,12 @@ import {
     ClusterToJSON,
     ClusterSettingsInputFromJSON,
     ClusterSettingsInputToJSON,
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
     NewClusterInputFromJSON,
     NewClusterInputToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     UpdateTitleRequestFromJSON,
     UpdateTitleRequestToJSON,
 } from '../models/index';
@@ -69,6 +69,14 @@ export interface UpdateClusterRequest {
 export interface UpdateClusterSettingsRequest {
     id: number;
     clusterSettingsInput: ClusterSettingsInput;
+}
+
+export interface UpgradeClusterInfraRequest {
+    id: number;
+}
+
+export interface UpgradeClusterInfraAppsRequest {
+    id: number;
 }
 
 /**
@@ -195,6 +203,38 @@ export interface ClustersApiInterface {
      * Update cluster settings
      */
     updateClusterSettings(requestParameters: UpdateClusterSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
+
+    /**
+     * Starts a cluster infrastructure upgrade task and returns the task identifier.
+     * @summary Upgrade cluster infrastructure
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    upgradeClusterInfraRaw(requestParameters: UpgradeClusterInfraRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Starts a cluster infrastructure upgrade task and returns the task identifier.
+     * Upgrade cluster infrastructure
+     */
+    upgradeClusterInfra(requestParameters: UpgradeClusterInfraRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Starts a cluster infrastructure app stack upgrade task and returns the task identifier.
+     * @summary Upgrade cluster infrastructure app stacks
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    upgradeClusterInfraAppsRaw(requestParameters: UpgradeClusterInfraAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Starts a cluster infrastructure app stack upgrade task and returns the task identifier.
+     * Upgrade cluster infrastructure app stacks
+     */
+    upgradeClusterInfraApps(requestParameters: UpgradeClusterInfraAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
 }
 
@@ -509,6 +549,84 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async updateClusterSettings(requestParameters: UpdateClusterSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
         const response = await this.updateClusterSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Starts a cluster infrastructure upgrade task and returns the task identifier.
+     * Upgrade cluster infrastructure
+     */
+    async upgradeClusterInfraRaw(requestParameters: UpgradeClusterInfraRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling upgradeClusterInfra().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/{id}/actions/upgrade-infra`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Starts a cluster infrastructure upgrade task and returns the task identifier.
+     * Upgrade cluster infrastructure
+     */
+    async upgradeClusterInfra(requestParameters: UpgradeClusterInfraRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.upgradeClusterInfraRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Starts a cluster infrastructure app stack upgrade task and returns the task identifier.
+     * Upgrade cluster infrastructure app stacks
+     */
+    async upgradeClusterInfraAppsRaw(requestParameters: UpgradeClusterInfraAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling upgradeClusterInfraApps().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/{id}/actions/upgrade-infra-apps`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Starts a cluster infrastructure app stack upgrade task and returns the task identifier.
+     * Upgrade cluster infrastructure app stacks
+     */
+    async upgradeClusterInfraApps(requestParameters: UpgradeClusterInfraAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.upgradeClusterInfraAppsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

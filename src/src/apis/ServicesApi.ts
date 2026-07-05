@@ -15,21 +15,21 @@
 
 import * as runtime from '../runtime';
 import type {
-  ErrorResponse,
   ImportCatalogFromGitInput,
   OperationResult,
+  ProblemDetails,
   Service,
   ServiceRevision,
   ServiceSettingsInput,
   ServicesResponse,
 } from '../models/index';
 import {
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
     ImportCatalogFromGitInputFromJSON,
     ImportCatalogFromGitInputToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     ServiceFromJSON,
     ServiceToJSON,
     ServiceRevisionFromJSON,

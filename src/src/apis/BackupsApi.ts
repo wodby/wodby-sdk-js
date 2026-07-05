@@ -16,19 +16,19 @@
 import * as runtime from '../runtime';
 import type {
   Backup,
-  ErrorResponse,
   NewBackupInput,
   OperationResult,
+  ProblemDetails,
 } from '../models/index';
 import {
     BackupFromJSON,
     BackupToJSON,
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
     NewBackupInputFromJSON,
     NewBackupInputToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
 } from '../models/index';
 
 export interface CreateBackupRequest {

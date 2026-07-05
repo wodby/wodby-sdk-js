@@ -15,13 +15,13 @@
 
 import * as runtime from '../runtime';
 import type {
-  ErrorResponse,
+  ProblemDetails,
   TaskStepLogs,
   URLResponse,
 } from '../models/index';
 import {
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     TaskStepLogsFromJSON,
     TaskStepLogsToJSON,
     URLResponseFromJSON,

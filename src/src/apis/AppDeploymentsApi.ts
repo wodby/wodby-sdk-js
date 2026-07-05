@@ -19,7 +19,7 @@ import type {
   AppDeploymentsResponse,
   CreateDeploymentRequest,
   DeploymentFromCIInput,
-  ErrorResponse,
+  ProblemDetails,
 } from '../models/index';
 import {
     AppDeploymentFromJSON,
@@ -30,8 +30,8 @@ import {
     CreateDeploymentRequestToJSON,
     DeploymentFromCIInputFromJSON,
     DeploymentFromCIInputToJSON,
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
 } from '../models/index';
 
 export interface CreateAppDeploymentRequest {

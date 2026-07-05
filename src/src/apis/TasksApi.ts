@@ -15,17 +15,17 @@
 
 import * as runtime from '../runtime';
 import type {
-  ErrorResponse,
   OperationResult,
+  ProblemDetails,
   RepeatTaskRequest,
   Task,
   TasksResponse,
 } from '../models/index';
 import {
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     RepeatTaskRequestFromJSON,
     RepeatTaskRequestToJSON,
     TaskFromJSON,

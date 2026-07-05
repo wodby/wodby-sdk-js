@@ -15,18 +15,16 @@
 
 import * as runtime from '../runtime';
 import type {
-  ErrorResponse,
   Integration,
   IntegrationScope,
   KubeVersion,
   NewIntegrationInput,
   OperationResult,
+  ProblemDetails,
   RemoteGitRepo,
   UpdateIntegrationInput,
 } from '../models/index';
 import {
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
     IntegrationFromJSON,
     IntegrationToJSON,
     IntegrationScopeFromJSON,
@@ -37,6 +35,8 @@ import {
     NewIntegrationInputToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     RemoteGitRepoFromJSON,
     RemoteGitRepoToJSON,
     UpdateIntegrationInputFromJSON,

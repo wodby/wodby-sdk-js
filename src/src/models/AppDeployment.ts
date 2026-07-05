@@ -85,6 +85,12 @@ export interface AppDeployment {
     builds: Array<AppBuild>;
     /**
      * 
+     * @type {number}
+     * @memberof AppDeployment
+     */
+    taskId?: number | null;
+    /**
+     * 
      * @type {Task}
      * @memberof AppDeployment
      */
@@ -167,6 +173,7 @@ export function AppDeploymentFromJSONTyped(json: any, ignoreDiscriminator: boole
         'skipRollback': json['skipRollback'],
         'appInstanceId': json['appInstanceId'],
         'builds': ((json['builds'] as Array<any>).map(AppBuildFromJSON)),
+        'taskId': json['taskId'] == null ? undefined : json['taskId'],
         'task': json['task'] == null ? undefined : TaskFromJSON(json['task']),
         'appServiceDeployments': ((json['appServiceDeployments'] as Array<any>).map(AppServiceDeploymentFromJSON)),
         'createdAt': (new Date(json['createdAt'])),
@@ -194,6 +201,7 @@ export function AppDeploymentToJSONTyped(value?: AppDeployment | null, ignoreDis
         'skipRollback': value['skipRollback'],
         'appInstanceId': value['appInstanceId'],
         'builds': ((value['builds'] as Array<any>).map(AppBuildToJSON)),
+        'taskId': value['taskId'],
         'task': TaskToJSON(value['task']),
         'appServiceDeployments': ((value['appServiceDeployments'] as Array<any>).map(AppServiceDeploymentToJSON)),
         'createdAt': ((value['createdAt']).toISOString()),

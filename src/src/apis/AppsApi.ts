@@ -16,20 +16,20 @@
 import * as runtime from '../runtime';
 import type {
   App,
-  ErrorResponse,
   NewAppInput,
   OperationResult,
+  ProblemDetails,
   UpdateTitleRequest,
 } from '../models/index';
 import {
     AppFromJSON,
     AppToJSON,
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
     NewAppInputFromJSON,
     NewAppInputToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     UpdateTitleRequestFromJSON,
     UpdateTitleRequestToJSON,
 } from '../models/index';

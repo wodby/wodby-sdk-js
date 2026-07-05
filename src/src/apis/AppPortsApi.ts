@@ -16,13 +16,13 @@
 import * as runtime from '../runtime';
 import type {
   AppPort,
-  ErrorResponse,
+  ProblemDetails,
 } from '../models/index';
 import {
     AppPortFromJSON,
     AppPortToJSON,
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
 } from '../models/index';
 
 export interface GetAppPortRequest {

@@ -66,6 +66,12 @@ export interface AppBuild {
     appServiceId: number;
     /**
      * 
+     * @type {number}
+     * @memberof AppBuild
+     */
+    taskId?: number | null;
+    /**
+     * 
      * @type {Task}
      * @memberof AppBuild
      */
@@ -160,6 +166,7 @@ export function AppBuildFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'status': json['status'],
         'appInstanceId': json['appInstanceId'],
         'appServiceId': json['appServiceId'],
+        'taskId': json['taskId'] == null ? undefined : json['taskId'],
         'task': json['task'] == null ? undefined : TaskFromJSON(json['task']),
         'appServiceBuilds': ((json['appServiceBuilds'] as Array<any>).map(AppServiceBuildFromJSON)),
         'gitRefType': json['gitRefType'],
@@ -189,6 +196,7 @@ export function AppBuildToJSONTyped(value?: AppBuild | null, ignoreDiscriminator
         'status': value['status'],
         'appInstanceId': value['appInstanceId'],
         'appServiceId': value['appServiceId'],
+        'taskId': value['taskId'],
         'task': TaskToJSON(value['task']),
         'appServiceBuilds': ((value['appServiceBuilds'] as Array<any>).map(AppServiceBuildToJSON)),
         'gitRefType': value['gitRefType'],

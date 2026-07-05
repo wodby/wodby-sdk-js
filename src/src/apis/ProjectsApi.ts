@@ -15,19 +15,19 @@
 
 import * as runtime from '../runtime';
 import type {
-  ErrorResponse,
   NewProjectInput,
   OperationResult,
+  ProblemDetails,
   Project,
   UpdateProjectInput,
 } from '../models/index';
 import {
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
     NewProjectInputFromJSON,
     NewProjectInputToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     ProjectFromJSON,
     ProjectToJSON,
     UpdateProjectInputFromJSON,

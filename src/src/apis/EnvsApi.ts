@@ -17,8 +17,8 @@ import * as runtime from '../runtime';
 import type {
   CreateEnvRequest,
   Env,
-  ErrorResponse,
   OperationResult,
+  ProblemDetails,
   UpdateEnvRequest,
 } from '../models/index';
 import {
@@ -26,10 +26,10 @@ import {
     CreateEnvRequestToJSON,
     EnvFromJSON,
     EnvToJSON,
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     UpdateEnvRequestFromJSON,
     UpdateEnvRequestToJSON,
 } from '../models/index';

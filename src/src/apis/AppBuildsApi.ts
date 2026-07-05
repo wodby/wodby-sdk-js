@@ -17,18 +17,21 @@ import * as runtime from '../runtime';
 import type {
   AppBuild,
   AppBuildConfig,
+  AppBuildsCreateResponse,
   AppBuildsResponse,
   AppDeployment,
   CreateBuildRequest,
   DockerRegistryCredentials,
-  ErrorResponse,
   NewBuildFromCIInput,
+  ProblemDetails,
 } from '../models/index';
 import {
     AppBuildFromJSON,
     AppBuildToJSON,
     AppBuildConfigFromJSON,
     AppBuildConfigToJSON,
+    AppBuildsCreateResponseFromJSON,
+    AppBuildsCreateResponseToJSON,
     AppBuildsResponseFromJSON,
     AppBuildsResponseToJSON,
     AppDeploymentFromJSON,
@@ -37,10 +40,10 @@ import {
     CreateBuildRequestToJSON,
     DockerRegistryCredentialsFromJSON,
     DockerRegistryCredentialsToJSON,
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
     NewBuildFromCIInputFromJSON,
     NewBuildFromCIInputToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
 } from '../models/index';
 
 export interface CreateAppBuildRequest {
@@ -88,13 +91,13 @@ export interface AppBuildsApiInterface {
      * @throws {RequiredError}
      * @memberof AppBuildsApiInterface
      */
-    createAppBuildRaw(requestParameters: CreateAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppBuild>>>;
+    createAppBuildRaw(requestParameters: CreateAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuildsCreateResponse>>;
 
     /**
      * Creates a build and returns the created resource.
      * Create build
      */
-    createAppBuild(requestParameters: CreateAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppBuild>>;
+    createAppBuild(requestParameters: CreateAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildsCreateResponse>;
 
     /**
      * Creates a build from a CI workflow request.
@@ -205,7 +208,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
      * Creates a build and returns the created resource.
      * Create build
      */
-    async createAppBuildRaw(requestParameters: CreateAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppBuild>>> {
+    async createAppBuildRaw(requestParameters: CreateAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuildsCreateResponse>> {
         if (requestParameters['createBuildRequest'] == null) {
             throw new runtime.RequiredError(
                 'createBuildRequest',
@@ -231,14 +234,14 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
             body: CreateBuildRequestToJSON(requestParameters['createBuildRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppBuildFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => AppBuildsCreateResponseFromJSON(jsonValue));
     }
 
     /**
      * Creates a build and returns the created resource.
      * Create build
      */
-    async createAppBuild(requestParameters: CreateAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppBuild>> {
+    async createAppBuild(requestParameters: CreateAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildsCreateResponse> {
         const response = await this.createAppBuildRaw(requestParameters, initOverrides);
         return await response.value();
     }

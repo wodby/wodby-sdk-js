@@ -25,3 +25,4 @@ export * from './StackServicesApi';
 export * from './StacksApi';
 export * from './TaskStepsApi';
 export * from './TasksApi';
+export * from './UserApi';

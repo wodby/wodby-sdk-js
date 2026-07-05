@@ -53,6 +53,12 @@ export interface StackServiceInput {
     main?: boolean | null;
     /**
      * 
+     * @type {boolean}
+     * @memberof StackServiceInput
+     */
+    serviceRevPinned?: boolean | null;
+    /**
+     * 
      * @type {string}
      * @memberof StackServiceInput
      */
@@ -86,6 +92,7 @@ export function StackServiceInputFromJSONTyped(json: any, ignoreDiscriminator: b
         'required': json['required'] == null ? undefined : json['required'],
         'disabled': json['disabled'] == null ? undefined : json['disabled'],
         'main': json['main'] == null ? undefined : json['main'],
+        'serviceRevPinned': json['serviceRevPinned'] == null ? undefined : json['serviceRevPinned'],
         'title': json['title'] == null ? undefined : json['title'],
         'buildSource': json['buildSource'] == null ? undefined : BuildSourceInputFromJSON(json['buildSource']),
     };
@@ -106,6 +113,7 @@ export function StackServiceInputToJSONTyped(value?: StackServiceInput | null, i
         'required': value['required'],
         'disabled': value['disabled'],
         'main': value['main'],
+        'serviceRevPinned': value['serviceRevPinned'],
         'title': value['title'],
         'buildSource': BuildSourceInputToJSON(value['buildSource']),
     };

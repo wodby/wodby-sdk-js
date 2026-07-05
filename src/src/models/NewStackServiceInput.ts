@@ -55,6 +55,12 @@ export interface NewStackServiceInput {
      * @memberof NewStackServiceInput
      */
     replicas: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewStackServiceInput
+     */
+    serviceRevPinned?: boolean | null;
 }
 
 /**
@@ -86,6 +92,7 @@ export function NewStackServiceInputFromJSONTyped(json: any, ignoreDiscriminator
         'title': json['title'],
         'required': json['required'],
         'replicas': json['replicas'],
+        'serviceRevPinned': json['serviceRevPinned'] == null ? undefined : json['serviceRevPinned'],
     };
 }
 
@@ -106,6 +113,7 @@ export function NewStackServiceInputToJSONTyped(value?: NewStackServiceInput | n
         'title': value['title'],
         'required': value['required'],
         'replicas': value['replicas'],
+        'serviceRevPinned': value['serviceRevPinned'],
     };
 }
 

@@ -16,13 +16,13 @@
 import * as runtime from '../runtime';
 import type {
   Cert,
-  ErrorResponse,
+  ProblemDetails,
 } from '../models/index';
 import {
     CertFromJSON,
     CertToJSON,
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
 } from '../models/index';
 
 export interface GetCertRequest {

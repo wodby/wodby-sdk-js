@@ -16,20 +16,20 @@
 import * as runtime from '../runtime';
 import type {
   AppRoute,
-  ErrorResponse,
   NewAppRouteInput,
   OperationResult,
+  ProblemDetails,
   UpdateAppRouteInput,
 } from '../models/index';
 import {
     AppRouteFromJSON,
     AppRouteToJSON,
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
     NewAppRouteInputFromJSON,
     NewAppRouteInputToJSON,
     OperationResultFromJSON,
     OperationResultToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
     UpdateAppRouteInputFromJSON,
     UpdateAppRouteInputToJSON,
 } from '../models/index';

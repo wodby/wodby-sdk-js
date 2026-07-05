@@ -17,15 +17,15 @@ import * as runtime from '../runtime';
 import type {
   DatabaseType,
   DatabaseVersion,
-  ErrorResponse,
+  ProblemDetails,
 } from '../models/index';
 import {
     DatabaseTypeFromJSON,
     DatabaseTypeToJSON,
     DatabaseVersionFromJSON,
     DatabaseVersionToJSON,
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
 } from '../models/index';
 
 export interface GetIntegrationKindDatabaseSettingsRequest {

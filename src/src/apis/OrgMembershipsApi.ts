@@ -15,14 +15,14 @@
 
 import * as runtime from '../runtime';
 import type {
-  ErrorResponse,
   OrgMembership,
+  ProblemDetails,
 } from '../models/index';
 import {
-    ErrorResponseFromJSON,
-    ErrorResponseToJSON,
     OrgMembershipFromJSON,
     OrgMembershipToJSON,
+    ProblemDetailsFromJSON,
+    ProblemDetailsToJSON,
 } from '../models/index';
 
 export interface GetOrgMembershipRequest {
