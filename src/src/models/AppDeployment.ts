@@ -61,6 +61,12 @@ export interface AppDeployment {
     status: string;
     /**
      * 
+     * @type {string}
+     * @memberof AppDeployment
+     */
+    rollbackStatus: AppDeploymentRollbackStatusEnum;
+    /**
+     * 
      * @type {boolean}
      * @memberof AppDeployment
      */
@@ -115,6 +121,18 @@ export interface AppDeployment {
     endedAt?: Date | null;
 }
 
+
+/**
+ * @export
+ */
+export const AppDeploymentRollbackStatusEnum = {
+    NotAttempted: 'not_attempted',
+    RolledBack: 'rolled_back',
+    Failed: 'failed'
+} as const;
+export type AppDeploymentRollbackStatusEnum = typeof AppDeploymentRollbackStatusEnum[keyof typeof AppDeploymentRollbackStatusEnum];
+
+
 /**
  * Check if a given object implements the AppDeployment interface.
  */
@@ -122,6 +140,7 @@ export function instanceOfAppDeployment(value: object): value is AppDeployment {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('number' in value) || value['number'] === undefined) return false;
     if (!('status' in value) || value['status'] === undefined) return false;
+    if (!('rollbackStatus' in value) || value['rollbackStatus'] === undefined) return false;
     if (!('skipRollback' in value) || value['skipRollback'] === undefined) return false;
     if (!('appInstanceId' in value) || value['appInstanceId'] === undefined) return false;
     if (!('builds' in value) || value['builds'] === undefined) return false;
@@ -144,6 +163,7 @@ export function AppDeploymentFromJSONTyped(json: any, ignoreDiscriminator: boole
         'id': json['id'],
         'number': json['number'],
         'status': json['status'],
+        'rollbackStatus': json['rollbackStatus'],
         'skipRollback': json['skipRollback'],
         'appInstanceId': json['appInstanceId'],
         'builds': ((json['builds'] as Array<any>).map(AppBuildFromJSON)),
@@ -170,6 +190,7 @@ export function AppDeploymentToJSONTyped(value?: AppDeployment | null, ignoreDis
         'id': value['id'],
         'number': value['number'],
         'status': value['status'],
+        'rollbackStatus': value['rollbackStatus'],
         'skipRollback': value['skipRollback'],
         'appInstanceId': value['appInstanceId'],
         'builds': ((value['builds'] as Array<any>).map(AppBuildToJSON)),
