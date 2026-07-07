@@ -24,24 +24,6 @@ import type {
   RemoteGitRepo,
   UpdateIntegrationInput,
 } from '../models/index';
-import {
-    IntegrationFromJSON,
-    IntegrationToJSON,
-    IntegrationScopeFromJSON,
-    IntegrationScopeToJSON,
-    KubeVersionFromJSON,
-    KubeVersionToJSON,
-    NewIntegrationInputFromJSON,
-    NewIntegrationInputToJSON,
-    OperationResultFromJSON,
-    OperationResultToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    RemoteGitRepoFromJSON,
-    RemoteGitRepoToJSON,
-    UpdateIntegrationInputFromJSON,
-    UpdateIntegrationInputToJSON,
-} from '../models/index';
 
 export interface CreateIntegrationRequest {
     newIntegrationInput: NewIntegrationInput;
@@ -440,10 +422,10 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewIntegrationInputToJSON(requestParameters['newIntegrationInput']),
+            body: requestParameters['newIntegrationInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IntegrationFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -482,7 +464,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -521,7 +503,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IntegrationFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -564,7 +546,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IntegrationFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -742,7 +724,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(KubeVersionFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -920,7 +902,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(RemoteGitRepoFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -959,7 +941,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(IntegrationScopeFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1081,7 +1063,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(IntegrationFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1127,10 +1109,10 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateIntegrationInputToJSON(requestParameters['updateIntegrationInput']),
+            body: requestParameters['updateIntegrationInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IntegrationFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

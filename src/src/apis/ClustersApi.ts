@@ -22,20 +22,6 @@ import type {
   ProblemDetails,
   UpdateTitleRequest,
 } from '../models/index';
-import {
-    ClusterFromJSON,
-    ClusterToJSON,
-    ClusterSettingsInputFromJSON,
-    ClusterSettingsInputToJSON,
-    NewClusterInputFromJSON,
-    NewClusterInputToJSON,
-    OperationResultFromJSON,
-    OperationResultToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    UpdateTitleRequestFromJSON,
-    UpdateTitleRequestToJSON,
-} from '../models/index';
 
 export interface CreateClusterRequest {
     newClusterInput: NewClusterInput;
@@ -270,10 +256,10 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewClusterInputToJSON(requestParameters['newClusterInput']),
+            body: requestParameters['newClusterInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ClusterFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -316,7 +302,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -355,7 +341,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ClusterFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -398,7 +384,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ClusterFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -442,7 +428,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ClusterFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -488,10 +474,10 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateTitleRequestToJSON(requestParameters['updateTitleRequest']),
+            body: requestParameters['updateTitleRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ClusterFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -537,10 +523,10 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: ClusterSettingsInputToJSON(requestParameters['clusterSettingsInput']),
+            body: requestParameters['clusterSettingsInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ClusterFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -579,7 +565,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -618,7 +604,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

@@ -16,7 +16,11 @@
 import * as runtime from '../runtime';
 import type {
   DuplicateStackRequest,
+  HelmChartStackScaffoldInput,
+  HelmChartStackScaffoldResponse,
   ImportCatalogFromGitInput,
+  ManifestFromYAMLInput,
+  ManifestValidationResponse,
   OperationResult,
   ProblemDetails,
   Stack,
@@ -27,30 +31,10 @@ import type {
   StacksResponse,
   UpdateStackFromGitRequest,
 } from '../models/index';
-import {
-    DuplicateStackRequestFromJSON,
-    DuplicateStackRequestToJSON,
-    ImportCatalogFromGitInputFromJSON,
-    ImportCatalogFromGitInputToJSON,
-    OperationResultFromJSON,
-    OperationResultToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    StackFromJSON,
-    StackToJSON,
-    StackRevisionFromJSON,
-    StackRevisionToJSON,
-    StackServiceFromJSON,
-    StackServiceToJSON,
-    StackSettingsInputFromJSON,
-    StackSettingsInputToJSON,
-    StackSyncOptionsInputFromJSON,
-    StackSyncOptionsInputToJSON,
-    StacksResponseFromJSON,
-    StacksResponseToJSON,
-    UpdateStackFromGitRequestFromJSON,
-    UpdateStackFromGitRequestToJSON,
-} from '../models/index';
+
+export interface CreateStackFromManifestRequest {
+    manifestFromYAMLInput: ManifestFromYAMLInput;
+}
 
 export interface DuplicateStackOperationRequest {
     id: number;
@@ -90,6 +74,10 @@ export interface PublishStackDraftRequest {
     id: number;
 }
 
+export interface ScaffoldStackFromHelmChartRequest {
+    helmChartStackScaffoldInput: HelmChartStackScaffoldInput;
+}
+
 export interface SyncStackWithOriginRequest {
     id: number;
     stackSyncOptionsInput?: StackSyncOptionsInput;
@@ -105,6 +93,10 @@ export interface UpdateStackSettingsRequest {
     stackSettingsInput: StackSettingsInput;
 }
 
+export interface ValidateStackManifestRequest {
+    manifestFromYAMLInput: ManifestFromYAMLInput;
+}
+
 /**
  * StacksApi - interface
  * 
@@ -112,6 +104,22 @@ export interface UpdateStackSettingsRequest {
  * @interface StacksApiInterface
  */
 export interface StacksApiInterface {
+    /**
+     * Creates a non-Git Wodby stack from a stack manifest.
+     * @summary Create stack from manifest
+     * @param {ManifestFromYAMLInput} manifestFromYAMLInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    createStackFromManifestRaw(requestParameters: CreateStackFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>>;
+
+    /**
+     * Creates a non-Git Wodby stack from a stack manifest.
+     * Create stack from manifest
+     */
+    createStackFromManifest(requestParameters: CreateStackFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
+
     /**
      * Duplicates the stack into the target organization or project.
      * @summary Duplicate stack
@@ -247,6 +255,22 @@ export interface StacksApiInterface {
     publishStackDraft(requestParameters: PublishStackDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
 
     /**
+     * Renders a Helm chart and returns best-effort Wodby service and stack manifests for review and validation.
+     * @summary Scaffold stack from Helm chart
+     * @param {HelmChartStackScaffoldInput} helmChartStackScaffoldInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    scaffoldStackFromHelmChartRaw(requestParameters: ScaffoldStackFromHelmChartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HelmChartStackScaffoldResponse>>;
+
+    /**
+     * Renders a Helm chart and returns best-effort Wodby service and stack manifests for review and validation.
+     * Scaffold stack from Helm chart
+     */
+    scaffoldStackFromHelmChart(requestParameters: ScaffoldStackFromHelmChartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HelmChartStackScaffoldResponse>;
+
+    /**
      * Syncs the stack with its origin stack revision.
      * @summary Sync stack with origin
      * @param {number} id 
@@ -297,12 +321,70 @@ export interface StacksApiInterface {
      */
     updateStackSettings(requestParameters: UpdateStackSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
 
+    /**
+     * Validates a Wodby stack manifest without creating a stack.
+     * @summary Validate stack manifest
+     * @param {ManifestFromYAMLInput} manifestFromYAMLInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    validateStackManifestRaw(requestParameters: ValidateStackManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ManifestValidationResponse>>;
+
+    /**
+     * Validates a Wodby stack manifest without creating a stack.
+     * Validate stack manifest
+     */
+    validateStackManifest(requestParameters: ValidateStackManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ManifestValidationResponse>;
+
 }
 
 /**
  * 
  */
 export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
+
+    /**
+     * Creates a non-Git Wodby stack from a stack manifest.
+     * Create stack from manifest
+     */
+    async createStackFromManifestRaw(requestParameters: CreateStackFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>> {
+        if (requestParameters['manifestFromYAMLInput'] == null) {
+            throw new runtime.RequiredError(
+                'manifestFromYAMLInput',
+                'Required parameter "manifestFromYAMLInput" was null or undefined when calling createStackFromManifest().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/actions/create-from-manifest`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['manifestFromYAMLInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Creates a non-Git Wodby stack from a stack manifest.
+     * Create stack from manifest
+     */
+    async createStackFromManifest(requestParameters: CreateStackFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
+        const response = await this.createStackFromManifestRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Duplicates the stack into the target organization or project.
@@ -338,10 +420,10 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: DuplicateStackRequestToJSON(requestParameters['duplicateStackRequest']),
+            body: requestParameters['duplicateStackRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -380,7 +462,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -423,7 +505,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -462,7 +544,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackRevisionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -501,10 +583,10 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ImportCatalogFromGitInputToJSON(requestParameters['importCatalogFromGitInput']),
+            body: requestParameters['importCatalogFromGitInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -543,7 +625,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -595,7 +677,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StacksResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -634,7 +716,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -643,6 +725,48 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
      */
     async publishStackDraft(requestParameters: PublishStackDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
         const response = await this.publishStackDraftRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Renders a Helm chart and returns best-effort Wodby service and stack manifests for review and validation.
+     * Scaffold stack from Helm chart
+     */
+    async scaffoldStackFromHelmChartRaw(requestParameters: ScaffoldStackFromHelmChartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HelmChartStackScaffoldResponse>> {
+        if (requestParameters['helmChartStackScaffoldInput'] == null) {
+            throw new runtime.RequiredError(
+                'helmChartStackScaffoldInput',
+                'Required parameter "helmChartStackScaffoldInput" was null or undefined when calling scaffoldStackFromHelmChart().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/actions/scaffold-from-helm-chart`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['helmChartStackScaffoldInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Renders a Helm chart and returns best-effort Wodby service and stack manifests for review and validation.
+     * Scaffold stack from Helm chart
+     */
+    async scaffoldStackFromHelmChart(requestParameters: ScaffoldStackFromHelmChartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HelmChartStackScaffoldResponse> {
+        const response = await this.scaffoldStackFromHelmChartRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -673,10 +797,10 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: StackSyncOptionsInputToJSON(requestParameters['stackSyncOptionsInput']),
+            body: requestParameters['stackSyncOptionsInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -722,10 +846,10 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateStackFromGitRequestToJSON(requestParameters['updateStackFromGitRequest']),
+            body: requestParameters['updateStackFromGitRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -771,10 +895,10 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: StackSettingsInputToJSON(requestParameters['stackSettingsInput']),
+            body: requestParameters['stackSettingsInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -783,6 +907,48 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
      */
     async updateStackSettings(requestParameters: UpdateStackSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
         const response = await this.updateStackSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Validates a Wodby stack manifest without creating a stack.
+     * Validate stack manifest
+     */
+    async validateStackManifestRaw(requestParameters: ValidateStackManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ManifestValidationResponse>> {
+        if (requestParameters['manifestFromYAMLInput'] == null) {
+            throw new runtime.RequiredError(
+                'manifestFromYAMLInput',
+                'Required parameter "manifestFromYAMLInput" was null or undefined when calling validateStackManifest().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/actions/validate-manifest`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['manifestFromYAMLInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Validates a Wodby stack manifest without creating a stack.
+     * Validate stack manifest
+     */
+    async validateStackManifest(requestParameters: ValidateStackManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ManifestValidationResponse> {
+        const response = await this.validateStackManifestRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

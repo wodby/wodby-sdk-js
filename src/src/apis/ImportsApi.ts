@@ -20,16 +20,6 @@ import type {
   OperationResult,
   ProblemDetails,
 } from '../models/index';
-import {
-    ImportFromJSON,
-    ImportToJSON,
-    NewImportInputFromJSON,
-    NewImportInputToJSON,
-    OperationResultFromJSON,
-    OperationResultToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-} from '../models/index';
 
 export interface CreateImportRequest {
     newImportInput: NewImportInput;
@@ -138,10 +128,10 @@ export class ImportsApi extends runtime.BaseAPI implements ImportsApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewImportInputToJSON(requestParameters['newImportInput']),
+            body: requestParameters['newImportInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -180,7 +170,7 @@ export class ImportsApi extends runtime.BaseAPI implements ImportsApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ImportFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -228,7 +218,7 @@ export class ImportsApi extends runtime.BaseAPI implements ImportsApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ImportFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

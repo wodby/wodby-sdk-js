@@ -21,18 +21,6 @@ import type {
   ProblemDetails,
   UpdateTitleRequest,
 } from '../models/index';
-import {
-    AppFromJSON,
-    AppToJSON,
-    NewAppInputFromJSON,
-    NewAppInputToJSON,
-    OperationResultFromJSON,
-    OperationResultToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    UpdateTitleRequestFromJSON,
-    UpdateTitleRequestToJSON,
-} from '../models/index';
 
 export interface CreateAppRequest {
     newAppInput: NewAppInput;
@@ -203,10 +191,10 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewAppInputToJSON(requestParameters['newAppInput']),
+            body: requestParameters['newAppInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -245,7 +233,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -284,7 +272,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -327,7 +315,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -371,7 +359,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -417,10 +405,10 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateTitleRequestToJSON(requestParameters['updateTitleRequest']),
+            body: requestParameters['updateTitleRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

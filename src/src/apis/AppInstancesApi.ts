@@ -23,22 +23,6 @@ import type {
   ProblemDetails,
   UpdateTitleRequest,
 } from '../models/index';
-import {
-    AppInstanceFromJSON,
-    AppInstanceToJSON,
-    AppInstanceSettingsInputFromJSON,
-    AppInstanceSettingsInputToJSON,
-    AppInstanceStackUpgradeInputFromJSON,
-    AppInstanceStackUpgradeInputToJSON,
-    NewAppInstanceInputFromJSON,
-    NewAppInstanceInputToJSON,
-    OperationResultFromJSON,
-    OperationResultToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    UpdateTitleRequestFromJSON,
-    UpdateTitleRequestToJSON,
-} from '../models/index';
 
 export interface CreateAppInstanceRequest {
     newAppInstanceInput: NewAppInstanceInput;
@@ -261,10 +245,10 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewAppInstanceInputToJSON(requestParameters['newAppInstanceInput']),
+            body: requestParameters['newAppInstanceInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppInstanceFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -307,7 +291,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -346,7 +330,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppInstanceFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -396,7 +380,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppInstanceFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -448,7 +432,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppInstanceFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -494,10 +478,10 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateTitleRequestToJSON(requestParameters['updateTitleRequest']),
+            body: requestParameters['updateTitleRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppInstanceFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -543,10 +527,10 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: AppInstanceSettingsInputToJSON(requestParameters['appInstanceSettingsInput']),
+            body: requestParameters['appInstanceSettingsInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppInstanceFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -592,10 +576,10 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: AppInstanceStackUpgradeInputToJSON(requestParameters['appInstanceStackUpgradeInput']),
+            body: requestParameters['appInstanceStackUpgradeInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

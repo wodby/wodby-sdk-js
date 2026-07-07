@@ -19,14 +19,6 @@ import type {
   ProblemDetails,
   UpdateCurrentUserRequest,
 } from '../models/index';
-import {
-    CurrentUserFromJSON,
-    CurrentUserToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    UpdateCurrentUserRequestFromJSON,
-    UpdateCurrentUserRequestToJSON,
-} from '../models/index';
 
 export interface UpdateCurrentUserOperationRequest {
     updateCurrentUserRequest: UpdateCurrentUserRequest;
@@ -97,7 +89,7 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CurrentUserFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -136,10 +128,10 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateCurrentUserRequestToJSON(requestParameters['updateCurrentUserRequest']),
+            body: requestParameters['updateCurrentUserRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CurrentUserFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

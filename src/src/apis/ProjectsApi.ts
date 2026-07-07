@@ -21,18 +21,6 @@ import type {
   Project,
   UpdateProjectInput,
 } from '../models/index';
-import {
-    NewProjectInputFromJSON,
-    NewProjectInputToJSON,
-    OperationResultFromJSON,
-    OperationResultToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    ProjectFromJSON,
-    ProjectToJSON,
-    UpdateProjectInputFromJSON,
-    UpdateProjectInputToJSON,
-} from '../models/index';
 
 export interface CreateProjectRequest {
     newProjectInput: NewProjectInput;
@@ -199,10 +187,10 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewProjectInputToJSON(requestParameters['newProjectInput']),
+            body: requestParameters['newProjectInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProjectFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -241,7 +229,7 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -280,7 +268,7 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProjectFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -323,7 +311,7 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProjectFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -359,7 +347,7 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ProjectFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -405,10 +393,10 @@ export class ProjectsApi extends runtime.BaseAPI implements ProjectsApiInterface
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateProjectInputToJSON(requestParameters['updateProjectInput']),
+            body: requestParameters['updateProjectInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProjectFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

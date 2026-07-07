@@ -19,14 +19,6 @@ import type {
   TaskStepLogs,
   URLResponse,
 } from '../models/index';
-import {
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    TaskStepLogsFromJSON,
-    TaskStepLogsToJSON,
-    URLResponseFromJSON,
-    URLResponseToJSON,
-} from '../models/index';
 
 export interface GetTaskStepLogUrlRequest {
     id: number;
@@ -111,7 +103,7 @@ export class TaskStepsApi extends runtime.BaseAPI implements TaskStepsApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => URLResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -154,7 +146,7 @@ export class TaskStepsApi extends runtime.BaseAPI implements TaskStepsApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => TaskStepLogsFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

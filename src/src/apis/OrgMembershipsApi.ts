@@ -18,12 +18,6 @@ import type {
   OrgMembership,
   ProblemDetails,
 } from '../models/index';
-import {
-    OrgMembershipFromJSON,
-    OrgMembershipToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-} from '../models/index';
 
 export interface GetOrgMembershipRequest {
     id: number;
@@ -106,7 +100,7 @@ export class OrgMembershipsApi extends runtime.BaseAPI implements OrgMemberships
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OrgMembershipFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -142,7 +136,7 @@ export class OrgMembershipsApi extends runtime.BaseAPI implements OrgMemberships
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(OrgMembershipFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

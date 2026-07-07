@@ -21,18 +21,6 @@ import type {
   Task,
   TasksResponse,
 } from '../models/index';
-import {
-    OperationResultFromJSON,
-    OperationResultToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    RepeatTaskRequestFromJSON,
-    RepeatTaskRequestToJSON,
-    TaskFromJSON,
-    TaskToJSON,
-    TasksResponseFromJSON,
-    TasksResponseToJSON,
-} from '../models/index';
 
 export interface CancelTaskRequest {
     id: number;
@@ -187,7 +175,7 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -226,7 +214,7 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => TaskFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -322,7 +310,7 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => TasksResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -368,10 +356,10 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: RepeatTaskRequestToJSON(requestParameters['repeatTaskRequest']),
+            body: requestParameters['repeatTaskRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

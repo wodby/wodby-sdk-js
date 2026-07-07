@@ -18,12 +18,6 @@ import type {
   AppPort,
   ProblemDetails,
 } from '../models/index';
-import {
-    AppPortFromJSON,
-    AppPortToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-} from '../models/index';
 
 export interface GetAppPortRequest {
     id: number;
@@ -106,7 +100,7 @@ export class AppPortsApi extends runtime.BaseAPI implements AppPortsApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppPortFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -149,7 +143,7 @@ export class AppPortsApi extends runtime.BaseAPI implements AppPortsApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppPortFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

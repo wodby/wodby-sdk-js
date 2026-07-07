@@ -13,6 +13,7 @@ export * from './ClustersApi';
 export * from './DatabasesApi';
 export * from './DefaultApi';
 export * from './EnvsApi';
+export * from './HelmChartsApi';
 export * from './ImportsApi';
 export * from './IntegrationKindsApi';
 export * from './IntegrationsApi';

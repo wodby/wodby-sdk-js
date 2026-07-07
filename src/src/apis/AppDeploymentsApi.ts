@@ -21,18 +21,6 @@ import type {
   DeploymentFromCIInput,
   ProblemDetails,
 } from '../models/index';
-import {
-    AppDeploymentFromJSON,
-    AppDeploymentToJSON,
-    AppDeploymentsResponseFromJSON,
-    AppDeploymentsResponseToJSON,
-    CreateDeploymentRequestFromJSON,
-    CreateDeploymentRequestToJSON,
-    DeploymentFromCIInputFromJSON,
-    DeploymentFromCIInputToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-} from '../models/index';
 
 export interface CreateAppDeploymentRequest {
     createDeploymentRequest: CreateDeploymentRequest;
@@ -179,10 +167,10 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateDeploymentRequestToJSON(requestParameters['createDeploymentRequest']),
+            body: requestParameters['createDeploymentRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppDeploymentFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -225,10 +213,10 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: DeploymentFromCIInputToJSON(requestParameters['deploymentFromCIInput']),
+            body: requestParameters['deploymentFromCIInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppDeploymentFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -267,7 +255,7 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppDeploymentFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -318,7 +306,7 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppDeploymentsResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -357,7 +345,7 @@ export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeployments
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppDeploymentFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

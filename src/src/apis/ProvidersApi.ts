@@ -20,16 +20,6 @@ import type {
   ProviderRevision,
   ProvidersResponse,
 } from '../models/index';
-import {
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    ProviderFromJSON,
-    ProviderToJSON,
-    ProviderRevisionFromJSON,
-    ProviderRevisionToJSON,
-    ProvidersResponseFromJSON,
-    ProvidersResponseToJSON,
-} from '../models/index';
 
 export interface GetProviderRequest {
     id: number;
@@ -162,7 +152,7 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProviderFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -201,7 +191,7 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProviderFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -240,7 +230,7 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProviderRevisionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -296,7 +286,7 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProvidersResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

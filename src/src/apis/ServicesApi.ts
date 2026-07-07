@@ -15,7 +15,11 @@
 
 import * as runtime from '../runtime';
 import type {
+  HelmChartServiceScaffoldInput,
+  HelmChartServiceScaffoldResponse,
   ImportCatalogFromGitInput,
+  ManifestFromYAMLInput,
+  ManifestValidationResponse,
   OperationResult,
   ProblemDetails,
   Service,
@@ -23,22 +27,10 @@ import type {
   ServiceSettingsInput,
   ServicesResponse,
 } from '../models/index';
-import {
-    ImportCatalogFromGitInputFromJSON,
-    ImportCatalogFromGitInputToJSON,
-    OperationResultFromJSON,
-    OperationResultToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    ServiceFromJSON,
-    ServiceToJSON,
-    ServiceRevisionFromJSON,
-    ServiceRevisionToJSON,
-    ServiceSettingsInputFromJSON,
-    ServiceSettingsInputToJSON,
-    ServicesResponseFromJSON,
-    ServicesResponseToJSON,
-} from '../models/index';
+
+export interface CreateServiceFromManifestRequest {
+    manifestFromYAMLInput: ManifestFromYAMLInput;
+}
 
 export interface GetServiceRequest {
     id: number;
@@ -69,9 +61,17 @@ export interface ListServicesRequest {
     pageSize?: number;
 }
 
+export interface ScaffoldServiceFromHelmChartRequest {
+    helmChartServiceScaffoldInput: HelmChartServiceScaffoldInput;
+}
+
 export interface UpdateServiceSettingsRequest {
     id: number;
     serviceSettingsInput: ServiceSettingsInput;
+}
+
+export interface ValidateServiceManifestRequest {
+    manifestFromYAMLInput: ManifestFromYAMLInput;
 }
 
 /**
@@ -81,6 +81,22 @@ export interface UpdateServiceSettingsRequest {
  * @interface ServicesApiInterface
  */
 export interface ServicesApiInterface {
+    /**
+     * Creates a non-Git Wodby service from a service manifest.
+     * @summary Create service from manifest
+     * @param {ManifestFromYAMLInput} manifestFromYAMLInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServicesApiInterface
+     */
+    createServiceFromManifestRaw(requestParameters: CreateServiceFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>>;
+
+    /**
+     * Creates a non-Git Wodby service from a service manifest.
+     * Create service from manifest
+     */
+    createServiceFromManifest(requestParameters: CreateServiceFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service>;
+
     /**
      * Returns the service identified by the request path.
      * @summary Get service
@@ -183,6 +199,22 @@ export interface ServicesApiInterface {
     listServices(requestParameters: ListServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServicesResponse>;
 
     /**
+     * Renders a Helm chart and returns a best-effort Wodby service manifest for review and validation.
+     * @summary Scaffold service from Helm chart
+     * @param {HelmChartServiceScaffoldInput} helmChartServiceScaffoldInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServicesApiInterface
+     */
+    scaffoldServiceFromHelmChartRaw(requestParameters: ScaffoldServiceFromHelmChartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HelmChartServiceScaffoldResponse>>;
+
+    /**
+     * Renders a Helm chart and returns a best-effort Wodby service manifest for review and validation.
+     * Scaffold service from Helm chart
+     */
+    scaffoldServiceFromHelmChart(requestParameters: ScaffoldServiceFromHelmChartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HelmChartServiceScaffoldResponse>;
+
+    /**
      * Updates service settings and returns the updated service.
      * @summary Update service settings
      * @param {number} id 
@@ -199,12 +231,70 @@ export interface ServicesApiInterface {
      */
     updateServiceSettings(requestParameters: UpdateServiceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service>;
 
+    /**
+     * Validates a Wodby service manifest without creating a service.
+     * @summary Validate service manifest
+     * @param {ManifestFromYAMLInput} manifestFromYAMLInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServicesApiInterface
+     */
+    validateServiceManifestRaw(requestParameters: ValidateServiceManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ManifestValidationResponse>>;
+
+    /**
+     * Validates a Wodby service manifest without creating a service.
+     * Validate service manifest
+     */
+    validateServiceManifest(requestParameters: ValidateServiceManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ManifestValidationResponse>;
+
 }
 
 /**
  * 
  */
 export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface {
+
+    /**
+     * Creates a non-Git Wodby service from a service manifest.
+     * Create service from manifest
+     */
+    async createServiceFromManifestRaw(requestParameters: CreateServiceFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>> {
+        if (requestParameters['manifestFromYAMLInput'] == null) {
+            throw new runtime.RequiredError(
+                'manifestFromYAMLInput',
+                'Required parameter "manifestFromYAMLInput" was null or undefined when calling createServiceFromManifest().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/services/actions/create-from-manifest`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['manifestFromYAMLInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Creates a non-Git Wodby service from a service manifest.
+     * Create service from manifest
+     */
+    async createServiceFromManifest(requestParameters: CreateServiceFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service> {
+        const response = await this.createServiceFromManifestRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Returns the service identified by the request path.
@@ -233,7 +323,7 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ServiceFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -276,7 +366,7 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ServiceFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -315,7 +405,7 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ServiceRevisionFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -354,10 +444,10 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ImportCatalogFromGitInputToJSON(requestParameters['importCatalogFromGitInput']),
+            body: requestParameters['importCatalogFromGitInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -448,7 +538,7 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ServicesResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -457,6 +547,48 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
      */
     async listServices(requestParameters: ListServicesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServicesResponse> {
         const response = await this.listServicesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Renders a Helm chart and returns a best-effort Wodby service manifest for review and validation.
+     * Scaffold service from Helm chart
+     */
+    async scaffoldServiceFromHelmChartRaw(requestParameters: ScaffoldServiceFromHelmChartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HelmChartServiceScaffoldResponse>> {
+        if (requestParameters['helmChartServiceScaffoldInput'] == null) {
+            throw new runtime.RequiredError(
+                'helmChartServiceScaffoldInput',
+                'Required parameter "helmChartServiceScaffoldInput" was null or undefined when calling scaffoldServiceFromHelmChart().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/services/actions/scaffold-from-helm-chart`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['helmChartServiceScaffoldInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Renders a Helm chart and returns a best-effort Wodby service manifest for review and validation.
+     * Scaffold service from Helm chart
+     */
+    async scaffoldServiceFromHelmChart(requestParameters: ScaffoldServiceFromHelmChartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HelmChartServiceScaffoldResponse> {
+        const response = await this.scaffoldServiceFromHelmChartRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -494,10 +626,10 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: ServiceSettingsInputToJSON(requestParameters['serviceSettingsInput']),
+            body: requestParameters['serviceSettingsInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ServiceFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -506,6 +638,48 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
      */
     async updateServiceSettings(requestParameters: UpdateServiceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service> {
         const response = await this.updateServiceSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Validates a Wodby service manifest without creating a service.
+     * Validate service manifest
+     */
+    async validateServiceManifestRaw(requestParameters: ValidateServiceManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ManifestValidationResponse>> {
+        if (requestParameters['manifestFromYAMLInput'] == null) {
+            throw new runtime.RequiredError(
+                'manifestFromYAMLInput',
+                'Required parameter "manifestFromYAMLInput" was null or undefined when calling validateServiceManifest().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/services/actions/validate-manifest`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['manifestFromYAMLInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Validates a Wodby service manifest without creating a service.
+     * Validate service manifest
+     */
+    async validateServiceManifest(requestParameters: ValidateServiceManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ManifestValidationResponse> {
+        const response = await this.validateServiceManifestRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

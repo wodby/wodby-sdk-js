@@ -19,7 +19,7 @@ codegen:
 			-i ./swagger.json \
 			-g typescript-fetch \
 			-o ./src \
-			--additional-properties=npmName=@wodby/sdk,supportsES6=true,typescriptThreePlus=true,withInterfaces=true
+			--additional-properties=npmName=@wodby/sdk,supportsES6=true,typescriptThreePlus=true,withInterfaces=true,withoutRuntimeChecks=true
 	rm -f ./src/.npmignore \
 		./src/.gitignore \
 		./src/git_push.sh \

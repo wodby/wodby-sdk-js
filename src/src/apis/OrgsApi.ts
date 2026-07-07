@@ -19,14 +19,6 @@ import type {
   ProblemDetails,
   UpdateOrgRequest,
 } from '../models/index';
-import {
-    OrgFromJSON,
-    OrgToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    UpdateOrgRequestFromJSON,
-    UpdateOrgRequestToJSON,
-} from '../models/index';
 
 export interface GetOrgRequest {
     id: number;
@@ -126,7 +118,7 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OrgFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -158,7 +150,7 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(OrgFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -204,10 +196,10 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateOrgRequestToJSON(requestParameters['updateOrgRequest']),
+            body: requestParameters['updateOrgRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OrgFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

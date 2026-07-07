@@ -18,12 +18,6 @@ import type {
   Cert,
   ProblemDetails,
 } from '../models/index';
-import {
-    CertFromJSON,
-    CertToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-} from '../models/index';
 
 export interface GetCertRequest {
     id: number;
@@ -112,7 +106,7 @@ export class CertsApi extends runtime.BaseAPI implements CertsApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CertFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -148,7 +142,7 @@ export class CertsApi extends runtime.BaseAPI implements CertsApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(CertFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

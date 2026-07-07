@@ -20,16 +20,6 @@ import type {
   OperationResult,
   ProblemDetails,
 } from '../models/index';
-import {
-    BackupFromJSON,
-    BackupToJSON,
-    NewBackupInputFromJSON,
-    NewBackupInputToJSON,
-    OperationResultFromJSON,
-    OperationResultToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-} from '../models/index';
 
 export interface CreateBackupRequest {
     newBackupInput: NewBackupInput;
@@ -140,10 +130,10 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewBackupInputToJSON(requestParameters['newBackupInput']),
+            body: requestParameters['newBackupInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -182,7 +172,7 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => BackupFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -234,7 +224,7 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(BackupFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

@@ -27,30 +27,6 @@ import type {
   UpdateDatabaseUserDBsInput,
   UpdateTitleRequest,
 } from '../models/index';
-import {
-    DatabaseFromJSON,
-    DatabaseToJSON,
-    DatabaseCharsetFromJSON,
-    DatabaseCharsetToJSON,
-    DatabaseDBFromJSON,
-    DatabaseDBToJSON,
-    DatabaseUserFromJSON,
-    DatabaseUserToJSON,
-    NewDatabaseDBInputFromJSON,
-    NewDatabaseDBInputToJSON,
-    NewDatabaseInputFromJSON,
-    NewDatabaseInputToJSON,
-    NewDatabaseUserInputFromJSON,
-    NewDatabaseUserInputToJSON,
-    OperationResultFromJSON,
-    OperationResultToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    UpdateDatabaseUserDBsInputFromJSON,
-    UpdateDatabaseUserDBsInputToJSON,
-    UpdateTitleRequestFromJSON,
-    UpdateTitleRequestToJSON,
-} from '../models/index';
 
 export interface CreateDatabaseRequest {
     newDatabaseInput: NewDatabaseInput;
@@ -403,10 +379,10 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewDatabaseInputToJSON(requestParameters['newDatabaseInput']),
+            body: requestParameters['newDatabaseInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => DatabaseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -445,10 +421,10 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewDatabaseDBInputToJSON(requestParameters['newDatabaseDBInput']),
+            body: requestParameters['newDatabaseDBInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => DatabaseDBFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -487,10 +463,10 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewDatabaseUserInputToJSON(requestParameters['newDatabaseUserInput']),
+            body: requestParameters['newDatabaseUserInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => DatabaseUserFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -529,7 +505,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -568,7 +544,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -607,7 +583,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -646,7 +622,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => DatabaseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -689,7 +665,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => DatabaseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -728,7 +704,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => DatabaseDBFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -767,7 +743,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(DatabaseCharsetFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -810,7 +786,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(DatabaseDBFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -853,7 +829,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(DatabaseUserFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -897,7 +873,7 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(DatabaseFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -943,10 +919,10 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateTitleRequestToJSON(requestParameters['updateTitleRequest']),
+            body: requestParameters['updateTitleRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => DatabaseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -992,10 +968,10 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateDatabaseUserDBsInputToJSON(requestParameters['updateDatabaseUserDBsInput']),
+            body: requestParameters['updateDatabaseUserDBsInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => DatabaseUserFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

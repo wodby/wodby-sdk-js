@@ -25,26 +25,6 @@ import type {
   NewBuildFromCIInput,
   ProblemDetails,
 } from '../models/index';
-import {
-    AppBuildFromJSON,
-    AppBuildToJSON,
-    AppBuildConfigFromJSON,
-    AppBuildConfigToJSON,
-    AppBuildsCreateResponseFromJSON,
-    AppBuildsCreateResponseToJSON,
-    AppBuildsResponseFromJSON,
-    AppBuildsResponseToJSON,
-    AppDeploymentFromJSON,
-    AppDeploymentToJSON,
-    CreateBuildRequestFromJSON,
-    CreateBuildRequestToJSON,
-    DockerRegistryCredentialsFromJSON,
-    DockerRegistryCredentialsToJSON,
-    NewBuildFromCIInputFromJSON,
-    NewBuildFromCIInputToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-} from '../models/index';
 
 export interface CreateAppBuildRequest {
     createBuildRequest: CreateBuildRequest;
@@ -231,10 +211,10 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateBuildRequestToJSON(requestParameters['createBuildRequest']),
+            body: requestParameters['createBuildRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppBuildsCreateResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -273,10 +253,10 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewBuildFromCIInputToJSON(requestParameters['newBuildFromCIInput']),
+            body: requestParameters['newBuildFromCIInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppBuildFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -315,7 +295,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppDeploymentFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -358,7 +338,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppBuildFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -401,7 +381,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppBuildConfigFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -444,7 +424,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => DockerRegistryCredentialsFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -495,7 +475,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppBuildsResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

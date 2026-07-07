@@ -21,18 +21,6 @@ import type {
   ProblemDetails,
   UpdateEnvRequest,
 } from '../models/index';
-import {
-    CreateEnvRequestFromJSON,
-    CreateEnvRequestToJSON,
-    EnvFromJSON,
-    EnvToJSON,
-    OperationResultFromJSON,
-    OperationResultToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    UpdateEnvRequestFromJSON,
-    UpdateEnvRequestToJSON,
-} from '../models/index';
 
 export interface CreateEnvOperationRequest {
     createEnvRequest: CreateEnvRequest;
@@ -199,10 +187,10 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateEnvRequestToJSON(requestParameters['createEnvRequest']),
+            body: requestParameters['createEnvRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -241,7 +229,7 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -280,7 +268,7 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -323,7 +311,7 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -359,7 +347,7 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EnvFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -405,10 +393,10 @@ export class EnvsApi extends runtime.BaseAPI implements EnvsApiInterface {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateEnvRequestToJSON(requestParameters['updateEnvRequest']),
+            body: requestParameters['updateEnvRequest'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

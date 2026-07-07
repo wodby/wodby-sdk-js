@@ -21,18 +21,6 @@ import type {
   ProblemDetails,
   UpdateAppRouteInput,
 } from '../models/index';
-import {
-    AppRouteFromJSON,
-    AppRouteToJSON,
-    NewAppRouteInputFromJSON,
-    NewAppRouteInputToJSON,
-    OperationResultFromJSON,
-    OperationResultToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    UpdateAppRouteInputFromJSON,
-    UpdateAppRouteInputToJSON,
-} from '../models/index';
 
 export interface CreateAppRouteRequest {
     newAppRouteInput: NewAppRouteInput;
@@ -177,10 +165,10 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewAppRouteInputToJSON(requestParameters['newAppRouteInput']),
+            body: requestParameters['newAppRouteInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppRouteFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -219,7 +207,7 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -258,7 +246,7 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppRouteFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -301,7 +289,7 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppRouteFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -347,10 +335,10 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateAppRouteInputToJSON(requestParameters['updateAppRouteInput']),
+            body: requestParameters['updateAppRouteInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppRouteFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

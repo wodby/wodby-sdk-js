@@ -19,14 +19,6 @@ import type {
   DatabaseVersion,
   ProblemDetails,
 } from '../models/index';
-import {
-    DatabaseTypeFromJSON,
-    DatabaseTypeToJSON,
-    DatabaseVersionFromJSON,
-    DatabaseVersionToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-} from '../models/index';
 
 export interface GetIntegrationKindDatabaseSettingsRequest {
     id: number;
@@ -377,7 +369,7 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(DatabaseTypeFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -427,7 +419,7 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(DatabaseVersionFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

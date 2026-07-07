@@ -48,72 +48,6 @@ import type {
   UpdateAppServiceEnvVarInput,
   UpdateSecretValueInput,
 } from '../models/index';
-import {
-    AppServiceFromJSON,
-    AppServiceToJSON,
-    AppServiceAnnotationFromJSON,
-    AppServiceAnnotationToJSON,
-    AppServiceConfigFromJSON,
-    AppServiceConfigToJSON,
-    AppServiceContainerFromJSON,
-    AppServiceContainerToJSON,
-    AppServiceCronJobFromJSON,
-    AppServiceCronJobToJSON,
-    AppServiceCronJobsResponseFromJSON,
-    AppServiceCronJobsResponseToJSON,
-    AppServiceCronScheduleFromJSON,
-    AppServiceCronScheduleToJSON,
-    AppServiceEnvVarFromJSON,
-    AppServiceEnvVarToJSON,
-    AppServiceHelmValueFromJSON,
-    AppServiceHelmValueToJSON,
-    AppServiceInputFromJSON,
-    AppServiceInputToJSON,
-    AppServiceIntegrationFromJSON,
-    AppServiceIntegrationToJSON,
-    AppServiceLinkFromJSON,
-    AppServiceLinkToJSON,
-    AppServiceLinkInputFromJSON,
-    AppServiceLinkInputToJSON,
-    AppServiceSettingFromJSON,
-    AppServiceSettingToJSON,
-    AppServiceTokenFromJSON,
-    AppServiceTokenToJSON,
-    ConfigOverrideInputFromJSON,
-    ConfigOverrideInputToJSON,
-    IntegrationLinkInputFromJSON,
-    IntegrationLinkInputToJSON,
-    LogStreamFromJSON,
-    LogStreamToJSON,
-    NamedSecretValueInputFromJSON,
-    NamedSecretValueInputToJSON,
-    NewAnnotationInputFromJSON,
-    NewAnnotationInputToJSON,
-    NewAppServiceCronScheduleInputFromJSON,
-    NewAppServiceCronScheduleInputToJSON,
-    NewAppServiceEnvVarInputFromJSON,
-    NewAppServiceEnvVarInputToJSON,
-    NewAppServiceLogStreamInputFromJSON,
-    NewAppServiceLogStreamInputToJSON,
-    OperationResultFromJSON,
-    OperationResultToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    ResourcesInputFromJSON,
-    ResourcesInputToJSON,
-    SetStringValueInputFromJSON,
-    SetStringValueInputToJSON,
-    TaskFromJSON,
-    TaskToJSON,
-    UpdateAppServiceCronScheduleInputFromJSON,
-    UpdateAppServiceCronScheduleInputToJSON,
-    UpdateAppServiceDatabaseInputFromJSON,
-    UpdateAppServiceDatabaseInputToJSON,
-    UpdateAppServiceEnvVarInputFromJSON,
-    UpdateAppServiceEnvVarInputToJSON,
-    UpdateSecretValueInputFromJSON,
-    UpdateSecretValueInputToJSON,
-} from '../models/index';
 
 export interface CreateAppServiceAnnotationRequest {
     id: number;
@@ -1053,10 +987,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewAnnotationInputToJSON(requestParameters['newAnnotationInput']),
+            body: requestParameters['newAnnotationInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceAnnotationFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1102,10 +1036,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewAppServiceCronScheduleInputToJSON(requestParameters['newAppServiceCronScheduleInput']),
+            body: requestParameters['newAppServiceCronScheduleInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceCronScheduleFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1151,10 +1085,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewAppServiceEnvVarInputToJSON(requestParameters['newAppServiceEnvVarInput']),
+            body: requestParameters['newAppServiceEnvVarInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceEnvVarFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1200,10 +1134,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NamedSecretValueInputToJSON(requestParameters['namedSecretValueInput']),
+            body: requestParameters['namedSecretValueInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceHelmValueFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1249,10 +1183,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: IntegrationLinkInputToJSON(requestParameters['integrationLinkInput']),
+            body: requestParameters['integrationLinkInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceIntegrationFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1291,10 +1225,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewAppServiceLogStreamInputToJSON(requestParameters['newAppServiceLogStreamInput']),
+            body: requestParameters['newAppServiceLogStreamInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => LogStreamFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1340,10 +1274,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NamedSecretValueInputToJSON(requestParameters['namedSecretValueInput']),
+            body: requestParameters['namedSecretValueInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceTokenFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1382,7 +1316,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1421,7 +1355,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1460,7 +1394,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1499,7 +1433,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1538,7 +1472,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1577,7 +1511,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1616,7 +1550,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1655,7 +1589,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceCronJobFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1694,7 +1628,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1733,7 +1667,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceAnnotationFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1772,7 +1706,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceConfigFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1811,7 +1745,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceContainerFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1863,7 +1797,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceCronJobsResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1902,7 +1836,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceCronScheduleFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1941,7 +1875,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceEnvVarFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1980,7 +1914,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceHelmValueFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2019,7 +1953,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceIntegrationFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2058,7 +1992,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceLinkFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2097,7 +2031,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceSettingFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2136,7 +2070,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceTokenFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2179,7 +2113,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AppServiceFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2225,7 +2159,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2264,7 +2198,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => TaskFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2317,10 +2251,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: ConfigOverrideInputToJSON(requestParameters['configOverrideInput']),
+            body: requestParameters['configOverrideInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2373,10 +2307,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: AppServiceLinkInputToJSON(requestParameters['appServiceLinkInput']),
+            body: requestParameters['appServiceLinkInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2422,10 +2356,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: ResourcesInputToJSON(requestParameters['resourcesInput']),
+            body: requestParameters['resourcesInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2478,10 +2412,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: SetStringValueInputToJSON(requestParameters['setStringValueInput']),
+            body: requestParameters['setStringValueInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceSettingFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2520,7 +2454,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2559,7 +2493,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2605,10 +2539,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: AppServiceInputToJSON(requestParameters['appServiceInput']),
+            body: requestParameters['appServiceInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2654,10 +2588,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateAppServiceCronScheduleInputToJSON(requestParameters['updateAppServiceCronScheduleInput']),
+            body: requestParameters['updateAppServiceCronScheduleInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceCronScheduleFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2703,10 +2637,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateAppServiceDatabaseInputToJSON(requestParameters['updateAppServiceDatabaseInput']),
+            body: requestParameters['updateAppServiceDatabaseInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2752,10 +2686,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateAppServiceEnvVarInputToJSON(requestParameters['updateAppServiceEnvVarInput']),
+            body: requestParameters['updateAppServiceEnvVarInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceEnvVarFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2801,10 +2735,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateSecretValueInputToJSON(requestParameters['updateSecretValueInput']),
+            body: requestParameters['updateSecretValueInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceHelmValueFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2850,10 +2784,10 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateSecretValueInputToJSON(requestParameters['updateSecretValueInput']),
+            body: requestParameters['updateSecretValueInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppServiceTokenFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**

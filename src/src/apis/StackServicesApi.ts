@@ -46,68 +46,6 @@ import type {
   UpdateStackServiceEnvVarInput,
   UpdateStackServiceTokenInput,
 } from '../models/index';
-import {
-    IntegrationLinkInputFromJSON,
-    IntegrationLinkInputToJSON,
-    NewStackServiceAnnotationInputFromJSON,
-    NewStackServiceAnnotationInputToJSON,
-    NewStackServiceCronScheduleInputFromJSON,
-    NewStackServiceCronScheduleInputToJSON,
-    NewStackServiceEnvVarInputFromJSON,
-    NewStackServiceEnvVarInputToJSON,
-    NewStackServiceInputFromJSON,
-    NewStackServiceInputToJSON,
-    NewStackServiceScopedValueInputFromJSON,
-    NewStackServiceScopedValueInputToJSON,
-    NewStackServiceTokenInputFromJSON,
-    NewStackServiceTokenInputToJSON,
-    OperationResultFromJSON,
-    OperationResultToJSON,
-    ProblemDetailsFromJSON,
-    ProblemDetailsToJSON,
-    ResourcesInputFromJSON,
-    ResourcesInputToJSON,
-    SetNullableStringValueInputFromJSON,
-    SetNullableStringValueInputToJSON,
-    StackServiceFromJSON,
-    StackServiceToJSON,
-    StackServiceAnnotationFromJSON,
-    StackServiceAnnotationToJSON,
-    StackServiceConfigFromJSON,
-    StackServiceConfigToJSON,
-    StackServiceConfigInputFromJSON,
-    StackServiceConfigInputToJSON,
-    StackServiceCronScheduleFromJSON,
-    StackServiceCronScheduleToJSON,
-    StackServiceEnvVarFromJSON,
-    StackServiceEnvVarToJSON,
-    StackServiceHelmValueFromJSON,
-    StackServiceHelmValueToJSON,
-    StackServiceInputFromJSON,
-    StackServiceInputToJSON,
-    StackServiceIntegrationFromJSON,
-    StackServiceIntegrationToJSON,
-    StackServiceLinkFromJSON,
-    StackServiceLinkToJSON,
-    StackServiceLinkInputFromJSON,
-    StackServiceLinkInputToJSON,
-    StackServiceOptionsInputFromJSON,
-    StackServiceOptionsInputToJSON,
-    StackServiceTokenFromJSON,
-    StackServiceTokenToJSON,
-    StackServiceVolumeFromJSON,
-    StackServiceVolumeToJSON,
-    StackServiceVolumeInputFromJSON,
-    StackServiceVolumeInputToJSON,
-    UpdateSecretValueInputFromJSON,
-    UpdateSecretValueInputToJSON,
-    UpdateStackServiceCronScheduleInputFromJSON,
-    UpdateStackServiceCronScheduleInputToJSON,
-    UpdateStackServiceEnvVarInputFromJSON,
-    UpdateStackServiceEnvVarInputToJSON,
-    UpdateStackServiceTokenInputFromJSON,
-    UpdateStackServiceTokenInputToJSON,
-} from '../models/index';
 
 export interface CreateStackServiceRequest {
     newStackServiceInput: NewStackServiceInput;
@@ -892,10 +830,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewStackServiceInputToJSON(requestParameters['newStackServiceInput']),
+            body: requestParameters['newStackServiceInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -941,10 +879,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewStackServiceAnnotationInputToJSON(requestParameters['newStackServiceAnnotationInput']),
+            body: requestParameters['newStackServiceAnnotationInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceAnnotationFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -990,10 +928,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewStackServiceCronScheduleInputToJSON(requestParameters['newStackServiceCronScheduleInput']),
+            body: requestParameters['newStackServiceCronScheduleInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceCronScheduleFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1039,10 +977,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewStackServiceEnvVarInputToJSON(requestParameters['newStackServiceEnvVarInput']),
+            body: requestParameters['newStackServiceEnvVarInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceEnvVarFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1088,10 +1026,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewStackServiceScopedValueInputToJSON(requestParameters['newStackServiceScopedValueInput']),
+            body: requestParameters['newStackServiceScopedValueInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceHelmValueFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1137,10 +1075,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: IntegrationLinkInputToJSON(requestParameters['integrationLinkInput']),
+            body: requestParameters['integrationLinkInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceIntegrationFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1186,10 +1124,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewStackServiceTokenInputToJSON(requestParameters['newStackServiceTokenInput']),
+            body: requestParameters['newStackServiceTokenInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceTokenFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1228,7 +1166,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1267,7 +1205,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1306,7 +1244,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1345,7 +1283,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1384,7 +1322,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1423,7 +1361,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1462,7 +1400,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1501,7 +1439,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceAnnotationFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1540,7 +1478,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceConfigFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1579,7 +1517,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceCronScheduleFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1618,7 +1556,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceEnvVarFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1657,7 +1595,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceHelmValueFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1696,7 +1634,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceIntegrationFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1735,7 +1673,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceLinkFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1774,7 +1712,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceTokenFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1813,7 +1751,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceVolumeFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1856,7 +1794,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(StackServiceFromJSON));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1909,10 +1847,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: StackServiceConfigInputToJSON(requestParameters['stackServiceConfigInput']),
+            body: requestParameters['stackServiceConfigInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -1965,10 +1903,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: StackServiceLinkInputToJSON(requestParameters['stackServiceLinkInput']),
+            body: requestParameters['stackServiceLinkInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2014,10 +1952,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: StackServiceOptionsInputToJSON(requestParameters['stackServiceOptionsInput']),
+            body: requestParameters['stackServiceOptionsInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2063,10 +2001,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: ResourcesInputToJSON(requestParameters['resourcesInput']),
+            body: requestParameters['resourcesInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2119,10 +2057,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: SetNullableStringValueInputToJSON(requestParameters['setNullableStringValueInput']),
+            body: requestParameters['setNullableStringValueInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2175,10 +2113,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: StackServiceVolumeInputToJSON(requestParameters['stackServiceVolumeInput']),
+            body: requestParameters['stackServiceVolumeInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => OperationResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2224,10 +2162,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: StackServiceInputToJSON(requestParameters['stackServiceInput']),
+            body: requestParameters['stackServiceInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2273,10 +2211,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateStackServiceCronScheduleInputToJSON(requestParameters['updateStackServiceCronScheduleInput']),
+            body: requestParameters['updateStackServiceCronScheduleInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceCronScheduleFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2322,10 +2260,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateStackServiceEnvVarInputToJSON(requestParameters['updateStackServiceEnvVarInput']),
+            body: requestParameters['updateStackServiceEnvVarInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceEnvVarFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2371,10 +2309,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateSecretValueInputToJSON(requestParameters['updateSecretValueInput']),
+            body: requestParameters['updateSecretValueInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceHelmValueFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
@@ -2420,10 +2358,10 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateStackServiceTokenInputToJSON(requestParameters['updateStackServiceTokenInput']),
+            body: requestParameters['updateStackServiceTokenInput'],
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => StackServiceTokenFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
