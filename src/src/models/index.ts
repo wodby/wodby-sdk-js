@@ -259,6 +259,12 @@ export interface AppDeployment {
     rollbackStatus: AppDeploymentRollbackStatusEnum;
     /**
      * 
+     * @type {string}
+     * @memberof AppDeployment
+     */
+    postDeploymentStatus: AppDeploymentPostDeploymentStatusEnum;
+    /**
+     * 
      * @type {boolean}
      * @memberof AppDeployment
      */
@@ -287,6 +293,18 @@ export interface AppDeployment {
      * @memberof AppDeployment
      */
     task?: Task | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppDeployment
+     */
+    postDeploymentTaskId?: number | null;
+    /**
+     * 
+     * @type {Task}
+     * @memberof AppDeployment
+     */
+    postDeploymentTask?: Task | null;
     /**
      * 
      * @type {Array<AppServiceDeployment>}
@@ -329,6 +347,22 @@ export const AppDeploymentRollbackStatusEnum = {
     Failed: 'failed'
 } as const;
 export type AppDeploymentRollbackStatusEnum = typeof AppDeploymentRollbackStatusEnum[keyof typeof AppDeploymentRollbackStatusEnum];
+
+/**
+ * @export
+ */
+export const AppDeploymentPostDeploymentStatusEnum = {
+    Unknown: 'unknown',
+    NotApplicable: 'not_applicable',
+    Skipped: 'skipped',
+    NotRun: 'not_run',
+    Pending: 'pending',
+    InProgress: 'in_progress',
+    Completed: 'completed',
+    Failed: 'failed',
+    Canceled: 'canceled'
+} as const;
+export type AppDeploymentPostDeploymentStatusEnum = typeof AppDeploymentPostDeploymentStatusEnum[keyof typeof AppDeploymentPostDeploymentStatusEnum];
 
 /**
  * 
@@ -2597,6 +2631,12 @@ export interface ClusterAutoInfrastructureUpgradeSettingsInput {
  */
 export interface ClusterAutoUpgradeVersionPolicy {
     /**
+     * Allow newer infrastructure app stack revisions that keep the same stable semantic version. Ignored for cluster-level infrastructure versions.
+     * @type {boolean}
+     * @memberof ClusterAutoUpgradeVersionPolicy
+     */
+    allowSameVersion: boolean;
+    /**
      * 
      * @type {boolean}
      * @memberof ClusterAutoUpgradeVersionPolicy
@@ -2621,6 +2661,12 @@ export interface ClusterAutoUpgradeVersionPolicy {
  * @interface ClusterAutoUpgradeVersionPolicyInput
  */
 export interface ClusterAutoUpgradeVersionPolicyInput {
+    /**
+     * Allow newer infrastructure app stack revisions that keep the same stable semantic version. Ignored for cluster-level infrastructure versions.
+     * @type {boolean}
+     * @memberof ClusterAutoUpgradeVersionPolicyInput
+     */
+    allowSameVersion?: boolean | null;
     /**
      * 
      * @type {boolean}
@@ -6309,6 +6355,31 @@ export interface ServiceDeploymentInput {
      * @memberof ServiceDeploymentInput
      */
     image: string;
+}
+/**
+ * 
+ * @export
+ * @interface ServiceManifestUpdateInput
+ */
+export interface ServiceManifestUpdateInput {
+    /**
+     * Optional service revision version; defaults to the current service version.
+     * @type {string}
+     * @memberof ServiceManifestUpdateInput
+     */
+    version?: string;
+    /**
+     * Complete Wodby service.yml manifest content.
+     * @type {string}
+     * @memberof ServiceManifestUpdateInput
+     */
+    manifestYaml: string;
+    /**
+     * Optional referenced file contents keyed by manifest-relative path, for example Dockerfile or configs/app.conf.
+     * @type {{ [key: string]: string; }}
+     * @memberof ServiceManifestUpdateInput
+     */
+    files?: { [key: string]: string; };
 }
 /**
  * 

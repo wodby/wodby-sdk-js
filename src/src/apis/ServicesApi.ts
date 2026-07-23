@@ -23,6 +23,7 @@ import type {
   OperationResult,
   ProblemDetails,
   Service,
+  ServiceManifestUpdateInput,
   ServiceRevision,
   ServiceSettingsInput,
   ServicesResponse,
@@ -63,6 +64,11 @@ export interface ListServicesRequest {
 
 export interface ScaffoldServiceFromHelmChartRequest {
     helmChartServiceScaffoldInput: HelmChartServiceScaffoldInput;
+}
+
+export interface UpdateServiceFromManifestRequest {
+    id: number;
+    serviceManifestUpdateInput: ServiceManifestUpdateInput;
 }
 
 export interface UpdateServiceSettingsRequest {
@@ -213,6 +219,23 @@ export interface ServicesApiInterface {
      * Scaffold service from Helm chart
      */
     scaffoldServiceFromHelmChart(requestParameters: ScaffoldServiceFromHelmChartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HelmChartServiceScaffoldResponse>;
+
+    /**
+     * Updates an existing non-Git Wodby service from a service manifest and starts a service update task.
+     * @summary Update service from manifest
+     * @param {number} id 
+     * @param {ServiceManifestUpdateInput} serviceManifestUpdateInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServicesApiInterface
+     */
+    updateServiceFromManifestRaw(requestParameters: UpdateServiceFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Updates an existing non-Git Wodby service from a service manifest and starts a service update task.
+     * Update service from manifest
+     */
+    updateServiceFromManifest(requestParameters: UpdateServiceFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Updates service settings and returns the updated service.
@@ -589,6 +612,55 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
      */
     async scaffoldServiceFromHelmChart(requestParameters: ScaffoldServiceFromHelmChartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HelmChartServiceScaffoldResponse> {
         const response = await this.scaffoldServiceFromHelmChartRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates an existing non-Git Wodby service from a service manifest and starts a service update task.
+     * Update service from manifest
+     */
+    async updateServiceFromManifestRaw(requestParameters: UpdateServiceFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateServiceFromManifest().'
+            );
+        }
+
+        if (requestParameters['serviceManifestUpdateInput'] == null) {
+            throw new runtime.RequiredError(
+                'serviceManifestUpdateInput',
+                'Required parameter "serviceManifestUpdateInput" was null or undefined when calling updateServiceFromManifest().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/services/{id}/actions/update-from-manifest`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['serviceManifestUpdateInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Updates an existing non-Git Wodby service from a service manifest and starts a service update task.
+     * Update service from manifest
+     */
+    async updateServiceFromManifest(requestParameters: UpdateServiceFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.updateServiceFromManifestRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
