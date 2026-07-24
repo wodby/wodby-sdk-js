@@ -16,17 +16,41 @@
 import * as runtime from '../runtime';
 import type {
   Backup,
+  BackupPreset,
   NewBackupInput,
+  NewBackupPresetInput,
   OperationResult,
   ProblemDetails,
+  UpdateBackupPresetInput,
 } from '../models/index';
 
 export interface CreateBackupRequest {
     newBackupInput: NewBackupInput;
 }
 
+export interface CreateBackupPresetRequest {
+    newBackupPresetInput: NewBackupPresetInput;
+}
+
+export interface DeleteBackupPresetRequest {
+    id: number;
+}
+
 export interface GetBackupRequest {
     id: number;
+}
+
+export interface GetBackupPresetRequest {
+    id: number;
+}
+
+export interface ListBackupPresetsRequest {
+    appInstanceId?: number;
+    appServiceId?: number;
+    databaseId?: number;
+    databaseDbId?: number;
+    orgId?: number;
+    backupName?: string;
 }
 
 export interface ListBackupsRequest {
@@ -35,6 +59,11 @@ export interface ListBackupsRequest {
     databaseId?: number;
     databaseDbId?: number;
     backupName?: string;
+}
+
+export interface UpdateBackupPresetRequest {
+    id: number;
+    updateBackupPresetInput: UpdateBackupPresetInput;
 }
 
 /**
@@ -61,6 +90,38 @@ export interface BackupsApiInterface {
     createBackup(requestParameters: CreateBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
+     * Creates a manual or scheduled backup preset.
+     * @summary Create backup preset
+     * @param {NewBackupPresetInput} newBackupPresetInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BackupsApiInterface
+     */
+    createBackupPresetRaw(requestParameters: CreateBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackupPreset>>;
+
+    /**
+     * Creates a manual or scheduled backup preset.
+     * Create backup preset
+     */
+    createBackupPreset(requestParameters: CreateBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackupPreset>;
+
+    /**
+     * Deletes a backup preset and its schedule.
+     * @summary Delete backup preset
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BackupsApiInterface
+     */
+    deleteBackupPresetRaw(requestParameters: DeleteBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes a backup preset and its schedule.
+     * Delete backup preset
+     */
+    deleteBackupPreset(requestParameters: DeleteBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
      * Returns the backup identified by the request path.
      * @summary Get backup
      * @param {number} id 
@@ -75,6 +136,43 @@ export interface BackupsApiInterface {
      * Get backup
      */
     getBackup(requestParameters: GetBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Backup>;
+
+    /**
+     * Returns the backup preset identified by the request path.
+     * @summary Get backup preset
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BackupsApiInterface
+     */
+    getBackupPresetRaw(requestParameters: GetBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackupPreset>>;
+
+    /**
+     * Returns the backup preset identified by the request path.
+     * Get backup preset
+     */
+    getBackupPreset(requestParameters: GetBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackupPreset>;
+
+    /**
+     * Returns backup presets matching the request filters. At least one target filter is required for user-session requests; API-key requests default to the key\'s organization.
+     * @summary List backup presets
+     * @param {number} [appInstanceId] 
+     * @param {number} [appServiceId] 
+     * @param {number} [databaseId] 
+     * @param {number} [databaseDbId] 
+     * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
+     * @param {string} [backupName] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BackupsApiInterface
+     */
+    listBackupPresetsRaw(requestParameters: ListBackupPresetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<BackupPreset>>>;
+
+    /**
+     * Returns backup presets matching the request filters. At least one target filter is required for user-session requests; API-key requests default to the key\'s organization.
+     * List backup presets
+     */
+    listBackupPresets(requestParameters: ListBackupPresetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<BackupPreset>>;
 
     /**
      * Returns backups matching the request filters.
@@ -95,6 +193,23 @@ export interface BackupsApiInterface {
      * List backups
      */
     listBackups(requestParameters: ListBackupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Backup>>;
+
+    /**
+     * Updates a backup preset\'s destination and schedule.
+     * @summary Update backup preset
+     * @param {number} id 
+     * @param {UpdateBackupPresetInput} updateBackupPresetInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BackupsApiInterface
+     */
+    updateBackupPresetRaw(requestParameters: UpdateBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackupPreset>>;
+
+    /**
+     * Updates a backup preset\'s destination and schedule.
+     * Update backup preset
+     */
+    updateBackupPreset(requestParameters: UpdateBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackupPreset>;
 
 }
 
@@ -146,6 +261,87 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
     }
 
     /**
+     * Creates a manual or scheduled backup preset.
+     * Create backup preset
+     */
+    async createBackupPresetRaw(requestParameters: CreateBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackupPreset>> {
+        if (requestParameters['newBackupPresetInput'] == null) {
+            throw new runtime.RequiredError(
+                'newBackupPresetInput',
+                'Required parameter "newBackupPresetInput" was null or undefined when calling createBackupPreset().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/backup-presets`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['newBackupPresetInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Creates a manual or scheduled backup preset.
+     * Create backup preset
+     */
+    async createBackupPreset(requestParameters: CreateBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackupPreset> {
+        const response = await this.createBackupPresetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes a backup preset and its schedule.
+     * Delete backup preset
+     */
+    async deleteBackupPresetRaw(requestParameters: DeleteBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteBackupPreset().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/backup-presets/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Deletes a backup preset and its schedule.
+     * Delete backup preset
+     */
+    async deleteBackupPreset(requestParameters: DeleteBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteBackupPresetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns the backup identified by the request path.
      * Get backup
      */
@@ -181,6 +377,101 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
      */
     async getBackup(requestParameters: GetBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Backup> {
         const response = await this.getBackupRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the backup preset identified by the request path.
+     * Get backup preset
+     */
+    async getBackupPresetRaw(requestParameters: GetBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackupPreset>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getBackupPreset().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/backup-presets/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the backup preset identified by the request path.
+     * Get backup preset
+     */
+    async getBackupPreset(requestParameters: GetBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackupPreset> {
+        const response = await this.getBackupPresetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns backup presets matching the request filters. At least one target filter is required for user-session requests; API-key requests default to the key\'s organization.
+     * List backup presets
+     */
+    async listBackupPresetsRaw(requestParameters: ListBackupPresetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<BackupPreset>>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['appInstanceId'] != null) {
+            queryParameters['appInstanceId'] = requestParameters['appInstanceId'];
+        }
+
+        if (requestParameters['appServiceId'] != null) {
+            queryParameters['appServiceId'] = requestParameters['appServiceId'];
+        }
+
+        if (requestParameters['databaseId'] != null) {
+            queryParameters['databaseId'] = requestParameters['databaseId'];
+        }
+
+        if (requestParameters['databaseDbId'] != null) {
+            queryParameters['databaseDbId'] = requestParameters['databaseDbId'];
+        }
+
+        if (requestParameters['orgId'] != null) {
+            queryParameters['orgId'] = requestParameters['orgId'];
+        }
+
+        if (requestParameters['backupName'] != null) {
+            queryParameters['backupName'] = requestParameters['backupName'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/backup-presets`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns backup presets matching the request filters. At least one target filter is required for user-session requests; API-key requests default to the key\'s organization.
+     * List backup presets
+     */
+    async listBackupPresets(requestParameters: ListBackupPresetsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<BackupPreset>> {
+        const response = await this.listBackupPresetsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -233,6 +524,55 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
      */
     async listBackups(requestParameters: ListBackupsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Backup>> {
         const response = await this.listBackupsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates a backup preset\'s destination and schedule.
+     * Update backup preset
+     */
+    async updateBackupPresetRaw(requestParameters: UpdateBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackupPreset>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateBackupPreset().'
+            );
+        }
+
+        if (requestParameters['updateBackupPresetInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateBackupPresetInput',
+                'Required parameter "updateBackupPresetInput" was null or undefined when calling updateBackupPreset().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/backup-presets/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateBackupPresetInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Updates a backup preset\'s destination and schedule.
+     * Update backup preset
+     */
+    async updateBackupPreset(requestParameters: UpdateBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackupPreset> {
+        const response = await this.updateBackupPresetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

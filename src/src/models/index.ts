@@ -2254,6 +2254,127 @@ export interface Backup {
 /**
  * 
  * @export
+ * @interface BackupPreset
+ */
+export interface BackupPreset {
+    /**
+     * 
+     * @type {number}
+     * @memberof BackupPreset
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof BackupPreset
+     */
+    appInstanceId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof BackupPreset
+     */
+    appServiceId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof BackupPreset
+     */
+    databaseId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof BackupPreset
+     */
+    databaseDbId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof BackupPreset
+     */
+    orgId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof BackupPreset
+     */
+    envId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof BackupPreset
+     */
+    backupName?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof BackupPreset
+     */
+    integrationId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof BackupPreset
+     */
+    bucket: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BackupPreset
+     */
+    storageClass?: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BackupPreset
+     */
+    override: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BackupPreset
+     */
+    auto: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BackupPreset
+     */
+    disabled: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof BackupPreset
+     */
+    crontab?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof BackupPreset
+     */
+    duration?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof BackupPreset
+     */
+    nextRunAt?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof BackupPreset
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BackupPreset
+     */
+    updatedAt: string;
+}
+/**
+ * 
+ * @export
  * @interface BuildSourceInput
  */
 export interface BuildSourceInput {
@@ -2268,7 +2389,7 @@ export interface BuildSourceInput {
      * @type {string}
      * @memberof BuildSourceInput
      */
-    template?: string | null;
+    boilerplate?: string | null;
     /**
      * 
      * @type {string}
@@ -4559,6 +4680,12 @@ export interface NewAppInput {
      * @memberof NewAppInput
      */
     registryIntegrationId?: number | null;
+    /**
+     * 
+     * @type {AppInstanceSettingsInput}
+     * @memberof NewAppInput
+     */
+    settings?: AppInstanceSettingsInput;
 }
 /**
  * 
@@ -4626,6 +4753,12 @@ export interface NewAppInstanceInput {
      * @memberof NewAppInstanceInput
      */
     registryIntegrationId?: number | null;
+    /**
+     * 
+     * @type {AppInstanceSettingsInput}
+     * @memberof NewAppInstanceInput
+     */
+    settings?: AppInstanceSettingsInput;
 }
 /**
  * 
@@ -4974,6 +5107,103 @@ export interface NewBackupInput {
 /**
  * 
  * @export
+ * @interface NewBackupPresetInput
+ */
+export interface NewBackupPresetInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof NewBackupPresetInput
+     */
+    appInstanceId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewBackupPresetInput
+     */
+    appServiceId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewBackupPresetInput
+     */
+    databaseId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewBackupPresetInput
+     */
+    databaseDbId?: number | null;
+    /**
+     * Optional for API-key requests; defaults to the API key's organization when no more specific target is provided.
+     * @type {number}
+     * @memberof NewBackupPresetInput
+     */
+    orgId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewBackupPresetInput
+     */
+    envId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewBackupPresetInput
+     */
+    backupName?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewBackupPresetInput
+     */
+    integrationId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewBackupPresetInput
+     */
+    bucket: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewBackupPresetInput
+     */
+    storageClass?: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewBackupPresetInput
+     */
+    disabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewBackupPresetInput
+     */
+    override: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewBackupPresetInput
+     */
+    auto?: boolean | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewBackupPresetInput
+     */
+    crontab?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewBackupPresetInput
+     */
+    duration?: number | null;
+}
+/**
+ * 
+ * @export
  * @interface NewBuildFromCIInput
  */
 export interface NewBuildFromCIInput {
@@ -5152,6 +5382,12 @@ export interface NewClusterInput {
      * @memberof NewClusterInput
      */
     disableMonitoring: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewClusterInput
+     */
+    autoInfrastructureUpgrade?: boolean | null;
 }
 /**
  * 
@@ -6245,73 +6481,7 @@ export interface Service {
      * @type {number}
      * @memberof Service
      */
-    draftRevId?: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof Service
-     */
     latestRevNumber: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof Service
-     */
-    gitRepoId?: number | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof Service
-     */
-    gitRepoRemoteId?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof Service
-     */
-    gitRepoRef?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof Service
-     */
-    gitRepoRefType?: string | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof Service
-     */
-    originStackRevId?: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof Service
-     */
-    originStackRevStackId?: number | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof Service
-     */
-    originStackRevName?: string | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof Service
-     */
-    originStackRevNumber?: number | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof Service
-     */
-    originStackRevVersion?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof Service
-     */
-    originStackRevCreatedAt?: string | null;
     /**
      * 
      * @type {number}
@@ -6578,7 +6748,73 @@ export interface Stack {
      * @type {number}
      * @memberof Stack
      */
+    draftRevId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Stack
+     */
     latestRevNumber: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Stack
+     */
+    gitRepoId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Stack
+     */
+    gitRepoRemoteId?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Stack
+     */
+    gitRepoRef?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Stack
+     */
+    gitRepoRefType?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Stack
+     */
+    originStackRevId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Stack
+     */
+    originStackRevStackId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Stack
+     */
+    originStackRevName?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Stack
+     */
+    originStackRevNumber?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Stack
+     */
+    originStackRevVersion?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Stack
+     */
+    originStackRevCreatedAt?: string | null;
     /**
      * 
      * @type {number}
@@ -6975,6 +7211,12 @@ export interface StackService {
      * @memberof StackService
      */
     replicas: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StackService
+     */
+    serviceRevPinned: boolean;
     /**
      * 
      * @type {boolean}
@@ -8285,6 +8527,61 @@ export interface UpdateAppServiceEnvVarInput {
      * @memberof UpdateAppServiceEnvVarInput
      */
     build?: boolean | null;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateBackupPresetInput
+ */
+export interface UpdateBackupPresetInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateBackupPresetInput
+     */
+    integrationId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateBackupPresetInput
+     */
+    bucket: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateBackupPresetInput
+     */
+    storageClass?: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateBackupPresetInput
+     */
+    disabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateBackupPresetInput
+     */
+    override: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateBackupPresetInput
+     */
+    auto: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateBackupPresetInput
+     */
+    crontab?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateBackupPresetInput
+     */
+    duration?: number | null;
 }
 /**
  * 
