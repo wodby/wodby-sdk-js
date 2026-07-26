@@ -3209,12 +3209,6 @@ export interface CurrentUser {
     name: string;
     /**
      * 
-     * @type {boolean}
-     * @memberof CurrentUser
-     */
-    isAdmin: boolean;
-    /**
-     * 
      * @type {Array<Org>}
      * @memberof CurrentUser
      */
