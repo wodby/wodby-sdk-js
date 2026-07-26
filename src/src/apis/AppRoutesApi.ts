@@ -16,9 +16,12 @@
 import * as runtime from '../runtime';
 import type {
   AppRoute,
+  AppRouteSetting,
+  AppRouteSettingName,
   NewAppRouteInput,
   OperationResult,
   ProblemDetails,
+  SetStringValueInput,
   UpdateAppRouteInput,
 } from '../models/index';
 
@@ -30,12 +33,27 @@ export interface DeleteAppRouteRequest {
     id: number;
 }
 
+export interface DeleteAppRouteSettingRequest {
+    id: number;
+    name: AppRouteSettingName;
+}
+
 export interface GetAppRouteRequest {
+    id: number;
+}
+
+export interface ListAppRouteSettingsRequest {
     id: number;
 }
 
 export interface ListAppRoutesRequest {
     appInstanceId: number;
+}
+
+export interface SetAppRouteSettingRequest {
+    id: number;
+    name: AppRouteSettingName;
+    setStringValueInput: SetStringValueInput;
 }
 
 export interface UpdateAppRouteRequest {
@@ -83,6 +101,23 @@ export interface AppRoutesApiInterface {
     deleteAppRoute(requestParameters: DeleteAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
+     * Deletes a named app route setting and restores any applicable default.
+     * @summary Delete app route setting
+     * @param {number} id 
+     * @param {AppRouteSettingName} name 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppRoutesApiInterface
+     */
+    deleteAppRouteSettingRaw(requestParameters: DeleteAppRouteSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes a named app route setting and restores any applicable default.
+     * Delete app route setting
+     */
+    deleteAppRouteSetting(requestParameters: DeleteAppRouteSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
      * Returns the app route identified by the request path.
      * @summary Get app route
      * @param {number} id 
@@ -99,6 +134,22 @@ export interface AppRoutesApiInterface {
     getAppRoute(requestParameters: GetAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute>;
 
     /**
+     * Returns route-specific setting overrides. Inherited app-instance defaults are not included.
+     * @summary List app route settings
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppRoutesApiInterface
+     */
+    listAppRouteSettingsRaw(requestParameters: ListAppRouteSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppRouteSetting>>>;
+
+    /**
+     * Returns route-specific setting overrides. Inherited app-instance defaults are not included.
+     * List app route settings
+     */
+    listAppRouteSettings(requestParameters: ListAppRouteSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppRouteSetting>>;
+
+    /**
      * Returns app routes matching the request filters.
      * @summary List app routes
      * @param {number} appInstanceId 
@@ -113,6 +164,24 @@ export interface AppRoutesApiInterface {
      * List app routes
      */
     listAppRoutes(requestParameters: ListAppRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppRoute>>;
+
+    /**
+     * Creates or updates a named app route setting.
+     * @summary Set app route setting
+     * @param {number} id 
+     * @param {AppRouteSettingName} name 
+     * @param {SetStringValueInput} setStringValueInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppRoutesApiInterface
+     */
+    setAppRouteSettingRaw(requestParameters: SetAppRouteSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRouteSetting>>;
+
+    /**
+     * Creates or updates a named app route setting.
+     * Set app route setting
+     */
+    setAppRouteSetting(requestParameters: SetAppRouteSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRouteSetting>;
 
     /**
      * Updates the app route and returns the updated resource.
@@ -220,6 +289,52 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
     }
 
     /**
+     * Deletes a named app route setting and restores any applicable default.
+     * Delete app route setting
+     */
+    async deleteAppRouteSettingRaw(requestParameters: DeleteAppRouteSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteAppRouteSetting().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteAppRouteSetting().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-routes/{id}/settings/{name}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))).replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Deletes a named app route setting and restores any applicable default.
+     * Delete app route setting
+     */
+    async deleteAppRouteSetting(requestParameters: DeleteAppRouteSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteAppRouteSettingRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns the app route identified by the request path.
      * Get app route
      */
@@ -255,6 +370,45 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
      */
     async getAppRoute(requestParameters: GetAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute> {
         const response = await this.getAppRouteRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns route-specific setting overrides. Inherited app-instance defaults are not included.
+     * List app route settings
+     */
+    async listAppRouteSettingsRaw(requestParameters: ListAppRouteSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppRouteSetting>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppRouteSettings().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-routes/{id}/settings`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns route-specific setting overrides. Inherited app-instance defaults are not included.
+     * List app route settings
+     */
+    async listAppRouteSettings(requestParameters: ListAppRouteSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppRouteSetting>> {
+        const response = await this.listAppRouteSettingsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -298,6 +452,62 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
      */
     async listAppRoutes(requestParameters: ListAppRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppRoute>> {
         const response = await this.listAppRoutesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates or updates a named app route setting.
+     * Set app route setting
+     */
+    async setAppRouteSettingRaw(requestParameters: SetAppRouteSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppRouteSetting>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling setAppRouteSetting().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling setAppRouteSetting().'
+            );
+        }
+
+        if (requestParameters['setStringValueInput'] == null) {
+            throw new runtime.RequiredError(
+                'setStringValueInput',
+                'Required parameter "setStringValueInput" was null or undefined when calling setAppRouteSetting().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-routes/{id}/settings/{name}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))).replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['setStringValueInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Creates or updates a named app route setting.
+     * Set app route setting
+     */
+    async setAppRouteSetting(requestParameters: SetAppRouteSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRouteSetting> {
+        const response = await this.setAppRouteSettingRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

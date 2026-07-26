@@ -30,6 +30,7 @@ import type {
   AppServiceLinkInput,
   AppServiceSetting,
   AppServiceToken,
+  AppServiceVolume,
   ConfigOverrideInput,
   IntegrationLinkInput,
   LogStream,
@@ -165,6 +166,10 @@ export interface ListAppServiceSettingsRequest {
 }
 
 export interface ListAppServiceTokensRequest {
+    id: number;
+}
+
+export interface ListAppServiceVolumesRequest {
     id: number;
 }
 
@@ -691,6 +696,22 @@ export interface AppServicesApiInterface {
      * List app service tokens
      */
     listAppServiceTokens(requestParameters: ListAppServiceTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceToken>>;
+
+    /**
+     * Returns configured volume metadata together with effective Kubernetes storage-class state.
+     * @summary List app service volumes
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServiceVolumesRaw(requestParameters: ListAppServiceVolumesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceVolume>>>;
+
+    /**
+     * Returns configured volume metadata together with effective Kubernetes storage-class state.
+     * List app service volumes
+     */
+    listAppServiceVolumes(requestParameters: ListAppServiceVolumesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceVolume>>;
 
     /**
      * Returns app services matching the request filters.
@@ -2079,6 +2100,45 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
      */
     async listAppServiceTokens(requestParameters: ListAppServiceTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceToken>> {
         const response = await this.listAppServiceTokensRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns configured volume metadata together with effective Kubernetes storage-class state.
+     * List app service volumes
+     */
+    async listAppServiceVolumesRaw(requestParameters: ListAppServiceVolumesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceVolume>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppServiceVolumes().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/volumes`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns configured volume metadata together with effective Kubernetes storage-class state.
+     * List app service volumes
+     */
+    async listAppServiceVolumes(requestParameters: ListAppServiceVolumesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceVolume>> {
+        const response = await this.listAppServiceVolumesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

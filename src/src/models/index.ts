@@ -58,6 +58,61 @@ export interface App {
 /**
  * 
  * @export
+ * @interface AppAuth
+ */
+export interface AppAuth {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAuth
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAuth
+     */
+    appInstanceId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAuth
+     */
+    appServiceId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAuth
+     */
+    appRouteId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAuth
+     */
+    login: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAuth
+     */
+    realm: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAuth
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAuth
+     */
+    updatedAt: string;
+}
+/**
+ * 
+ * @export
  * @interface AppBuild
  */
 export interface AppBuild {
@@ -388,25 +443,6 @@ export interface AppDeploymentsResponse {
      * @memberof AppDeploymentsResponse
      */
     nextPage?: number | null;
-}
-/**
- * 
- * @export
- * @interface AppEndpointOptionInput
- */
-export interface AppEndpointOptionInput {
-    /**
-     * 
-     * @type {string}
-     * @memberof AppEndpointOptionInput
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppEndpointOptionInput
-     */
-    value: string;
 }
 /**
  * 
@@ -1033,6 +1069,77 @@ export interface AppRoute {
 /**
  * 
  * @export
+ * @interface AppRouteSetting
+ */
+export interface AppRouteSetting {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppRouteSetting
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppRouteSetting
+     */
+    appInstanceId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppRouteSetting
+     */
+    routeId: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppRouteSetting
+     */
+    _default: boolean;
+    /**
+     * 
+     * @type {AppRouteSettingName}
+     * @memberof AppRouteSetting
+     */
+    name: AppRouteSettingName;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppRouteSetting
+     */
+    value: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppRouteSetting
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppRouteSetting
+     */
+    updatedAt: string;
+}
+
+
+
+/**
+ * 
+ * @export
+ */
+export const AppRouteSettingName = {
+    HttpsRedirect: 'HTTPS_REDIRECT',
+    NoIndex: 'NO_INDEX',
+    RequestBodySize: 'REQUEST_BODY_SIZE',
+    SessionAffinity: 'SESSION_AFFINITY',
+    PathRewrite: 'PATH_REWRITE'
+} as const;
+export type AppRouteSettingName = typeof AppRouteSettingName[keyof typeof AppRouteSettingName];
+
+/**
+ * 
+ * @export
  * @interface AppService
  */
 export interface AppService {
@@ -1562,6 +1669,12 @@ export interface AppServiceCronSchedule {
      * @memberof AppServiceCronSchedule
      */
     appServiceId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceCronSchedule
+     */
+    name: string;
     /**
      * 
      * @type {string}
@@ -2193,6 +2306,105 @@ export interface AppServiceToken {
 /**
  * 
  * @export
+ * @interface AppServiceVolume
+ */
+export interface AppServiceVolume {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceVolume
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceVolume
+     */
+    appServiceId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceVolume
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceVolume
+     */
+    path: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppServiceVolume
+     */
+    shared: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppServiceVolume
+     */
+    readOnly: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceVolume
+     */
+    size: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceVolume
+     */
+    configuredStorageClassName?: string | null;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof AppServiceVolume
+     */
+    effectiveStorageClassNames: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceVolume
+     */
+    storageClassStatus: AppServiceVolumeStorageClassStatusEnum;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppServiceVolume
+     */
+    storageClassSelectable: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceVolume
+     */
+    fromVolumeId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceVolume
+     */
+    storageAppServiceId?: number | null;
+}
+
+
+/**
+ * @export
+ */
+export const AppServiceVolumeStorageClassStatusEnum = {
+    Current: 'current',
+    Mismatch: 'mismatch',
+    Mixed: 'mixed',
+    Unknown: 'unknown',
+    Unavailable: 'unavailable'
+} as const;
+export type AppServiceVolumeStorageClassStatusEnum = typeof AppServiceVolumeStorageClassStatusEnum[keyof typeof AppServiceVolumeStorageClassStatusEnum];
+
+/**
+ * 
+ * @export
  * @interface Backup
  */
 export interface Backup {
@@ -2640,10 +2852,28 @@ export interface Cluster {
     orgId: number;
     /**
      * 
+     * @type {ClusterCapabilities}
+     * @memberof Cluster
+     */
+    capabilities: ClusterCapabilities;
+    /**
+     * 
      * @type {ClusterSettings}
      * @memberof Cluster
      */
     settings?: ClusterSettings;
+    /**
+     * 
+     * @type {Array<StorageClass>}
+     * @memberof Cluster
+     */
+    storageClasses?: Array<StorageClass> | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Cluster
+     */
+    storageClassesObservedAt?: string | null;
     /**
      * 
      * @type {string}
@@ -2810,6 +3040,25 @@ export interface ClusterAutoUpgradeVersionPolicyInput {
 /**
  * 
  * @export
+ * @interface ClusterCapabilities
+ */
+export interface ClusterCapabilities {
+    /**
+     * Whether this cluster uses Envoy Gateway for application routing.
+     * @type {boolean}
+     * @memberof ClusterCapabilities
+     */
+    envoyGateway: boolean;
+    /**
+     * Whether this cluster supports routes with the REDIRECT action.
+     * @type {boolean}
+     * @memberof ClusterCapabilities
+     */
+    redirectRoutes: boolean;
+}
+/**
+ * 
+ * @export
  * @interface ClusterSettings
  */
 export interface ClusterSettings {
@@ -2958,6 +3207,12 @@ export interface CurrentUser {
      * @memberof CurrentUser
      */
     name: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CurrentUser
+     */
+    isAdmin: boolean;
     /**
      * 
      * @type {Array<Org>}
@@ -4599,6 +4854,49 @@ export interface NewAnnotationInput {
 /**
  * 
  * @export
+ * @interface NewAppAuthInput
+ */
+export interface NewAppAuthInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof NewAppAuthInput
+     */
+    appInstanceId: number;
+    /**
+     * Optional service scope. Required together with appRouteId for route scope.
+     * @type {number}
+     * @memberof NewAppAuthInput
+     */
+    appServiceId?: number | null;
+    /**
+     * Optional route scope. Requires appServiceId and must belong to that service.
+     * @type {number}
+     * @memberof NewAppAuthInput
+     */
+    appRouteId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppAuthInput
+     */
+    login: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppAuthInput
+     */
+    password: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppAuthInput
+     */
+    realm: string;
+}
+/**
+ * 
+ * @export
  * @interface NewAppInput
  */
 export interface NewAppInput {
@@ -4844,30 +5142,6 @@ export interface NewAppRouteInput {
      * @memberof NewAppRouteInput
      */
     letsencrypt?: boolean | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof NewAppRouteInput
-     */
-    authLogin?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof NewAppRouteInput
-     */
-    authPassword?: string | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof NewAppRouteInput
-     */
-    authId?: number | null;
-    /**
-     * 
-     * @type {Array<AppEndpointOptionInput>}
-     * @memberof NewAppRouteInput
-     */
-    options?: Array<AppEndpointOptionInput>;
 }
 
 
@@ -4895,6 +5169,12 @@ export type NewAppRouteInputActionEnum = typeof NewAppRouteInputActionEnum[keyof
  * @interface NewAppServiceCronScheduleInput
  */
 export interface NewAppServiceCronScheduleInput {
+    /**
+     * Stable cron schedule identity. When omitted or blank, the server generates a unique name.
+     * @type {string}
+     * @memberof NewAppServiceCronScheduleInput
+     */
+    name?: string | null;
     /**
      * 
      * @type {string}
@@ -7973,6 +8253,61 @@ export interface StacksResponse {
 /**
  * 
  * @export
+ * @interface StorageClass
+ */
+export interface StorageClass {
+    /**
+     * 
+     * @type {string}
+     * @memberof StorageClass
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StorageClass
+     */
+    provisioner: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StorageClass
+     */
+    reclaimPolicy?: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StorageClass
+     */
+    allowVolumeExpansion: boolean;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof StorageClass
+     */
+    mountOptions: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof StorageClass
+     */
+    volumeBindingMode?: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StorageClass
+     */
+    isDefault: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StorageClass
+     */
+    selectable: boolean;
+}
+/**
+ * 
+ * @export
  * @interface Task
  */
 export interface Task {
@@ -8351,6 +8686,43 @@ export interface URLResponse {
 /**
  * 
  * @export
+ * @interface UpdateAppAuthInput
+ */
+export interface UpdateAppAuthInput {
+    /**
+     * Omit with appRouteId to preserve the current scope. When supplied alone, moves the entry to service scope and clears any route scope.
+     * @type {number}
+     * @memberof UpdateAppAuthInput
+     */
+    appServiceId?: number | null;
+    /**
+     * Moves the entry to route scope and must be accompanied by appServiceId.
+     * @type {number}
+     * @memberof UpdateAppAuthInput
+     */
+    appRouteId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateAppAuthInput
+     */
+    login: string;
+    /**
+     * Replaces the existing secret when supplied; omit to keep the current password.
+     * @type {string}
+     * @memberof UpdateAppAuthInput
+     */
+    password?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateAppAuthInput
+     */
+    realm: string;
+}
+/**
+ * 
+ * @export
  * @interface UpdateAppRouteInput
  */
 export interface UpdateAppRouteInput {
@@ -8414,12 +8786,6 @@ export interface UpdateAppRouteInput {
      * @memberof UpdateAppRouteInput
      */
     redirectStatusCode?: number | null;
-    /**
-     * 
-     * @type {Array<AppEndpointOptionInput>}
-     * @memberof UpdateAppRouteInput
-     */
-    options?: Array<AppEndpointOptionInput>;
 }
 
 
@@ -8884,4 +9250,10 @@ export interface VolumeSizeInput {
      * @memberof VolumeSizeInput
      */
     size: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof VolumeSizeInput
+     */
+    storageClassName?: string | null;
 }

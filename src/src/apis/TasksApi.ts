@@ -34,8 +34,10 @@ export interface ListTasksRequest {
     scope?: ListTasksScopeEnum;
     orgId?: number;
     projectIds?: string;
+    view?: ListTasksViewEnum;
     withoutOrigin?: boolean;
     statuses?: string;
+    names?: string;
     search?: string;
     appId?: number;
     appInstanceId?: number;
@@ -99,8 +101,10 @@ export interface TasksApiInterface {
      * @param {'project_and_org' | 'org_only' | 'user_only'} [scope] 
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
-     * @param {boolean} [withoutOrigin] 
+     * @param {'flat' | 'tree'} [view] Return matching tasks as a flat page or as entity-scoped task trees
+     * @param {boolean} [withoutOrigin] Deprecated compatibility alias for view&#x3D;tree
      * @param {string} [statuses] Comma-separated task statuses
+     * @param {string} [names] Comma-separated exact task names
      * @param {string} [search] 
      * @param {number} [appId] 
      * @param {number} [appInstanceId] 
@@ -245,12 +249,20 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
             queryParameters['projectIds'] = requestParameters['projectIds'];
         }
 
+        if (requestParameters['view'] != null) {
+            queryParameters['view'] = requestParameters['view'];
+        }
+
         if (requestParameters['withoutOrigin'] != null) {
             queryParameters['withoutOrigin'] = requestParameters['withoutOrigin'];
         }
 
         if (requestParameters['statuses'] != null) {
             queryParameters['statuses'] = requestParameters['statuses'];
+        }
+
+        if (requestParameters['names'] != null) {
+            queryParameters['names'] = requestParameters['names'];
         }
 
         if (requestParameters['search'] != null) {
@@ -382,3 +394,11 @@ export const ListTasksScopeEnum = {
     UserOnly: 'user_only'
 } as const;
 export type ListTasksScopeEnum = typeof ListTasksScopeEnum[keyof typeof ListTasksScopeEnum];
+/**
+ * @export
+ */
+export const ListTasksViewEnum = {
+    Flat: 'flat',
+    Tree: 'tree'
+} as const;
+export type ListTasksViewEnum = typeof ListTasksViewEnum[keyof typeof ListTasksViewEnum];
