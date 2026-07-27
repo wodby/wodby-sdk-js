@@ -479,6 +479,12 @@ export interface AppInstance {
      * @type {string}
      * @memberof AppInstance
      */
+    pausedAt?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppInstance
+     */
     mainDomain?: string | null;
     /**
      * 
@@ -548,6 +554,12 @@ export interface AppInstance {
     settings?: AppInstanceSettings;
     /**
      * 
+     * @type {AppInstanceHealth}
+     * @memberof AppInstance
+     */
+    health: AppInstanceHealth;
+    /**
+     * 
      * @type {string}
      * @memberof AppInstance
      */
@@ -596,6 +608,63 @@ export interface AppInstanceAutoStackUpgradeSettingsInput {
      * @memberof AppInstanceAutoStackUpgradeSettingsInput
      */
     upgradeSettings?: AppInstanceStackUpgradeSettingsInput;
+}
+/**
+ * 
+ * @export
+ * @interface AppInstanceBackupHealth
+ */
+export interface AppInstanceBackupHealth {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppInstanceBackupHealth
+     */
+    failingSchedulesCount: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppInstanceBackupHealth
+     */
+    latestFailureAt?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface AppInstanceCronHealth
+ */
+export interface AppInstanceCronHealth {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppInstanceCronHealth
+     */
+    failingSchedulesCount: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppInstanceCronHealth
+     */
+    latestFailureAt?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface AppInstanceHealth
+ */
+export interface AppInstanceHealth {
+    /**
+     * 
+     * @type {AppInstanceCronHealth}
+     * @memberof AppInstanceHealth
+     */
+    cron: AppInstanceCronHealth;
+    /**
+     * 
+     * @type {AppInstanceBackupHealth}
+     * @memberof AppInstanceHealth
+     */
+    backups: AppInstanceBackupHealth;
 }
 /**
  * 
@@ -1023,6 +1092,12 @@ export interface AppRoute {
      * @memberof AppRoute
      */
     _private: boolean;
+    /**
+     * Whether Wodby generates and manages the route.
+     * @type {boolean}
+     * @memberof AppRoute
+     */
+    readonly technical: boolean;
     /**
      * 
      * @type {number}
@@ -2636,6 +2711,44 @@ export interface BuildSourceInput {
 /**
  * 
  * @export
+ * @interface CapacityMetrics
+ */
+export interface CapacityMetrics {
+    /**
+     * 
+     * @type {number}
+     * @memberof CapacityMetrics
+     */
+    total: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CapacityMetrics
+     */
+    allocated: number;
+}
+/**
+ * 
+ * @export
+ * @interface CapacityMetricsFloat
+ */
+export interface CapacityMetricsFloat {
+    /**
+     * 
+     * @type {number}
+     * @memberof CapacityMetricsFloat
+     */
+    total: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CapacityMetricsFloat
+     */
+    allocated: number;
+}
+/**
+ * 
+ * @export
  * @interface Cert
  */
 export interface Cert {
@@ -3055,6 +3168,73 @@ export interface ClusterCapabilities {
      * @memberof ClusterCapabilities
      */
     redirectRoutes: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ClusterMetrics
+ */
+export interface ClusterMetrics {
+    /**
+     * 
+     * @type {number}
+     * @memberof ClusterMetrics
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClusterMetrics
+     */
+    clusterId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClusterMetrics
+     */
+    nodesTotal: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClusterMetrics
+     */
+    nodesReady: number;
+    /**
+     * 
+     * @type {KubeCPUMetrics}
+     * @memberof ClusterMetrics
+     */
+    cpu: KubeCPUMetrics;
+    /**
+     * 
+     * @type {KubeMemoryMetrics}
+     * @memberof ClusterMetrics
+     */
+    memory: KubeMemoryMetrics;
+    /**
+     * 
+     * @type {CapacityMetricsFloat}
+     * @memberof ClusterMetrics
+     */
+    kubeCPUCap: CapacityMetricsFloat;
+    /**
+     * 
+     * @type {CapacityMetrics}
+     * @memberof ClusterMetrics
+     */
+    kubeMemoryCap: CapacityMetrics;
+    /**
+     * 
+     * @type {CapacityMetrics}
+     * @memberof ClusterMetrics
+     */
+    kubePodsCap: CapacityMetrics;
+    /**
+     * 
+     * @type {NodeDiskMetrics}
+     * @memberof ClusterMetrics
+     */
+    hostDisk?: NodeDiskMetrics;
 }
 /**
  * 
@@ -4679,6 +4859,74 @@ export interface IntegrationScope {
 /**
  * 
  * @export
+ * @interface KubeCPUMetrics
+ */
+export interface KubeCPUMetrics {
+    /**
+     * 
+     * @type {number}
+     * @memberof KubeCPUMetrics
+     */
+    cores: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof KubeCPUMetrics
+     */
+    load1: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof KubeCPUMetrics
+     */
+    load5: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof KubeCPUMetrics
+     */
+    load15: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof KubeCPUMetrics
+     */
+    idle?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof KubeCPUMetrics
+     */
+    ioWait?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof KubeCPUMetrics
+     */
+    steal?: number | null;
+}
+/**
+ * 
+ * @export
+ * @interface KubeMemoryMetrics
+ */
+export interface KubeMemoryMetrics {
+    /**
+     * 
+     * @type {number}
+     * @memberof KubeMemoryMetrics
+     */
+    total: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof KubeMemoryMetrics
+     */
+    available: number;
+}
+/**
+ * 
+ * @export
  * @interface KubeVersion
  */
 export interface KubeVersion {
@@ -6202,6 +6450,49 @@ export interface NewStackServiceTokenInput {
      * @memberof NewStackServiceTokenInput
      */
     envType?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface NodeDiskMetrics
+ */
+export interface NodeDiskMetrics {
+    /**
+     * 
+     * @type {string}
+     * @memberof NodeDiskMetrics
+     */
+    device: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NodeDiskMetrics
+     */
+    fsType: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof NodeDiskMetrics
+     */
+    size: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof NodeDiskMetrics
+     */
+    free: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof NodeDiskMetrics
+     */
+    iNodes: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof NodeDiskMetrics
+     */
+    iNodesFree: number;
 }
 /**
  * 
@@ -8720,6 +9011,18 @@ export interface UpdateAppAuthInput {
  * @interface UpdateAppRouteInput
  */
 export interface UpdateAppRouteInput {
+    /**
+     * Target app service for retargeting. Must be supplied together with port.
+     * @type {number}
+     * @memberof UpdateAppRouteInput
+     */
+    appServiceId?: number | null;
+    /**
+     * Target public HTTP port for retargeting. Must be supplied together with appServiceId.
+     * @type {number}
+     * @memberof UpdateAppRouteInput
+     */
+    port?: number | null;
     /**
      * 
      * @type {boolean}

@@ -85,7 +85,7 @@ export interface AppRoutesApiInterface {
     createAppRoute(requestParameters: CreateAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute>;
 
     /**
-     * Deletes the app route and returns the operation result.
+     * Deletes a customer route and returns the operation result. Wodby-managed technical routes cannot be deleted; disable them instead.
      * @summary Delete app route
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -95,7 +95,7 @@ export interface AppRoutesApiInterface {
     deleteAppRouteRaw(requestParameters: DeleteAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
-     * Deletes the app route and returns the operation result.
+     * Deletes a customer route and returns the operation result. Wodby-managed technical routes cannot be deleted; disable them instead.
      * Delete app route
      */
     deleteAppRoute(requestParameters: DeleteAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
@@ -250,7 +250,7 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
     }
 
     /**
-     * Deletes the app route and returns the operation result.
+     * Deletes a customer route and returns the operation result. Wodby-managed technical routes cannot be deleted; disable them instead.
      * Delete app route
      */
     async deleteAppRouteRaw(requestParameters: DeleteAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -280,7 +280,7 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
     }
 
     /**
-     * Deletes the app route and returns the operation result.
+     * Deletes a customer route and returns the operation result. Wodby-managed technical routes cannot be deleted; disable them instead.
      * Delete app route
      */
     async deleteAppRoute(requestParameters: DeleteAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
