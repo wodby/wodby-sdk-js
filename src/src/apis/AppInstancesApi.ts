@@ -51,14 +51,6 @@ export interface ListAppInstancesRequest {
     clusterApp?: boolean;
 }
 
-export interface PauseAppInstanceRequest {
-    id: number;
-}
-
-export interface ResumeAppInstanceRequest {
-    id: number;
-}
-
 export interface UpdateAppInstanceRequest {
     id: number;
     updateTitleRequest: UpdateTitleRequest;
@@ -167,38 +159,6 @@ export interface AppInstancesApiInterface {
      * List app instances
      */
     listAppInstances(requestParameters: ListAppInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppInstance>>;
-
-    /**
-     * Starts the app instance pause task and returns the task identifier.
-     * @summary Pause app instance
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppInstancesApiInterface
-     */
-    pauseAppInstanceRaw(requestParameters: PauseAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
-
-    /**
-     * Starts the app instance pause task and returns the task identifier.
-     * Pause app instance
-     */
-    pauseAppInstance(requestParameters: PauseAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
-
-    /**
-     * Starts the app instance resume task and returns the task identifier.
-     * @summary Resume app instance
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AppInstancesApiInterface
-     */
-    resumeAppInstanceRaw(requestParameters: ResumeAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
-
-    /**
-     * Starts the app instance resume task and returns the task identifier.
-     * Resume app instance
-     */
-    resumeAppInstance(requestParameters: ResumeAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Updates the app instance and returns the updated resource.
@@ -481,84 +441,6 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
      */
     async listAppInstances(requestParameters: ListAppInstancesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppInstance>> {
         const response = await this.listAppInstancesRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Starts the app instance pause task and returns the task identifier.
-     * Pause app instance
-     */
-    async pauseAppInstanceRaw(requestParameters: PauseAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling pauseAppInstance().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/app-instances/{id}/actions/pause`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response);
-    }
-
-    /**
-     * Starts the app instance pause task and returns the task identifier.
-     * Pause app instance
-     */
-    async pauseAppInstance(requestParameters: PauseAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
-        const response = await this.pauseAppInstanceRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Starts the app instance resume task and returns the task identifier.
-     * Resume app instance
-     */
-    async resumeAppInstanceRaw(requestParameters: ResumeAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling resumeAppInstance().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/app-instances/{id}/actions/resume`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response);
-    }
-
-    /**
-     * Starts the app instance resume task and returns the task identifier.
-     * Resume app instance
-     */
-    async resumeAppInstance(requestParameters: ResumeAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
-        const response = await this.resumeAppInstanceRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

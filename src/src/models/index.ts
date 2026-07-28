@@ -479,12 +479,6 @@ export interface AppInstance {
      * @type {string}
      * @memberof AppInstance
      */
-    pausedAt?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstance
-     */
     mainDomain?: string | null;
     /**
      * 
