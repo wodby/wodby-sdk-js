@@ -2705,44 +2705,6 @@ export interface BuildSourceInput {
 /**
  * 
  * @export
- * @interface CapacityMetrics
- */
-export interface CapacityMetrics {
-    /**
-     * 
-     * @type {number}
-     * @memberof CapacityMetrics
-     */
-    total: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CapacityMetrics
-     */
-    allocated: number;
-}
-/**
- * 
- * @export
- * @interface CapacityMetricsFloat
- */
-export interface CapacityMetricsFloat {
-    /**
-     * 
-     * @type {number}
-     * @memberof CapacityMetricsFloat
-     */
-    total: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CapacityMetricsFloat
-     */
-    allocated: number;
-}
-/**
- * 
- * @export
  * @interface Cert
  */
 export interface Cert {
@@ -3162,73 +3124,6 @@ export interface ClusterCapabilities {
      * @memberof ClusterCapabilities
      */
     redirectRoutes: boolean;
-}
-/**
- * 
- * @export
- * @interface ClusterMetrics
- */
-export interface ClusterMetrics {
-    /**
-     * 
-     * @type {number}
-     * @memberof ClusterMetrics
-     */
-    id: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ClusterMetrics
-     */
-    clusterId: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ClusterMetrics
-     */
-    nodesTotal: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ClusterMetrics
-     */
-    nodesReady: number;
-    /**
-     * 
-     * @type {KubeCPUMetrics}
-     * @memberof ClusterMetrics
-     */
-    cpu: KubeCPUMetrics;
-    /**
-     * 
-     * @type {KubeMemoryMetrics}
-     * @memberof ClusterMetrics
-     */
-    memory: KubeMemoryMetrics;
-    /**
-     * 
-     * @type {CapacityMetricsFloat}
-     * @memberof ClusterMetrics
-     */
-    kubeCPUCap: CapacityMetricsFloat;
-    /**
-     * 
-     * @type {CapacityMetrics}
-     * @memberof ClusterMetrics
-     */
-    kubeMemoryCap: CapacityMetrics;
-    /**
-     * 
-     * @type {CapacityMetrics}
-     * @memberof ClusterMetrics
-     */
-    kubePodsCap: CapacityMetrics;
-    /**
-     * 
-     * @type {NodeDiskMetrics}
-     * @memberof ClusterMetrics
-     */
-    hostDisk?: NodeDiskMetrics;
 }
 /**
  * 
@@ -4853,74 +4748,6 @@ export interface IntegrationScope {
 /**
  * 
  * @export
- * @interface KubeCPUMetrics
- */
-export interface KubeCPUMetrics {
-    /**
-     * 
-     * @type {number}
-     * @memberof KubeCPUMetrics
-     */
-    cores: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof KubeCPUMetrics
-     */
-    load1: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof KubeCPUMetrics
-     */
-    load5: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof KubeCPUMetrics
-     */
-    load15: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof KubeCPUMetrics
-     */
-    idle?: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof KubeCPUMetrics
-     */
-    ioWait?: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof KubeCPUMetrics
-     */
-    steal?: number | null;
-}
-/**
- * 
- * @export
- * @interface KubeMemoryMetrics
- */
-export interface KubeMemoryMetrics {
-    /**
-     * 
-     * @type {number}
-     * @memberof KubeMemoryMetrics
-     */
-    total: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof KubeMemoryMetrics
-     */
-    available: number;
-}
-/**
- * 
- * @export
  * @interface KubeVersion
  */
 export interface KubeVersion {
@@ -6444,49 +6271,6 @@ export interface NewStackServiceTokenInput {
      * @memberof NewStackServiceTokenInput
      */
     envType?: string | null;
-}
-/**
- * 
- * @export
- * @interface NodeDiskMetrics
- */
-export interface NodeDiskMetrics {
-    /**
-     * 
-     * @type {string}
-     * @memberof NodeDiskMetrics
-     */
-    device: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof NodeDiskMetrics
-     */
-    fsType: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof NodeDiskMetrics
-     */
-    size: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof NodeDiskMetrics
-     */
-    free: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof NodeDiskMetrics
-     */
-    iNodes: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof NodeDiskMetrics
-     */
-    iNodesFree: number;
 }
 /**
  * 

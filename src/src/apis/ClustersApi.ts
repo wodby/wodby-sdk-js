@@ -16,7 +16,6 @@
 import * as runtime from '../runtime';
 import type {
   Cluster,
-  ClusterMetrics,
   ClusterSettingsInput,
   NewClusterInput,
   OperationResult,
@@ -40,14 +39,6 @@ export interface GetClusterRequest {
 export interface GetClusterByNameRequest {
     name: string;
     orgId?: number;
-}
-
-export interface GetClusterMetricsRequest {
-    id: number;
-}
-
-export interface ListClusterMetricsRequest {
-    ids: Array<number>;
 }
 
 export interface ListClustersRequest {
@@ -146,38 +137,6 @@ export interface ClustersApiInterface {
      * Get cluster by name
      */
     getClusterByName(requestParameters: GetClusterByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
-
-    /**
-     * Returns current aggregate cluster metrics, including host disk capacity when available.
-     * @summary Get cluster metrics
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ClustersApiInterface
-     */
-    getClusterMetricsRaw(requestParameters: GetClusterMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterMetrics>>;
-
-    /**
-     * Returns current aggregate cluster metrics, including host disk capacity when available.
-     * Get cluster metrics
-     */
-    getClusterMetrics(requestParameters: GetClusterMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterMetrics>;
-
-    /**
-     * Returns current aggregate metrics for the requested clusters in one batch.
-     * @summary Get metrics for multiple clusters
-     * @param {Array<number>} ids Comma-separated cluster ids
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ClustersApiInterface
-     */
-    listClusterMetricsRaw(requestParameters: ListClusterMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterMetrics>>>;
-
-    /**
-     * Returns current aggregate metrics for the requested clusters in one batch.
-     * Get metrics for multiple clusters
-     */
-    listClusterMetrics(requestParameters: ListClusterMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterMetrics>>;
 
     /**
      * Returns clusters matching the request filters.
@@ -434,88 +393,6 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async getClusterByName(requestParameters: GetClusterByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
         const response = await this.getClusterByNameRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Returns current aggregate cluster metrics, including host disk capacity when available.
-     * Get cluster metrics
-     */
-    async getClusterMetricsRaw(requestParameters: GetClusterMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterMetrics>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getClusterMetrics().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/clusters/metrics/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response);
-    }
-
-    /**
-     * Returns current aggregate cluster metrics, including host disk capacity when available.
-     * Get cluster metrics
-     */
-    async getClusterMetrics(requestParameters: GetClusterMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterMetrics> {
-        const response = await this.getClusterMetricsRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Returns current aggregate metrics for the requested clusters in one batch.
-     * Get metrics for multiple clusters
-     */
-    async listClusterMetricsRaw(requestParameters: ListClusterMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterMetrics>>> {
-        if (requestParameters['ids'] == null) {
-            throw new runtime.RequiredError(
-                'ids',
-                'Required parameter "ids" was null or undefined when calling listClusterMetrics().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        if (requestParameters['ids'] != null) {
-            queryParameters['ids'] = requestParameters['ids']!.join(runtime.COLLECTION_FORMATS["csv"]);
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/cluster-metrics`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response);
-    }
-
-    /**
-     * Returns current aggregate metrics for the requested clusters in one batch.
-     * Get metrics for multiple clusters
-     */
-    async listClusterMetrics(requestParameters: ListClusterMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterMetrics>> {
-        const response = await this.listClusterMetricsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
