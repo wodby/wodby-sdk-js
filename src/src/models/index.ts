@@ -6872,6 +6872,26 @@ export interface ServiceDeploymentInput {
 /**
  * 
  * @export
+ * @interface ServiceManifest
+ */
+export interface ServiceManifest {
+    [key: string]: any | any;
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceManifest
+     */
+    raw: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ServiceManifest
+     */
+    scalable: boolean;
+}
+/**
+ * 
+ * @export
  * @interface ServiceManifestUpdateInput
  */
 export interface ServiceManifestUpdateInput {
@@ -6950,10 +6970,10 @@ export interface ServiceRevision {
     serviceId: number;
     /**
      * 
-     * @type {{ [key: string]: any; }}
+     * @type {ServiceManifest}
      * @memberof ServiceRevision
      */
-    manifest?: { [key: string]: any; };
+    manifest?: ServiceManifest;
     /**
      * 
      * @type {string}
