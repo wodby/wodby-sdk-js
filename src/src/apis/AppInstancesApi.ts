@@ -16,6 +16,8 @@
 import * as runtime from '../runtime';
 import type {
   AppInstance,
+  AppInstanceCICDSettings,
+  AppInstanceCICDSettingsInput,
   AppInstanceSettingsInput,
   AppInstanceStackUpgradeInput,
   NewAppInstanceInput,
@@ -43,6 +45,10 @@ export interface GetAppInstanceByNameRequest {
     orgId?: number;
 }
 
+export interface GetAppInstanceCICDSettingsRequest {
+    id: number;
+}
+
 export interface ListAppInstancesRequest {
     orgId?: number;
     projectIds?: string;
@@ -54,6 +60,11 @@ export interface ListAppInstancesRequest {
 export interface UpdateAppInstanceRequest {
     id: number;
     updateTitleRequest: UpdateTitleRequest;
+}
+
+export interface UpdateAppInstanceCICDSettingsRequest {
+    id: number;
+    appInstanceCICDSettingsInput: AppInstanceCICDSettingsInput;
 }
 
 export interface UpdateAppInstanceSettingsRequest {
@@ -141,6 +152,22 @@ export interface AppInstancesApiInterface {
     getAppInstanceByName(requestParameters: GetAppInstanceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
 
     /**
+     * Returns the CI and registry integrations used by future app instance builds. Integration ID 0 identifies the built-in Wodby service.
+     * @summary Get app instance CI/CD settings
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    getAppInstanceCICDSettingsRaw(requestParameters: GetAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstanceCICDSettings>>;
+
+    /**
+     * Returns the CI and registry integrations used by future app instance builds. Integration ID 0 identifies the built-in Wodby service.
+     * Get app instance CI/CD settings
+     */
+    getAppInstanceCICDSettings(requestParameters: GetAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstanceCICDSettings>;
+
+    /**
      * Returns app instances matching the request filters.
      * @summary List app instances
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -176,6 +203,23 @@ export interface AppInstancesApiInterface {
      * Update app instance
      */
     updateAppInstance(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
+
+    /**
+     * Updates the CI and registry integrations used by future app instance builds. Integration ID 0 selects the built-in Wodby service.
+     * @summary Update app instance CI/CD settings
+     * @param {number} id 
+     * @param {AppInstanceCICDSettingsInput} appInstanceCICDSettingsInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    updateAppInstanceCICDSettingsRaw(requestParameters: UpdateAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstanceCICDSettings>>;
+
+    /**
+     * Updates the CI and registry integrations used by future app instance builds. Integration ID 0 selects the built-in Wodby service.
+     * Update app instance CI/CD settings
+     */
+    updateAppInstanceCICDSettings(requestParameters: UpdateAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstanceCICDSettings>;
 
     /**
      * Updates app instance settings and returns the updated app instance.
@@ -393,6 +437,45 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
+     * Returns the CI and registry integrations used by future app instance builds. Integration ID 0 identifies the built-in Wodby service.
+     * Get app instance CI/CD settings
+     */
+    async getAppInstanceCICDSettingsRaw(requestParameters: GetAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstanceCICDSettings>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppInstanceCICDSettings().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-instances/cicd-settings/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the CI and registry integrations used by future app instance builds. Integration ID 0 identifies the built-in Wodby service.
+     * Get app instance CI/CD settings
+     */
+    async getAppInstanceCICDSettings(requestParameters: GetAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstanceCICDSettings> {
+        const response = await this.getAppInstanceCICDSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns app instances matching the request filters.
      * List app instances
      */
@@ -490,6 +573,55 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
      */
     async updateAppInstance(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
         const response = await this.updateAppInstanceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates the CI and registry integrations used by future app instance builds. Integration ID 0 selects the built-in Wodby service.
+     * Update app instance CI/CD settings
+     */
+    async updateAppInstanceCICDSettingsRaw(requestParameters: UpdateAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstanceCICDSettings>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateAppInstanceCICDSettings().'
+            );
+        }
+
+        if (requestParameters['appInstanceCICDSettingsInput'] == null) {
+            throw new runtime.RequiredError(
+                'appInstanceCICDSettingsInput',
+                'Required parameter "appInstanceCICDSettingsInput" was null or undefined when calling updateAppInstanceCICDSettings().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-instances/cicd-settings/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['appInstanceCICDSettingsInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Updates the CI and registry integrations used by future app instance builds. Integration ID 0 selects the built-in Wodby service.
+     * Update app instance CI/CD settings
+     */
+    async updateAppInstanceCICDSettings(requestParameters: UpdateAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstanceCICDSettings> {
+        const response = await this.updateAppInstanceCICDSettingsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

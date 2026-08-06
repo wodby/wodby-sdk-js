@@ -101,7 +101,7 @@ export interface TasksApiInterface {
      * @param {'project_and_org' | 'org_only' | 'user_only'} [scope] 
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
-     * @param {'flat' | 'tree'} [view] Return matching tasks as a flat page or as entity-scoped task trees
+     * @param {'flat' | 'tree'} [view] Return matching tasks as a flat page or as filter-scoped task trees. Tree responses support user, organization, project, and resource filters, keep paginated roots in items, and include all current-page tree nodes in treeItems.
      * @param {boolean} [withoutOrigin] Deprecated compatibility alias for view&#x3D;tree
      * @param {string} [statuses] Comma-separated task statuses
      * @param {string} [names] Comma-separated exact task names

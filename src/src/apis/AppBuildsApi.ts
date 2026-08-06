@@ -128,7 +128,7 @@ export interface AppBuildsApiInterface {
     getAppBuild(requestParameters: GetAppBuildRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild>;
 
     /**
-     * Returns CI build configuration for the app build.
+     * Returns CI build configuration for the build source owner and image targets linked to that owner. Services with independent build sources are omitted.
      * @summary Get build config
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -138,7 +138,7 @@ export interface AppBuildsApiInterface {
     getAppBuildConfigRaw(requestParameters: GetAppBuildConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuildConfig>>;
 
     /**
-     * Returns CI build configuration for the app build.
+     * Returns CI build configuration for the build source owner and image targets linked to that owner. Services with independent build sources are omitted.
      * Get build config
      */
     getAppBuildConfig(requestParameters: GetAppBuildConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildConfig>;
@@ -351,7 +351,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     }
 
     /**
-     * Returns CI build configuration for the app build.
+     * Returns CI build configuration for the build source owner and image targets linked to that owner. Services with independent build sources are omitted.
      * Get build config
      */
     async getAppBuildConfigRaw(requestParameters: GetAppBuildConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuildConfig>> {
@@ -385,7 +385,7 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
     }
 
     /**
-     * Returns CI build configuration for the app build.
+     * Returns CI build configuration for the build source owner and image targets linked to that owner. Services with independent build sources are omitted.
      * Get build config
      */
     async getAppBuildConfig(requestParameters: GetAppBuildConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildConfig> {

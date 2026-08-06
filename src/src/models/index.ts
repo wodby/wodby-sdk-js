@@ -123,7 +123,7 @@ export interface AppBuild {
      */
     id: number;
     /**
-     * 
+     * App-instance build-launch number. Build records created by the same Wodby CI launch share this number.
      * @type {number}
      * @memberof AppBuild
      */
@@ -583,6 +583,12 @@ export interface AppInstanceAutoStackUpgradeSettings {
      * @memberof AppInstanceAutoStackUpgradeSettings
      */
     upgradeSettings?: AppInstanceStackUpgradeSettings;
+    /**
+     * 
+     * @type {AutomationTimeWindow}
+     * @memberof AppInstanceAutoStackUpgradeSettings
+     */
+    timeWindow?: AutomationTimeWindow;
 }
 /**
  * 
@@ -602,6 +608,12 @@ export interface AppInstanceAutoStackUpgradeSettingsInput {
      * @memberof AppInstanceAutoStackUpgradeSettingsInput
      */
     upgradeSettings?: AppInstanceStackUpgradeSettingsInput;
+    /**
+     * 
+     * @type {AutomationTimeWindowInput}
+     * @memberof AppInstanceAutoStackUpgradeSettingsInput
+     */
+    timeWindow?: AutomationTimeWindowInput;
 }
 /**
  * 
@@ -621,6 +633,56 @@ export interface AppInstanceBackupHealth {
      * @memberof AppInstanceBackupHealth
      */
     latestFailureAt?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface AppInstanceCICDSettings
+ */
+export interface AppInstanceCICDSettings {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppInstanceCICDSettings
+     */
+    appInstanceId: number;
+    /**
+     * Effective CI integration ID. Zero selects the built-in Wodby CI service.
+     * @type {number}
+     * @memberof AppInstanceCICDSettings
+     */
+    ciIntegrationId: number;
+    /**
+     * Effective registry integration ID. Zero selects the built-in Wodby registry service.
+     * @type {number}
+     * @memberof AppInstanceCICDSettings
+     */
+    registryIntegrationId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppInstanceCICDSettings
+     */
+    registryRepository: string;
+}
+/**
+ * 
+ * @export
+ * @interface AppInstanceCICDSettingsInput
+ */
+export interface AppInstanceCICDSettingsInput {
+    /**
+     * CI integration ID. Set to zero to use the built-in Wodby CI service.
+     * @type {number}
+     * @memberof AppInstanceCICDSettingsInput
+     */
+    ciIntegrationId: number;
+    /**
+     * Registry integration ID. Set to zero to use the built-in Wodby registry service.
+     * @type {number}
+     * @memberof AppInstanceCICDSettingsInput
+     */
+    registryIntegrationId: number;
 }
 /**
  * 
@@ -1248,6 +1310,12 @@ export interface AppService {
      * @memberof AppService
      */
     replicas: number;
+    /**
+     * 
+     * @type {AppServiceScalability}
+     * @memberof AppService
+     */
+    scalability?: AppServiceScalability | null;
     /**
      * 
      * @type {string}
@@ -2120,6 +2188,12 @@ export interface AppServiceInput {
     replicas?: number | null;
     /**
      * 
+     * @type {AppServiceScalabilityUpdateInput}
+     * @memberof AppServiceInput
+     */
+    scalability?: AppServiceScalabilityUpdateInput;
+    /**
+     * 
      * @type {string}
      * @memberof AppServiceInput
      */
@@ -2248,6 +2322,62 @@ export interface AppServiceLinkInput {
      * @memberof AppServiceLinkInput
      */
     linkedAppServiceId?: number | null;
+}
+/**
+ * 
+ * @export
+ * @interface AppServiceScalability
+ */
+export interface AppServiceScalability {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceScalability
+     */
+    averageCPU: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceScalability
+     */
+    minReplicas: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceScalability
+     */
+    maxReplicas: number;
+}
+/**
+ * 
+ * @export
+ * @interface AppServiceScalabilityUpdateInput
+ */
+export interface AppServiceScalabilityUpdateInput {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppServiceScalabilityUpdateInput
+     */
+    enabled: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceScalabilityUpdateInput
+     */
+    averageCPU?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceScalabilityUpdateInput
+     */
+    minReplicas?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceScalabilityUpdateInput
+     */
+    maxReplicas?: number | null;
 }
 /**
  * 
@@ -2474,6 +2604,106 @@ export type AppServiceVolumeStorageClassStatusEnum = typeof AppServiceVolumeStor
 /**
  * 
  * @export
+ * @interface AutomationTimeWindow
+ */
+export interface AutomationTimeWindow {
+    /**
+     * 
+     * @type {string}
+     * @memberof AutomationTimeWindow
+     */
+    start: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutomationTimeWindow
+     */
+    end: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutomationTimeWindow
+     */
+    timeZone: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof AutomationTimeWindow
+     */
+    days: Array<AutomationTimeWindowDaysEnum>;
+}
+
+
+/**
+ * @export
+ */
+export const AutomationTimeWindowDaysEnum = {
+    Monday: 'MONDAY',
+    Tuesday: 'TUESDAY',
+    Wednesday: 'WEDNESDAY',
+    Thursday: 'THURSDAY',
+    Friday: 'FRIDAY',
+    Saturday: 'SATURDAY',
+    Sunday: 'SUNDAY'
+} as const;
+export type AutomationTimeWindowDaysEnum = typeof AutomationTimeWindowDaysEnum[keyof typeof AutomationTimeWindowDaysEnum];
+
+/**
+ * 
+ * @export
+ * @interface AutomationTimeWindowInput
+ */
+export interface AutomationTimeWindowInput {
+    /**
+     * Set to false to remove the configured time window.
+     * @type {boolean}
+     * @memberof AutomationTimeWindowInput
+     */
+    enabled: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutomationTimeWindowInput
+     */
+    start?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutomationTimeWindowInput
+     */
+    end?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AutomationTimeWindowInput
+     */
+    timeZone?: string | null;
+    /**
+     * Selected weekdays. Omit for every day. Overnight windows use the day on which the window starts.
+     * @type {Array<string>}
+     * @memberof AutomationTimeWindowInput
+     */
+    days?: Array<AutomationTimeWindowInputDaysEnum> | null;
+}
+
+
+/**
+ * @export
+ */
+export const AutomationTimeWindowInputDaysEnum = {
+    Monday: 'MONDAY',
+    Tuesday: 'TUESDAY',
+    Wednesday: 'WEDNESDAY',
+    Thursday: 'THURSDAY',
+    Friday: 'FRIDAY',
+    Saturday: 'SATURDAY',
+    Sunday: 'SUNDAY'
+} as const;
+export type AutomationTimeWindowInputDaysEnum = typeof AutomationTimeWindowInputDaysEnum[keyof typeof AutomationTimeWindowInputDaysEnum];
+
+/**
+ * 
+ * @export
  * @interface Backup
  */
 export interface Backup {
@@ -2630,6 +2860,12 @@ export interface BackupPreset {
     crontab?: string | null;
     /**
      * 
+     * @type {AutomationTimeWindow}
+     * @memberof BackupPreset
+     */
+    timeWindow?: AutomationTimeWindow;
+    /**
+     * 
      * @type {number}
      * @memberof BackupPreset
      */
@@ -2701,6 +2937,12 @@ export interface BuildSourceInput {
      * @memberof BuildSourceInput
      */
     gitRefType?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof BuildSourceInput
+     */
+    ciWorkflow?: string | null;
 }
 /**
  * 
@@ -2974,6 +3216,12 @@ export interface ClusterAutoInfrastructureComponentSettings {
      * @memberof ClusterAutoInfrastructureComponentSettings
      */
     versionPolicy?: ClusterAutoUpgradeVersionPolicy;
+    /**
+     * 
+     * @type {AutomationTimeWindow}
+     * @memberof ClusterAutoInfrastructureComponentSettings
+     */
+    timeWindow?: AutomationTimeWindow;
 }
 /**
  * 
@@ -2993,6 +3241,12 @@ export interface ClusterAutoInfrastructureComponentSettingsInput {
      * @memberof ClusterAutoInfrastructureComponentSettingsInput
      */
     versionPolicy?: ClusterAutoUpgradeVersionPolicyInput;
+    /**
+     * 
+     * @type {AutomationTimeWindowInput}
+     * @memberof ClusterAutoInfrastructureComponentSettingsInput
+     */
+    timeWindow?: AutomationTimeWindowInput;
 }
 /**
  * 
@@ -5403,6 +5657,12 @@ export interface NewAppServiceLogStreamInput {
      * @memberof NewAppServiceLogStreamInput
      */
     container?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppServiceLogStreamInput
+     */
+    pod?: string | null;
 }
 /**
  * 
@@ -5537,6 +5797,12 @@ export interface NewBackupPresetInput {
      * @memberof NewBackupPresetInput
      */
     crontab?: string | null;
+    /**
+     * 
+     * @type {AutomationTimeWindowInput}
+     * @memberof NewBackupPresetInput
+     */
+    timeWindow?: AutomationTimeWindowInput;
     /**
      * 
      * @type {number}
@@ -6321,6 +6587,24 @@ export interface Org {
      * @memberof Org
      */
     domain: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Org
+     */
+    defaultTimeZone: string;
+    /**
+     * Effective default CI integration ID. Zero selects the built-in Wodby CI service.
+     * @type {number}
+     * @memberof Org
+     */
+    ciIntegrationId: number;
+    /**
+     * Effective default registry integration ID. Zero selects the built-in Wodby registry service.
+     * @type {number}
+     * @memberof Org
+     */
+    registryIntegrationId: number;
     /**
      * 
      * @type {string}
@@ -8650,6 +8934,12 @@ export interface TaskStep {
     id: number;
     /**
      * 
+     * @type {number}
+     * @memberof TaskStep
+     */
+    position: number;
+    /**
+     * 
      * @type {string}
      * @memberof TaskStep
      */
@@ -8731,6 +9021,25 @@ export type TaskStepLogsStatusEnum = typeof TaskStepLogsStatusEnum[keyof typeof 
 /**
  * 
  * @export
+ * @interface TaskTreeItem
+ */
+export interface TaskTreeItem {
+    /**
+     * 
+     * @type {Task}
+     * @memberof TaskTreeItem
+     */
+    task: Task;
+    /**
+     * 
+     * @type {number}
+     * @memberof TaskTreeItem
+     */
+    parentId?: number | null;
+}
+/**
+ * 
+ * @export
  * @interface TasksResponse
  */
 export interface TasksResponse {
@@ -8740,6 +9049,12 @@ export interface TasksResponse {
      * @memberof TasksResponse
      */
     items: Array<Task>;
+    /**
+     * Flat current-page roots and descendants for tree view, linked by parentId.
+     * @type {Array<TaskTreeItem>}
+     * @memberof TasksResponse
+     */
+    treeItems?: Array<TaskTreeItem> | null;
     /**
      * 
      * @type {number}
@@ -9039,6 +9354,12 @@ export interface UpdateBackupPresetInput {
     crontab?: string | null;
     /**
      * 
+     * @type {AutomationTimeWindowInput}
+     * @memberof UpdateBackupPresetInput
+     */
+    timeWindow?: AutomationTimeWindowInput;
+    /**
+     * 
      * @type {number}
      * @memberof UpdateBackupPresetInput
      */
@@ -9144,6 +9465,12 @@ export interface UpdateOrgRequest {
      * @memberof UpdateOrgRequest
      */
     title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateOrgRequest
+     */
+    defaultTimeZone?: string;
     /**
      * 
      * @type {number}

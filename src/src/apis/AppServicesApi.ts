@@ -340,7 +340,7 @@ export interface AppServicesApiInterface {
     createAppServiceIntegration(requestParameters: CreateAppServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceIntegration>;
 
     /**
-     * Creates a log stream for an app service container and returns the stream id.
+     * Creates a log stream for an app service container across all replicas or for one selected pod and returns the stream id. Log streams are available while the app instance status is ok or deploying.
      * @summary Create app service log stream
      * @param {number} id 
      * @param {NewAppServiceLogStreamInput} [newAppServiceLogStreamInput] 
@@ -351,7 +351,7 @@ export interface AppServicesApiInterface {
     createAppServiceLogStreamRaw(requestParameters: CreateAppServiceLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LogStream>>;
 
     /**
-     * Creates a log stream for an app service container and returns the stream id.
+     * Creates a log stream for an app service container across all replicas or for one selected pod and returns the stream id. Log streams are available while the app instance status is ok or deploying.
      * Create app service log stream
      */
     createAppServiceLogStream(requestParameters: CreateAppServiceLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LogStream>;
@@ -1220,7 +1220,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
-     * Creates a log stream for an app service container and returns the stream id.
+     * Creates a log stream for an app service container across all replicas or for one selected pod and returns the stream id. Log streams are available while the app instance status is ok or deploying.
      * Create app service log stream
      */
     async createAppServiceLogStreamRaw(requestParameters: CreateAppServiceLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LogStream>> {
@@ -1253,7 +1253,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
-     * Creates a log stream for an app service container and returns the stream id.
+     * Creates a log stream for an app service container across all replicas or for one selected pod and returns the stream id. Log streams are available while the app instance status is ok or deploying.
      * Create app service log stream
      */
     async createAppServiceLogStream(requestParameters: CreateAppServiceLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LogStream> {
