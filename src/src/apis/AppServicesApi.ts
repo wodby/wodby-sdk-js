@@ -15,6 +15,7 @@
 
 import * as runtime from '../runtime';
 import type {
+  AddAppServiceVolumeInput,
   AppService,
   AppServiceAnnotation,
   AppServiceConfig,
@@ -31,6 +32,7 @@ import type {
   AppServiceSetting,
   AppServiceToken,
   AppServiceVolume,
+  AppServiceVolumeStorageClassState,
   ConfigOverrideInput,
   IntegrationLinkInput,
   LogStream,
@@ -49,6 +51,11 @@ import type {
   UpdateAppServiceEnvVarInput,
   UpdateSecretValueInput,
 } from '../models/index';
+
+export interface AddAppServiceVolumeRequest {
+    id: number;
+    addAppServiceVolumeInput: AddAppServiceVolumeInput;
+}
 
 export interface CreateAppServiceAnnotationRequest {
     id: number;
@@ -169,6 +176,10 @@ export interface ListAppServiceTokensRequest {
     id: number;
 }
 
+export interface ListAppServiceVolumeStorageClassesRequest {
+    id: number;
+}
+
 export interface ListAppServiceVolumesRequest {
     id: number;
 }
@@ -254,6 +265,23 @@ export interface UpdateAppServiceTokenRequest {
  * @interface AppServicesApiInterface
  */
 export interface AppServicesApiInterface {
+    /**
+     * Adds a volume that is optional in the service manifest and returns the reconciliation task identifier.
+     * @summary Add an optional app service volume
+     * @param {number} id 
+     * @param {AddAppServiceVolumeInput} addAppServiceVolumeInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    addAppServiceVolumeRaw(requestParameters: AddAppServiceVolumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Adds a volume that is optional in the service manifest and returns the reconciliation task identifier.
+     * Add an optional app service volume
+     */
+    addAppServiceVolume(requestParameters: AddAppServiceVolumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
     /**
      * Creates an annotation for an app service.
      * @summary Create app service annotation
@@ -698,6 +726,22 @@ export interface AppServicesApiInterface {
     listAppServiceTokens(requestParameters: ListAppServiceTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceToken>>;
 
     /**
+     * Returns configured and effective storage-class choices for each app service volume.
+     * @summary List app service volume storage-class state
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServiceVolumeStorageClassesRaw(requestParameters: ListAppServiceVolumeStorageClassesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceVolumeStorageClassState>>>;
+
+    /**
+     * Returns configured and effective storage-class choices for each app service volume.
+     * List app service volume storage-class state
+     */
+    listAppServiceVolumeStorageClasses(requestParameters: ListAppServiceVolumeStorageClassesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceVolumeStorageClassState>>;
+
+    /**
      * Returns configured volume metadata together with effective Kubernetes storage-class state.
      * @summary List app service volumes
      * @param {number} id 
@@ -973,6 +1017,55 @@ export interface AppServicesApiInterface {
  * 
  */
 export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInterface {
+
+    /**
+     * Adds a volume that is optional in the service manifest and returns the reconciliation task identifier.
+     * Add an optional app service volume
+     */
+    async addAppServiceVolumeRaw(requestParameters: AddAppServiceVolumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling addAppServiceVolume().'
+            );
+        }
+
+        if (requestParameters['addAppServiceVolumeInput'] == null) {
+            throw new runtime.RequiredError(
+                'addAppServiceVolumeInput',
+                'Required parameter "addAppServiceVolumeInput" was null or undefined when calling addAppServiceVolume().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/volumes`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['addAppServiceVolumeInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Adds a volume that is optional in the service manifest and returns the reconciliation task identifier.
+     * Add an optional app service volume
+     */
+    async addAppServiceVolume(requestParameters: AddAppServiceVolumeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.addAppServiceVolumeRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Creates an annotation for an app service.
@@ -2100,6 +2193,45 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
      */
     async listAppServiceTokens(requestParameters: ListAppServiceTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceToken>> {
         const response = await this.listAppServiceTokensRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns configured and effective storage-class choices for each app service volume.
+     * List app service volume storage-class state
+     */
+    async listAppServiceVolumeStorageClassesRaw(requestParameters: ListAppServiceVolumeStorageClassesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceVolumeStorageClassState>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppServiceVolumeStorageClasses().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/options/volume-storage-classes`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns configured and effective storage-class choices for each app service volume.
+     * List app service volume storage-class state
+     */
+    async listAppServiceVolumeStorageClasses(requestParameters: ListAppServiceVolumeStorageClassesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceVolumeStorageClassState>> {
+        const response = await this.listAppServiceVolumeStorageClassesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   Cluster,
+  ClusterInfraAppUpgradeChangelog,
   ClusterSettingsInput,
   NewClusterInput,
   OperationResult,
@@ -39,6 +40,11 @@ export interface GetClusterRequest {
 export interface GetClusterByNameRequest {
     name: string;
     orgId?: number;
+}
+
+export interface GetClusterInfraAppUpgradeChangelogRequest {
+    id: number;
+    appInstanceId?: number;
 }
 
 export interface ListClustersRequest {
@@ -137,6 +143,23 @@ export interface ClustersApiInterface {
      * Get cluster by name
      */
     getClusterByName(requestParameters: GetClusterByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
+
+    /**
+     * Returns stack and service revision changes for infrastructure apps on the cluster.
+     * @summary Preview cluster infrastructure app upgrades
+     * @param {number} id 
+     * @param {number} [appInstanceId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    getClusterInfraAppUpgradeChangelogRaw(requestParameters: GetClusterInfraAppUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterInfraAppUpgradeChangelog>>>;
+
+    /**
+     * Returns stack and service revision changes for infrastructure apps on the cluster.
+     * Preview cluster infrastructure app upgrades
+     */
+    getClusterInfraAppUpgradeChangelog(requestParameters: GetClusterInfraAppUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterInfraAppUpgradeChangelog>>;
 
     /**
      * Returns clusters matching the request filters.
@@ -393,6 +416,49 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async getClusterByName(requestParameters: GetClusterByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
         const response = await this.getClusterByNameRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns stack and service revision changes for infrastructure apps on the cluster.
+     * Preview cluster infrastructure app upgrades
+     */
+    async getClusterInfraAppUpgradeChangelogRaw(requestParameters: GetClusterInfraAppUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterInfraAppUpgradeChangelog>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getClusterInfraAppUpgradeChangelog().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['appInstanceId'] != null) {
+            queryParameters['appInstanceId'] = requestParameters['appInstanceId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/cluster-infra-app-upgrade-changelogs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns stack and service revision changes for infrastructure apps on the cluster.
+     * Preview cluster infrastructure app upgrades
+     */
+    async getClusterInfraAppUpgradeChangelog(requestParameters: GetClusterInfraAppUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterInfraAppUpgradeChangelog>> {
+        const response = await this.getClusterInfraAppUpgradeChangelogRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

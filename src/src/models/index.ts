@@ -3,6 +3,31 @@
 /**
  * 
  * @export
+ * @interface AddAppServiceVolumeInput
+ */
+export interface AddAppServiceVolumeInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof AddAppServiceVolumeInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AddAppServiceVolumeInput
+     */
+    size?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AddAppServiceVolumeInput
+     */
+    storageClassName?: string | null;
+}
+/**
+ * 
+ * @export
  * @interface App
  */
 export interface App {
@@ -54,6 +79,518 @@ export interface App {
      * @memberof App
      */
     updatedAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface AppAccess
+ */
+export interface AppAccess {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAccess
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccess
+     */
+    mode: AppAccessModeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccess
+     */
+    scope: AppAccessScopeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccess
+     */
+    status: string;
+    /**
+     * 
+     * @type {Array<AppAccessSetting>}
+     * @memberof AppAccess
+     */
+    settings: Array<AppAccessSetting>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppAccess
+     */
+    publicRoutesSuppressed: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccess
+     */
+    effectiveUrl?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccess
+     */
+    lastError?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAccess
+     */
+    integrationId: number;
+    /**
+     * 
+     * @type {Array<AppAccessEndpoint>}
+     * @memberof AppAccess
+     */
+    endpoints: Array<AppAccessEndpoint>;
+    /**
+     * 
+     * @type {Array<AppAccessResource>}
+     * @memberof AppAccess
+     */
+    resources: Array<AppAccessResource>;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccess
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccess
+     */
+    updatedAt: string;
+}
+
+
+/**
+ * @export
+ */
+export const AppAccessModeEnum = {
+    Protected: 'protected',
+    PrivateNetwork: 'private_network'
+} as const;
+export type AppAccessModeEnum = typeof AppAccessModeEnum[keyof typeof AppAccessModeEnum];
+
+/**
+ * @export
+ */
+export const AppAccessScopeEnum = {
+    EntireApp: 'entire_app',
+    SelectedEndpoints: 'selected_endpoints'
+} as const;
+export type AppAccessScopeEnum = typeof AppAccessScopeEnum[keyof typeof AppAccessScopeEnum];
+
+/**
+ * 
+ * @export
+ * @interface AppAccessCleanup
+ */
+export interface AppAccessCleanup {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAccessCleanup
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAccessCleanup
+     */
+    appAccessId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAccessCleanup
+     */
+    appInstanceId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAccessCleanup
+     */
+    integrationId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessCleanup
+     */
+    provider: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessCleanup
+     */
+    status: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAccessCleanup
+     */
+    attempts: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessCleanup
+     */
+    lastError?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessCleanup
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessCleanup
+     */
+    updatedAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface AppAccessEndpoint
+ */
+export interface AppAccessEndpoint {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAccessEndpoint
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAccessEndpoint
+     */
+    appPortId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessEndpoint
+     */
+    host: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppAccessEndpoint
+     */
+    primary: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessEndpoint
+     */
+    url: string;
+}
+/**
+ * 
+ * @export
+ * @interface AppAccessEndpointInput
+ */
+export interface AppAccessEndpointInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAccessEndpointInput
+     */
+    appPortId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessEndpointInput
+     */
+    host?: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppAccessEndpointInput
+     */
+    primary: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface AppAccessOperationResult
+ */
+export interface AppAccessOperationResult {
+    /**
+     * 
+     * @type {AppAccess}
+     * @memberof AppAccessOperationResult
+     */
+    access: AppAccess;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAccessOperationResult
+     */
+    taskId?: number | null;
+}
+/**
+ * 
+ * @export
+ * @interface AppAccessProviderConfiguration
+ */
+export interface AppAccessProviderConfiguration {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessProviderConfiguration
+     */
+    mode: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessProviderConfiguration
+     */
+    endpointHostMode: string;
+    /**
+     * 
+     * @type {Array<AppAccessProviderField>}
+     * @memberof AppAccessProviderConfiguration
+     */
+    fields: Array<AppAccessProviderField>;
+}
+/**
+ * 
+ * @export
+ * @interface AppAccessProviderField
+ */
+export interface AppAccessProviderField {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessProviderField
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessProviderField
+     */
+    label: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessProviderField
+     */
+    description: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppAccessProviderField
+     */
+    required: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppAccessProviderField
+     */
+    radio: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppAccessProviderField
+     */
+    hostnameSuffix: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppAccessProviderField
+     */
+    affectsHostname: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessProviderField
+     */
+    defaultValue?: string | null;
+    /**
+     * 
+     * @type {Array<AppAccessProviderOption>}
+     * @memberof AppAccessProviderField
+     */
+    options: Array<AppAccessProviderOption>;
+}
+/**
+ * 
+ * @export
+ * @interface AppAccessProviderOption
+ */
+export interface AppAccessProviderOption {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessProviderOption
+     */
+    value: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessProviderOption
+     */
+    label: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppAccessProviderOption
+     */
+    flattenHostnamePrefix: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessProviderOption
+     */
+    warningTitle?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessProviderOption
+     */
+    warning?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessProviderOption
+     */
+    warningUrl?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface AppAccessProviderOptions
+ */
+export interface AppAccessProviderOptions {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessProviderOptions
+     */
+    provider: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof AppAccessProviderOptions
+     */
+    modes: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof AppAccessProviderOptions
+     */
+    scopes: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessProviderOptions
+     */
+    endpointHostMode: string;
+    /**
+     * 
+     * @type {Array<AppAccessProviderField>}
+     * @memberof AppAccessProviderOptions
+     */
+    fields: Array<AppAccessProviderField>;
+    /**
+     * 
+     * @type {Array<AppAccessProviderConfiguration>}
+     * @memberof AppAccessProviderOptions
+     */
+    configurations: Array<AppAccessProviderConfiguration>;
+}
+/**
+ * 
+ * @export
+ * @interface AppAccessResource
+ */
+export interface AppAccessResource {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAccessResource
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessResource
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessResource
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessResource
+     */
+    externalId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessResource
+     */
+    status: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessResource
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessResource
+     */
+    updatedAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface AppAccessSetting
+ */
+export interface AppAccessSetting {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessSetting
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessSetting
+     */
+    value: string;
+}
+/**
+ * 
+ * @export
+ * @interface AppAccessSettingInput
+ */
+export interface AppAccessSettingInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessSettingInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAccessSettingInput
+     */
+    value: string;
 }
 /**
  * 
@@ -542,6 +1079,36 @@ export interface AppInstance {
     stackVersion: string;
     /**
      * 
+     * @type {AppAccess}
+     * @memberof AppInstance
+     */
+    access?: AppAccess | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppInstance
+     */
+    routingMode: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstance
+     */
+    routingPending: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstance
+     */
+    configurationReady: boolean;
+    /**
+     * 
+     * @type {Array<AppServiceConfigurationIssue>}
+     * @memberof AppInstance
+     */
+    configurationIssues: Array<AppServiceConfigurationIssue>;
+    /**
+     * 
      * @type {AppInstanceSettings}
      * @memberof AppInstance
      */
@@ -747,6 +1314,43 @@ export interface AppInstanceSettingsInput {
      * @memberof AppInstanceSettingsInput
      */
     autoStackUpgrade?: AppInstanceAutoStackUpgradeSettingsInput;
+}
+/**
+ * 
+ * @export
+ * @interface AppInstanceStackUpgradeChangelog
+ */
+export interface AppInstanceStackUpgradeChangelog {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppInstanceStackUpgradeChangelog
+     */
+    previousStackVersion: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppInstanceStackUpgradeChangelog
+     */
+    stackVersion: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppInstanceStackUpgradeChangelog
+     */
+    previousStackRevNumber: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppInstanceStackUpgradeChangelog
+     */
+    stackRevNumber: number;
+    /**
+     * 
+     * @type {Array<ServiceRevisionChange>}
+     * @memberof AppInstanceStackUpgradeChangelog
+     */
+    serviceChanges: Array<ServiceRevisionChange>;
 }
 /**
  * 
@@ -1126,6 +1730,24 @@ export interface AppRoute {
     status: string;
     /**
      * 
+     * @type {string}
+     * @memberof AppRoute
+     */
+    attachmentStatus: AppRouteAttachmentStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppRoute
+     */
+    attachmentCheckedAt?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppRoute
+     */
+    attachmentError?: string | null;
+    /**
+     * 
      * @type {boolean}
      * @memberof AppRoute
      */
@@ -1197,6 +1819,21 @@ export interface AppRoute {
      */
     lastSyncedAt?: string | null;
 }
+
+
+/**
+ * @export
+ */
+export const AppRouteAttachmentStatusEnum = {
+    Unknown: 'UNKNOWN',
+    Checking: 'CHECKING',
+    AwaitingDns: 'AWAITING_DNS',
+    NotConnected: 'NOT_CONNECTED',
+    Connected: 'CONNECTED',
+    Error: 'ERROR'
+} as const;
+export type AppRouteAttachmentStatusEnum = typeof AppRouteAttachmentStatusEnum[keyof typeof AppRouteAttachmentStatusEnum];
+
 /**
  * 
  * @export
@@ -1264,9 +1901,41 @@ export const AppRouteSettingName = {
     NoIndex: 'NO_INDEX',
     RequestBodySize: 'REQUEST_BODY_SIZE',
     SessionAffinity: 'SESSION_AFFINITY',
-    PathRewrite: 'PATH_REWRITE'
+    PathRewrite: 'PATH_REWRITE',
+    Hsts: 'HSTS'
 } as const;
 export type AppRouteSettingName = typeof AppRouteSettingName[keyof typeof AppRouteSettingName];
+
+/**
+ * 
+ * @export
+ * @interface AppRouteTLSInput
+ */
+export interface AppRouteTLSInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppRouteTLSInput
+     */
+    mode: AppRouteTLSInputModeEnum;
+    /**
+     * Required only when mode is CUSTOM.
+     * @type {number}
+     * @memberof AppRouteTLSInput
+     */
+    certId?: number | null;
+}
+
+
+/**
+ * @export
+ */
+export const AppRouteTLSInputModeEnum = {
+    None: 'NONE',
+    LetsEncrypt: 'LETS_ENCRYPT',
+    Custom: 'CUSTOM'
+} as const;
+export type AppRouteTLSInputModeEnum = typeof AppRouteTLSInputModeEnum[keyof typeof AppRouteTLSInputModeEnum];
 
 /**
  * 
@@ -1366,6 +2035,30 @@ export interface AppService {
     configurationReady: boolean;
     /**
      * 
+     * @type {string}
+     * @memberof AppService
+     */
+    buildSourceBoilerplate?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppService
+     */
+    ciPolicy: AppServiceCiPolicyEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppService
+     */
+    effectiveCiIntegrationId?: number | null;
+    /**
+     * 
+     * @type {Array<AppServiceConfigurationIssue>}
+     * @memberof AppService
+     */
+    configurationIssues: Array<AppServiceConfigurationIssue>;
+    /**
+     * 
      * @type {number}
      * @memberof AppService
      */
@@ -1395,6 +2088,18 @@ export interface AppService {
      */
     updatedAt: string;
 }
+
+
+/**
+ * @export
+ */
+export const AppServiceCiPolicyEnum = {
+    Inherit: 'INHERIT',
+    Wodby: 'WODBY',
+    Integration: 'INTEGRATION'
+} as const;
+export type AppServiceCiPolicyEnum = typeof AppServiceCiPolicyEnum[keyof typeof AppServiceCiPolicyEnum];
+
 /**
  * 
  * @export
@@ -1511,6 +2216,24 @@ export interface AppServiceBuild {
      * @memberof AppServiceBuild
      */
     appServiceId: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppServiceBuild
+     */
+    previouslyDeployed: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppServiceBuild
+     */
+    currentlyDeployed: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceBuild
+     */
+    currentBuildNumber?: number | null;
     /**
      * 
      * @type {string}
@@ -1646,6 +2369,55 @@ export interface AppServiceConfig {
      * @memberof AppServiceConfig
      */
     disabled: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface AppServiceConfigurationIssue
+ */
+export interface AppServiceConfigurationIssue {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceConfigurationIssue
+     */
+    appServiceId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceConfigurationIssue
+     */
+    appServiceName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceConfigurationIssue
+     */
+    appServiceTitle: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceConfigurationIssue
+     */
+    code: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceConfigurationIssue
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceConfigurationIssue
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceConfigurationIssue
+     */
+    message: string;
 }
 /**
  * 
@@ -1916,6 +2688,18 @@ export interface AppServiceDeployment {
      * @memberof AppServiceDeployment
      */
     appServiceBuildId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceDeployment
+     */
+    previousAppServiceBuildId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceDeployment
+     */
+    buildSelectionKind: string;
     /**
      * 
      * @type {boolean}
@@ -2604,6 +3388,37 @@ export type AppServiceVolumeStorageClassStatusEnum = typeof AppServiceVolumeStor
 /**
  * 
  * @export
+ * @interface AppServiceVolumeStorageClassState
+ */
+export interface AppServiceVolumeStorageClassState {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceVolumeStorageClassState
+     */
+    volumeId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceVolumeStorageClassState
+     */
+    configuredStorageClassName?: string | null;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof AppServiceVolumeStorageClassState
+     */
+    effectiveStorageClassNames: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceVolumeStorageClassState
+     */
+    status: string;
+}
+/**
+ * 
+ * @export
  * @interface AutomationTimeWindow
  */
 export interface AutomationTimeWindow {
@@ -2937,12 +3752,6 @@ export interface BuildSourceInput {
      * @memberof BuildSourceInput
      */
     gitRefType?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof BuildSourceInput
-     */
-    ciWorkflow?: string | null;
 }
 /**
  * 
@@ -2961,7 +3770,43 @@ export interface Cert {
      * @type {string}
      * @memberof Cert
      */
+    title: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Cert
+     */
+    custom: boolean;
+    /**
+     * Human-readable certificate authority name parsed from uploaded certificates, or the managed issuer identifier.
+     * @type {string}
+     * @memberof Cert
+     */
     issuer: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Cert
+     */
+    domain: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Cert
+     */
+    dnsNames: Array<string>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof Cert
+     */
+    routeIds: Array<number>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Cert
+     */
+    fingerprint?: string | null;
     /**
      * 
      * @type {string}
@@ -3163,6 +4008,18 @@ export interface Cluster {
     orgId: number;
     /**
      * 
+     * @type {string}
+     * @memberof Cluster
+     */
+    ownershipScope: ClusterOwnershipScopeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof Cluster
+     */
+    ownerProjectId?: number | null;
+    /**
+     * 
      * @type {ClusterCapabilities}
      * @memberof Cluster
      */
@@ -3198,6 +4055,17 @@ export interface Cluster {
      */
     updatedAt: string;
 }
+
+
+/**
+ * @export
+ */
+export const ClusterOwnershipScopeEnum = {
+    Org: 'org',
+    Project: 'project'
+} as const;
+export type ClusterOwnershipScopeEnum = typeof ClusterOwnershipScopeEnum[keyof typeof ClusterOwnershipScopeEnum];
+
 /**
  * 
  * @export
@@ -3378,6 +4246,61 @@ export interface ClusterCapabilities {
      * @memberof ClusterCapabilities
      */
     redirectRoutes: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ClusterInfraAppUpgradeChangelog
+ */
+export interface ClusterInfraAppUpgradeChangelog {
+    /**
+     * 
+     * @type {number}
+     * @memberof ClusterInfraAppUpgradeChangelog
+     */
+    appInstanceId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterInfraAppUpgradeChangelog
+     */
+    appName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterInfraAppUpgradeChangelog
+     */
+    appTitle: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterInfraAppUpgradeChangelog
+     */
+    previousStackVersion: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterInfraAppUpgradeChangelog
+     */
+    stackVersion: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClusterInfraAppUpgradeChangelog
+     */
+    previousStackRevNumber: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClusterInfraAppUpgradeChangelog
+     */
+    stackRevNumber: number;
+    /**
+     * 
+     * @type {Array<ServiceRevisionChange>}
+     * @memberof ClusterInfraAppUpgradeChangelog
+     */
+    serviceChanges: Array<ServiceRevisionChange>;
 }
 /**
  * 
@@ -3918,6 +4841,12 @@ export interface DuplicateStackRequest {
      */
     projectId?: number | null;
     /**
+     * Optional immutable source stack revision to duplicate. It must belong to the stack in the request path.
+     * @type {number}
+     * @memberof DuplicateStackRequest
+     */
+    sourceRevId?: number | null;
+    /**
      * 
      * @type {CopyStackSettingsInput}
      * @memberof DuplicateStackRequest
@@ -3991,7 +4920,27 @@ export interface FieldInput {
      * @memberof FieldInput
      */
     value: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FieldInput
+     */
+    envType?: FieldInputEnvTypeEnum | null;
 }
+
+
+/**
+ * @export
+ */
+export const FieldInputEnvTypeEnum = {
+    Dev: 'dev',
+    Feature: 'feature',
+    Test: 'test',
+    Staging: 'staging',
+    Prod: 'prod'
+} as const;
+export type FieldInputEnvTypeEnum = typeof FieldInputEnvTypeEnum[keyof typeof FieldInputEnvTypeEnum];
+
 /**
  * 
  * @export
@@ -4964,6 +5913,31 @@ export interface Integration {
 /**
  * 
  * @export
+ * @interface IntegrationConfigurationResult
+ */
+export interface IntegrationConfigurationResult {
+    /**
+     * 
+     * @type {Integration}
+     * @memberof IntegrationConfigurationResult
+     */
+    integration: Integration;
+    /**
+     * 
+     * @type {number}
+     * @memberof IntegrationConfigurationResult
+     */
+    taskId?: number | null;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof IntegrationConfigurationResult
+     */
+    warnings: Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface IntegrationLinkInput
  */
 export interface IntegrationLinkInput {
@@ -5171,6 +6145,63 @@ export interface NewAnnotationInput {
 /**
  * 
  * @export
+ * @interface NewAppAccessInput
+ */
+export interface NewAppAccessInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof NewAppAccessInput
+     */
+    integrationId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppAccessInput
+     */
+    mode: NewAppAccessInputModeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppAccessInput
+     */
+    scope: NewAppAccessInputScopeEnum;
+    /**
+     * 
+     * @type {Array<AppAccessSettingInput>}
+     * @memberof NewAppAccessInput
+     */
+    settings?: Array<AppAccessSettingInput>;
+    /**
+     * 
+     * @type {Array<AppAccessEndpointInput>}
+     * @memberof NewAppAccessInput
+     */
+    endpoints: Array<AppAccessEndpointInput>;
+}
+
+
+/**
+ * @export
+ */
+export const NewAppAccessInputModeEnum = {
+    Protected: 'PROTECTED',
+    PrivateNetwork: 'PRIVATE_NETWORK'
+} as const;
+export type NewAppAccessInputModeEnum = typeof NewAppAccessInputModeEnum[keyof typeof NewAppAccessInputModeEnum];
+
+/**
+ * @export
+ */
+export const NewAppAccessInputScopeEnum = {
+    EntireApp: 'ENTIRE_APP',
+    SelectedEndpoints: 'SELECTED_ENDPOINTS'
+} as const;
+export type NewAppAccessInputScopeEnum = typeof NewAppAccessInputScopeEnum[keyof typeof NewAppAccessInputScopeEnum];
+
+/**
+ * 
+ * @export
  * @interface NewAppAuthInput
  */
 export interface NewAppAuthInput {
@@ -5284,24 +6315,124 @@ export interface NewAppInput {
      */
     envId: number;
     /**
-     * 
+     * Omit or use null to inherit the organization default, use 0 for the built-in CI service, or use an accessible CI integration ID. A project-owned integration must be shared with the app's project.
      * @type {number}
      * @memberof NewAppInput
      */
     ciIntegrationId?: number | null;
     /**
-     * 
+     * Omit or use null to inherit the organization default, use 0 for the built-in registry, or use an accessible registry integration ID. A project-owned integration must be shared with the app's project.
      * @type {number}
      * @memberof NewAppInput
      */
     registryIntegrationId?: number | null;
+    /**
+     * Defers the automatic initial build and deployment while preserving app instance initialization. Intended for automation that configures the instance before explicitly starting its first build.
+     * @type {boolean}
+     * @memberof NewAppInput
+     */
+    deferInitialDeployment?: boolean;
     /**
      * 
      * @type {AppInstanceSettingsInput}
      * @memberof NewAppInput
      */
     settings?: AppInstanceSettingsInput;
+    /**
+     * 
+     * @type {NewAppInstanceAccessInput}
+     * @memberof NewAppInput
+     */
+    access?: NewAppInstanceAccessInput;
 }
+/**
+ * 
+ * @export
+ * @interface NewAppInstanceAccessEndpointInput
+ */
+export interface NewAppInstanceAccessEndpointInput {
+    /**
+     * Machine name of an enabled app service from the selected stack revision.
+     * @type {string}
+     * @memberof NewAppInstanceAccessEndpointInput
+     */
+    appServiceName: string;
+    /**
+     * Machine name of a public HTTP port from that service manifest.
+     * @type {string}
+     * @memberof NewAppInstanceAccessEndpointInput
+     */
+    appPortName: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewAppInstanceAccessEndpointInput
+     */
+    primary: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface NewAppInstanceAccessInput
+ */
+export interface NewAppInstanceAccessInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof NewAppInstanceAccessInput
+     */
+    integrationId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppInstanceAccessInput
+     */
+    mode: NewAppInstanceAccessInputModeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppInstanceAccessInput
+     */
+    scope: NewAppInstanceAccessInputScopeEnum;
+    /**
+     * 
+     * @type {Array<AppAccessSettingInput>}
+     * @memberof NewAppInstanceAccessInput
+     */
+    settings?: Array<AppAccessSettingInput>;
+    /**
+     * Required only when the selected provider uses a customer-assigned hostname.
+     * @type {string}
+     * @memberof NewAppInstanceAccessInput
+     */
+    host?: string | null;
+    /**
+     * HTTP endpoints selected during creation. Used only with SELECTED_ENDPOINTS scope; older clients may omit it to select the main endpoint.
+     * @type {Array<NewAppInstanceAccessEndpointInput>}
+     * @memberof NewAppInstanceAccessInput
+     */
+    endpoints?: Array<NewAppInstanceAccessEndpointInput>;
+}
+
+
+/**
+ * @export
+ */
+export const NewAppInstanceAccessInputModeEnum = {
+    Protected: 'PROTECTED',
+    PrivateNetwork: 'PRIVATE_NETWORK'
+} as const;
+export type NewAppInstanceAccessInputModeEnum = typeof NewAppInstanceAccessInputModeEnum[keyof typeof NewAppInstanceAccessInputModeEnum];
+
+/**
+ * @export
+ */
+export const NewAppInstanceAccessInputScopeEnum = {
+    EntireApp: 'ENTIRE_APP',
+    SelectedEndpoints: 'SELECTED_ENDPOINTS'
+} as const;
+export type NewAppInstanceAccessInputScopeEnum = typeof NewAppInstanceAccessInputScopeEnum[keyof typeof NewAppInstanceAccessInputScopeEnum];
+
 /**
  * 
  * @export
@@ -5357,23 +6488,35 @@ export interface NewAppInstanceInput {
      */
     envId: number;
     /**
-     * 
+     * Omit or use null to inherit the organization default, use 0 for the built-in CI service, or use an accessible CI integration ID. A project-owned integration must be shared with the app's project.
      * @type {number}
      * @memberof NewAppInstanceInput
      */
     ciIntegrationId?: number | null;
     /**
-     * 
+     * Omit or use null to inherit the organization default, use 0 for the built-in registry, or use an accessible registry integration ID. A project-owned integration must be shared with the app's project.
      * @type {number}
      * @memberof NewAppInstanceInput
      */
     registryIntegrationId?: number | null;
+    /**
+     * Defers the automatic initial build and deployment while preserving app instance initialization. Intended for automation that configures the instance before explicitly starting its first build.
+     * @type {boolean}
+     * @memberof NewAppInstanceInput
+     */
+    deferInitialDeployment?: boolean;
     /**
      * 
      * @type {AppInstanceSettingsInput}
      * @memberof NewAppInstanceInput
      */
     settings?: AppInstanceSettingsInput;
+    /**
+     * 
+     * @type {NewAppInstanceAccessInput}
+     * @memberof NewAppInstanceInput
+     */
+    access?: NewAppInstanceAccessInput;
 }
 /**
  * 
@@ -5387,6 +6530,12 @@ export interface NewAppRouteInput {
      * @memberof NewAppRouteInput
      */
     appServiceId: number;
+    /**
+     * Creates the custom domain disabled. Disabled domains do not require custom-domain feature access until enabled.
+     * @type {boolean}
+     * @memberof NewAppRouteInput
+     */
+    disabled?: boolean | null;
     /**
      * 
      * @type {boolean}
@@ -5424,7 +6573,7 @@ export interface NewAppRouteInput {
      */
     pathType?: NewAppRouteInputPathTypeEnum | null;
     /**
-     * 
+     * SERVE sends requests to the selected app service. BACKEND is accepted for backwards compatibility.
      * @type {string}
      * @memberof NewAppRouteInput
      */
@@ -5454,11 +6603,23 @@ export interface NewAppRouteInput {
      */
     redirectStatusCode?: number | null;
     /**
+     * Enables HTTP Strict Transport Security for a serve route when TLS is active.
+     * @type {boolean}
+     * @memberof NewAppRouteInput
+     */
+    hsts?: boolean | null;
+    /**
      * 
      * @type {boolean}
      * @memberof NewAppRouteInput
      */
     letsencrypt?: boolean | null;
+    /**
+     * 
+     * @type {AppRouteTLSInput}
+     * @memberof NewAppRouteInput
+     */
+    tls?: AppRouteTLSInput;
 }
 
 
@@ -5475,6 +6636,7 @@ export type NewAppRouteInputPathTypeEnum = typeof NewAppRouteInputPathTypeEnum[k
  * @export
  */
 export const NewAppRouteInputActionEnum = {
+    Serve: 'SERVE',
     Backend: 'BACKEND',
     Redirect: 'REDIRECT'
 } as const;
@@ -5516,6 +6678,12 @@ export interface NewAppServiceCronScheduleInput {
      * @memberof NewAppServiceCronScheduleInput
      */
     workload?: string | null;
+    /**
+     * Creates the schedule disabled. Disabled schedules do not require cron feature access.
+     * @type {boolean}
+     * @memberof NewAppServiceCronScheduleInput
+     */
+    disabled?: boolean | null;
 }
 /**
  * 
@@ -5689,13 +6857,13 @@ export interface NewBackupInput {
      */
     backupName?: string | null;
     /**
-     * 
+     * Use 0 for Wodby Blob Storage.
      * @type {number}
      * @memberof NewBackupInput
      */
     integrationId: number;
     /**
-     * 
+     * Must be empty for Wodby Blob Storage.
      * @type {string}
      * @memberof NewBackupInput
      */
@@ -5756,13 +6924,13 @@ export interface NewBackupPresetInput {
      */
     backupName?: string | null;
     /**
-     * 
+     * Use 0 for Wodby Blob Storage. Free subscriptions may create only an automatic preset that is disabled.
      * @type {number}
      * @memberof NewBackupPresetInput
      */
     integrationId: number;
     /**
-     * 
+     * Must be empty for Wodby Blob Storage.
      * @type {string}
      * @memberof NewBackupPresetInput
      */
@@ -6541,6 +7709,80 @@ export interface NewStackServiceTokenInput {
 /**
  * 
  * @export
+ * @interface NewVariableProviderFieldInput
+ */
+export interface NewVariableProviderFieldInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof NewVariableProviderFieldInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewVariableProviderFieldInput
+     */
+    label: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewVariableProviderFieldInput
+     */
+    variable: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewVariableProviderFieldInput
+     */
+    required: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewVariableProviderFieldInput
+     */
+    secret: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface NewVariableProviderInput
+ */
+export interface NewVariableProviderInput {
+    /**
+     * Optional for API-key requests; defaults to the API key's organization.
+     * @type {number}
+     * @memberof NewVariableProviderInput
+     */
+    orgId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewVariableProviderInput
+     */
+    projectId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewVariableProviderInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewVariableProviderInput
+     */
+    title: string;
+    /**
+     * 
+     * @type {Array<NewVariableProviderFieldInput>}
+     * @memberof NewVariableProviderInput
+     */
+    fields: Array<NewVariableProviderFieldInput>;
+}
+/**
+ * 
+ * @export
  * @interface OperationResult
  */
 export interface OperationResult {
@@ -6607,6 +7849,18 @@ export interface Org {
     registryIntegrationId: number;
     /**
      * 
+     * @type {OrgCapabilities}
+     * @memberof Org
+     */
+    capabilities?: OrgCapabilities;
+    /**
+     * 
+     * @type {OrgSubscription}
+     * @memberof Org
+     */
+    subscription?: OrgSubscription;
+    /**
+     * 
      * @type {string}
      * @memberof Org
      */
@@ -6617,6 +7871,67 @@ export interface Org {
      * @memberof Org
      */
     updatedAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface OrgCapabilities
+ */
+export interface OrgCapabilities {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OrgCapabilities
+     */
+    customDomains: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OrgCapabilities
+     */
+    autoBackups: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OrgCapabilities
+     */
+    users: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OrgCapabilities
+     */
+    projects: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OrgCapabilities
+     */
+    cronSchedules: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OrgCapabilities
+     */
+    autoscale: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OrgCapabilities
+     */
+    appInstancePause: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OrgCapabilities
+     */
+    webShell: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OrgCapabilities
+     */
+    wodbyCloud: boolean;
 }
 /**
  * 
@@ -6684,6 +7999,68 @@ export interface OrgMembership {
      * @memberof OrgMembership
      */
     updatedAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface OrgSubscription
+ */
+export interface OrgSubscription {
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSubscription
+     */
+    status: string;
+    /**
+     * 
+     * @type {OrgSubscriptionPlan}
+     * @memberof OrgSubscription
+     */
+    plan?: OrgSubscriptionPlan;
+}
+/**
+ * 
+ * @export
+ * @interface OrgSubscriptionPlan
+ */
+export interface OrgSubscriptionPlan {
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSubscriptionPlan
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSubscriptionPlan
+     */
+    title: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof OrgSubscriptionPlan
+     */
+    usage: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof OrgSubscriptionPlan
+     */
+    usageIncluded: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof OrgSubscriptionPlan
+     */
+    spendingLimit: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof OrgSubscriptionPlan
+     */
+    pricePerUnit: number;
 }
 /**
  * 
@@ -6919,6 +8296,12 @@ export interface ProviderRevision {
     manifest?: { [key: string]: any; };
     /**
      * 
+     * @type {boolean}
+     * @memberof ProviderRevision
+     */
+    permissionAudit: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof ProviderRevision
      */
@@ -6971,6 +8354,19 @@ export interface RemoteGitRepo {
 /**
  * 
  * @export
+ * @interface RemoteGitRepoFilePresence
+ */
+export interface RemoteGitRepoFilePresence {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RemoteGitRepoFilePresence
+     */
+    _exists: boolean;
+}
+/**
+ * 
+ * @export
  * @interface RepeatTaskRequest
  */
 export interface RepeatTaskRequest {
@@ -6980,6 +8376,25 @@ export interface RepeatTaskRequest {
      * @memberof RepeatTaskRequest
      */
     force: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ResolveIntegrationResult
+ */
+export interface ResolveIntegrationResult {
+    /**
+     * 
+     * @type {Integration}
+     * @memberof ResolveIntegrationResult
+     */
+    integration: Integration;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ResolveIntegrationResult
+     */
+    created: boolean;
 }
 /**
  * 
@@ -7264,6 +8679,67 @@ export interface ServiceRevision {
      * @memberof ServiceRevision
      */
     createdAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface ServiceRevisionChange
+ */
+export interface ServiceRevisionChange {
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceRevisionChange
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceRevisionChange
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceRevisionChange
+     */
+    icon: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceRevisionChange
+     */
+    kind: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceRevisionChange
+     */
+    previousVersion?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceRevisionChange
+     */
+    version?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof ServiceRevisionChange
+     */
+    previousRevNumber?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof ServiceRevisionChange
+     */
+    revNumber?: number | null;
+    /**
+     * 
+     * @type {Array<StackServiceUpdateChangelogEntry>}
+     * @memberof ServiceRevisionChange
+     */
+    entries: Array<StackServiceUpdateChangelogEntry>;
 }
 /**
  * 
@@ -7740,6 +9216,31 @@ export interface StackAutoUpdateVersionPolicyInput {
 /**
  * 
  * @export
+ * @interface StackOriginSyncChangelog
+ */
+export interface StackOriginSyncChangelog {
+    /**
+     * 
+     * @type {string}
+     * @memberof StackOriginSyncChangelog
+     */
+    previousVersion: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackOriginSyncChangelog
+     */
+    version: string;
+    /**
+     * 
+     * @type {Array<StackServiceUpdateChangelogEntry>}
+     * @memberof StackOriginSyncChangelog
+     */
+    entries: Array<StackServiceUpdateChangelogEntry>;
+}
+/**
+ * 
+ * @export
  * @interface StackRevision
  */
 export interface StackRevision {
@@ -7799,10 +9300,77 @@ export interface StackRevision {
     manifest: string;
     /**
      * 
+     * @type {Array<StackRevisionLinkIssue>}
+     * @memberof StackRevision
+     */
+    linkIssues: Array<StackRevisionLinkIssue>;
+    /**
+     * 
      * @type {string}
      * @memberof StackRevision
      */
     createdAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface StackRevisionLinkIssue
+ */
+export interface StackRevisionLinkIssue {
+    /**
+     * 
+     * @type {string}
+     * @memberof StackRevisionLinkIssue
+     */
+    code: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof StackRevisionLinkIssue
+     */
+    stackServiceId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackRevisionLinkIssue
+     */
+    stackServiceName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackRevisionLinkIssue
+     */
+    stackServiceTitle: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackRevisionLinkIssue
+     */
+    linkName?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof StackRevisionLinkIssue
+     */
+    targetStackServiceId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackRevisionLinkIssue
+     */
+    targetStackServiceName?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackRevisionLinkIssue
+     */
+    targetStackServiceTitle?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackRevisionLinkIssue
+     */
+    message: string;
 }
 /**
  * 
@@ -7908,6 +9476,24 @@ export interface StackService {
     buildSourceRemoteRepoId?: string | null;
     /**
      * 
+     * @type {Array<StackServiceOption>}
+     * @memberof StackService
+     */
+    options?: Array<StackServiceOption>;
+    /**
+     * 
+     * @type {Array<StackServiceSetting>}
+     * @memberof StackService
+     */
+    settings?: Array<StackServiceSetting>;
+    /**
+     * 
+     * @type {Array<StackServiceContainer>}
+     * @memberof StackService
+     */
+    containers?: Array<StackServiceContainer>;
+    /**
+     * 
      * @type {string}
      * @memberof StackService
      */
@@ -8011,6 +9597,61 @@ export interface StackServiceConfigInput {
      * @memberof StackServiceConfigInput
      */
     config: string;
+}
+/**
+ * 
+ * @export
+ * @interface StackServiceContainer
+ */
+export interface StackServiceContainer {
+    /**
+     * 
+     * @type {number}
+     * @memberof StackServiceContainer
+     */
+    id?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof StackServiceContainer
+     */
+    stackServiceId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackServiceContainer
+     */
+    workload: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackServiceContainer
+     */
+    name: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof StackServiceContainer
+     */
+    requestCPU?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof StackServiceContainer
+     */
+    requestMem?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof StackServiceContainer
+     */
+    limitCPU?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof StackServiceContainer
+     */
+    limitMem?: number | null;
 }
 /**
  * 
@@ -8322,6 +9963,43 @@ export interface StackServiceLinkInput {
 /**
  * 
  * @export
+ * @interface StackServiceOption
+ */
+export interface StackServiceOption {
+    /**
+     * 
+     * @type {number}
+     * @memberof StackServiceOption
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof StackServiceOption
+     */
+    stackServiceId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackServiceOption
+     */
+    version: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StackServiceOption
+     */
+    _default: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StackServiceOption
+     */
+    disabled: boolean;
+}
+/**
+ * 
+ * @export
  * @interface StackServiceOptionInput
  */
 export interface StackServiceOptionInput {
@@ -8356,6 +10034,37 @@ export interface StackServiceOptionsInput {
      * @memberof StackServiceOptionsInput
      */
     options: Array<StackServiceOptionInput>;
+}
+/**
+ * 
+ * @export
+ * @interface StackServiceSetting
+ */
+export interface StackServiceSetting {
+    /**
+     * 
+     * @type {number}
+     * @memberof StackServiceSetting
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof StackServiceSetting
+     */
+    stackServiceId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackServiceSetting
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackServiceSetting
+     */
+    value: string;
 }
 /**
  * 
@@ -8411,6 +10120,80 @@ export interface StackServiceToken {
      * @memberof StackServiceToken
      */
     createdAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface StackServiceUpdateChangelog
+ */
+export interface StackServiceUpdateChangelog {
+    /**
+     * 
+     * @type {number}
+     * @memberof StackServiceUpdateChangelog
+     */
+    stackServiceId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackServiceUpdateChangelog
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackServiceUpdateChangelog
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackServiceUpdateChangelog
+     */
+    previousVersion: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackServiceUpdateChangelog
+     */
+    version: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof StackServiceUpdateChangelog
+     */
+    previousRevNumber: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof StackServiceUpdateChangelog
+     */
+    revNumber: number;
+    /**
+     * 
+     * @type {Array<StackServiceUpdateChangelogEntry>}
+     * @memberof StackServiceUpdateChangelog
+     */
+    entries: Array<StackServiceUpdateChangelogEntry>;
+}
+/**
+ * 
+ * @export
+ * @interface StackServiceUpdateChangelogEntry
+ */
+export interface StackServiceUpdateChangelogEntry {
+    /**
+     * 
+     * @type {string}
+     * @memberof StackServiceUpdateChangelogEntry
+     */
+    tag: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackServiceUpdateChangelogEntry
+     */
+    description: string;
 }
 /**
  * 
@@ -8701,6 +10484,12 @@ export interface Task {
      * @type {string}
      * @memberof Task
      */
+    executionScope: TaskExecutionScopeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof Task
+     */
     status: string;
     /**
      * 
@@ -8835,6 +10624,19 @@ export interface Task {
      */
     endedAt?: string | null;
 }
+
+
+/**
+ * @export
+ */
+export const TaskExecutionScopeEnum = {
+    User: 'user',
+    Org: 'org',
+    Project: 'project',
+    LegacyUnknown: 'legacy_unknown'
+} as const;
+export type TaskExecutionScopeEnum = typeof TaskExecutionScopeEnum[keyof typeof TaskExecutionScopeEnum];
+
 /**
  * 
  * @export
@@ -9050,11 +10852,17 @@ export interface TasksResponse {
      */
     items: Array<Task>;
     /**
-     * Flat current-page roots and descendants for tree view, linked by parentId.
+     * Bounded current-page roots and authorized descendants for tree view, linked by parentId.
      * @type {Array<TaskTreeItem>}
      * @memberof TasksResponse
      */
     treeItems?: Array<TaskTreeItem> | null;
+    /**
+     * True when treeItems omitted visible descendants after reaching the 250-item response limit. Always false for flat view.
+     * @type {boolean}
+     * @memberof TasksResponse
+     */
+    treeTruncated: boolean;
     /**
      * 
      * @type {number}
@@ -9081,6 +10889,42 @@ export interface URLResponse {
      */
     url: string;
 }
+/**
+ * 
+ * @export
+ * @interface UpdateAppAccessInput
+ */
+export interface UpdateAppAccessInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateAppAccessInput
+     */
+    scope: UpdateAppAccessInputScopeEnum;
+    /**
+     * 
+     * @type {Array<AppAccessSettingInput>}
+     * @memberof UpdateAppAccessInput
+     */
+    settings?: Array<AppAccessSettingInput>;
+    /**
+     * 
+     * @type {Array<AppAccessEndpointInput>}
+     * @memberof UpdateAppAccessInput
+     */
+    endpoints: Array<AppAccessEndpointInput>;
+}
+
+
+/**
+ * @export
+ */
+export const UpdateAppAccessInputScopeEnum = {
+    EntireApp: 'ENTIRE_APP',
+    SelectedEndpoints: 'SELECTED_ENDPOINTS'
+} as const;
+export type UpdateAppAccessInputScopeEnum = typeof UpdateAppAccessInputScopeEnum[keyof typeof UpdateAppAccessInputScopeEnum];
+
 /**
  * 
  * @export
@@ -9167,7 +11011,7 @@ export interface UpdateAppRouteInput {
      */
     pathType?: UpdateAppRouteInputPathTypeEnum | null;
     /**
-     * 
+     * SERVE sends requests to the selected app service. BACKEND is accepted for backwards compatibility.
      * @type {string}
      * @memberof UpdateAppRouteInput
      */
@@ -9196,6 +11040,12 @@ export interface UpdateAppRouteInput {
      * @memberof UpdateAppRouteInput
      */
     redirectStatusCode?: number | null;
+    /**
+     * 
+     * @type {AppRouteTLSInput}
+     * @memberof UpdateAppRouteInput
+     */
+    tls?: AppRouteTLSInput;
 }
 
 
@@ -9212,6 +11062,7 @@ export type UpdateAppRouteInputPathTypeEnum = typeof UpdateAppRouteInputPathType
  * @export
  */
 export const UpdateAppRouteInputActionEnum = {
+    Serve: 'SERVE',
     Backend: 'BACKEND',
     Redirect: 'REDIRECT'
 } as const;
@@ -9311,13 +11162,13 @@ export interface UpdateAppServiceEnvVarInput {
  */
 export interface UpdateBackupPresetInput {
     /**
-     * 
+     * Use 0 for Wodby Blob Storage. Enabling the preset requires a paid subscription.
      * @type {number}
      * @memberof UpdateBackupPresetInput
      */
     integrationId: number;
     /**
-     * 
+     * Must be empty for Wodby Blob Storage.
      * @type {string}
      * @memberof UpdateBackupPresetInput
      */
@@ -9472,13 +11323,13 @@ export interface UpdateOrgRequest {
      */
     defaultTimeZone?: string;
     /**
-     * 
+     * Omit or use null to preserve the current default, use 0 for the built-in registry, or use an organization-owned registry integration ID.
      * @type {number}
      * @memberof UpdateOrgRequest
      */
     registryIntegrationId?: number | null;
     /**
-     * 
+     * Omit or use null to preserve the current default, use 0 for the built-in CI service, or use an organization-owned CI integration ID.
      * @type {number}
      * @memberof UpdateOrgRequest
      */
@@ -9653,6 +11504,38 @@ export interface User {
      * @memberof User
      */
     name: string;
+}
+/**
+ * 
+ * @export
+ * @interface ValidateAppAccessHostnameInput
+ */
+export interface ValidateAppAccessHostnameInput {
+    /**
+     * 
+     * @type {Array<AppAccessSettingInput>}
+     * @memberof ValidateAppAccessHostnameInput
+     */
+    settings?: Array<AppAccessSettingInput>;
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidateAppAccessHostnameInput
+     */
+    host: string;
+}
+/**
+ * 
+ * @export
+ * @interface ValidationResult
+ */
+export interface ValidationResult {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ValidationResult
+     */
+    valid: boolean;
 }
 /**
  * 

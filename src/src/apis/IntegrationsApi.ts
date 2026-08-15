@@ -15,21 +15,36 @@
 
 import * as runtime from '../runtime';
 import type {
+  AppAccessProviderOptions,
   Integration,
+  IntegrationConfigurationResult,
   IntegrationScope,
   KubeVersion,
   NewIntegrationInput,
   OperationResult,
   ProblemDetails,
   RemoteGitRepo,
+  RemoteGitRepoFilePresence,
+  ResolveIntegrationResult,
   UpdateIntegrationInput,
+  ValidateAppAccessHostnameInput,
+  ValidationResult,
 } from '../models/index';
+
+export interface ConfigureIntegrationRequest {
+    id: number;
+    updateIntegrationInput: UpdateIntegrationInput;
+}
 
 export interface CreateIntegrationRequest {
     newIntegrationInput: NewIntegrationInput;
 }
 
 export interface DeleteIntegrationRequest {
+    id: number;
+}
+
+export interface GetAppAccessProviderOptionsRequest {
     id: number;
 }
 
@@ -44,6 +59,13 @@ export interface GetIntegrationByNameRequest {
 
 export interface GetIntegrationKubeSettingsRequest {
     id: number;
+}
+
+export interface GetIntegrationRemoteGitRepoFilePresenceRequest {
+    id: number;
+    remoteGitRepoId: string;
+    path: string;
+    ref: string;
 }
 
 export interface ListIntegrationKubeMachineTypesRequest {
@@ -96,9 +118,22 @@ export interface ListIntegrationsRequest {
     labels?: string;
 }
 
+export interface ResolveIntegrationRequest {
+    newIntegrationInput: NewIntegrationInput;
+}
+
+export interface TestIntegrationPermissionsRequest {
+    id: number;
+}
+
 export interface UpdateIntegrationRequest {
     id: number;
     updateIntegrationInput: UpdateIntegrationInput;
+}
+
+export interface ValidateAppAccessHostnameRequest {
+    id: number;
+    validateAppAccessHostnameInput: ValidateAppAccessHostnameInput;
 }
 
 /**
@@ -108,6 +143,23 @@ export interface UpdateIntegrationRequest {
  * @interface IntegrationsApiInterface
  */
 export interface IntegrationsApiInterface {
+    /**
+     * Atomically updates integration metadata, adds selected kinds, merges field values, and returns any background activation or permission-test task.
+     * @summary Configure integration
+     * @param {number} id 
+     * @param {UpdateIntegrationInput} updateIntegrationInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    configureIntegrationRaw(requestParameters: ConfigureIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IntegrationConfigurationResult>>;
+
+    /**
+     * Atomically updates integration metadata, adds selected kinds, merges field values, and returns any background activation or permission-test task.
+     * Configure integration
+     */
+    configureIntegration(requestParameters: ConfigureIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IntegrationConfigurationResult>;
+
     /**
      * Creates an integration and returns the created resource.
      * @summary Create integration
@@ -139,6 +191,22 @@ export interface IntegrationsApiInterface {
      * Delete integration
      */
     deleteIntegration(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Returns supported app-access modes, scopes, fields, and hostname behavior for the integration.
+     * @summary Get app-access provider options
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    getAppAccessProviderOptionsRaw(requestParameters: GetAppAccessProviderOptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessProviderOptions>>;
+
+    /**
+     * Returns supported app-access modes, scopes, fields, and hostname behavior for the integration.
+     * Get app-access provider options
+     */
+    getAppAccessProviderOptions(requestParameters: GetAppAccessProviderOptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessProviderOptions>;
 
     /**
      * Returns the integration identified by the request path.
@@ -188,6 +256,25 @@ export interface IntegrationsApiInterface {
      * Get Kubernetes settings
      */
     getIntegrationKubeSettings(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }>;
+
+    /**
+     * Returns whether a file exists at an exact repository ref through the selected Git integration.
+     * @summary Check a remote Git repository file
+     * @param {number} id 
+     * @param {string} remoteGitRepoId 
+     * @param {string} path 
+     * @param {string} ref 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    getIntegrationRemoteGitRepoFilePresenceRaw(requestParameters: GetIntegrationRemoteGitRepoFilePresenceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RemoteGitRepoFilePresence>>;
+
+    /**
+     * Returns whether a file exists at an exact repository ref through the selected Git integration.
+     * Check a remote Git repository file
+     */
+    getIntegrationRemoteGitRepoFilePresence(requestParameters: GetIntegrationRemoteGitRepoFilePresenceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RemoteGitRepoFilePresence>;
 
     /**
      * Returns Kubernetes machine types matching the request filters.
@@ -372,6 +459,38 @@ export interface IntegrationsApiInterface {
     listIntegrations(requestParameters: ListIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>>;
 
     /**
+     * Reuses an accessible integration when provider, kinds, scope, environment scopes, and credential values match exactly; otherwise creates it.
+     * @summary Resolve or create integration
+     * @param {NewIntegrationInput} newIntegrationInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    resolveIntegrationRaw(requestParameters: ResolveIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResolveIntegrationResult>>;
+
+    /**
+     * Reuses an accessible integration when provider, kinds, scope, environment scopes, and credential values match exactly; otherwise creates it.
+     * Resolve or create integration
+     */
+    resolveIntegration(requestParameters: ResolveIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResolveIntegrationResult>;
+
+    /**
+     * Starts the provider permission audit configured by the integration\'s provider revision.
+     * @summary Test integration permissions
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    testIntegrationPermissionsRaw(requestParameters: TestIntegrationPermissionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Starts the provider permission audit configured by the integration\'s provider revision.
+     * Test integration permissions
+     */
+    testIntegrationPermissions(requestParameters: TestIntegrationPermissionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
      * Updates the integration and returns the updated resource.
      * @summary Update integration
      * @param {number} id 
@@ -388,12 +507,78 @@ export interface IntegrationsApiInterface {
      */
     updateIntegration(requestParameters: UpdateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
 
+    /**
+     * Validates an app-access hostname against the provider settings of the integration.
+     * @summary Validate an app-access hostname
+     * @param {number} id 
+     * @param {ValidateAppAccessHostnameInput} validateAppAccessHostnameInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    validateAppAccessHostnameRaw(requestParameters: ValidateAppAccessHostnameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ValidationResult>>;
+
+    /**
+     * Validates an app-access hostname against the provider settings of the integration.
+     * Validate an app-access hostname
+     */
+    validateAppAccessHostname(requestParameters: ValidateAppAccessHostnameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidationResult>;
+
 }
 
 /**
  * 
  */
 export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiInterface {
+
+    /**
+     * Atomically updates integration metadata, adds selected kinds, merges field values, and returns any background activation or permission-test task.
+     * Configure integration
+     */
+    async configureIntegrationRaw(requestParameters: ConfigureIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IntegrationConfigurationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling configureIntegration().'
+            );
+        }
+
+        if (requestParameters['updateIntegrationInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateIntegrationInput',
+                'Required parameter "updateIntegrationInput" was null or undefined when calling configureIntegration().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/configuration/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateIntegrationInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Atomically updates integration metadata, adds selected kinds, merges field values, and returns any background activation or permission-test task.
+     * Configure integration
+     */
+    async configureIntegration(requestParameters: ConfigureIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IntegrationConfigurationResult> {
+        const response = await this.configureIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Creates an integration and returns the created resource.
@@ -473,6 +658,45 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
      */
     async deleteIntegration(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.deleteIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns supported app-access modes, scopes, fields, and hostname behavior for the integration.
+     * Get app-access provider options
+     */
+    async getAppAccessProviderOptionsRaw(requestParameters: GetAppAccessProviderOptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessProviderOptions>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppAccessProviderOptions().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}/options/app-access`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns supported app-access modes, scopes, fields, and hostname behavior for the integration.
+     * Get app-access provider options
+     */
+    async getAppAccessProviderOptions(requestParameters: GetAppAccessProviderOptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessProviderOptions> {
+        const response = await this.getAppAccessProviderOptionsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -594,6 +818,78 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
      */
     async getIntegrationKubeSettings(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }> {
         const response = await this.getIntegrationKubeSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns whether a file exists at an exact repository ref through the selected Git integration.
+     * Check a remote Git repository file
+     */
+    async getIntegrationRemoteGitRepoFilePresenceRaw(requestParameters: GetIntegrationRemoteGitRepoFilePresenceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RemoteGitRepoFilePresence>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getIntegrationRemoteGitRepoFilePresence().'
+            );
+        }
+
+        if (requestParameters['remoteGitRepoId'] == null) {
+            throw new runtime.RequiredError(
+                'remoteGitRepoId',
+                'Required parameter "remoteGitRepoId" was null or undefined when calling getIntegrationRemoteGitRepoFilePresence().'
+            );
+        }
+
+        if (requestParameters['path'] == null) {
+            throw new runtime.RequiredError(
+                'path',
+                'Required parameter "path" was null or undefined when calling getIntegrationRemoteGitRepoFilePresence().'
+            );
+        }
+
+        if (requestParameters['ref'] == null) {
+            throw new runtime.RequiredError(
+                'ref',
+                'Required parameter "ref" was null or undefined when calling getIntegrationRemoteGitRepoFilePresence().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['remoteGitRepoId'] != null) {
+            queryParameters['remoteGitRepoId'] = requestParameters['remoteGitRepoId'];
+        }
+
+        if (requestParameters['path'] != null) {
+            queryParameters['path'] = requestParameters['path'];
+        }
+
+        if (requestParameters['ref'] != null) {
+            queryParameters['ref'] = requestParameters['ref'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}/options/remote-git-repo-file`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns whether a file exists at an exact repository ref through the selected Git integration.
+     * Check a remote Git repository file
+     */
+    async getIntegrationRemoteGitRepoFilePresence(requestParameters: GetIntegrationRemoteGitRepoFilePresenceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RemoteGitRepoFilePresence> {
+        const response = await this.getIntegrationRemoteGitRepoFilePresenceRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1076,6 +1372,87 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Reuses an accessible integration when provider, kinds, scope, environment scopes, and credential values match exactly; otherwise creates it.
+     * Resolve or create integration
+     */
+    async resolveIntegrationRaw(requestParameters: ResolveIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResolveIntegrationResult>> {
+        if (requestParameters['newIntegrationInput'] == null) {
+            throw new runtime.RequiredError(
+                'newIntegrationInput',
+                'Required parameter "newIntegrationInput" was null or undefined when calling resolveIntegration().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/actions/resolve`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['newIntegrationInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Reuses an accessible integration when provider, kinds, scope, environment scopes, and credential values match exactly; otherwise creates it.
+     * Resolve or create integration
+     */
+    async resolveIntegration(requestParameters: ResolveIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResolveIntegrationResult> {
+        const response = await this.resolveIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Starts the provider permission audit configured by the integration\'s provider revision.
+     * Test integration permissions
+     */
+    async testIntegrationPermissionsRaw(requestParameters: TestIntegrationPermissionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling testIntegrationPermissions().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}/actions/test-permissions`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Starts the provider permission audit configured by the integration\'s provider revision.
+     * Test integration permissions
+     */
+    async testIntegrationPermissions(requestParameters: TestIntegrationPermissionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.testIntegrationPermissionsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Updates the integration and returns the updated resource.
      * Update integration
      */
@@ -1121,6 +1498,55 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
      */
     async updateIntegration(requestParameters: UpdateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
         const response = await this.updateIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Validates an app-access hostname against the provider settings of the integration.
+     * Validate an app-access hostname
+     */
+    async validateAppAccessHostnameRaw(requestParameters: ValidateAppAccessHostnameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ValidationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling validateAppAccessHostname().'
+            );
+        }
+
+        if (requestParameters['validateAppAccessHostnameInput'] == null) {
+            throw new runtime.RequiredError(
+                'validateAppAccessHostnameInput',
+                'Required parameter "validateAppAccessHostnameInput" was null or undefined when calling validateAppAccessHostname().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}/actions/validate-app-access-hostname`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['validateAppAccessHostnameInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Validates an app-access hostname against the provider settings of the integration.
+     * Validate an app-access hostname
+     */
+    async validateAppAccessHostname(requestParameters: ValidateAppAccessHostnameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidationResult> {
+        const response = await this.validateAppAccessHostnameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

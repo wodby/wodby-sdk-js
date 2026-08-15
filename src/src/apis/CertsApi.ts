@@ -16,8 +16,13 @@
 import * as runtime from '../runtime';
 import type {
   Cert,
+  OperationResult,
   ProblemDetails,
 } from '../models/index';
+
+export interface DeleteCustomCertRequest {
+    id: number;
+}
 
 export interface GetCertRequest {
     id: number;
@@ -26,6 +31,7 @@ export interface GetCertRequest {
 
 export interface ListCertsRequest {
     orgId?: number;
+    host?: string;
 }
 
 /**
@@ -35,6 +41,22 @@ export interface ListCertsRequest {
  * @interface CertsApiInterface
  */
 export interface CertsApiInterface {
+    /**
+     * Deletes an uploaded certificate that is not attached to any route or other resource.
+     * @summary Delete custom certificate
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CertsApiInterface
+     */
+    deleteCustomCertRaw(requestParameters: DeleteCustomCertRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes an uploaded certificate that is not attached to any route or other resource.
+     * Delete custom certificate
+     */
+    deleteCustomCert(requestParameters: DeleteCustomCertRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
     /**
      * Returns certificate metadata identified by the request path within the requested organization.
      * @summary Get cert
@@ -56,6 +78,7 @@ export interface CertsApiInterface {
      * Returns certificate metadata for an organization.
      * @summary List certs
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
+     * @param {string} [host] When supplied, returns only usable custom certificates whose DNS names cover this host.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CertsApiInterface
@@ -74,6 +97,45 @@ export interface CertsApiInterface {
  * 
  */
 export class CertsApi extends runtime.BaseAPI implements CertsApiInterface {
+
+    /**
+     * Deletes an uploaded certificate that is not attached to any route or other resource.
+     * Delete custom certificate
+     */
+    async deleteCustomCertRaw(requestParameters: DeleteCustomCertRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteCustomCert().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/certs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Deletes an uploaded certificate that is not attached to any route or other resource.
+     * Delete custom certificate
+     */
+    async deleteCustomCert(requestParameters: DeleteCustomCertRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteCustomCertRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Returns certificate metadata identified by the request path within the requested organization.
@@ -127,6 +189,10 @@ export class CertsApi extends runtime.BaseAPI implements CertsApiInterface {
 
         if (requestParameters['orgId'] != null) {
             queryParameters['orgId'] = requestParameters['orgId'];
+        }
+
+        if (requestParameters['host'] != null) {
+            queryParameters['host'] = requestParameters['host'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

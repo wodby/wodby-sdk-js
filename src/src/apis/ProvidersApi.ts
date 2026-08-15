@@ -15,11 +15,16 @@
 
 import * as runtime from '../runtime';
 import type {
+  NewVariableProviderInput,
   ProblemDetails,
   Provider,
   ProviderRevision,
   ProvidersResponse,
 } from '../models/index';
+
+export interface CreateVariableProviderRequest {
+    newVariableProviderInput: NewVariableProviderInput;
+}
 
 export interface GetProviderRequest {
     id: number;
@@ -49,6 +54,22 @@ export interface ListProvidersRequest {
  * @interface ProvidersApiInterface
  */
 export interface ProvidersApiInterface {
+    /**
+     * Creates a private provider whose integration fields are exposed as service environment variables.
+     * @summary Create variable provider
+     * @param {NewVariableProviderInput} newVariableProviderInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProvidersApiInterface
+     */
+    createVariableProviderRaw(requestParameters: CreateVariableProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>>;
+
+    /**
+     * Creates a private provider whose integration fields are exposed as service environment variables.
+     * Create variable provider
+     */
+    createVariableProvider(requestParameters: CreateVariableProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider>;
+
     /**
      * Returns the provider identified by the request path.
      * @summary Get provider
@@ -124,6 +145,48 @@ export interface ProvidersApiInterface {
  * 
  */
 export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterface {
+
+    /**
+     * Creates a private provider whose integration fields are exposed as service environment variables.
+     * Create variable provider
+     */
+    async createVariableProviderRaw(requestParameters: CreateVariableProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>> {
+        if (requestParameters['newVariableProviderInput'] == null) {
+            throw new runtime.RequiredError(
+                'newVariableProviderInput',
+                'Required parameter "newVariableProviderInput" was null or undefined when calling createVariableProvider().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/providers/actions/create-variable`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['newVariableProviderInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Creates a private provider whose integration fields are exposed as service environment variables.
+     * Create variable provider
+     */
+    async createVariableProvider(requestParameters: CreateVariableProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider> {
+        const response = await this.createVariableProviderRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Returns the provider identified by the request path.

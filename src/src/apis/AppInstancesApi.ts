@@ -15,19 +15,36 @@
 
 import * as runtime from '../runtime';
 import type {
+  AppAccess,
+  AppAccessCleanup,
+  AppAccessOperationResult,
   AppInstance,
   AppInstanceCICDSettings,
   AppInstanceCICDSettingsInput,
   AppInstanceSettingsInput,
+  AppInstanceStackUpgradeChangelog,
   AppInstanceStackUpgradeInput,
+  NewAppAccessInput,
+  NewAppInstanceAccessInput,
   NewAppInstanceInput,
   OperationResult,
   ProblemDetails,
+  UpdateAppAccessInput,
   UpdateTitleRequest,
+  ValidationResult,
 } from '../models/index';
+
+export interface CreateAppAccessRequest {
+    id: number;
+    newAppAccessInput: NewAppAccessInput;
+}
 
 export interface CreateAppInstanceRequest {
     newAppInstanceInput: NewAppInstanceInput;
+}
+
+export interface DeleteAppAccessRequest {
+    id: number;
 }
 
 export interface DeleteAppInstanceRequest {
@@ -36,6 +53,10 @@ export interface DeleteAppInstanceRequest {
 }
 
 export interface GetAppInstanceRequest {
+    id: number;
+}
+
+export interface GetAppInstanceAccessRequest {
     id: number;
 }
 
@@ -49,12 +70,34 @@ export interface GetAppInstanceCICDSettingsRequest {
     id: number;
 }
 
+export interface GetAppInstanceStackUpgradeChangelogRequest {
+    id: number;
+}
+
+export interface ListAppAccessCleanupsRequest {
+    appInstanceId?: number;
+    integrationId?: number;
+}
+
 export interface ListAppInstancesRequest {
     orgId?: number;
     projectIds?: string;
     appId?: number;
     clusterId?: number;
     clusterApp?: boolean;
+}
+
+export interface PreflightAppAccessRequest {
+    newAppInstanceAccessInput: NewAppInstanceAccessInput;
+}
+
+export interface RetryAppAccessCleanupRequest {
+    id: number;
+}
+
+export interface UpdateAppAccessRequest {
+    id: number;
+    updateAppAccessInput: UpdateAppAccessInput;
 }
 
 export interface UpdateAppInstanceRequest {
@@ -85,6 +128,23 @@ export interface UpgradeAppInstanceStackRequest {
  */
 export interface AppInstancesApiInterface {
     /**
+     * Creates external access for the app instance identified by the path.
+     * @summary Create app instance access
+     * @param {number} id 
+     * @param {NewAppAccessInput} newAppAccessInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    createAppAccessRaw(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessOperationResult>>;
+
+    /**
+     * Creates external access for the app instance identified by the path.
+     * Create app instance access
+     */
+    createAppAccess(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult>;
+
+    /**
      * Creates an app instance and returns the created resource.
      * @summary Create app instance
      * @param {NewAppInstanceInput} newAppInstanceInput 
@@ -99,6 +159,22 @@ export interface AppInstancesApiInterface {
      * Create app instance
      */
     createAppInstance(requestParameters: CreateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
+
+    /**
+     * Removes app access and returns the cleanup task identifier.
+     * @summary Delete app access
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    deleteAppAccessRaw(requestParameters: DeleteAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Removes app access and returns the cleanup task identifier.
+     * Delete app access
+     */
+    deleteAppAccess(requestParameters: DeleteAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Deletes the app instance and returns the operation result.
@@ -132,6 +208,22 @@ export interface AppInstancesApiInterface {
      * Get app instance
      */
     getAppInstance(requestParameters: GetAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
+
+    /**
+     * Returns the external access configuration for the app instance identified by the path.
+     * @summary Get app instance access
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    getAppInstanceAccessRaw(requestParameters: GetAppInstanceAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccess>>;
+
+    /**
+     * Returns the external access configuration for the app instance identified by the path.
+     * Get app instance access
+     */
+    getAppInstanceAccess(requestParameters: GetAppInstanceAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccess>;
 
     /**
      * Returns the app instance identified by app and instance name.
@@ -168,6 +260,39 @@ export interface AppInstancesApiInterface {
     getAppInstanceCICDSettings(requestParameters: GetAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstanceCICDSettings>;
 
     /**
+     * Returns the stack and service revision changes that an app instance stack upgrade would apply.
+     * @summary Preview app instance stack upgrade
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    getAppInstanceStackUpgradeChangelogRaw(requestParameters: GetAppInstanceStackUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstanceStackUpgradeChangelog>>;
+
+    /**
+     * Returns the stack and service revision changes that an app instance stack upgrade would apply.
+     * Preview app instance stack upgrade
+     */
+    getAppInstanceStackUpgradeChangelog(requestParameters: GetAppInstanceStackUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstanceStackUpgradeChangelog>;
+
+    /**
+     * Returns cleanup records for exactly one app instance or integration.
+     * @summary List app-access cleanups
+     * @param {number} [appInstanceId] 
+     * @param {number} [integrationId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    listAppAccessCleanupsRaw(requestParameters: ListAppAccessCleanupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppAccessCleanup>>>;
+
+    /**
+     * Returns cleanup records for exactly one app instance or integration.
+     * List app-access cleanups
+     */
+    listAppAccessCleanups(requestParameters: ListAppAccessCleanupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppAccessCleanup>>;
+
+    /**
      * Returns app instances matching the request filters.
      * @summary List app instances
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -186,6 +311,55 @@ export interface AppInstancesApiInterface {
      * List app instances
      */
     listAppInstances(requestParameters: ListAppInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppInstance>>;
+
+    /**
+     * Validates a proposed app-access configuration before an app instance or access resource is created.
+     * @summary Preflight app instance access
+     * @param {NewAppInstanceAccessInput} newAppInstanceAccessInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    preflightAppAccessRaw(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ValidationResult>>;
+
+    /**
+     * Validates a proposed app-access configuration before an app instance or access resource is created.
+     * Preflight app instance access
+     */
+    preflightAppAccess(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidationResult>;
+
+    /**
+     * Retries a failed app-access cleanup and returns its task identifier.
+     * @summary Retry app-access cleanup
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    retryAppAccessCleanupRaw(requestParameters: RetryAppAccessCleanupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Retries a failed app-access cleanup and returns its task identifier.
+     * Retry app-access cleanup
+     */
+    retryAppAccessCleanup(requestParameters: RetryAppAccessCleanupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Updates an existing app-access configuration and starts its reconciliation task.
+     * @summary Update app access
+     * @param {number} id 
+     * @param {UpdateAppAccessInput} updateAppAccessInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    updateAppAccessRaw(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessOperationResult>>;
+
+    /**
+     * Updates an existing app-access configuration and starts its reconciliation task.
+     * Update app access
+     */
+    updateAppAccess(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult>;
 
     /**
      * Updates the app instance and returns the updated resource.
@@ -263,6 +437,55 @@ export interface AppInstancesApiInterface {
 export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiInterface {
 
     /**
+     * Creates external access for the app instance identified by the path.
+     * Create app instance access
+     */
+    async createAppAccessRaw(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessOperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createAppAccess().'
+            );
+        }
+
+        if (requestParameters['newAppAccessInput'] == null) {
+            throw new runtime.RequiredError(
+                'newAppAccessInput',
+                'Required parameter "newAppAccessInput" was null or undefined when calling createAppAccess().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-instance-accesses/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['newAppAccessInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Creates external access for the app instance identified by the path.
+     * Create app instance access
+     */
+    async createAppAccess(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult> {
+        const response = await this.createAppAccessRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates an app instance and returns the created resource.
      * Create app instance
      */
@@ -301,6 +524,45 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
      */
     async createAppInstance(requestParameters: CreateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
         const response = await this.createAppInstanceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Removes app access and returns the cleanup task identifier.
+     * Delete app access
+     */
+    async deleteAppAccessRaw(requestParameters: DeleteAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteAppAccess().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-accesses/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Removes app access and returns the cleanup task identifier.
+     * Delete app access
+     */
+    async deleteAppAccess(requestParameters: DeleteAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteAppAccessRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -383,6 +645,45 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
      */
     async getAppInstance(requestParameters: GetAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
         const response = await this.getAppInstanceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the external access configuration for the app instance identified by the path.
+     * Get app instance access
+     */
+    async getAppInstanceAccessRaw(requestParameters: GetAppInstanceAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccess>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppInstanceAccess().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-instance-accesses/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the external access configuration for the app instance identified by the path.
+     * Get app instance access
+     */
+    async getAppInstanceAccess(requestParameters: GetAppInstanceAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccess> {
+        const response = await this.getAppInstanceAccessRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -476,6 +777,85 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
+     * Returns the stack and service revision changes that an app instance stack upgrade would apply.
+     * Preview app instance stack upgrade
+     */
+    async getAppInstanceStackUpgradeChangelogRaw(requestParameters: GetAppInstanceStackUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstanceStackUpgradeChangelog>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppInstanceStackUpgradeChangelog().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-instance-stack-upgrade-changelogs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the stack and service revision changes that an app instance stack upgrade would apply.
+     * Preview app instance stack upgrade
+     */
+    async getAppInstanceStackUpgradeChangelog(requestParameters: GetAppInstanceStackUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstanceStackUpgradeChangelog> {
+        const response = await this.getAppInstanceStackUpgradeChangelogRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns cleanup records for exactly one app instance or integration.
+     * List app-access cleanups
+     */
+    async listAppAccessCleanupsRaw(requestParameters: ListAppAccessCleanupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppAccessCleanup>>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['appInstanceId'] != null) {
+            queryParameters['appInstanceId'] = requestParameters['appInstanceId'];
+        }
+
+        if (requestParameters['integrationId'] != null) {
+            queryParameters['integrationId'] = requestParameters['integrationId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-access-cleanups`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns cleanup records for exactly one app instance or integration.
+     * List app-access cleanups
+     */
+    async listAppAccessCleanups(requestParameters: ListAppAccessCleanupsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppAccessCleanup>> {
+        const response = await this.listAppAccessCleanupsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns app instances matching the request filters.
      * List app instances
      */
@@ -524,6 +904,136 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
      */
     async listAppInstances(requestParameters: ListAppInstancesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppInstance>> {
         const response = await this.listAppInstancesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Validates a proposed app-access configuration before an app instance or access resource is created.
+     * Preflight app instance access
+     */
+    async preflightAppAccessRaw(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ValidationResult>> {
+        if (requestParameters['newAppInstanceAccessInput'] == null) {
+            throw new runtime.RequiredError(
+                'newAppInstanceAccessInput',
+                'Required parameter "newAppInstanceAccessInput" was null or undefined when calling preflightAppAccess().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-accesses/actions/preflight`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['newAppInstanceAccessInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Validates a proposed app-access configuration before an app instance or access resource is created.
+     * Preflight app instance access
+     */
+    async preflightAppAccess(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidationResult> {
+        const response = await this.preflightAppAccessRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Retries a failed app-access cleanup and returns its task identifier.
+     * Retry app-access cleanup
+     */
+    async retryAppAccessCleanupRaw(requestParameters: RetryAppAccessCleanupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling retryAppAccessCleanup().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-access-cleanups/{id}/actions/retry`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Retries a failed app-access cleanup and returns its task identifier.
+     * Retry app-access cleanup
+     */
+    async retryAppAccessCleanup(requestParameters: RetryAppAccessCleanupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.retryAppAccessCleanupRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates an existing app-access configuration and starts its reconciliation task.
+     * Update app access
+     */
+    async updateAppAccessRaw(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessOperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateAppAccess().'
+            );
+        }
+
+        if (requestParameters['updateAppAccessInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateAppAccessInput',
+                'Required parameter "updateAppAccessInput" was null or undefined when calling updateAppAccess().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-accesses/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateAppAccessInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Updates an existing app-access configuration and starts its reconciliation task.
+     * Update app access
+     */
+    async updateAppAccess(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult> {
+        const response = await this.updateAppAccessRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
