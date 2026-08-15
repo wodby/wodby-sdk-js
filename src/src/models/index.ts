@@ -72,6 +72,18 @@ export interface App {
      * @type {string}
      * @memberof App
      */
+    ownershipScope: AppOwnershipScopeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof App
+     */
+    ownerProjectId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof App
+     */
     createdAt: string;
     /**
      * 
@@ -80,6 +92,17 @@ export interface App {
      */
     updatedAt: string;
 }
+
+
+/**
+ * @export
+ */
+export const AppOwnershipScopeEnum = {
+    Org: 'org',
+    Project: 'project'
+} as const;
+export type AppOwnershipScopeEnum = typeof AppOwnershipScopeEnum[keyof typeof AppOwnershipScopeEnum];
+
 /**
  * 
  * @export
@@ -3195,6 +3218,18 @@ export interface AppServiceSetting {
     value: string;
     /**
      * 
+     * @type {boolean}
+     * @memberof AppServiceSetting
+     */
+    secret: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppServiceSetting
+     */
+    hasValue: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof AppServiceSetting
      */
@@ -3765,12 +3800,6 @@ export interface Cert {
      * @memberof Cert
      */
     id: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Cert
-     */
-    title: string;
     /**
      * 
      * @type {boolean}
@@ -10065,6 +10094,18 @@ export interface StackServiceSetting {
      * @memberof StackServiceSetting
      */
     value: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StackServiceSetting
+     */
+    secret: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StackServiceSetting
+     */
+    hasValue: boolean;
 }
 /**
  * 
