@@ -2466,6 +2466,56 @@ export interface AppServiceBuildConfig {
 /**
  * 
  * @export
+ * @interface AppServiceCapacityPreflight
+ */
+export interface AppServiceCapacityPreflight {
+    /**
+     * Whether the proposed usage increase is permitted by the effective backend policy.
+     * @type {boolean}
+     * @memberof AppServiceCapacityPreflight
+     */
+    allowed: boolean;
+    /**
+     * Whether subscription capacity limits apply to this organization.
+     * @type {boolean}
+     * @memberof AppServiceCapacityPreflight
+     */
+    enforced: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceCapacityPreflight
+     */
+    usage: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceCapacityPreflight
+     */
+    usageIncluded: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceCapacityPreflight
+     */
+    projectedUsage: number;
+}
+/**
+ * 
+ * @export
+ * @interface AppServiceCapacityPreflightRequest
+ */
+export interface AppServiceCapacityPreflightRequest {
+    /**
+     * Number of enabled app services the operation would add.
+     * @type {number}
+     * @memberof AppServiceCapacityPreflightRequest
+     */
+    additionalUsage: number;
+}
+/**
+ * 
+ * @export
  * @interface AppServiceConfig
  */
 export interface AppServiceConfig {
@@ -3876,6 +3926,22 @@ export interface BackupPreset {
      */
     updatedAt: string;
 }
+
+/**
+ * 
+ * @export
+ */
+export const BillingSubscriptionStatus = {
+    Active: 'ACTIVE',
+    Expired: 'EXPIRED',
+    Creating: 'CREATING',
+    Updating: 'UPDATING',
+    Errored: 'ERRORED',
+    Renewing: 'RENEWING',
+    Canceling: 'CANCELING'
+} as const;
+export type BillingSubscriptionStatus = typeof BillingSubscriptionStatus[keyof typeof BillingSubscriptionStatus];
+
 /**
  * 
  * @export
@@ -8284,7 +8350,7 @@ export interface Org {
      */
     capabilities?: OrgCapabilities;
     /**
-     * 
+     * Billing summary. Omitted when the caller does not have billing-view access.
      * @type {OrgSubscription}
      * @memberof Org
      */
@@ -8438,10 +8504,10 @@ export interface OrgMembership {
 export interface OrgSubscription {
     /**
      * 
-     * @type {string}
+     * @type {BillingSubscriptionStatus}
      * @memberof OrgSubscription
      */
-    status: string;
+    status: BillingSubscriptionStatus;
     /**
      * 
      * @type {OrgSubscriptionPlan}
@@ -8449,6 +8515,29 @@ export interface OrgSubscription {
      */
     plan?: OrgSubscriptionPlan;
 }
+
+
+/**
+ * 
+ * @export
+ * @interface OrgSubscriptionDetails
+ */
+export interface OrgSubscriptionDetails {
+    /**
+     * 
+     * @type {BillingSubscriptionStatus}
+     * @memberof OrgSubscriptionDetails
+     */
+    status: BillingSubscriptionStatus;
+    /**
+     * 
+     * @type {OrgSubscriptionPlanDetails}
+     * @memberof OrgSubscriptionDetails
+     */
+    plan: OrgSubscriptionPlanDetails;
+}
+
+
 /**
  * 
  * @export
@@ -8467,30 +8556,55 @@ export interface OrgSubscriptionPlan {
      * @memberof OrgSubscriptionPlan
      */
     title: string;
+}
+/**
+ * 
+ * @export
+ * @interface OrgSubscriptionPlanDetails
+ */
+export interface OrgSubscriptionPlanDetails {
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSubscriptionPlanDetails
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSubscriptionPlanDetails
+     */
+    title: string;
     /**
      * 
      * @type {number}
-     * @memberof OrgSubscriptionPlan
+     * @memberof OrgSubscriptionPlanDetails
      */
     usage: number;
     /**
      * 
      * @type {number}
-     * @memberof OrgSubscriptionPlan
+     * @memberof OrgSubscriptionPlanDetails
      */
     usageIncluded: number;
     /**
      * 
      * @type {number}
-     * @memberof OrgSubscriptionPlan
+     * @memberof OrgSubscriptionPlanDetails
      */
     spendingLimit: number;
     /**
      * 
      * @type {number}
-     * @memberof OrgSubscriptionPlan
+     * @memberof OrgSubscriptionPlanDetails
      */
     pricePerUnit: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSubscriptionPlanDetails
+     */
+    unit: string;
 }
 /**
  * 

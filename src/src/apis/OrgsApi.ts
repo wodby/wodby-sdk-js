@@ -15,13 +15,25 @@
 
 import * as runtime from '../runtime';
 import type {
+  AppServiceCapacityPreflight,
+  AppServiceCapacityPreflightRequest,
   Org,
+  OrgSubscriptionDetails,
   ProblemDetails,
   UpdateOrgRequest,
 } from '../models/index';
 
 export interface GetOrgRequest {
     id: number;
+}
+
+export interface GetOrgSubscriptionRequest {
+    id: number;
+}
+
+export interface PreflightAppServiceCapacityRequest {
+    id: number;
+    appServiceCapacityPreflightRequest: AppServiceCapacityPreflightRequest;
 }
 
 export interface UpdateOrgOperationRequest {
@@ -53,6 +65,22 @@ export interface OrgsApiInterface {
     getOrg(requestParameters: GetOrgRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org>;
 
     /**
+     * Returns usage and pricing details for callers with billing-view access to the organization.
+     * @summary Get org subscription
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrgsApiInterface
+     */
+    getOrgSubscriptionRaw(requestParameters: GetOrgSubscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgSubscriptionDetails>>;
+
+    /**
+     * Returns usage and pricing details for callers with billing-view access to the organization.
+     * Get org subscription
+     */
+    getOrgSubscription(requestParameters: GetOrgSubscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgSubscriptionDetails>;
+
+    /**
      * Returns orgs matching the request filters.
      * @summary List orgs
      * @param {*} [options] Override http request option.
@@ -66,6 +94,23 @@ export interface OrgsApiInterface {
      * List orgs
      */
     listOrgs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Org>>;
+
+    /**
+     * Evaluates whether the organization can add the requested number of enabled app services under the backend\'s effective billing policy.
+     * @summary Preflight app-service capacity
+     * @param {number} id 
+     * @param {AppServiceCapacityPreflightRequest} appServiceCapacityPreflightRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrgsApiInterface
+     */
+    preflightAppServiceCapacityRaw(requestParameters: PreflightAppServiceCapacityRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceCapacityPreflight>>;
+
+    /**
+     * Evaluates whether the organization can add the requested number of enabled app services under the backend\'s effective billing policy.
+     * Preflight app-service capacity
+     */
+    preflightAppServiceCapacity(requestParameters: PreflightAppServiceCapacityRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceCapacityPreflight>;
 
     /**
      * Updates the org and returns the updated resource.
@@ -131,6 +176,45 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
     }
 
     /**
+     * Returns usage and pricing details for callers with billing-view access to the organization.
+     * Get org subscription
+     */
+    async getOrgSubscriptionRaw(requestParameters: GetOrgSubscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgSubscriptionDetails>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getOrgSubscription().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/orgs/{id}/subscription`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns usage and pricing details for callers with billing-view access to the organization.
+     * Get org subscription
+     */
+    async getOrgSubscription(requestParameters: GetOrgSubscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgSubscriptionDetails> {
+        const response = await this.getOrgSubscriptionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns orgs matching the request filters.
      * List orgs
      */
@@ -159,6 +243,55 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
      */
     async listOrgs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Org>> {
         const response = await this.listOrgsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Evaluates whether the organization can add the requested number of enabled app services under the backend\'s effective billing policy.
+     * Preflight app-service capacity
+     */
+    async preflightAppServiceCapacityRaw(requestParameters: PreflightAppServiceCapacityRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceCapacityPreflight>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling preflightAppServiceCapacity().'
+            );
+        }
+
+        if (requestParameters['appServiceCapacityPreflightRequest'] == null) {
+            throw new runtime.RequiredError(
+                'appServiceCapacityPreflightRequest',
+                'Required parameter "appServiceCapacityPreflightRequest" was null or undefined when calling preflightAppServiceCapacity().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/orgs/{id}/actions/preflight-app-service-capacity`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['appServiceCapacityPreflightRequest'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Evaluates whether the organization can add the requested number of enabled app services under the backend\'s effective billing policy.
+     * Preflight app-service capacity
+     */
+    async preflightAppServiceCapacity(requestParameters: PreflightAppServiceCapacityRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceCapacityPreflight> {
+        const response = await this.preflightAppServiceCapacityRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
