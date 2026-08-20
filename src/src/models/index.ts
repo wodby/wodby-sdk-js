@@ -635,8 +635,21 @@ export interface AppAuth {
     appInstanceId: number;
     /**
      * 
+     * @type {AppAuthScope}
+     * @memberof AppAuth
+     */
+    scope: AppAuthScope;
+    /**
+     * App services protected by this entry. Empty unless scope is SERVICE.
+     * @type {Array<number>}
+     * @memberof AppAuth
+     */
+    appServiceIds: Array<number>;
+    /**
+     * Single protected app service. Null when the entry protects several services or the whole app instance.
      * @type {number}
      * @memberof AppAuth
+     * @deprecated
      */
     appServiceId?: number | null;
     /**
@@ -670,6 +683,20 @@ export interface AppAuth {
      */
     updatedAt: string;
 }
+
+
+
+/**
+ * What a basic auth entry protects. Route beats service, service beats app.
+ * @export
+ */
+export const AppAuthScope = {
+    App: 'APP',
+    Service: 'SERVICE',
+    Route: 'ROUTE'
+} as const;
+export type AppAuthScope = typeof AppAuthScope[keyof typeof AppAuthScope];
+
 /**
  * 
  * @export
@@ -1036,10 +1063,22 @@ export interface AppInstance {
     status: string;
     /**
      * 
+     * @type {boolean}
+     * @memberof AppInstance
+     */
+    outdated: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof AppInstance
      */
     mainDomain?: string | null;
+    /**
+     * 
+     * @type {AppInstanceMainRouteCert}
+     * @memberof AppInstance
+     */
+    mainRouteCert: AppInstanceMainRouteCert | null;
     /**
      * 
      * @type {number}
@@ -1118,6 +1157,18 @@ export interface AppInstance {
      * @memberof AppInstance
      */
     routingPending: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstance
+     */
+    maintenanceMode: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstance
+     */
+    maintenanceModeActive: boolean;
     /**
      * 
      * @type {boolean}
@@ -1311,6 +1362,38 @@ export interface AppInstanceHealth {
      * @memberof AppInstanceHealth
      */
     backups: AppInstanceBackupHealth;
+}
+/**
+ * 
+ * @export
+ * @interface AppInstanceMainRouteCert
+ */
+export interface AppInstanceMainRouteCert {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppInstanceMainRouteCert
+     */
+    issuer: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstanceMainRouteCert
+     */
+    custom: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface AppInstanceMaintenanceModeInput
+ */
+export interface AppInstanceMaintenanceModeInput {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstanceMaintenanceModeInput
+     */
+    enabled: boolean;
 }
 /**
  * 
@@ -2228,6 +2311,24 @@ export interface AppServiceBuild {
      */
     imageDeleted: boolean;
     /**
+     * True when the image was built from a Dockerfile that does not derive from the service image, so it no longer tracks service image updates.
+     * @type {boolean}
+     * @memberof AppServiceBuild
+     */
+    unmanagedImage: boolean;
+    /**
+     * Repository path of an author-provided Dockerfile. Empty when the build used a service-provided or generated Dockerfile.
+     * @type {string}
+     * @memberof AppServiceBuild
+     */
+    dockerfilePath: string;
+    /**
+     * SHA-256 of the Dockerfile that produced the image. Empty when the build did not report it.
+     * @type {string}
+     * @memberof AppServiceBuild
+     */
+    dockerfileHash: string;
+    /**
      * 
      * @type {number}
      * @memberof AppServiceBuild
@@ -2343,6 +2444,18 @@ export interface AppServiceBuildConfig {
      * @memberof AppServiceBuildConfig
      */
     dockerignore?: string | null;
+    /**
+     * Build context subdirectory to copy, relative to the CI --from path. Empty means the whole context.
+     * @type {string}
+     * @memberof AppServiceBuildConfig
+     */
+    copyFrom: string;
+    /**
+     * Image subdirectory to copy into, relative to the CI --to path. Empty means the image working directory.
+     * @type {string}
+     * @memberof AppServiceBuildConfig
+     */
+    copyTo: string;
     /**
      * 
      * @type {Array<AppServiceBuildArg>}
@@ -3600,6 +3713,18 @@ export interface Backup {
      */
     databaseDbId?: number | null;
     /**
+     * Storage integration that owns the backup. Null identifies Wodby's built-in blob storage.
+     * @type {number}
+     * @memberof Backup
+     */
+    integrationId: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Backup
+     */
+    taskId?: number | null;
+    /**
      * 
      * @type {string}
      * @memberof Backup
@@ -3611,6 +3736,18 @@ export interface Backup {
      * @memberof Backup
      */
     updatedAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Backup
+     */
+    startedAt?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Backup
+     */
+    endedAt?: string | null;
 }
 /**
  * 
@@ -5059,6 +5196,56 @@ export interface GitAutoUpdateSettingsInput {
 /**
  * 
  * @export
+ * @interface GitRepoUsage
+ */
+export interface GitRepoUsage {
+    /**
+     * 
+     * @type {number}
+     * @memberof GitRepoUsage
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GitRepoUsage
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GitRepoUsage
+     */
+    title: string;
+}
+/**
+ * 
+ * @export
+ * @interface GitRepoUsages
+ */
+export interface GitRepoUsages {
+    /**
+     * 
+     * @type {Array<GitRepoUsage>}
+     * @memberof GitRepoUsages
+     */
+    services: Array<GitRepoUsage>;
+    /**
+     * 
+     * @type {Array<GitRepoUsage>}
+     * @memberof GitRepoUsages
+     */
+    stacks: Array<GitRepoUsage>;
+    /**
+     * 
+     * @type {Array<GitRepoUsage>}
+     * @memberof GitRepoUsages
+     */
+    providers: Array<GitRepoUsage>;
+}
+/**
+ * 
+ * @export
  * @interface HelmChartAnalysis
  */
 export interface HelmChartAnalysis {
@@ -5696,6 +5883,18 @@ export interface Import {
     status: string;
     /**
      * 
+     * @type {string}
+     * @memberof Import
+     */
+    filename?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Import
+     */
+    size?: number | null;
+    /**
+     * 
      * @type {number}
      * @memberof Import
      */
@@ -5875,6 +6074,61 @@ export interface ImportInput {
 /**
  * 
  * @export
+ * @interface ImportServicesFromGitInput
+ */
+export interface ImportServicesFromGitInput {
+    /**
+     * Optional for API-key requests; defaults to the API key's organization.
+     * @type {number}
+     * @memberof ImportServicesFromGitInput
+     */
+    orgId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ImportServicesFromGitInput
+     */
+    projectId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof ImportServicesFromGitInput
+     */
+    integrationId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ImportServicesFromGitInput
+     */
+    remoteGitRepoId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ImportServicesFromGitInput
+     */
+    gitRef: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ImportServicesFromGitInput
+     */
+    gitRefType: string;
+    /**
+     * 
+     * @type {GitAutoUpdateSettingsInput}
+     * @memberof ImportServicesFromGitInput
+     */
+    autoUpdate?: GitAutoUpdateSettingsInput;
+    /**
+     * Optional registry integration used when an imported service image requires authentication.
+     * @type {number}
+     * @memberof ImportServicesFromGitInput
+     */
+    registryIntegrationId?: number | null;
+}
+/**
+ * 
+ * @export
  * @interface Integration
  */
 export interface Integration {
@@ -5884,12 +6138,6 @@ export interface Integration {
      * @memberof Integration
      */
     id: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Integration
-     */
-    name: string;
     /**
      * 
      * @type {string}
@@ -5928,6 +6176,24 @@ export interface Integration {
     orgId: number;
     /**
      * 
+     * @type {number}
+     * @memberof Integration
+     */
+    primaryEnvId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Integration
+     */
+    envScope: IntegrationEnvScopeEnum;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof Integration
+     */
+    allowedEnvIds: Array<number>;
+    /**
+     * 
      * @type {string}
      * @memberof Integration
      */
@@ -5939,6 +6205,17 @@ export interface Integration {
      */
     updatedAt: string;
 }
+
+
+/**
+ * @export
+ */
+export const IntegrationEnvScopeEnum = {
+    All: 'all',
+    Selected: 'selected'
+} as const;
+export type IntegrationEnvScopeEnum = typeof IntegrationEnvScopeEnum[keyof typeof IntegrationEnvScopeEnum];
+
 /**
  * 
  * @export
@@ -5964,6 +6241,42 @@ export interface IntegrationConfigurationResult {
      */
     warnings: Array<string>;
 }
+/**
+ * 
+ * @export
+ * @interface IntegrationEnvironmentPolicyInput
+ */
+export interface IntegrationEnvironmentPolicyInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof IntegrationEnvironmentPolicyInput
+     */
+    primaryEnvId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationEnvironmentPolicyInput
+     */
+    scope: IntegrationEnvironmentPolicyInputScopeEnum;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof IntegrationEnvironmentPolicyInput
+     */
+    allowedEnvIds: Array<number>;
+}
+
+
+/**
+ * @export
+ */
+export const IntegrationEnvironmentPolicyInputScopeEnum = {
+    All: 'all',
+    Selected: 'selected'
+} as const;
+export type IntegrationEnvironmentPolicyInputScopeEnum = typeof IntegrationEnvironmentPolicyInputScopeEnum[keyof typeof IntegrationEnvironmentPolicyInputScopeEnum];
+
 /**
  * 
  * @export
@@ -6001,6 +6314,56 @@ export interface IntegrationScope {
      * @memberof IntegrationScope
      */
     title: string;
+}
+/**
+ * 
+ * @export
+ * @interface IntegrationVariableRequirement
+ */
+export interface IntegrationVariableRequirement {
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationVariableRequirement
+     */
+    name: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof IntegrationVariableRequirement
+     */
+    secret: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof IntegrationVariableRequirement
+     */
+    optional: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface IntegrationVariableRequirementInput
+ */
+export interface IntegrationVariableRequirementInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationVariableRequirementInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof IntegrationVariableRequirementInput
+     */
+    secret?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof IntegrationVariableRequirementInput
+     */
+    optional?: boolean;
 }
 /**
  * 
@@ -6241,13 +6604,20 @@ export interface NewAppAuthInput {
      */
     appInstanceId: number;
     /**
-     * Optional service scope. Required together with appRouteId for route scope.
+     * App services to protect. Omit or pass an empty list to protect the whole app instance.
+     * @type {Array<number>}
+     * @memberof NewAppAuthInput
+     */
+    appServiceIds?: Array<number> | null;
+    /**
+     * Single-service scope. Ignored when appServiceIds is supplied.
      * @type {number}
      * @memberof NewAppAuthInput
+     * @deprecated
      */
     appServiceId?: number | null;
     /**
-     * Optional route scope. Requires appServiceId and must belong to that service.
+     * Route scope. The owning app service is derived from the route.
      * @type {number}
      * @memberof NewAppAuthInput
      */
@@ -7420,12 +7790,6 @@ export interface NewIntegrationInput {
      * @type {string}
      * @memberof NewIntegrationInput
      */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof NewIntegrationInput
-     */
     title: string;
     /**
      * 
@@ -7457,6 +7821,12 @@ export interface NewIntegrationInput {
      * @memberof NewIntegrationInput
      */
     scope?: string | null;
+    /**
+     * 
+     * @type {IntegrationEnvironmentPolicyInput}
+     * @memberof NewIntegrationInput
+     */
+    environmentPolicy?: IntegrationEnvironmentPolicyInput;
 }
 /**
  * 
@@ -7500,6 +7870,37 @@ export interface NewProjectInput {
      * @memberof NewProjectInput
      */
     role?: string;
+}
+/**
+ * 
+ * @export
+ * @interface NewStackEnvVarInput
+ */
+export interface NewStackEnvVarInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof NewStackEnvVarInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewStackEnvVarInput
+     */
+    value: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewStackEnvVarInput
+     */
+    secret: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewStackEnvVarInput
+     */
+    envType?: string | null;
 }
 /**
  * 
@@ -8278,6 +8679,44 @@ export interface Provider {
 /**
  * 
  * @export
+ * @interface ProviderManifestInput
+ */
+export interface ProviderManifestInput {
+    /**
+     * Optional for API-key requests; defaults to the API key's organization.
+     * @type {number}
+     * @memberof ProviderManifestInput
+     */
+    orgId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ProviderManifestInput
+     */
+    projectId?: number | null;
+    /**
+     * Complete variable provider manifest YAML.
+     * @type {string}
+     * @memberof ProviderManifestInput
+     */
+    manifestYaml: string;
+}
+/**
+ * 
+ * @export
+ * @interface ProviderManifestUpdateInput
+ */
+export interface ProviderManifestUpdateInput {
+    /**
+     * Complete versioned variable provider manifest YAML.
+     * @type {string}
+     * @memberof ProviderManifestUpdateInput
+     */
+    manifestYaml: string;
+}
+/**
+ * 
+ * @export
  * @interface ProviderRevision
  */
 export interface ProviderRevision {
@@ -8335,6 +8774,19 @@ export interface ProviderRevision {
      * @memberof ProviderRevision
      */
     createdAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface ProviderSettingsInput
+ */
+export interface ProviderSettingsInput {
+    /**
+     * 
+     * @type {GitAutoUpdateSettingsInput}
+     * @memberof ProviderSettingsInput
+     */
+    gitAutoUpdate: GitAutoUpdateSettingsInput;
 }
 /**
  * 
@@ -8496,6 +8948,93 @@ export interface ScalabilityInput {
 /**
  * 
  * @export
+ * @interface SearchIntegrationsInput
+ */
+export interface SearchIntegrationsInput {
+    /**
+     * Optional for API-key requests; defaults to the API key's organization.
+     * @type {number}
+     * @memberof SearchIntegrationsInput
+     */
+    orgId?: number;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof SearchIntegrationsInput
+     */
+    projectIds?: Array<number>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof SearchIntegrationsInput
+     */
+    types?: Array<SearchIntegrationsInputTypesEnum>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof SearchIntegrationsInput
+     */
+    statuses?: Array<SearchIntegrationsInputStatusesEnum>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof SearchIntegrationsInput
+     */
+    labels?: Array<string>;
+    /**
+     * 
+     * @type {Array<IntegrationVariableRequirementInput>}
+     * @memberof SearchIntegrationsInput
+     */
+    variables?: Array<IntegrationVariableRequirementInput>;
+    /**
+     * 
+     * @type {number}
+     * @memberof SearchIntegrationsInput
+     */
+    envId?: number | null;
+}
+
+
+/**
+ * @export
+ */
+export const SearchIntegrationsInputTypesEnum = {
+    Git: 'GIT',
+    Storage: 'STORAGE',
+    Kubernetes: 'KUBERNETES',
+    Db: 'DB',
+    Variable: 'VARIABLE',
+    Registry: 'REGISTRY',
+    Nfs: 'NFS',
+    Ci: 'CI',
+    Smtp: 'SMTP',
+    ApplicationAccess: 'APPLICATION_ACCESS',
+    Vpn: 'VPN'
+} as const;
+export type SearchIntegrationsInputTypesEnum = typeof SearchIntegrationsInputTypesEnum[keyof typeof SearchIntegrationsInputTypesEnum];
+
+/**
+ * @export
+ */
+export const SearchIntegrationsInputStatusesEnum = {
+    Ok: 'OK',
+    Creating: 'CREATING',
+    Deleting: 'DELETING',
+    Deleted: 'DELETED',
+    Disabled: 'DISABLED',
+    Deprecated: 'DEPRECATED',
+    Eol: 'EOL',
+    Abandoned: 'ABANDONED',
+    Errored: 'ERRORED',
+    Updating: 'UPDATING',
+    Expired: 'EXPIRED'
+} as const;
+export type SearchIntegrationsInputStatusesEnum = typeof SearchIntegrationsInputStatusesEnum[keyof typeof SearchIntegrationsInputStatusesEnum];
+
+/**
+ * 
+ * @export
  * @interface Service
  */
 export interface Service {
@@ -8596,7 +9135,94 @@ export interface ServiceDeploymentInput {
      * @memberof ServiceDeploymentInput
      */
     image: string;
+    /**
+     * Set by the CI build when the image was produced from a Dockerfile that does not derive from the service image.
+     * @type {boolean}
+     * @memberof ServiceDeploymentInput
+     */
+    unmanagedImage?: boolean | null;
+    /**
+     * Repository path of an author-provided Dockerfile, reported by the CI build.
+     * @type {string}
+     * @memberof ServiceDeploymentInput
+     */
+    dockerfilePath?: string | null;
+    /**
+     * SHA-256 of the Dockerfile that produced the image, reported by the CI build.
+     * @type {string}
+     * @memberof ServiceDeploymentInput
+     */
+    dockerfileHash?: string | null;
 }
+/**
+ * 
+ * @export
+ * @interface ServiceIntegrationRequirement
+ */
+export interface ServiceIntegrationRequirement {
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceIntegrationRequirement
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceIntegrationRequirement
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceIntegrationRequirement
+     */
+    type: ServiceIntegrationRequirementTypeEnum;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ServiceIntegrationRequirement
+     */
+    labels?: Array<string>;
+    /**
+     * 
+     * @type {Array<IntegrationVariableRequirement>}
+     * @memberof ServiceIntegrationRequirement
+     */
+    variables: Array<IntegrationVariableRequirement>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ServiceIntegrationRequirement
+     */
+    required: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ServiceIntegrationRequirement
+     */
+    multiple: boolean;
+}
+
+
+/**
+ * @export
+ */
+export const ServiceIntegrationRequirementTypeEnum = {
+    Git: 'GIT',
+    Storage: 'STORAGE',
+    Kubernetes: 'KUBERNETES',
+    Db: 'DB',
+    Variable: 'VARIABLE',
+    Registry: 'REGISTRY',
+    Nfs: 'NFS',
+    Ci: 'CI',
+    Smtp: 'SMTP',
+    ApplicationAccess: 'APPLICATION_ACCESS',
+    Vpn: 'VPN'
+} as const;
+export type ServiceIntegrationRequirementTypeEnum = typeof ServiceIntegrationRequirementTypeEnum[keyof typeof ServiceIntegrationRequirementTypeEnum];
+
 /**
  * 
  * @export
@@ -8616,6 +9242,12 @@ export interface ServiceManifest {
      * @memberof ServiceManifest
      */
     scalable: boolean;
+    /**
+     * 
+     * @type {Array<ServiceIntegrationRequirement>}
+     * @memberof ServiceManifest
+     */
+    integrations?: Array<ServiceIntegrationRequirement>;
 }
 /**
  * 
@@ -8883,6 +9515,12 @@ export interface Stack {
      * @memberof Stack
      */
     status: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Stack
+     */
+    outdated: boolean;
     /**
      * 
      * @type {boolean}
@@ -9241,6 +9879,49 @@ export interface StackAutoUpdateVersionPolicyInput {
      * @memberof StackAutoUpdateVersionPolicyInput
      */
     allowMajor?: boolean | null;
+}
+/**
+ * 
+ * @export
+ * @interface StackEnvVar
+ */
+export interface StackEnvVar {
+    /**
+     * 
+     * @type {number}
+     * @memberof StackEnvVar
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackEnvVar
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackEnvVar
+     */
+    value?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof StackEnvVar
+     */
+    valueSecretId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackEnvVar
+     */
+    envType?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackEnvVar
+     */
+    createdAt: string;
 }
 /**
  * 
@@ -10973,13 +11654,20 @@ export type UpdateAppAccessInputScopeEnum = typeof UpdateAppAccessInputScopeEnum
  */
 export interface UpdateAppAuthInput {
     /**
-     * Omit with appRouteId to preserve the current scope. When supplied alone, moves the entry to service scope and clears any route scope.
+     * App services to protect. Omit every scope field to preserve the current scope, or pass an empty list to protect the whole app instance.
+     * @type {Array<number>}
+     * @memberof UpdateAppAuthInput
+     */
+    appServiceIds?: Array<number> | null;
+    /**
+     * Single-service scope. Ignored when appServiceIds is supplied.
      * @type {number}
      * @memberof UpdateAppAuthInput
+     * @deprecated
      */
     appServiceId?: number | null;
     /**
-     * Moves the entry to route scope and must be accompanied by appServiceId.
+     * Moves the entry to route scope. The owning app service is derived from the route.
      * @type {number}
      * @memberof UpdateAppAuthInput
      */
@@ -11322,12 +12010,6 @@ export interface UpdateIntegrationInput {
     title: string;
     /**
      * 
-     * @type {string}
-     * @memberof UpdateIntegrationInput
-     */
-    name: string;
-    /**
-     * 
      * @type {Array<string>}
      * @memberof UpdateIntegrationInput
      */
@@ -11411,6 +12093,25 @@ export interface UpdateSecretValueInput {
 /**
  * 
  * @export
+ * @interface UpdateStackEnvVarInput
+ */
+export interface UpdateStackEnvVarInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateStackEnvVarInput
+     */
+    value: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateStackEnvVarInput
+     */
+    secret: boolean;
+}
+/**
+ * 
+ * @export
  * @interface UpdateStackFromGitRequest
  */
 export interface UpdateStackFromGitRequest {
@@ -11426,6 +12127,25 @@ export interface UpdateStackFromGitRequest {
      * @memberof UpdateStackFromGitRequest
      */
     gitRefType: string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateStackRequest
+ */
+export interface UpdateStackRequest {
+    /**
+     * Unique stack machine name within the organization.
+     * @type {string}
+     * @memberof UpdateStackRequest
+     */
+    name: string;
+    /**
+     * Human-readable stack title.
+     * @type {string}
+     * @memberof UpdateStackRequest
+     */
+    title: string;
 }
 /**
  * 

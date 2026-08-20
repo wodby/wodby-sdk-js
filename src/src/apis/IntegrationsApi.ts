@@ -18,6 +18,7 @@ import type {
   AppAccessProviderOptions,
   Integration,
   IntegrationConfigurationResult,
+  IntegrationEnvironmentPolicyInput,
   IntegrationScope,
   KubeVersion,
   NewIntegrationInput,
@@ -26,6 +27,7 @@ import type {
   RemoteGitRepo,
   RemoteGitRepoFilePresence,
   ResolveIntegrationResult,
+  SearchIntegrationsInput,
   UpdateIntegrationInput,
   ValidateAppAccessHostnameInput,
   ValidationResult,
@@ -50,11 +52,6 @@ export interface GetAppAccessProviderOptionsRequest {
 
 export interface GetIntegrationRequest {
     id: number;
-}
-
-export interface GetIntegrationByNameRequest {
-    name: string;
-    orgId?: number;
 }
 
 export interface GetIntegrationKubeSettingsRequest {
@@ -116,10 +113,15 @@ export interface ListIntegrationsRequest {
     orgId?: number;
     projectIds?: string;
     labels?: string;
+    envId?: number;
 }
 
 export interface ResolveIntegrationRequest {
     newIntegrationInput: NewIntegrationInput;
+}
+
+export interface SearchIntegrationsRequest {
+    searchIntegrationsInput: SearchIntegrationsInput;
 }
 
 export interface TestIntegrationPermissionsRequest {
@@ -129,6 +131,11 @@ export interface TestIntegrationPermissionsRequest {
 export interface UpdateIntegrationRequest {
     id: number;
     updateIntegrationInput: UpdateIntegrationInput;
+}
+
+export interface UpdateIntegrationEnvironmentPolicyRequest {
+    id: number;
+    integrationEnvironmentPolicyInput: IntegrationEnvironmentPolicyInput;
 }
 
 export interface ValidateAppAccessHostnameRequest {
@@ -223,23 +230,6 @@ export interface IntegrationsApiInterface {
      * Get integration
      */
     getIntegration(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
-
-    /**
-     * Returns the integration identified by name.
-     * @summary Get integration by name
-     * @param {string} name 
-     * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IntegrationsApiInterface
-     */
-    getIntegrationByNameRaw(requestParameters: GetIntegrationByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>>;
-
-    /**
-     * Returns the integration identified by name.
-     * Get integration by name
-     */
-    getIntegrationByName(requestParameters: GetIntegrationByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
 
     /**
      * Returns the Kubernetes settings identified by the request path.
@@ -446,6 +436,7 @@ export interface IntegrationsApiInterface {
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
      * @param {string} [labels] Comma-separated labels
+     * @param {number} [envId] Return only integrations allowed in this environment
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof IntegrationsApiInterface
@@ -473,6 +464,22 @@ export interface IntegrationsApiInterface {
      * Resolve or create integration
      */
     resolveIntegration(requestParameters: ResolveIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResolveIntegrationResult>;
+
+    /**
+     * Returns accessible integrations matching structured type, status, label, variable, project, and environment requirements.
+     * @summary Search integrations
+     * @param {SearchIntegrationsInput} searchIntegrationsInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    searchIntegrationsRaw(requestParameters: SearchIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>>;
+
+    /**
+     * Returns accessible integrations matching structured type, status, label, variable, project, and environment requirements.
+     * Search integrations
+     */
+    searchIntegrations(requestParameters: SearchIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>>;
 
     /**
      * Starts the provider permission audit configured by the integration\'s provider revision.
@@ -506,6 +513,23 @@ export interface IntegrationsApiInterface {
      * Update integration
      */
     updateIntegration(requestParameters: UpdateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
+
+    /**
+     * Updates the associated environment and exact allowed environment scope. Scope reductions that conflict with existing references are rejected.
+     * @summary Update integration environment policy
+     * @param {number} id 
+     * @param {IntegrationEnvironmentPolicyInput} integrationEnvironmentPolicyInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    updateIntegrationEnvironmentPolicyRaw(requestParameters: UpdateIntegrationEnvironmentPolicyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>>;
+
+    /**
+     * Updates the associated environment and exact allowed environment scope. Scope reductions that conflict with existing references are rejected.
+     * Update integration environment policy
+     */
+    updateIntegrationEnvironmentPolicy(requestParameters: UpdateIntegrationEnvironmentPolicyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
 
     /**
      * Validates an app-access hostname against the provider settings of the integration.
@@ -736,49 +760,6 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
      */
     async getIntegration(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
         const response = await this.getIntegrationRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Returns the integration identified by name.
-     * Get integration by name
-     */
-    async getIntegrationByNameRaw(requestParameters: GetIntegrationByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>> {
-        if (requestParameters['name'] == null) {
-            throw new runtime.RequiredError(
-                'name',
-                'Required parameter "name" was null or undefined when calling getIntegrationByName().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        if (requestParameters['orgId'] != null) {
-            queryParameters['orgId'] = requestParameters['orgId'];
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
-        }
-
-        const response = await this.request({
-            path: `/integrations/by-name/{name}`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response);
-    }
-
-    /**
-     * Returns the integration identified by name.
-     * Get integration by name
-     */
-    async getIntegrationByName(requestParameters: GetIntegrationByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
-        const response = await this.getIntegrationByNameRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1346,6 +1327,10 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
             queryParameters['labels'] = requestParameters['labels'];
         }
 
+        if (requestParameters['envId'] != null) {
+            queryParameters['envId'] = requestParameters['envId'];
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
@@ -1410,6 +1395,48 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
      */
     async resolveIntegration(requestParameters: ResolveIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResolveIntegrationResult> {
         const response = await this.resolveIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns accessible integrations matching structured type, status, label, variable, project, and environment requirements.
+     * Search integrations
+     */
+    async searchIntegrationsRaw(requestParameters: SearchIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Integration>>> {
+        if (requestParameters['searchIntegrationsInput'] == null) {
+            throw new runtime.RequiredError(
+                'searchIntegrationsInput',
+                'Required parameter "searchIntegrationsInput" was null or undefined when calling searchIntegrations().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/actions/search`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['searchIntegrationsInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns accessible integrations matching structured type, status, label, variable, project, and environment requirements.
+     * Search integrations
+     */
+    async searchIntegrations(requestParameters: SearchIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Integration>> {
+        const response = await this.searchIntegrationsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1498,6 +1525,55 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
      */
     async updateIntegration(requestParameters: UpdateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
         const response = await this.updateIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates the associated environment and exact allowed environment scope. Scope reductions that conflict with existing references are rejected.
+     * Update integration environment policy
+     */
+    async updateIntegrationEnvironmentPolicyRaw(requestParameters: UpdateIntegrationEnvironmentPolicyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateIntegrationEnvironmentPolicy().'
+            );
+        }
+
+        if (requestParameters['integrationEnvironmentPolicyInput'] == null) {
+            throw new runtime.RequiredError(
+                'integrationEnvironmentPolicyInput',
+                'Required parameter "integrationEnvironmentPolicyInput" was null or undefined when calling updateIntegrationEnvironmentPolicy().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/environment-policy/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['integrationEnvironmentPolicyInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Updates the associated environment and exact allowed environment scope. Scope reductions that conflict with existing references are rejected.
+     * Update integration environment policy
+     */
+    async updateIntegrationEnvironmentPolicy(requestParameters: UpdateIntegrationEnvironmentPolicyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
+        const response = await this.updateIntegrationEnvironmentPolicyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

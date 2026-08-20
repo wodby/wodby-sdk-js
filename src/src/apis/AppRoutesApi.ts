@@ -50,6 +50,10 @@ export interface ListAppRoutesRequest {
     appInstanceId: number;
 }
 
+export interface RetryAppRouteCertificateRequest {
+    id: number;
+}
+
 export interface SetAppRouteSettingRequest {
     id: number;
     name: AppRouteSettingName;
@@ -164,6 +168,22 @@ export interface AppRoutesApiInterface {
      * List app routes
      */
     listAppRoutes(requestParameters: ListAppRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppRoute>>;
+
+    /**
+     * Starts certificate reconciliation again for a route whose managed certificate issuance failed or stalled.
+     * @summary Retry app route certificate
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppRoutesApiInterface
+     */
+    retryAppRouteCertificateRaw(requestParameters: RetryAppRouteCertificateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Starts certificate reconciliation again for a route whose managed certificate issuance failed or stalled.
+     * Retry app route certificate
+     */
+    retryAppRouteCertificate(requestParameters: RetryAppRouteCertificateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Creates or updates a named app route setting.
@@ -452,6 +472,45 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
      */
     async listAppRoutes(requestParameters: ListAppRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppRoute>> {
         const response = await this.listAppRoutesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Starts certificate reconciliation again for a route whose managed certificate issuance failed or stalled.
+     * Retry app route certificate
+     */
+    async retryAppRouteCertificateRaw(requestParameters: RetryAppRouteCertificateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling retryAppRouteCertificate().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-routes/{id}/actions/retry-certificate`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Starts certificate reconciliation again for a route whose managed certificate issuance failed or stalled.
+     * Retry app route certificate
+     */
+    async retryAppRouteCertificate(requestParameters: RetryAppRouteCertificateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.retryAppRouteCertificateRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

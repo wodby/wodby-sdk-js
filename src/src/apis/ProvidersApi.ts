@@ -15,12 +15,22 @@
 
 import * as runtime from '../runtime';
 import type {
+  ImportCatalogFromGitInput,
   NewVariableProviderInput,
+  OperationResult,
   ProblemDetails,
   Provider,
+  ProviderManifestInput,
+  ProviderManifestUpdateInput,
   ProviderRevision,
+  ProviderSettingsInput,
   ProvidersResponse,
+  UpdateStackFromGitRequest,
 } from '../models/index';
+
+export interface CreateProviderFromManifestRequest {
+    providerManifestInput: ProviderManifestInput;
+}
 
 export interface CreateVariableProviderRequest {
     newVariableProviderInput: NewVariableProviderInput;
@@ -38,6 +48,10 @@ export interface GetProviderRevisionRequest {
     id: number;
 }
 
+export interface ImportProvidersRequest {
+    importCatalogFromGitInput: ImportCatalogFromGitInput;
+}
+
 export interface ListProvidersRequest {
     orgId?: number;
     projectIds?: string;
@@ -47,6 +61,21 @@ export interface ListProvidersRequest {
     pageSize?: number;
 }
 
+export interface UpdateProviderFromGitRequest {
+    id: number;
+    updateStackFromGitRequest: UpdateStackFromGitRequest;
+}
+
+export interface UpdateProviderFromManifestRequest {
+    id: number;
+    providerManifestUpdateInput: ProviderManifestUpdateInput;
+}
+
+export interface UpdateProviderSettingsRequest {
+    id: number;
+    providerSettingsInput: ProviderSettingsInput;
+}
+
 /**
  * ProvidersApi - interface
  * 
@@ -54,6 +83,22 @@ export interface ListProvidersRequest {
  * @interface ProvidersApiInterface
  */
 export interface ProvidersApiInterface {
+    /**
+     * Creates a namespaced, versioned variable provider from manifest YAML.
+     * @summary Create provider from manifest
+     * @param {ProviderManifestInput} providerManifestInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProvidersApiInterface
+     */
+    createProviderFromManifestRaw(requestParameters: CreateProviderFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>>;
+
+    /**
+     * Creates a namespaced, versioned variable provider from manifest YAML.
+     * Create provider from manifest
+     */
+    createProviderFromManifest(requestParameters: CreateProviderFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider>;
+
     /**
      * Creates a private provider whose integration fields are exposed as service environment variables.
      * @summary Create variable provider
@@ -119,6 +164,22 @@ export interface ProvidersApiInterface {
     getProviderRevision(requestParameters: GetProviderRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProviderRevision>;
 
     /**
+     * Starts a task that imports provider.yml or all providers listed by index.yml from a Git repository.
+     * @summary Import providers from Git
+     * @param {ImportCatalogFromGitInput} importCatalogFromGitInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProvidersApiInterface
+     */
+    importProvidersRaw(requestParameters: ImportProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Starts a task that imports provider.yml or all providers listed by index.yml from a Git repository.
+     * Import providers from Git
+     */
+    importProviders(requestParameters: ImportProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
      * Returns providers matching the request filters.
      * @summary List providers
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -139,12 +200,105 @@ export interface ProvidersApiInterface {
      */
     listProviders(requestParameters: ListProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProvidersResponse>;
 
+    /**
+     * Starts an update from the selected ref. Changing a shared repository ref updates all repository usages.
+     * @summary Update provider from Git
+     * @param {number} id 
+     * @param {UpdateStackFromGitRequest} updateStackFromGitRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProvidersApiInterface
+     */
+    updateProviderFromGitRaw(requestParameters: UpdateProviderFromGitRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Starts an update from the selected ref. Changing a shared repository ref updates all repository usages.
+     * Update provider from Git
+     */
+    updateProviderFromGit(requestParameters: UpdateProviderFromGitRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Starts an update of a non-Git provider from versioned manifest YAML.
+     * @summary Update provider from manifest
+     * @param {number} id 
+     * @param {ProviderManifestUpdateInput} providerManifestUpdateInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProvidersApiInterface
+     */
+    updateProviderFromManifestRaw(requestParameters: UpdateProviderFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Starts an update of a non-Git provider from versioned manifest YAML.
+     * Update provider from manifest
+     */
+    updateProviderFromManifest(requestParameters: UpdateProviderFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Updates Git auto-update settings shared by the repository usages.
+     * @summary Update provider settings
+     * @param {number} id 
+     * @param {ProviderSettingsInput} providerSettingsInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProvidersApiInterface
+     */
+    updateProviderSettingsRaw(requestParameters: UpdateProviderSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>>;
+
+    /**
+     * Updates Git auto-update settings shared by the repository usages.
+     * Update provider settings
+     */
+    updateProviderSettings(requestParameters: UpdateProviderSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider>;
+
 }
 
 /**
  * 
  */
 export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterface {
+
+    /**
+     * Creates a namespaced, versioned variable provider from manifest YAML.
+     * Create provider from manifest
+     */
+    async createProviderFromManifestRaw(requestParameters: CreateProviderFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>> {
+        if (requestParameters['providerManifestInput'] == null) {
+            throw new runtime.RequiredError(
+                'providerManifestInput',
+                'Required parameter "providerManifestInput" was null or undefined when calling createProviderFromManifest().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/providers/actions/create-from-manifest`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['providerManifestInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Creates a namespaced, versioned variable provider from manifest YAML.
+     * Create provider from manifest
+     */
+    async createProviderFromManifest(requestParameters: CreateProviderFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider> {
+        const response = await this.createProviderFromManifestRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Creates a private provider whose integration fields are exposed as service environment variables.
@@ -306,6 +460,48 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
     }
 
     /**
+     * Starts a task that imports provider.yml or all providers listed by index.yml from a Git repository.
+     * Import providers from Git
+     */
+    async importProvidersRaw(requestParameters: ImportProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['importCatalogFromGitInput'] == null) {
+            throw new runtime.RequiredError(
+                'importCatalogFromGitInput',
+                'Required parameter "importCatalogFromGitInput" was null or undefined when calling importProviders().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/providers/actions/import`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['importCatalogFromGitInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Starts a task that imports provider.yml or all providers listed by index.yml from a Git repository.
+     * Import providers from Git
+     */
+    async importProviders(requestParameters: ImportProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.importProvidersRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns providers matching the request filters.
      * List providers
      */
@@ -358,6 +554,153 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
      */
     async listProviders(requestParameters: ListProvidersRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProvidersResponse> {
         const response = await this.listProvidersRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Starts an update from the selected ref. Changing a shared repository ref updates all repository usages.
+     * Update provider from Git
+     */
+    async updateProviderFromGitRaw(requestParameters: UpdateProviderFromGitRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateProviderFromGit().'
+            );
+        }
+
+        if (requestParameters['updateStackFromGitRequest'] == null) {
+            throw new runtime.RequiredError(
+                'updateStackFromGitRequest',
+                'Required parameter "updateStackFromGitRequest" was null or undefined when calling updateProviderFromGit().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/providers/{id}/actions/update-from-git`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateStackFromGitRequest'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Starts an update from the selected ref. Changing a shared repository ref updates all repository usages.
+     * Update provider from Git
+     */
+    async updateProviderFromGit(requestParameters: UpdateProviderFromGitRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.updateProviderFromGitRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Starts an update of a non-Git provider from versioned manifest YAML.
+     * Update provider from manifest
+     */
+    async updateProviderFromManifestRaw(requestParameters: UpdateProviderFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateProviderFromManifest().'
+            );
+        }
+
+        if (requestParameters['providerManifestUpdateInput'] == null) {
+            throw new runtime.RequiredError(
+                'providerManifestUpdateInput',
+                'Required parameter "providerManifestUpdateInput" was null or undefined when calling updateProviderFromManifest().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/providers/{id}/actions/update-from-manifest`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['providerManifestUpdateInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Starts an update of a non-Git provider from versioned manifest YAML.
+     * Update provider from manifest
+     */
+    async updateProviderFromManifest(requestParameters: UpdateProviderFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.updateProviderFromManifestRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates Git auto-update settings shared by the repository usages.
+     * Update provider settings
+     */
+    async updateProviderSettingsRaw(requestParameters: UpdateProviderSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateProviderSettings().'
+            );
+        }
+
+        if (requestParameters['providerSettingsInput'] == null) {
+            throw new runtime.RequiredError(
+                'providerSettingsInput',
+                'Required parameter "providerSettingsInput" was null or undefined when calling updateProviderSettings().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/providers/settings/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['providerSettingsInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Updates Git auto-update settings shared by the repository usages.
+     * Update provider settings
+     */
+    async updateProviderSettings(requestParameters: UpdateProviderSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider> {
+        const response = await this.updateProviderSettingsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

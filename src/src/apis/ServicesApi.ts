@@ -17,7 +17,7 @@ import * as runtime from '../runtime';
 import type {
   HelmChartServiceScaffoldInput,
   HelmChartServiceScaffoldResponse,
-  ImportCatalogFromGitInput,
+  ImportServicesFromGitInput,
   ManifestFromYAMLInput,
   ManifestValidationResponse,
   OperationResult,
@@ -47,7 +47,7 @@ export interface GetServiceRevisionRequest {
 }
 
 export interface ImportServicesRequest {
-    importCatalogFromGitInput: ImportCatalogFromGitInput;
+    importServicesFromGitInput: ImportServicesFromGitInput;
 }
 
 export interface ListServiceLinkCandidatesRequest {
@@ -155,7 +155,7 @@ export interface ServicesApiInterface {
     /**
      * Starts a task that imports services from a Git repository.
      * @summary Import services from Git
-     * @param {ImportCatalogFromGitInput} importCatalogFromGitInput 
+     * @param {ImportServicesFromGitInput} importServicesFromGitInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ServicesApiInterface
@@ -445,10 +445,10 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
      * Import services from Git
      */
     async importServicesRaw(requestParameters: ImportServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
-        if (requestParameters['importCatalogFromGitInput'] == null) {
+        if (requestParameters['importServicesFromGitInput'] == null) {
             throw new runtime.RequiredError(
-                'importCatalogFromGitInput',
-                'Required parameter "importCatalogFromGitInput" was null or undefined when calling importServices().'
+                'importServicesFromGitInput',
+                'Required parameter "importServicesFromGitInput" was null or undefined when calling importServices().'
             );
         }
 
@@ -467,7 +467,7 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['importCatalogFromGitInput'],
+            body: requestParameters['importServicesFromGitInput'],
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);

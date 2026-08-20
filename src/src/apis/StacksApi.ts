@@ -21,9 +21,11 @@ import type {
   ImportCatalogFromGitInput,
   ManifestFromYAMLInput,
   ManifestValidationResponse,
+  NewStackEnvVarInput,
   OperationResult,
   ProblemDetails,
   Stack,
+  StackEnvVar,
   StackOriginSyncChangelog,
   StackRevision,
   StackService,
@@ -31,11 +33,26 @@ import type {
   StackSettingsInput,
   StackSyncOptionsInput,
   StacksResponse,
+  UpdateStackEnvVarInput,
   UpdateStackFromGitRequest,
+  UpdateStackRequest,
 } from '../models/index';
+
+export interface CreateStackEnvVarRequest {
+    id: number;
+    newStackEnvVarInput: NewStackEnvVarInput;
+}
 
 export interface CreateStackFromManifestRequest {
     manifestFromYAMLInput: ManifestFromYAMLInput;
+}
+
+export interface DeleteStackRequest {
+    id: number;
+}
+
+export interface DeleteStackEnvVarRequest {
+    id: number;
 }
 
 export interface DuplicateStackOperationRequest {
@@ -69,6 +86,10 @@ export interface ImportStacksRequest {
     importCatalogFromGitInput: ImportCatalogFromGitInput;
 }
 
+export interface ListStackEnvVarsRequest {
+    id: number;
+}
+
 export interface ListStackRevisionServicesRequest {
     id: number;
 }
@@ -92,6 +113,16 @@ export interface ScaffoldStackFromHelmChartRequest {
 export interface SyncStackWithOriginRequest {
     id: number;
     stackSyncOptionsInput?: StackSyncOptionsInput;
+}
+
+export interface UpdateStackOperationRequest {
+    id: number;
+    updateStackRequest: UpdateStackRequest;
+}
+
+export interface UpdateStackEnvVarRequest {
+    id: number;
+    updateStackEnvVarInput: UpdateStackEnvVarInput;
 }
 
 export interface UpdateStackFromGitOperationRequest {
@@ -120,6 +151,23 @@ export interface ValidateStackManifestRequest {
  */
 export interface StacksApiInterface {
     /**
+     * Creates a stack-wide environment variable.
+     * @summary Create stack env var
+     * @param {number} id 
+     * @param {NewStackEnvVarInput} newStackEnvVarInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    createStackEnvVarRaw(requestParameters: CreateStackEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackEnvVar>>;
+
+    /**
+     * Creates a stack-wide environment variable.
+     * Create stack env var
+     */
+    createStackEnvVar(requestParameters: CreateStackEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackEnvVar>;
+
+    /**
      * Creates a non-Git Wodby stack from a stack manifest.
      * @summary Create stack from manifest
      * @param {ManifestFromYAMLInput} manifestFromYAMLInput 
@@ -134,6 +182,38 @@ export interface StacksApiInterface {
      * Create stack from manifest
      */
     createStackFromManifest(requestParameters: CreateStackFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
+
+    /**
+     * Deletes an unused stack and returns the operation result.
+     * @summary Delete stack
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    deleteStackRaw(requestParameters: DeleteStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes an unused stack and returns the operation result.
+     * Delete stack
+     */
+    deleteStack(requestParameters: DeleteStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Deletes a stack-wide environment variable.
+     * @summary Delete stack env var
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    deleteStackEnvVarRaw(requestParameters: DeleteStackEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes a stack-wide environment variable.
+     * Delete stack env var
+     */
+    deleteStackEnvVar(requestParameters: DeleteStackEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Duplicates the stack into the target organization or project.
@@ -266,6 +346,22 @@ export interface StacksApiInterface {
     listPublicStacks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Stack>>;
 
     /**
+     * Returns stack-wide environment variables for a stack revision.
+     * @summary List stack env vars
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    listStackEnvVarsRaw(requestParameters: ListStackEnvVarsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackEnvVar>>>;
+
+    /**
+     * Returns stack-wide environment variables for a stack revision.
+     * List stack env vars
+     */
+    listStackEnvVars(requestParameters: ListStackEnvVarsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackEnvVar>>;
+
+    /**
      * Returns stack services matching the request filters.
      * @summary List stack services
      * @param {number} id 
@@ -351,6 +447,40 @@ export interface StacksApiInterface {
     syncStackWithOrigin(requestParameters: SyncStackWithOriginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
 
     /**
+     * Updates the name and title of the stack identified by the request path.
+     * @summary Rename stack
+     * @param {number} id 
+     * @param {UpdateStackRequest} updateStackRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    updateStackRaw(requestParameters: UpdateStackOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>>;
+
+    /**
+     * Updates the name and title of the stack identified by the request path.
+     * Rename stack
+     */
+    updateStack(requestParameters: UpdateStackOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
+
+    /**
+     * Updates a stack-wide environment variable.
+     * @summary Update stack env var
+     * @param {number} id 
+     * @param {UpdateStackEnvVarInput} updateStackEnvVarInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    updateStackEnvVarRaw(requestParameters: UpdateStackEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackEnvVar>>;
+
+    /**
+     * Updates a stack-wide environment variable.
+     * Update stack env var
+     */
+    updateStackEnvVar(requestParameters: UpdateStackEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackEnvVar>;
+
+    /**
      * Starts a task that updates the stack from its configured Git source.
      * @summary Update stack from git
      * @param {number} id 
@@ -424,6 +554,55 @@ export interface StacksApiInterface {
 export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
 
     /**
+     * Creates a stack-wide environment variable.
+     * Create stack env var
+     */
+    async createStackEnvVarRaw(requestParameters: CreateStackEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackEnvVar>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createStackEnvVar().'
+            );
+        }
+
+        if (requestParameters['newStackEnvVarInput'] == null) {
+            throw new runtime.RequiredError(
+                'newStackEnvVarInput',
+                'Required parameter "newStackEnvVarInput" was null or undefined when calling createStackEnvVar().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/{id}/configuration/env-vars`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['newStackEnvVarInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Creates a stack-wide environment variable.
+     * Create stack env var
+     */
+    async createStackEnvVar(requestParameters: CreateStackEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackEnvVar> {
+        const response = await this.createStackEnvVarRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates a non-Git Wodby stack from a stack manifest.
      * Create stack from manifest
      */
@@ -462,6 +641,84 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
      */
     async createStackFromManifest(requestParameters: CreateStackFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
         const response = await this.createStackFromManifestRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes an unused stack and returns the operation result.
+     * Delete stack
+     */
+    async deleteStackRaw(requestParameters: DeleteStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteStack().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Deletes an unused stack and returns the operation result.
+     * Delete stack
+     */
+    async deleteStack(requestParameters: DeleteStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteStackRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes a stack-wide environment variable.
+     * Delete stack env var
+     */
+    async deleteStackEnvVarRaw(requestParameters: DeleteStackEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteStackEnvVar().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-env-vars/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Deletes a stack-wide environment variable.
+     * Delete stack env var
+     */
+    async deleteStackEnvVar(requestParameters: DeleteStackEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteStackEnvVarRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -792,6 +1049,45 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Returns stack-wide environment variables for a stack revision.
+     * List stack env vars
+     */
+    async listStackEnvVarsRaw(requestParameters: ListStackEnvVarsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackEnvVar>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listStackEnvVars().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-revisions/{id}/env-vars`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns stack-wide environment variables for a stack revision.
+     * List stack env vars
+     */
+    async listStackEnvVars(requestParameters: ListStackEnvVarsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackEnvVar>> {
+        const response = await this.listStackEnvVarsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns stack services matching the request filters.
      * List stack services
      */
@@ -1002,6 +1298,104 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
      */
     async syncStackWithOrigin(requestParameters: SyncStackWithOriginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
         const response = await this.syncStackWithOriginRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates the name and title of the stack identified by the request path.
+     * Rename stack
+     */
+    async updateStackRaw(requestParameters: UpdateStackOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateStack().'
+            );
+        }
+
+        if (requestParameters['updateStackRequest'] == null) {
+            throw new runtime.RequiredError(
+                'updateStackRequest',
+                'Required parameter "updateStackRequest" was null or undefined when calling updateStack().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateStackRequest'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Updates the name and title of the stack identified by the request path.
+     * Rename stack
+     */
+    async updateStack(requestParameters: UpdateStackOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
+        const response = await this.updateStackRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates a stack-wide environment variable.
+     * Update stack env var
+     */
+    async updateStackEnvVarRaw(requestParameters: UpdateStackEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackEnvVar>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateStackEnvVar().'
+            );
+        }
+
+        if (requestParameters['updateStackEnvVarInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateStackEnvVarInput',
+                'Required parameter "updateStackEnvVarInput" was null or undefined when calling updateStackEnvVar().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-env-vars/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateStackEnvVarInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Updates a stack-wide environment variable.
+     * Update stack env var
+     */
+    async updateStackEnvVar(requestParameters: UpdateStackEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackEnvVar> {
+        const response = await this.updateStackEnvVarRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

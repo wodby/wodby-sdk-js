@@ -21,6 +21,7 @@ import type {
   AppInstance,
   AppInstanceCICDSettings,
   AppInstanceCICDSettingsInput,
+  AppInstanceMaintenanceModeInput,
   AppInstanceSettingsInput,
   AppInstanceStackUpgradeChangelog,
   AppInstanceStackUpgradeInput,
@@ -108,6 +109,11 @@ export interface UpdateAppInstanceRequest {
 export interface UpdateAppInstanceCICDSettingsRequest {
     id: number;
     appInstanceCICDSettingsInput: AppInstanceCICDSettingsInput;
+}
+
+export interface UpdateAppInstanceMaintenanceModeRequest {
+    id: number;
+    appInstanceMaintenanceModeInput: AppInstanceMaintenanceModeInput;
 }
 
 export interface UpdateAppInstanceSettingsRequest {
@@ -394,6 +400,23 @@ export interface AppInstancesApiInterface {
      * Update app instance CI/CD settings
      */
     updateAppInstanceCICDSettings(requestParameters: UpdateAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstanceCICDSettings>;
+
+    /**
+     * Enables or disables the fixed maintenance response on all public HTTP routes while application workloads continue running.
+     * @summary Update app instance maintenance mode
+     * @param {number} id 
+     * @param {AppInstanceMaintenanceModeInput} appInstanceMaintenanceModeInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    updateAppInstanceMaintenanceModeRaw(requestParameters: UpdateAppInstanceMaintenanceModeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Enables or disables the fixed maintenance response on all public HTTP routes while application workloads continue running.
+     * Update app instance maintenance mode
+     */
+    updateAppInstanceMaintenanceMode(requestParameters: UpdateAppInstanceMaintenanceModeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Updates app instance settings and returns the updated app instance.
@@ -1132,6 +1155,55 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
      */
     async updateAppInstanceCICDSettings(requestParameters: UpdateAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstanceCICDSettings> {
         const response = await this.updateAppInstanceCICDSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Enables or disables the fixed maintenance response on all public HTTP routes while application workloads continue running.
+     * Update app instance maintenance mode
+     */
+    async updateAppInstanceMaintenanceModeRaw(requestParameters: UpdateAppInstanceMaintenanceModeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateAppInstanceMaintenanceMode().'
+            );
+        }
+
+        if (requestParameters['appInstanceMaintenanceModeInput'] == null) {
+            throw new runtime.RequiredError(
+                'appInstanceMaintenanceModeInput',
+                'Required parameter "appInstanceMaintenanceModeInput" was null or undefined when calling updateAppInstanceMaintenanceMode().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-instances/{id}/actions/maintenance-mode`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['appInstanceMaintenanceModeInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Enables or disables the fixed maintenance response on all public HTTP routes while application workloads continue running.
+     * Update app instance maintenance mode
+     */
+    async updateAppInstanceMaintenanceMode(requestParameters: UpdateAppInstanceMaintenanceModeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.updateAppInstanceMaintenanceModeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
