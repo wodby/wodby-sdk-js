@@ -3776,6 +3776,12 @@ export interface Backup {
     taskId?: number | null;
     /**
      * 
+     * @type {Array<BackupOption>}
+     * @memberof Backup
+     */
+    options: Array<BackupOption>;
+    /**
+     * 
      * @type {string}
      * @memberof Backup
      */
@@ -3798,6 +3804,25 @@ export interface Backup {
      * @memberof Backup
      */
     endedAt?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface BackupOption
+ */
+export interface BackupOption {
+    /**
+     * 
+     * @type {string}
+     * @memberof BackupOption
+     */
+    name: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof BackupOption
+     */
+    values: Array<string>;
 }
 /**
  * 
@@ -3871,6 +3896,12 @@ export interface BackupPreset {
      * @memberof BackupPreset
      */
     storageClass?: string | null;
+    /**
+     * 
+     * @type {Array<BackupOption>}
+     * @memberof BackupPreset
+     */
+    options: Array<BackupOption>;
     /**
      * 
      * @type {boolean}
@@ -7339,6 +7370,12 @@ export interface NewBackupInput {
      * @memberof NewBackupInput
      */
     storageClass?: string | null;
+    /**
+     * 
+     * @type {Array<BackupOption>}
+     * @memberof NewBackupInput
+     */
+    options?: Array<BackupOption> | null;
 }
 /**
  * 
@@ -7406,6 +7443,12 @@ export interface NewBackupPresetInput {
      * @memberof NewBackupPresetInput
      */
     storageClass?: string | null;
+    /**
+     * 
+     * @type {Array<BackupOption>}
+     * @memberof NewBackupPresetInput
+     */
+    options?: Array<BackupOption> | null;
     /**
      * 
      * @type {boolean}
@@ -12022,6 +12065,12 @@ export interface UpdateBackupPresetInput {
      * @memberof UpdateBackupPresetInput
      */
     storageClass?: string | null;
+    /**
+     * 
+     * @type {Array<BackupOption>}
+     * @memberof UpdateBackupPresetInput
+     */
+    options?: Array<BackupOption> | null;
     /**
      * 
      * @type {boolean}
