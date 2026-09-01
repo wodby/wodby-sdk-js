@@ -1241,6 +1241,75 @@ export type AppEnvironmentEnvironmentTypeEnum = typeof AppEnvironmentEnvironment
 /**
  * 
  * @export
+ * @interface AppEnvironmentAutoStackUpgradeSettings
+ */
+export interface AppEnvironmentAutoStackUpgradeSettings {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentAutoStackUpgradeSettings
+     */
+    enabled: boolean;
+    /**
+     * 
+     * @type {AppEnvironmentStackUpgradeSettings}
+     * @memberof AppEnvironmentAutoStackUpgradeSettings
+     */
+    upgradeSettings?: AppEnvironmentStackUpgradeSettings;
+    /**
+     * 
+     * @type {AutomationTimeWindow}
+     * @memberof AppEnvironmentAutoStackUpgradeSettings
+     */
+    timeWindow?: AutomationTimeWindow;
+}
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentAutoStackUpgradeSettingsInput
+ */
+export interface AppEnvironmentAutoStackUpgradeSettingsInput {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentAutoStackUpgradeSettingsInput
+     */
+    enabled: boolean;
+    /**
+     * 
+     * @type {AppEnvironmentStackUpgradeSettingsInput}
+     * @memberof AppEnvironmentAutoStackUpgradeSettingsInput
+     */
+    upgradeSettings?: AppEnvironmentStackUpgradeSettingsInput;
+    /**
+     * 
+     * @type {AutomationTimeWindowInput}
+     * @memberof AppEnvironmentAutoStackUpgradeSettingsInput
+     */
+    timeWindow?: AutomationTimeWindowInput;
+}
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentBackupHealth
+ */
+export interface AppEnvironmentBackupHealth {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentBackupHealth
+     */
+    failingSchedulesCount: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentBackupHealth
+     */
+    latestFailureAt?: string | null;
+}
+/**
+ * 
+ * @export
  * @interface AppEnvironmentCICDSettings
  */
 export interface AppEnvironmentCICDSettings {
@@ -1291,21 +1360,40 @@ export interface AppEnvironmentCICDSettingsInput {
 /**
  * 
  * @export
+ * @interface AppEnvironmentCronHealth
+ */
+export interface AppEnvironmentCronHealth {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentCronHealth
+     */
+    failingSchedulesCount: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentCronHealth
+     */
+    latestFailureAt?: string | null;
+}
+/**
+ * 
+ * @export
  * @interface AppEnvironmentHealth
  */
 export interface AppEnvironmentHealth {
     /**
      * 
-     * @type {AppInstanceCronHealth}
+     * @type {AppEnvironmentCronHealth}
      * @memberof AppEnvironmentHealth
      */
-    cron: AppInstanceCronHealth;
+    cron: AppEnvironmentCronHealth;
     /**
      * 
-     * @type {AppInstanceBackupHealth}
+     * @type {AppEnvironmentBackupHealth}
      * @memberof AppEnvironmentHealth
      */
-    backups: AppInstanceBackupHealth;
+    backups: AppEnvironmentBackupHealth;
 }
 /**
  * 
@@ -1347,10 +1435,10 @@ export interface AppEnvironmentMaintenanceModeInput {
 export interface AppEnvironmentSettings {
     /**
      * 
-     * @type {AppInstanceAutoStackUpgradeSettings}
+     * @type {AppEnvironmentAutoStackUpgradeSettings}
      * @memberof AppEnvironmentSettings
      */
-    autoStackUpgrade?: AppInstanceAutoStackUpgradeSettings;
+    autoStackUpgrade?: AppEnvironmentAutoStackUpgradeSettings;
 }
 /**
  * 
@@ -1360,10 +1448,10 @@ export interface AppEnvironmentSettings {
 export interface AppEnvironmentSettingsInput {
     /**
      * 
-     * @type {AppInstanceAutoStackUpgradeSettingsInput}
+     * @type {AppEnvironmentAutoStackUpgradeSettingsInput}
      * @memberof AppEnvironmentSettingsInput
      */
-    autoStackUpgrade?: AppInstanceAutoStackUpgradeSettingsInput;
+    autoStackUpgrade?: AppEnvironmentAutoStackUpgradeSettingsInput;
 }
 /**
  * 
@@ -1443,6 +1531,43 @@ export interface AppEnvironmentStackReconciliationInput {
      * @memberof AppEnvironmentStackReconciliationInput
      */
     main: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentStackUpgradeChangelog
+ */
+export interface AppEnvironmentStackUpgradeChangelog {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentStackUpgradeChangelog
+     */
+    previousStackVersion: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentStackUpgradeChangelog
+     */
+    stackVersion: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentStackUpgradeChangelog
+     */
+    previousStackRevNumber: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentStackUpgradeChangelog
+     */
+    stackRevNumber: number;
+    /**
+     * 
+     * @type {Array<ServiceRevisionChange>}
+     * @memberof AppEnvironmentStackUpgradeChangelog
+     */
+    serviceChanges: Array<ServiceRevisionChange>;
 }
 /**
  * 
@@ -1532,749 +1657,158 @@ export interface AppEnvironmentStackUpgradeInput {
 /**
  * 
  * @export
- * @interface AppInstance
+ * @interface AppEnvironmentStackUpgradeSettings
  */
-export interface AppInstance {
-    /**
-     * 
-     * @type {number}
-     * @memberof AppInstance
-     */
-    id: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstance
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstance
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstance
-     */
-    status: string;
+export interface AppEnvironmentStackUpgradeSettings {
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstance
-     */
-    outdated: boolean;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstance
-     */
-    mainDomain?: string | null;
-    /**
-     * 
-     * @type {AppInstanceMainRouteCert}
-     * @memberof AppInstance
-     */
-    mainRouteCert: AppInstanceMainRouteCert | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof AppInstance
-     */
-    appId: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof AppInstance
-     */
-    clusterId: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof AppInstance
-     */
-    envId: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof AppInstance
-     */
-    stackId: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof AppInstance
-     */
-    stackRevId: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstance
-     */
-    stackName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstance
-     */
-    stackTitle: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstance
-     */
-    stackIcon: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof AppInstance
-     */
-    stackRevNumber: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstance
-     */
-    stackVersion: string;
-    /**
-     * 
-     * @type {AppAccess}
-     * @memberof AppInstance
-     */
-    access?: AppAccess | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstance
-     */
-    routingMode: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstance
-     */
-    routingPending: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstance
-     */
-    maintenanceMode: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstance
-     */
-    maintenanceModeActive: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstance
-     */
-    configurationReady: boolean;
-    /**
-     * 
-     * @type {Array<AppServiceConfigurationIssue>}
-     * @memberof AppInstance
-     */
-    configurationIssues: Array<AppServiceConfigurationIssue>;
-    /**
-     * 
-     * @type {AppInstanceSettings}
-     * @memberof AppInstance
-     */
-    settings?: AppInstanceSettings;
-    /**
-     * 
-     * @type {AppInstanceHealth}
-     * @memberof AppInstance
-     */
-    health: AppInstanceHealth;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstance
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstance
-     */
-    updatedAt: string;
-}
-/**
- * 
- * @export
- * @interface AppInstanceAutoStackUpgradeSettings
- */
-export interface AppInstanceAutoStackUpgradeSettings {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceAutoStackUpgradeSettings
-     */
-    enabled: boolean;
-    /**
-     * 
-     * @type {AppInstanceStackUpgradeSettings}
-     * @memberof AppInstanceAutoStackUpgradeSettings
-     */
-    upgradeSettings?: AppInstanceStackUpgradeSettings;
-    /**
-     * 
-     * @type {AutomationTimeWindow}
-     * @memberof AppInstanceAutoStackUpgradeSettings
-     */
-    timeWindow?: AutomationTimeWindow;
-}
-/**
- * 
- * @export
- * @interface AppInstanceAutoStackUpgradeSettingsInput
- */
-export interface AppInstanceAutoStackUpgradeSettingsInput {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceAutoStackUpgradeSettingsInput
-     */
-    enabled: boolean;
-    /**
-     * 
-     * @type {AppInstanceStackUpgradeSettingsInput}
-     * @memberof AppInstanceAutoStackUpgradeSettingsInput
-     */
-    upgradeSettings?: AppInstanceStackUpgradeSettingsInput;
-    /**
-     * 
-     * @type {AutomationTimeWindowInput}
-     * @memberof AppInstanceAutoStackUpgradeSettingsInput
-     */
-    timeWindow?: AutomationTimeWindowInput;
-}
-/**
- * 
- * @export
- * @interface AppInstanceBackupHealth
- */
-export interface AppInstanceBackupHealth {
-    /**
-     * 
-     * @type {number}
-     * @memberof AppInstanceBackupHealth
-     */
-    failingSchedulesCount: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstanceBackupHealth
-     */
-    latestFailureAt?: string | null;
-}
-/**
- * 
- * @export
- * @interface AppInstanceCICDSettings
- */
-export interface AppInstanceCICDSettings {
-    /**
-     * 
-     * @type {number}
-     * @memberof AppInstanceCICDSettings
-     */
-    appInstanceId: number;
-    /**
-     * Effective CI integration ID. Zero selects the built-in Wodby CI service.
-     * @type {number}
-     * @memberof AppInstanceCICDSettings
-     */
-    ciIntegrationId: number;
-    /**
-     * Effective registry integration ID. Zero selects the built-in Wodby registry service.
-     * @type {number}
-     * @memberof AppInstanceCICDSettings
-     */
-    registryIntegrationId: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstanceCICDSettings
-     */
-    registryRepository: string;
-}
-/**
- * 
- * @export
- * @interface AppInstanceCICDSettingsInput
- */
-export interface AppInstanceCICDSettingsInput {
-    /**
-     * CI integration ID. Set to zero to use the built-in Wodby CI service.
-     * @type {number}
-     * @memberof AppInstanceCICDSettingsInput
-     */
-    ciIntegrationId: number;
-    /**
-     * Registry integration ID. Set to zero to use the built-in Wodby registry service.
-     * @type {number}
-     * @memberof AppInstanceCICDSettingsInput
-     */
-    registryIntegrationId: number;
-}
-/**
- * 
- * @export
- * @interface AppInstanceCronHealth
- */
-export interface AppInstanceCronHealth {
-    /**
-     * 
-     * @type {number}
-     * @memberof AppInstanceCronHealth
-     */
-    failingSchedulesCount: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstanceCronHealth
-     */
-    latestFailureAt?: string | null;
-}
-/**
- * 
- * @export
- * @interface AppInstanceHealth
- */
-export interface AppInstanceHealth {
-    /**
-     * 
-     * @type {AppInstanceCronHealth}
-     * @memberof AppInstanceHealth
-     */
-    cron: AppInstanceCronHealth;
-    /**
-     * 
-     * @type {AppInstanceBackupHealth}
-     * @memberof AppInstanceHealth
-     */
-    backups: AppInstanceBackupHealth;
-}
-/**
- * 
- * @export
- * @interface AppInstanceMainRouteCert
- */
-export interface AppInstanceMainRouteCert {
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstanceMainRouteCert
-     */
-    issuer: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceMainRouteCert
-     */
-    custom: boolean;
-}
-/**
- * 
- * @export
- * @interface AppInstanceMaintenanceModeInput
- */
-export interface AppInstanceMaintenanceModeInput {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceMaintenanceModeInput
-     */
-    enabled: boolean;
-}
-/**
- * 
- * @export
- * @interface AppInstanceSettings
- */
-export interface AppInstanceSettings {
-    /**
-     * 
-     * @type {AppInstanceAutoStackUpgradeSettings}
-     * @memberof AppInstanceSettings
-     */
-    autoStackUpgrade?: AppInstanceAutoStackUpgradeSettings;
-}
-/**
- * 
- * @export
- * @interface AppInstanceSettingsInput
- */
-export interface AppInstanceSettingsInput {
-    /**
-     * 
-     * @type {AppInstanceAutoStackUpgradeSettingsInput}
-     * @memberof AppInstanceSettingsInput
-     */
-    autoStackUpgrade?: AppInstanceAutoStackUpgradeSettingsInput;
-}
-/**
- * 
- * @export
- * @interface AppInstanceStackReconciliationInput
- */
-export interface AppInstanceStackReconciliationInput {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackReconciliationInput
+     * @memberof AppEnvironmentStackUpgradeSettings
      */
     versions: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackReconciliationInput
+     * @memberof AppEnvironmentStackUpgradeSettings
      */
     replicas: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackReconciliationInput
+     * @memberof AppEnvironmentStackUpgradeSettings
      */
     resources: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackReconciliationInput
+     * @memberof AppEnvironmentStackUpgradeSettings
      */
     integrations: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackReconciliationInput
+     * @memberof AppEnvironmentStackUpgradeSettings
      */
     services: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackReconciliationInput
+     * @memberof AppEnvironmentStackUpgradeSettings
      */
     settings: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackReconciliationInput
+     * @memberof AppEnvironmentStackUpgradeSettings
      */
     links: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackReconciliationInput
+     * @memberof AppEnvironmentStackUpgradeSettings
      */
     tokens: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackReconciliationInput
+     * @memberof AppEnvironmentStackUpgradeSettings
      */
     configs: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackReconciliationInput
+     * @memberof AppEnvironmentStackUpgradeSettings
      */
     cron: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackReconciliationInput
+     * @memberof AppEnvironmentStackUpgradeSettings
      */
     volumes: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackReconciliationInput
+     * @memberof AppEnvironmentStackUpgradeSettings
      */
     main: boolean;
 }
 /**
  * 
  * @export
- * @interface AppInstanceStackUpgradeChangelog
+ * @interface AppEnvironmentStackUpgradeSettingsInput
  */
-export interface AppInstanceStackUpgradeChangelog {
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstanceStackUpgradeChangelog
-     */
-    previousStackVersion: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AppInstanceStackUpgradeChangelog
-     */
-    stackVersion: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof AppInstanceStackUpgradeChangelog
-     */
-    previousStackRevNumber: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof AppInstanceStackUpgradeChangelog
-     */
-    stackRevNumber: number;
-    /**
-     * 
-     * @type {Array<ServiceRevisionChange>}
-     * @memberof AppInstanceStackUpgradeChangelog
-     */
-    serviceChanges: Array<ServiceRevisionChange>;
-}
-/**
- * 
- * @export
- * @interface AppInstanceStackUpgradeInput
- */
-export interface AppInstanceStackUpgradeInput {
-    /**
-     * Build affected services when required and deploy the upgraded stack configuration.
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeInput
-     */
-    deployment?: boolean;
+export interface AppEnvironmentStackUpgradeSettingsInput {
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackUpgradeInput
-     */
-    versions: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeInput
-     */
-    replicas: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeInput
-     */
-    resources: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeInput
-     */
-    integrations: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeInput
-     */
-    services: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeInput
-     */
-    settings: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeInput
-     */
-    links: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeInput
-     */
-    tokens: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeInput
-     */
-    configs: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeInput
-     */
-    cron: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeInput
-     */
-    volumes: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeInput
-     */
-    main: boolean;
-}
-/**
- * 
- * @export
- * @interface AppInstanceStackUpgradeSettings
- */
-export interface AppInstanceStackUpgradeSettings {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettings
-     */
-    versions: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettings
-     */
-    replicas: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettings
-     */
-    resources: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettings
-     */
-    integrations: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettings
-     */
-    services: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettings
-     */
-    settings: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettings
-     */
-    links: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettings
-     */
-    tokens: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettings
-     */
-    configs: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettings
-     */
-    cron: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettings
-     */
-    volumes: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettings
-     */
-    main: boolean;
-}
-/**
- * 
- * @export
- * @interface AppInstanceStackUpgradeSettingsInput
- */
-export interface AppInstanceStackUpgradeSettingsInput {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettingsInput
+     * @memberof AppEnvironmentStackUpgradeSettingsInput
      */
     versions?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettingsInput
+     * @memberof AppEnvironmentStackUpgradeSettingsInput
      */
     replicas?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettingsInput
+     * @memberof AppEnvironmentStackUpgradeSettingsInput
      */
     resources?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettingsInput
+     * @memberof AppEnvironmentStackUpgradeSettingsInput
      */
     integrations?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettingsInput
+     * @memberof AppEnvironmentStackUpgradeSettingsInput
      */
     services?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettingsInput
+     * @memberof AppEnvironmentStackUpgradeSettingsInput
      */
     settings?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettingsInput
+     * @memberof AppEnvironmentStackUpgradeSettingsInput
      */
     links?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettingsInput
+     * @memberof AppEnvironmentStackUpgradeSettingsInput
      */
     tokens?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettingsInput
+     * @memberof AppEnvironmentStackUpgradeSettingsInput
      */
     configs?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettingsInput
+     * @memberof AppEnvironmentStackUpgradeSettingsInput
      */
     cron?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettingsInput
+     * @memberof AppEnvironmentStackUpgradeSettingsInput
      */
     volumes?: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof AppInstanceStackUpgradeSettingsInput
+     * @memberof AppEnvironmentStackUpgradeSettingsInput
      */
     main?: boolean;
 }
@@ -5501,37 +5035,6 @@ export interface CreateDeploymentRequest {
 /**
  * 
  * @export
- * @interface CreateEnvRequest
- */
-export interface CreateEnvRequest {
-    /**
-     * Optional for API-key requests; defaults to the API key's organization.
-     * @type {number}
-     * @memberof CreateEnvRequest
-     */
-    orgId?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateEnvRequest
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateEnvRequest
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateEnvRequest
-     */
-    type: string;
-}
-/**
- * 
- * @export
  * @interface CurrentUser
  */
 export interface CurrentUser {
@@ -6001,55 +5504,6 @@ export interface EffectiveAppRouteSetting {
 }
 
 
-/**
- * 
- * @export
- * @interface Env
- */
-export interface Env {
-    /**
-     * 
-     * @type {number}
-     * @memberof Env
-     */
-    id: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Env
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Env
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Env
-     */
-    type: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof Env
-     */
-    orgId: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Env
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Env
-     */
-    updatedAt: string;
-}
 /**
  * 
  * @export
@@ -7862,6 +7316,31 @@ export interface NewAppAuthInput {
 /**
  * 
  * @export
+ * @interface NewAppEnvironmentAccessEndpointInput
+ */
+export interface NewAppEnvironmentAccessEndpointInput {
+    /**
+     * Machine name of an enabled app service from the selected stack revision.
+     * @type {string}
+     * @memberof NewAppEnvironmentAccessEndpointInput
+     */
+    appServiceName: string;
+    /**
+     * Machine name of a public HTTP port from that service manifest.
+     * @type {string}
+     * @memberof NewAppEnvironmentAccessEndpointInput
+     */
+    appPortName: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewAppEnvironmentAccessEndpointInput
+     */
+    primary: boolean;
+}
+/**
+ * 
+ * @export
  * @interface NewAppEnvironmentAccessInput
  */
 export interface NewAppEnvironmentAccessInput {
@@ -7897,10 +7376,10 @@ export interface NewAppEnvironmentAccessInput {
     host?: string | null;
     /**
      * HTTP endpoints selected during creation. Used only with SELECTED_ENDPOINTS scope; older clients may omit it to select the main endpoint.
-     * @type {Array<NewAppInstanceAccessEndpointInput>}
+     * @type {Array<NewAppEnvironmentAccessEndpointInput>}
      * @memberof NewAppEnvironmentAccessInput
      */
-    endpoints?: Array<NewAppInstanceAccessEndpointInput>;
+    endpoints?: Array<NewAppEnvironmentAccessEndpointInput>;
 }
 
 
@@ -8050,7 +7529,7 @@ export interface NewAppInput {
      * @type {string}
      * @memberof NewAppInput
      */
-    environmentName?: string;
+    environmentName: string;
     /**
      * Defaults to environmentName when omitted.
      * @type {string}
@@ -8062,23 +7541,9 @@ export interface NewAppInput {
      * @type {string}
      * @memberof NewAppInput
      */
-    environmentType?: NewAppInputEnvironmentTypeEnum;
+    environmentType: NewAppInputEnvironmentTypeEnum;
     /**
-     * Legacy alternative to environmentName. Requires envId and cannot be combined with canonical app environment fields.
-     * @type {string}
-     * @memberof NewAppInput
-     * @deprecated
-     */
-    instanceName?: string;
-    /**
-     * Legacy alternative to environmentTitle. Defaults to instanceName when omitted.
-     * @type {string}
-     * @memberof NewAppInput
-     * @deprecated
-     */
-    instanceTitle?: string;
-    /**
-     * Defaults to environmentName.name.orgDomain for the canonical contract, or instanceName.name.orgDomain for the legacy contract.
+     * Defaults to environmentName.name.orgDomain.
      * @type {string}
      * @memberof NewAppInput
      */
@@ -8107,13 +7572,6 @@ export interface NewAppInput {
      * @memberof NewAppInput
      */
     clusterId?: number | null;
-    /**
-     * Legacy environment entity ID. Required with instanceName and cannot be combined with canonical app environment fields.
-     * @type {number}
-     * @memberof NewAppInput
-     * @deprecated
-     */
-    envId?: number;
     /**
      * Omit or use null to inherit the organization default, use 0 for the built-in CI service, or use an accessible CI integration ID. A project-owned integration must be shared with the app's project.
      * @type {number}
@@ -8159,179 +7617,6 @@ export const NewAppInputEnvironmentTypeEnum = {
 } as const;
 export type NewAppInputEnvironmentTypeEnum = typeof NewAppInputEnvironmentTypeEnum[keyof typeof NewAppInputEnvironmentTypeEnum];
 
-/**
- * 
- * @export
- * @interface NewAppInstanceAccessEndpointInput
- */
-export interface NewAppInstanceAccessEndpointInput {
-    /**
-     * Machine name of an enabled app service from the selected stack revision.
-     * @type {string}
-     * @memberof NewAppInstanceAccessEndpointInput
-     */
-    appServiceName: string;
-    /**
-     * Machine name of a public HTTP port from that service manifest.
-     * @type {string}
-     * @memberof NewAppInstanceAccessEndpointInput
-     */
-    appPortName: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof NewAppInstanceAccessEndpointInput
-     */
-    primary: boolean;
-}
-/**
- * 
- * @export
- * @interface NewAppInstanceAccessInput
- */
-export interface NewAppInstanceAccessInput {
-    /**
-     * 
-     * @type {number}
-     * @memberof NewAppInstanceAccessInput
-     */
-    integrationId: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof NewAppInstanceAccessInput
-     */
-    mode: NewAppInstanceAccessInputModeEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof NewAppInstanceAccessInput
-     */
-    scope: NewAppInstanceAccessInputScopeEnum;
-    /**
-     * 
-     * @type {Array<AppAccessSettingInput>}
-     * @memberof NewAppInstanceAccessInput
-     */
-    settings?: Array<AppAccessSettingInput>;
-    /**
-     * Required only when the selected provider uses a customer-assigned hostname.
-     * @type {string}
-     * @memberof NewAppInstanceAccessInput
-     */
-    host?: string | null;
-    /**
-     * HTTP endpoints selected during creation. Used only with SELECTED_ENDPOINTS scope; older clients may omit it to select the main endpoint.
-     * @type {Array<NewAppInstanceAccessEndpointInput>}
-     * @memberof NewAppInstanceAccessInput
-     */
-    endpoints?: Array<NewAppInstanceAccessEndpointInput>;
-}
-
-
-/**
- * @export
- */
-export const NewAppInstanceAccessInputModeEnum = {
-    Protected: 'PROTECTED',
-    PrivateNetwork: 'PRIVATE_NETWORK'
-} as const;
-export type NewAppInstanceAccessInputModeEnum = typeof NewAppInstanceAccessInputModeEnum[keyof typeof NewAppInstanceAccessInputModeEnum];
-
-/**
- * @export
- */
-export const NewAppInstanceAccessInputScopeEnum = {
-    EntireApp: 'ENTIRE_APP',
-    SelectedEndpoints: 'SELECTED_ENDPOINTS'
-} as const;
-export type NewAppInstanceAccessInputScopeEnum = typeof NewAppInstanceAccessInputScopeEnum[keyof typeof NewAppInstanceAccessInputScopeEnum];
-
-/**
- * 
- * @export
- * @interface NewAppInstanceInput
- */
-export interface NewAppInstanceInput {
-    /**
-     * 
-     * @type {number}
-     * @memberof NewAppInstanceInput
-     */
-    appId: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof NewAppInstanceInput
-     */
-    instanceName: string;
-    /**
-     * Defaults to instanceName when omitted.
-     * @type {string}
-     * @memberof NewAppInstanceInput
-     */
-    instanceTitle?: string;
-    /**
-     * Defaults to instanceName.appName.orgDomain when omitted.
-     * @type {string}
-     * @memberof NewAppInstanceInput
-     */
-    domain?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof NewAppInstanceInput
-     */
-    stackRevId: number;
-    /**
-     * Defaults to the stack revision's service defaults when omitted.
-     * @type {Array<NewAppServiceInput>}
-     * @memberof NewAppInstanceInput
-     */
-    services?: Array<NewAppServiceInput>;
-    /**
-     * 
-     * @type {number}
-     * @memberof NewAppInstanceInput
-     */
-    clusterId?: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof NewAppInstanceInput
-     */
-    envId: number;
-    /**
-     * Omit or use null to inherit the organization default, use 0 for the built-in CI service, or use an accessible CI integration ID. A project-owned integration must be shared with the app's project.
-     * @type {number}
-     * @memberof NewAppInstanceInput
-     */
-    ciIntegrationId?: number | null;
-    /**
-     * Omit or use null to inherit the organization default, use 0 for the built-in registry, or use an accessible registry integration ID. A project-owned integration must be shared with the app's project.
-     * @type {number}
-     * @memberof NewAppInstanceInput
-     */
-    registryIntegrationId?: number | null;
-    /**
-     * Defers the automatic initial build and deployment while preserving app instance initialization. Intended for automation that configures the instance before explicitly starting its first build.
-     * @type {boolean}
-     * @memberof NewAppInstanceInput
-     */
-    deferInitialDeployment?: boolean;
-    /**
-     * 
-     * @type {AppInstanceSettingsInput}
-     * @memberof NewAppInstanceInput
-     */
-    settings?: AppInstanceSettingsInput;
-    /**
-     * 
-     * @type {NewAppInstanceAccessInput}
-     * @memberof NewAppInstanceInput
-     */
-    access?: NewAppInstanceAccessInput;
-}
 /**
  * 
  * @export
@@ -13937,31 +13222,6 @@ export interface UpdateDatabaseUserDBsInput {
      * @memberof UpdateDatabaseUserDBsInput
      */
     databaseDbIds: Array<number>;
-}
-/**
- * 
- * @export
- * @interface UpdateEnvRequest
- */
-export interface UpdateEnvRequest {
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateEnvRequest
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateEnvRequest
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateEnvRequest
-     */
-    type: string;
 }
 /**
  * 

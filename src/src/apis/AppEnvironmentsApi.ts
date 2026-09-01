@@ -15,21 +15,38 @@
 
 import * as runtime from '../runtime';
 import type {
+  AppAccess,
+  AppAccessCleanup,
+  AppAccessOperationResult,
   AppEnvironment,
   AppEnvironmentCICDSettings,
   AppEnvironmentCICDSettingsInput,
   AppEnvironmentMaintenanceModeInput,
   AppEnvironmentSettingsInput,
   AppEnvironmentStackReconciliationInput,
+  AppEnvironmentStackUpgradeChangelog,
   AppEnvironmentStackUpgradeInput,
+  NewAppAccessInput,
+  NewAppEnvironmentAccessInput,
   NewAppEnvironmentInput,
   OperationResult,
   ProblemDetails,
+  UpdateAppAccessInput,
   UpdateTitleRequest,
+  ValidationResult,
 } from '../models/index';
+
+export interface CreateAppAccessRequest {
+    id: number;
+    newAppAccessInput: NewAppAccessInput;
+}
 
 export interface CreateAppEnvironmentRequest {
     newAppEnvironmentInput: NewAppEnvironmentInput;
+}
+
+export interface DeleteAppAccessRequest {
+    id: number;
 }
 
 export interface DeleteAppEnvironmentRequest {
@@ -38,6 +55,10 @@ export interface DeleteAppEnvironmentRequest {
 }
 
 export interface GetAppEnvironmentRequest {
+    id: number;
+}
+
+export interface GetAppEnvironmentAccessRequest {
     id: number;
 }
 
@@ -51,6 +72,15 @@ export interface GetAppEnvironmentCICDSettingsRequest {
     id: number;
 }
 
+export interface GetAppEnvironmentStackUpgradeChangelogRequest {
+    id: number;
+}
+
+export interface ListAppAccessCleanupsRequest {
+    appInstanceId?: number;
+    integrationId?: number;
+}
+
 export interface ListAppEnvironmentsRequest {
     orgId?: number;
     projectIds?: string;
@@ -59,9 +89,22 @@ export interface ListAppEnvironmentsRequest {
     clusterApp?: boolean;
 }
 
+export interface PreflightAppAccessRequest {
+    newAppEnvironmentAccessInput: NewAppEnvironmentAccessInput;
+}
+
 export interface ReconcileAppEnvironmentStackRequest {
     id: number;
     appEnvironmentStackReconciliationInput: AppEnvironmentStackReconciliationInput;
+}
+
+export interface RetryAppAccessCleanupRequest {
+    id: number;
+}
+
+export interface UpdateAppAccessRequest {
+    id: number;
+    updateAppAccessInput: UpdateAppAccessInput;
 }
 
 export interface UpdateAppEnvironmentRequest {
@@ -97,6 +140,23 @@ export interface UpgradeAppEnvironmentStackRequest {
  */
 export interface AppEnvironmentsApiInterface {
     /**
+     * Creates external access for the app environment identified by the path. An active paid subscription is required.
+     * @summary Create app environment access
+     * @param {number} id 
+     * @param {NewAppAccessInput} newAppAccessInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    createAppAccessRaw(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessOperationResult>>;
+
+    /**
+     * Creates external access for the app environment identified by the path. An active paid subscription is required.
+     * Create app environment access
+     */
+    createAppAccess(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult>;
+
+    /**
      * Creates an app environment and returns the created resource.
      * @summary Create app environment
      * @param {NewAppEnvironmentInput} newAppEnvironmentInput 
@@ -111,6 +171,22 @@ export interface AppEnvironmentsApiInterface {
      * Create app environment
      */
     createAppEnvironment(requestParameters: CreateAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironment>;
+
+    /**
+     * Removes app access and returns the cleanup task identifier.
+     * @summary Delete app access
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    deleteAppAccessRaw(requestParameters: DeleteAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Removes app access and returns the cleanup task identifier.
+     * Delete app access
+     */
+    deleteAppAccess(requestParameters: DeleteAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Deletes the app environment and returns the operation result.
@@ -144,6 +220,22 @@ export interface AppEnvironmentsApiInterface {
      * Get app environment
      */
     getAppEnvironment(requestParameters: GetAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironment>;
+
+    /**
+     * Returns the external access configuration for the app environment identified by the path.
+     * @summary Get app environment access
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    getAppEnvironmentAccessRaw(requestParameters: GetAppEnvironmentAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccess>>;
+
+    /**
+     * Returns the external access configuration for the app environment identified by the path.
+     * Get app environment access
+     */
+    getAppEnvironmentAccess(requestParameters: GetAppEnvironmentAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccess>;
 
     /**
      * Returns the app environment identified by app and environment name.
@@ -180,6 +272,39 @@ export interface AppEnvironmentsApiInterface {
     getAppEnvironmentCICDSettings(requestParameters: GetAppEnvironmentCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironmentCICDSettings>;
 
     /**
+     * Returns the stack and service revision changes that an app environment stack upgrade would apply.
+     * @summary Preview app environment stack upgrade
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    getAppEnvironmentStackUpgradeChangelogRaw(requestParameters: GetAppEnvironmentStackUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppEnvironmentStackUpgradeChangelog>>;
+
+    /**
+     * Returns the stack and service revision changes that an app environment stack upgrade would apply.
+     * Preview app environment stack upgrade
+     */
+    getAppEnvironmentStackUpgradeChangelog(requestParameters: GetAppEnvironmentStackUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironmentStackUpgradeChangelog>;
+
+    /**
+     * Returns cleanup records for exactly one app instance or integration.
+     * @summary List app-access cleanups
+     * @param {number} [appInstanceId] 
+     * @param {number} [integrationId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    listAppAccessCleanupsRaw(requestParameters: ListAppAccessCleanupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppAccessCleanup>>>;
+
+    /**
+     * Returns cleanup records for exactly one app instance or integration.
+     * List app-access cleanups
+     */
+    listAppAccessCleanups(requestParameters: ListAppAccessCleanupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppAccessCleanup>>;
+
+    /**
      * Returns app environments matching the request filters.
      * @summary List app environments
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -200,6 +325,22 @@ export interface AppEnvironmentsApiInterface {
     listAppEnvironments(requestParameters: ListAppEnvironmentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppEnvironment>>;
 
     /**
+     * Validates a proposed app-access configuration before an app environment or access resource is created. An active paid subscription is required.
+     * @summary Preflight app environment access
+     * @param {NewAppEnvironmentAccessInput} newAppEnvironmentAccessInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    preflightAppAccessRaw(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ValidationResult>>;
+
+    /**
+     * Validates a proposed app-access configuration before an app environment or access resource is created. An active paid subscription is required.
+     * Preflight app environment access
+     */
+    preflightAppAccess(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidationResult>;
+
+    /**
      * Reapplies the app environment\'s assigned stack revision using the selected override sections without changing its stack revision.
      * @summary Reconcile app environment stack
      * @param {number} id 
@@ -215,6 +356,39 @@ export interface AppEnvironmentsApiInterface {
      * Reconcile app environment stack
      */
     reconcileAppEnvironmentStack(requestParameters: ReconcileAppEnvironmentStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Retries a failed app-access cleanup and returns its task identifier.
+     * @summary Retry app-access cleanup
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    retryAppAccessCleanupRaw(requestParameters: RetryAppAccessCleanupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Retries a failed app-access cleanup and returns its task identifier.
+     * Retry app-access cleanup
+     */
+    retryAppAccessCleanup(requestParameters: RetryAppAccessCleanupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Updates an existing app-access configuration and starts its reconciliation task. An active paid subscription is required.
+     * @summary Update app access
+     * @param {number} id 
+     * @param {UpdateAppAccessInput} updateAppAccessInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    updateAppAccessRaw(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessOperationResult>>;
+
+    /**
+     * Updates an existing app-access configuration and starts its reconciliation task. An active paid subscription is required.
+     * Update app access
+     */
+    updateAppAccess(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult>;
 
     /**
      * Updates the app environment and returns the updated resource.
@@ -309,6 +483,55 @@ export interface AppEnvironmentsApiInterface {
 export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmentsApiInterface {
 
     /**
+     * Creates external access for the app environment identified by the path. An active paid subscription is required.
+     * Create app environment access
+     */
+    async createAppAccessRaw(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessOperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createAppAccess().'
+            );
+        }
+
+        if (requestParameters['newAppAccessInput'] == null) {
+            throw new runtime.RequiredError(
+                'newAppAccessInput',
+                'Required parameter "newAppAccessInput" was null or undefined when calling createAppAccess().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-environment-accesses/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['newAppAccessInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Creates external access for the app environment identified by the path. An active paid subscription is required.
+     * Create app environment access
+     */
+    async createAppAccess(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult> {
+        const response = await this.createAppAccessRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates an app environment and returns the created resource.
      * Create app environment
      */
@@ -347,6 +570,45 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
      */
     async createAppEnvironment(requestParameters: CreateAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironment> {
         const response = await this.createAppEnvironmentRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Removes app access and returns the cleanup task identifier.
+     * Delete app access
+     */
+    async deleteAppAccessRaw(requestParameters: DeleteAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteAppAccess().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-accesses/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Removes app access and returns the cleanup task identifier.
+     * Delete app access
+     */
+    async deleteAppAccess(requestParameters: DeleteAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteAppAccessRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -429,6 +691,45 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
      */
     async getAppEnvironment(requestParameters: GetAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironment> {
         const response = await this.getAppEnvironmentRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the external access configuration for the app environment identified by the path.
+     * Get app environment access
+     */
+    async getAppEnvironmentAccessRaw(requestParameters: GetAppEnvironmentAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccess>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppEnvironmentAccess().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-environment-accesses/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the external access configuration for the app environment identified by the path.
+     * Get app environment access
+     */
+    async getAppEnvironmentAccess(requestParameters: GetAppEnvironmentAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccess> {
+        const response = await this.getAppEnvironmentAccessRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -522,6 +823,85 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
+     * Returns the stack and service revision changes that an app environment stack upgrade would apply.
+     * Preview app environment stack upgrade
+     */
+    async getAppEnvironmentStackUpgradeChangelogRaw(requestParameters: GetAppEnvironmentStackUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppEnvironmentStackUpgradeChangelog>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppEnvironmentStackUpgradeChangelog().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-environment-stack-upgrade-changelogs/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the stack and service revision changes that an app environment stack upgrade would apply.
+     * Preview app environment stack upgrade
+     */
+    async getAppEnvironmentStackUpgradeChangelog(requestParameters: GetAppEnvironmentStackUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironmentStackUpgradeChangelog> {
+        const response = await this.getAppEnvironmentStackUpgradeChangelogRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns cleanup records for exactly one app instance or integration.
+     * List app-access cleanups
+     */
+    async listAppAccessCleanupsRaw(requestParameters: ListAppAccessCleanupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppAccessCleanup>>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['appInstanceId'] != null) {
+            queryParameters['appInstanceId'] = requestParameters['appInstanceId'];
+        }
+
+        if (requestParameters['integrationId'] != null) {
+            queryParameters['integrationId'] = requestParameters['integrationId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-access-cleanups`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns cleanup records for exactly one app instance or integration.
+     * List app-access cleanups
+     */
+    async listAppAccessCleanups(requestParameters: ListAppAccessCleanupsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppAccessCleanup>> {
+        const response = await this.listAppAccessCleanupsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns app environments matching the request filters.
      * List app environments
      */
@@ -574,6 +954,48 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
+     * Validates a proposed app-access configuration before an app environment or access resource is created. An active paid subscription is required.
+     * Preflight app environment access
+     */
+    async preflightAppAccessRaw(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ValidationResult>> {
+        if (requestParameters['newAppEnvironmentAccessInput'] == null) {
+            throw new runtime.RequiredError(
+                'newAppEnvironmentAccessInput',
+                'Required parameter "newAppEnvironmentAccessInput" was null or undefined when calling preflightAppAccess().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-accesses/actions/preflight`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['newAppEnvironmentAccessInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Validates a proposed app-access configuration before an app environment or access resource is created. An active paid subscription is required.
+     * Preflight app environment access
+     */
+    async preflightAppAccess(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidationResult> {
+        const response = await this.preflightAppAccessRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Reapplies the app environment\'s assigned stack revision using the selected override sections without changing its stack revision.
      * Reconcile app environment stack
      */
@@ -619,6 +1041,94 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
      */
     async reconcileAppEnvironmentStack(requestParameters: ReconcileAppEnvironmentStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.reconcileAppEnvironmentStackRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Retries a failed app-access cleanup and returns its task identifier.
+     * Retry app-access cleanup
+     */
+    async retryAppAccessCleanupRaw(requestParameters: RetryAppAccessCleanupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling retryAppAccessCleanup().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-access-cleanups/{id}/actions/retry`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Retries a failed app-access cleanup and returns its task identifier.
+     * Retry app-access cleanup
+     */
+    async retryAppAccessCleanup(requestParameters: RetryAppAccessCleanupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.retryAppAccessCleanupRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates an existing app-access configuration and starts its reconciliation task. An active paid subscription is required.
+     * Update app access
+     */
+    async updateAppAccessRaw(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessOperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateAppAccess().'
+            );
+        }
+
+        if (requestParameters['updateAppAccessInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateAppAccessInput',
+                'Required parameter "updateAppAccessInput" was null or undefined when calling updateAppAccess().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-accesses/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateAppAccessInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Updates an existing app-access configuration and starts its reconciliation task. An active paid subscription is required.
+     * Update app access
+     */
+    async updateAppAccess(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult> {
+        const response = await this.updateAppAccessRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
