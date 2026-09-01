@@ -33,6 +33,7 @@ import type {
   AppServiceToken,
   AppServiceVolume,
   AppServiceVolumeStorageClassState,
+  BackupOption,
   ConfigOverrideInput,
   IntegrationLinkInput,
   LogStream,
@@ -130,6 +131,11 @@ export interface KeepLogStreamAliveRequest {
 
 export interface ListAppServiceAnnotationsRequest {
     id: number;
+}
+
+export interface ListAppServiceBackupOptionDefaultsRequest {
+    id: number;
+    backupName: string;
 }
 
 export interface ListAppServiceConfigsRequest {
@@ -368,7 +374,7 @@ export interface AppServicesApiInterface {
     createAppServiceIntegration(requestParameters: CreateAppServiceIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceIntegration>;
 
     /**
-     * Creates a log stream for an app service container across all replicas or for one selected pod and returns the stream id. Log streams are available while the app instance status is ok or deploying.
+     * Creates a log stream for an app service container across all replicas or for one selected pod and returns the stream id. Log streams are available while the app environment status is ok or deploying.
      * @summary Create app service log stream
      * @param {number} id 
      * @param {NewAppServiceLogStreamInput} [newAppServiceLogStreamInput] 
@@ -379,7 +385,7 @@ export interface AppServicesApiInterface {
     createAppServiceLogStreamRaw(requestParameters: CreateAppServiceLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LogStream>>;
 
     /**
-     * Creates a log stream for an app service container across all replicas or for one selected pod and returns the stream id. Log streams are available while the app instance status is ok or deploying.
+     * Creates a log stream for an app service container across all replicas or for one selected pod and returns the stream id. Log streams are available while the app environment status is ok or deploying.
      * Create app service log stream
      */
     createAppServiceLogStream(requestParameters: CreateAppServiceLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LogStream>;
@@ -560,6 +566,23 @@ export interface AppServicesApiInterface {
      * List app service annotations
      */
     listAppServiceAnnotations(requestParameters: ListAppServiceAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceAnnotation>>;
+
+    /**
+     * Returns the effective default option values for an app service backup definition.
+     * @summary List effective backup option defaults
+     * @param {number} id 
+     * @param {string} backupName 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServiceBackupOptionDefaultsRaw(requestParameters: ListAppServiceBackupOptionDefaultsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<BackupOption>>>;
+
+    /**
+     * Returns the effective default option values for an app service backup definition.
+     * List effective backup option defaults
+     */
+    listAppServiceBackupOptionDefaults(requestParameters: ListAppServiceBackupOptionDefaultsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<BackupOption>>;
 
     /**
      * Returns config overrides for an app service.
@@ -1313,7 +1336,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
-     * Creates a log stream for an app service container across all replicas or for one selected pod and returns the stream id. Log streams are available while the app instance status is ok or deploying.
+     * Creates a log stream for an app service container across all replicas or for one selected pod and returns the stream id. Log streams are available while the app environment status is ok or deploying.
      * Create app service log stream
      */
     async createAppServiceLogStreamRaw(requestParameters: CreateAppServiceLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LogStream>> {
@@ -1346,7 +1369,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
-     * Creates a log stream for an app service container across all replicas or for one selected pod and returns the stream id. Log streams are available while the app instance status is ok or deploying.
+     * Creates a log stream for an app service container across all replicas or for one selected pod and returns the stream id. Log streams are available while the app environment status is ok or deploying.
      * Create app service log stream
      */
     async createAppServiceLogStream(requestParameters: CreateAppServiceLogStreamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LogStream> {
@@ -1790,6 +1813,56 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
      */
     async listAppServiceAnnotations(requestParameters: ListAppServiceAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceAnnotation>> {
         const response = await this.listAppServiceAnnotationsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the effective default option values for an app service backup definition.
+     * List effective backup option defaults
+     */
+    async listAppServiceBackupOptionDefaultsRaw(requestParameters: ListAppServiceBackupOptionDefaultsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<BackupOption>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppServiceBackupOptionDefaults().'
+            );
+        }
+
+        if (requestParameters['backupName'] == null) {
+            throw new runtime.RequiredError(
+                'backupName',
+                'Required parameter "backupName" was null or undefined when calling listAppServiceBackupOptionDefaults().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['backupName'] != null) {
+            queryParameters['backupName'] = requestParameters['backupName'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/options/backup-option-defaults`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the effective default option values for an app service backup definition.
+     * List effective backup option defaults
+     */
+    async listAppServiceBackupOptionDefaults(requestParameters: ListAppServiceBackupOptionDefaultsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<BackupOption>> {
+        const response = await this.listAppServiceBackupOptionDefaultsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

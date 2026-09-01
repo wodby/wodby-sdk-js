@@ -23,6 +23,7 @@ import type {
   AppInstanceCICDSettingsInput,
   AppInstanceMaintenanceModeInput,
   AppInstanceSettingsInput,
+  AppInstanceStackReconciliationInput,
   AppInstanceStackUpgradeChangelog,
   AppInstanceStackUpgradeInput,
   NewAppAccessInput,
@@ -92,6 +93,11 @@ export interface PreflightAppAccessRequest {
     newAppInstanceAccessInput: NewAppInstanceAccessInput;
 }
 
+export interface ReconcileAppInstanceStackRequest {
+    id: number;
+    appInstanceStackReconciliationInput: AppInstanceStackReconciliationInput;
+}
+
 export interface RetryAppAccessCleanupRequest {
     id: number;
 }
@@ -134,7 +140,7 @@ export interface UpgradeAppInstanceStackRequest {
  */
 export interface AppInstancesApiInterface {
     /**
-     * Creates external access for the app instance identified by the path.
+     * Creates external access for the app instance identified by the path. An active paid subscription is required.
      * @summary Create app instance access
      * @param {number} id 
      * @param {NewAppAccessInput} newAppAccessInput 
@@ -145,7 +151,7 @@ export interface AppInstancesApiInterface {
     createAppAccessRaw(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessOperationResult>>;
 
     /**
-     * Creates external access for the app instance identified by the path.
+     * Creates external access for the app instance identified by the path. An active paid subscription is required.
      * Create app instance access
      */
     createAppAccess(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult>;
@@ -155,6 +161,7 @@ export interface AppInstancesApiInterface {
      * @summary Create app instance
      * @param {NewAppInstanceInput} newAppInstanceInput 
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      * @memberof AppInstancesApiInterface
      */
@@ -163,6 +170,7 @@ export interface AppInstancesApiInterface {
     /**
      * Creates an app instance and returns the created resource.
      * Create app instance
+     * @deprecated
      */
     createAppInstance(requestParameters: CreateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
 
@@ -188,6 +196,7 @@ export interface AppInstancesApiInterface {
      * @param {number} id 
      * @param {boolean} [force] 
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      * @memberof AppInstancesApiInterface
      */
@@ -196,6 +205,7 @@ export interface AppInstancesApiInterface {
     /**
      * Deletes the app instance and returns the operation result.
      * Delete app instance
+     * @deprecated
      */
     deleteAppInstance(requestParameters: DeleteAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
@@ -204,6 +214,7 @@ export interface AppInstancesApiInterface {
      * @summary Get app instance
      * @param {number} id 
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      * @memberof AppInstancesApiInterface
      */
@@ -212,6 +223,7 @@ export interface AppInstancesApiInterface {
     /**
      * Returns the app instance identified by the request path.
      * Get app instance
+     * @deprecated
      */
     getAppInstance(requestParameters: GetAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
 
@@ -238,6 +250,7 @@ export interface AppInstancesApiInterface {
      * @param {string} instanceName 
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      * @memberof AppInstancesApiInterface
      */
@@ -246,6 +259,7 @@ export interface AppInstancesApiInterface {
     /**
      * Returns the app instance identified by app and instance name.
      * Get app instance by app and instance name
+     * @deprecated
      */
     getAppInstanceByName(requestParameters: GetAppInstanceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
 
@@ -254,6 +268,7 @@ export interface AppInstancesApiInterface {
      * @summary Get app instance CI/CD settings
      * @param {number} id 
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      * @memberof AppInstancesApiInterface
      */
@@ -262,6 +277,7 @@ export interface AppInstancesApiInterface {
     /**
      * Returns the CI and registry integrations used by future app instance builds. Integration ID 0 identifies the built-in Wodby service.
      * Get app instance CI/CD settings
+     * @deprecated
      */
     getAppInstanceCICDSettings(requestParameters: GetAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstanceCICDSettings>;
 
@@ -307,6 +323,7 @@ export interface AppInstancesApiInterface {
      * @param {number} [clusterId] 
      * @param {boolean} [clusterApp] 
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      * @memberof AppInstancesApiInterface
      */
@@ -315,11 +332,12 @@ export interface AppInstancesApiInterface {
     /**
      * Returns app instances matching the request filters.
      * List app instances
+     * @deprecated
      */
     listAppInstances(requestParameters: ListAppInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppInstance>>;
 
     /**
-     * Validates a proposed app-access configuration before an app instance or access resource is created.
+     * Validates a proposed app-access configuration before an app instance or access resource is created. An active paid subscription is required.
      * @summary Preflight app instance access
      * @param {NewAppInstanceAccessInput} newAppInstanceAccessInput 
      * @param {*} [options] Override http request option.
@@ -329,10 +347,29 @@ export interface AppInstancesApiInterface {
     preflightAppAccessRaw(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ValidationResult>>;
 
     /**
-     * Validates a proposed app-access configuration before an app instance or access resource is created.
+     * Validates a proposed app-access configuration before an app instance or access resource is created. An active paid subscription is required.
      * Preflight app instance access
      */
     preflightAppAccess(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidationResult>;
+
+    /**
+     * Reapplies the app instance\'s assigned stack revision using the selected override sections without changing its stack revision.
+     * @summary Reconcile app instance stack
+     * @param {number} id 
+     * @param {AppInstanceStackReconciliationInput} appInstanceStackReconciliationInput 
+     * @param {*} [options] Override http request option.
+     * @deprecated
+     * @throws {RequiredError}
+     * @memberof AppInstancesApiInterface
+     */
+    reconcileAppInstanceStackRaw(requestParameters: ReconcileAppInstanceStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Reapplies the app instance\'s assigned stack revision using the selected override sections without changing its stack revision.
+     * Reconcile app instance stack
+     * @deprecated
+     */
+    reconcileAppInstanceStack(requestParameters: ReconcileAppInstanceStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Retries a failed app-access cleanup and returns its task identifier.
@@ -351,7 +388,7 @@ export interface AppInstancesApiInterface {
     retryAppAccessCleanup(requestParameters: RetryAppAccessCleanupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * Updates an existing app-access configuration and starts its reconciliation task.
+     * Updates an existing app-access configuration and starts its reconciliation task. An active paid subscription is required.
      * @summary Update app access
      * @param {number} id 
      * @param {UpdateAppAccessInput} updateAppAccessInput 
@@ -362,7 +399,7 @@ export interface AppInstancesApiInterface {
     updateAppAccessRaw(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessOperationResult>>;
 
     /**
-     * Updates an existing app-access configuration and starts its reconciliation task.
+     * Updates an existing app-access configuration and starts its reconciliation task. An active paid subscription is required.
      * Update app access
      */
     updateAppAccess(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult>;
@@ -373,6 +410,7 @@ export interface AppInstancesApiInterface {
      * @param {number} id 
      * @param {UpdateTitleRequest} updateTitleRequest 
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      * @memberof AppInstancesApiInterface
      */
@@ -381,6 +419,7 @@ export interface AppInstancesApiInterface {
     /**
      * Updates the app instance and returns the updated resource.
      * Update app instance
+     * @deprecated
      */
     updateAppInstance(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
 
@@ -390,6 +429,7 @@ export interface AppInstancesApiInterface {
      * @param {number} id 
      * @param {AppInstanceCICDSettingsInput} appInstanceCICDSettingsInput 
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      * @memberof AppInstancesApiInterface
      */
@@ -398,6 +438,7 @@ export interface AppInstancesApiInterface {
     /**
      * Updates the CI and registry integrations used by future app instance builds. Integration ID 0 selects the built-in Wodby service.
      * Update app instance CI/CD settings
+     * @deprecated
      */
     updateAppInstanceCICDSettings(requestParameters: UpdateAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstanceCICDSettings>;
 
@@ -407,6 +448,7 @@ export interface AppInstancesApiInterface {
      * @param {number} id 
      * @param {AppInstanceMaintenanceModeInput} appInstanceMaintenanceModeInput 
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      * @memberof AppInstancesApiInterface
      */
@@ -415,6 +457,7 @@ export interface AppInstancesApiInterface {
     /**
      * Enables or disables the fixed maintenance response on all public HTTP routes while application workloads continue running.
      * Update app instance maintenance mode
+     * @deprecated
      */
     updateAppInstanceMaintenanceMode(requestParameters: UpdateAppInstanceMaintenanceModeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
@@ -424,6 +467,7 @@ export interface AppInstancesApiInterface {
      * @param {number} id 
      * @param {AppInstanceSettingsInput} appInstanceSettingsInput 
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      * @memberof AppInstancesApiInterface
      */
@@ -432,6 +476,7 @@ export interface AppInstancesApiInterface {
     /**
      * Updates app instance settings and returns the updated app instance.
      * Update app instance settings
+     * @deprecated
      */
     updateAppInstanceSettings(requestParameters: UpdateAppInstanceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance>;
 
@@ -441,6 +486,7 @@ export interface AppInstancesApiInterface {
      * @param {number} id 
      * @param {AppInstanceStackUpgradeInput} appInstanceStackUpgradeInput 
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      * @memberof AppInstancesApiInterface
      */
@@ -449,6 +495,7 @@ export interface AppInstancesApiInterface {
     /**
      * Upgrades an app instance stack using the selected upgrade sections.
      * Upgrade app instance stack
+     * @deprecated
      */
     upgradeAppInstanceStack(requestParameters: UpgradeAppInstanceStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
@@ -460,7 +507,7 @@ export interface AppInstancesApiInterface {
 export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiInterface {
 
     /**
-     * Creates external access for the app instance identified by the path.
+     * Creates external access for the app instance identified by the path. An active paid subscription is required.
      * Create app instance access
      */
     async createAppAccessRaw(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessOperationResult>> {
@@ -500,7 +547,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
-     * Creates external access for the app instance identified by the path.
+     * Creates external access for the app instance identified by the path. An active paid subscription is required.
      * Create app instance access
      */
     async createAppAccess(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult> {
@@ -511,6 +558,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Creates an app instance and returns the created resource.
      * Create app instance
+     * @deprecated
      */
     async createAppInstanceRaw(requestParameters: CreateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
         if (requestParameters['newAppInstanceInput'] == null) {
@@ -544,6 +592,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Creates an app instance and returns the created resource.
      * Create app instance
+     * @deprecated
      */
     async createAppInstance(requestParameters: CreateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
         const response = await this.createAppInstanceRaw(requestParameters, initOverrides);
@@ -592,6 +641,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Deletes the app instance and returns the operation result.
      * Delete app instance
+     * @deprecated
      */
     async deleteAppInstanceRaw(requestParameters: DeleteAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
         if (requestParameters['id'] == null) {
@@ -626,6 +676,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Deletes the app instance and returns the operation result.
      * Delete app instance
+     * @deprecated
      */
     async deleteAppInstance(requestParameters: DeleteAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.deleteAppInstanceRaw(requestParameters, initOverrides);
@@ -635,6 +686,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Returns the app instance identified by the request path.
      * Get app instance
+     * @deprecated
      */
     async getAppInstanceRaw(requestParameters: GetAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
         if (requestParameters['id'] == null) {
@@ -665,6 +717,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Returns the app instance identified by the request path.
      * Get app instance
+     * @deprecated
      */
     async getAppInstance(requestParameters: GetAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
         const response = await this.getAppInstanceRaw(requestParameters, initOverrides);
@@ -713,6 +766,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Returns the app instance identified by app and instance name.
      * Get app instance by app and instance name
+     * @deprecated
      */
     async getAppInstanceByNameRaw(requestParameters: GetAppInstanceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
         if (requestParameters['appName'] == null) {
@@ -754,6 +808,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Returns the app instance identified by app and instance name.
      * Get app instance by app and instance name
+     * @deprecated
      */
     async getAppInstanceByName(requestParameters: GetAppInstanceByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
         const response = await this.getAppInstanceByNameRaw(requestParameters, initOverrides);
@@ -763,6 +818,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Returns the CI and registry integrations used by future app instance builds. Integration ID 0 identifies the built-in Wodby service.
      * Get app instance CI/CD settings
+     * @deprecated
      */
     async getAppInstanceCICDSettingsRaw(requestParameters: GetAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstanceCICDSettings>> {
         if (requestParameters['id'] == null) {
@@ -793,6 +849,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Returns the CI and registry integrations used by future app instance builds. Integration ID 0 identifies the built-in Wodby service.
      * Get app instance CI/CD settings
+     * @deprecated
      */
     async getAppInstanceCICDSettings(requestParameters: GetAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstanceCICDSettings> {
         const response = await this.getAppInstanceCICDSettingsRaw(requestParameters, initOverrides);
@@ -881,6 +938,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Returns app instances matching the request filters.
      * List app instances
+     * @deprecated
      */
     async listAppInstancesRaw(requestParameters: ListAppInstancesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppInstance>>> {
         const queryParameters: any = {};
@@ -924,6 +982,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Returns app instances matching the request filters.
      * List app instances
+     * @deprecated
      */
     async listAppInstances(requestParameters: ListAppInstancesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppInstance>> {
         const response = await this.listAppInstancesRaw(requestParameters, initOverrides);
@@ -931,7 +990,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
-     * Validates a proposed app-access configuration before an app instance or access resource is created.
+     * Validates a proposed app-access configuration before an app instance or access resource is created. An active paid subscription is required.
      * Preflight app instance access
      */
     async preflightAppAccessRaw(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ValidationResult>> {
@@ -964,11 +1023,62 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
-     * Validates a proposed app-access configuration before an app instance or access resource is created.
+     * Validates a proposed app-access configuration before an app instance or access resource is created. An active paid subscription is required.
      * Preflight app instance access
      */
     async preflightAppAccess(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidationResult> {
         const response = await this.preflightAppAccessRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Reapplies the app instance\'s assigned stack revision using the selected override sections without changing its stack revision.
+     * Reconcile app instance stack
+     * @deprecated
+     */
+    async reconcileAppInstanceStackRaw(requestParameters: ReconcileAppInstanceStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling reconcileAppInstanceStack().'
+            );
+        }
+
+        if (requestParameters['appInstanceStackReconciliationInput'] == null) {
+            throw new runtime.RequiredError(
+                'appInstanceStackReconciliationInput',
+                'Required parameter "appInstanceStackReconciliationInput" was null or undefined when calling reconcileAppInstanceStack().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-instances/{id}/actions/reconcile-stack`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['appInstanceStackReconciliationInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Reapplies the app instance\'s assigned stack revision using the selected override sections without changing its stack revision.
+     * Reconcile app instance stack
+     * @deprecated
+     */
+    async reconcileAppInstanceStack(requestParameters: ReconcileAppInstanceStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.reconcileAppInstanceStackRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1012,7 +1122,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
-     * Updates an existing app-access configuration and starts its reconciliation task.
+     * Updates an existing app-access configuration and starts its reconciliation task. An active paid subscription is required.
      * Update app access
      */
     async updateAppAccessRaw(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessOperationResult>> {
@@ -1052,7 +1162,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     }
 
     /**
-     * Updates an existing app-access configuration and starts its reconciliation task.
+     * Updates an existing app-access configuration and starts its reconciliation task. An active paid subscription is required.
      * Update app access
      */
     async updateAppAccess(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult> {
@@ -1063,6 +1173,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Updates the app instance and returns the updated resource.
      * Update app instance
+     * @deprecated
      */
     async updateAppInstanceRaw(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
         if (requestParameters['id'] == null) {
@@ -1103,6 +1214,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Updates the app instance and returns the updated resource.
      * Update app instance
+     * @deprecated
      */
     async updateAppInstance(requestParameters: UpdateAppInstanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
         const response = await this.updateAppInstanceRaw(requestParameters, initOverrides);
@@ -1112,6 +1224,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Updates the CI and registry integrations used by future app instance builds. Integration ID 0 selects the built-in Wodby service.
      * Update app instance CI/CD settings
+     * @deprecated
      */
     async updateAppInstanceCICDSettingsRaw(requestParameters: UpdateAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstanceCICDSettings>> {
         if (requestParameters['id'] == null) {
@@ -1152,6 +1265,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Updates the CI and registry integrations used by future app instance builds. Integration ID 0 selects the built-in Wodby service.
      * Update app instance CI/CD settings
+     * @deprecated
      */
     async updateAppInstanceCICDSettings(requestParameters: UpdateAppInstanceCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstanceCICDSettings> {
         const response = await this.updateAppInstanceCICDSettingsRaw(requestParameters, initOverrides);
@@ -1161,6 +1275,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Enables or disables the fixed maintenance response on all public HTTP routes while application workloads continue running.
      * Update app instance maintenance mode
+     * @deprecated
      */
     async updateAppInstanceMaintenanceModeRaw(requestParameters: UpdateAppInstanceMaintenanceModeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
         if (requestParameters['id'] == null) {
@@ -1201,6 +1316,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Enables or disables the fixed maintenance response on all public HTTP routes while application workloads continue running.
      * Update app instance maintenance mode
+     * @deprecated
      */
     async updateAppInstanceMaintenanceMode(requestParameters: UpdateAppInstanceMaintenanceModeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.updateAppInstanceMaintenanceModeRaw(requestParameters, initOverrides);
@@ -1210,6 +1326,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Updates app instance settings and returns the updated app instance.
      * Update app instance settings
+     * @deprecated
      */
     async updateAppInstanceSettingsRaw(requestParameters: UpdateAppInstanceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppInstance>> {
         if (requestParameters['id'] == null) {
@@ -1250,6 +1367,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Updates app instance settings and returns the updated app instance.
      * Update app instance settings
+     * @deprecated
      */
     async updateAppInstanceSettings(requestParameters: UpdateAppInstanceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppInstance> {
         const response = await this.updateAppInstanceSettingsRaw(requestParameters, initOverrides);
@@ -1259,6 +1377,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Upgrades an app instance stack using the selected upgrade sections.
      * Upgrade app instance stack
+     * @deprecated
      */
     async upgradeAppInstanceStackRaw(requestParameters: UpgradeAppInstanceStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
         if (requestParameters['id'] == null) {
@@ -1299,6 +1418,7 @@ export class AppInstancesApi extends runtime.BaseAPI implements AppInstancesApiI
     /**
      * Upgrades an app instance stack using the selected upgrade sections.
      * Upgrade app instance stack
+     * @deprecated
      */
     async upgradeAppInstanceStack(requestParameters: UpgradeAppInstanceStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.upgradeAppInstanceStackRaw(requestParameters, initOverrides);

@@ -19,6 +19,7 @@ import type {
   Integration,
   IntegrationConfigurationResult,
   IntegrationEnvironmentPolicyInput,
+  IntegrationProviderRevisionUpgrade,
   IntegrationScope,
   KubeVersion,
   NewIntegrationInput,
@@ -29,6 +30,7 @@ import type {
   ResolveIntegrationResult,
   SearchIntegrationsInput,
   UpdateIntegrationInput,
+  UpgradeIntegrationProviderRevisionInput,
   ValidateAppAccessHostnameInput,
   ValidationResult,
 } from '../models/index';
@@ -55,6 +57,10 @@ export interface GetIntegrationRequest {
 }
 
 export interface GetIntegrationKubeSettingsRequest {
+    id: number;
+}
+
+export interface GetIntegrationProviderRevisionUpgradeRequest {
     id: number;
 }
 
@@ -114,6 +120,7 @@ export interface ListIntegrationsRequest {
     projectIds?: string;
     labels?: string;
     envId?: number;
+    envType?: ListIntegrationsEnvTypeEnum;
 }
 
 export interface ResolveIntegrationRequest {
@@ -136,6 +143,11 @@ export interface UpdateIntegrationRequest {
 export interface UpdateIntegrationEnvironmentPolicyRequest {
     id: number;
     integrationEnvironmentPolicyInput: IntegrationEnvironmentPolicyInput;
+}
+
+export interface UpgradeIntegrationProviderRevisionRequest {
+    id: number;
+    upgradeIntegrationProviderRevisionInput: UpgradeIntegrationProviderRevisionInput;
 }
 
 export interface ValidateAppAccessHostnameRequest {
@@ -246,6 +258,22 @@ export interface IntegrationsApiInterface {
      * Get Kubernetes settings
      */
     getIntegrationKubeSettings(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }>;
+
+    /**
+     * Returns the compatibility decision and revision details for upgrading an integration.
+     * @summary Preview provider revision upgrade
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    getIntegrationProviderRevisionUpgradeRaw(requestParameters: GetIntegrationProviderRevisionUpgradeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IntegrationProviderRevisionUpgrade>>;
+
+    /**
+     * Returns the compatibility decision and revision details for upgrading an integration.
+     * Preview provider revision upgrade
+     */
+    getIntegrationProviderRevisionUpgrade(requestParameters: GetIntegrationProviderRevisionUpgradeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IntegrationProviderRevisionUpgrade>;
 
     /**
      * Returns whether a file exists at an exact repository ref through the selected Git integration.
@@ -436,7 +464,8 @@ export interface IntegrationsApiInterface {
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
      * @param {string} [labels] Comma-separated labels
-     * @param {number} [envId] Return only integrations allowed in this environment
+     * @param {number} [envId] Legacy environment entity filter. Use envType.
+     * @param {'prod' | 'test' | 'staging' | 'dev' | 'feature'} [envType] Return only integrations allowed for this fixed environment type.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof IntegrationsApiInterface
@@ -530,6 +559,23 @@ export interface IntegrationsApiInterface {
      * Update integration environment policy
      */
     updateIntegrationEnvironmentPolicy(requestParameters: UpdateIntegrationEnvironmentPolicyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
+
+    /**
+     * Upgrades an integration to its eligible provider revision and optionally drops fields removed by the target contract.
+     * @summary Upgrade integration provider revision
+     * @param {number} id 
+     * @param {UpgradeIntegrationProviderRevisionInput} upgradeIntegrationProviderRevisionInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    upgradeIntegrationProviderRevisionRaw(requestParameters: UpgradeIntegrationProviderRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Upgrades an integration to its eligible provider revision and optionally drops fields removed by the target contract.
+     * Upgrade integration provider revision
+     */
+    upgradeIntegrationProviderRevision(requestParameters: UpgradeIntegrationProviderRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Validates an app-access hostname against the provider settings of the integration.
@@ -799,6 +845,45 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
      */
     async getIntegrationKubeSettings(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }> {
         const response = await this.getIntegrationKubeSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the compatibility decision and revision details for upgrading an integration.
+     * Preview provider revision upgrade
+     */
+    async getIntegrationProviderRevisionUpgradeRaw(requestParameters: GetIntegrationProviderRevisionUpgradeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IntegrationProviderRevisionUpgrade>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getIntegrationProviderRevisionUpgrade().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integration-provider-revision-upgrades/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the compatibility decision and revision details for upgrading an integration.
+     * Preview provider revision upgrade
+     */
+    async getIntegrationProviderRevisionUpgrade(requestParameters: GetIntegrationProviderRevisionUpgradeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IntegrationProviderRevisionUpgrade> {
+        const response = await this.getIntegrationProviderRevisionUpgradeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1331,6 +1416,10 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
             queryParameters['envId'] = requestParameters['envId'];
         }
 
+        if (requestParameters['envType'] != null) {
+            queryParameters['envType'] = requestParameters['envType'];
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
@@ -1578,6 +1667,55 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Upgrades an integration to its eligible provider revision and optionally drops fields removed by the target contract.
+     * Upgrade integration provider revision
+     */
+    async upgradeIntegrationProviderRevisionRaw(requestParameters: UpgradeIntegrationProviderRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling upgradeIntegrationProviderRevision().'
+            );
+        }
+
+        if (requestParameters['upgradeIntegrationProviderRevisionInput'] == null) {
+            throw new runtime.RequiredError(
+                'upgradeIntegrationProviderRevisionInput',
+                'Required parameter "upgradeIntegrationProviderRevisionInput" was null or undefined when calling upgradeIntegrationProviderRevision().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/{id}/actions/upgrade-provider-revision`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['upgradeIntegrationProviderRevisionInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Upgrades an integration to its eligible provider revision and optionally drops fields removed by the target contract.
+     * Upgrade integration provider revision
+     */
+    async upgradeIntegrationProviderRevision(requestParameters: UpgradeIntegrationProviderRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.upgradeIntegrationProviderRevisionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Validates an app-access hostname against the provider settings of the integration.
      * Validate an app-access hostname
      */
@@ -1627,3 +1765,15 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
 }
+
+/**
+ * @export
+ */
+export const ListIntegrationsEnvTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type ListIntegrationsEnvTypeEnum = typeof ListIntegrationsEnvTypeEnum[keyof typeof ListIntegrationsEnvTypeEnum];

@@ -16,8 +16,10 @@
 import * as runtime from '../runtime';
 import type {
   Cluster,
+  ClusterEnvironmentPolicyInput,
   ClusterInfraAppUpgradeChangelog,
   ClusterSettingsInput,
+  KubernetesVersionUpgradePlan,
   NewClusterInput,
   OperationResult,
   ProblemDetails,
@@ -47,15 +49,25 @@ export interface GetClusterInfraAppUpgradeChangelogRequest {
     appInstanceId?: number;
 }
 
+export interface GetKubernetesVersionUpgradePlanRequest {
+    id: number;
+}
+
 export interface ListClustersRequest {
     orgId?: number;
     projectIds?: string;
     integrationId?: number;
+    environmentId?: number;
 }
 
 export interface UpdateClusterRequest {
     id: number;
     updateTitleRequest: UpdateTitleRequest;
+}
+
+export interface UpdateClusterEnvironmentPolicyRequest {
+    id: number;
+    clusterEnvironmentPolicyInput: ClusterEnvironmentPolicyInput;
 }
 
 export interface UpdateClusterSettingsRequest {
@@ -162,11 +174,28 @@ export interface ClustersApiInterface {
     getClusterInfraAppUpgradeChangelog(requestParameters: GetClusterInfraAppUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterInfraAppUpgradeChangelog>>;
 
     /**
+     * Returns supported Kubernetes upgrade targets, blockers, and warnings for a cluster.
+     * @summary Get Kubernetes version upgrade plan
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    getKubernetesVersionUpgradePlanRaw(requestParameters: GetKubernetesVersionUpgradePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<KubernetesVersionUpgradePlan>>;
+
+    /**
+     * Returns supported Kubernetes upgrade targets, blockers, and warnings for a cluster.
+     * Get Kubernetes version upgrade plan
+     */
+    getKubernetesVersionUpgradePlan(requestParameters: GetKubernetesVersionUpgradePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<KubernetesVersionUpgradePlan>;
+
+    /**
      * Returns clusters matching the request filters.
      * @summary List clusters
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
      * @param {number} [integrationId] 
+     * @param {number} [environmentId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ClustersApiInterface
@@ -195,6 +224,23 @@ export interface ClustersApiInterface {
      * Update cluster
      */
     updateCluster(requestParameters: UpdateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
+
+    /**
+     * Updates the cluster\'s environment type and allowed environment-type scope. Scope reductions that conflict with existing non-infrastructure app environments are rejected.
+     * @summary Update cluster environment policy
+     * @param {number} id 
+     * @param {ClusterEnvironmentPolicyInput} clusterEnvironmentPolicyInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    updateClusterEnvironmentPolicyRaw(requestParameters: UpdateClusterEnvironmentPolicyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
+
+    /**
+     * Updates the cluster\'s environment type and allowed environment-type scope. Scope reductions that conflict with existing non-infrastructure app environments are rejected.
+     * Update cluster environment policy
+     */
+    updateClusterEnvironmentPolicy(requestParameters: UpdateClusterEnvironmentPolicyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
 
     /**
      * Updates cluster settings and returns the updated cluster.
@@ -463,6 +509,45 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Returns supported Kubernetes upgrade targets, blockers, and warnings for a cluster.
+     * Get Kubernetes version upgrade plan
+     */
+    async getKubernetesVersionUpgradePlanRaw(requestParameters: GetKubernetesVersionUpgradePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<KubernetesVersionUpgradePlan>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getKubernetesVersionUpgradePlan().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/cluster-kubernetes-version-upgrade-plans/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns supported Kubernetes upgrade targets, blockers, and warnings for a cluster.
+     * Get Kubernetes version upgrade plan
+     */
+    async getKubernetesVersionUpgradePlan(requestParameters: GetKubernetesVersionUpgradePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<KubernetesVersionUpgradePlan> {
+        const response = await this.getKubernetesVersionUpgradePlanRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns clusters matching the request filters.
      * List clusters
      */
@@ -479,6 +564,10 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
 
         if (requestParameters['integrationId'] != null) {
             queryParameters['integrationId'] = requestParameters['integrationId'];
+        }
+
+        if (requestParameters['environmentId'] != null) {
+            queryParameters['environmentId'] = requestParameters['environmentId'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -552,6 +641,55 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async updateCluster(requestParameters: UpdateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
         const response = await this.updateClusterRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates the cluster\'s environment type and allowed environment-type scope. Scope reductions that conflict with existing non-infrastructure app environments are rejected.
+     * Update cluster environment policy
+     */
+    async updateClusterEnvironmentPolicyRaw(requestParameters: UpdateClusterEnvironmentPolicyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateClusterEnvironmentPolicy().'
+            );
+        }
+
+        if (requestParameters['clusterEnvironmentPolicyInput'] == null) {
+            throw new runtime.RequiredError(
+                'clusterEnvironmentPolicyInput',
+                'Required parameter "clusterEnvironmentPolicyInput" was null or undefined when calling updateClusterEnvironmentPolicy().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/environment-policy/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['clusterEnvironmentPolicyInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Updates the cluster\'s environment type and allowed environment-type scope. Scope reductions that conflict with existing non-infrastructure app environments are rejected.
+     * Update cluster environment policy
+     */
+    async updateClusterEnvironmentPolicy(requestParameters: UpdateClusterEnvironmentPolicyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
+        const response = await this.updateClusterEnvironmentPolicyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

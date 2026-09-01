@@ -646,7 +646,7 @@ export interface AppAuth {
      */
     appServiceIds: Array<number>;
     /**
-     * Single protected app service. Null when the entry protects several services or the whole app instance.
+     * Single protected app service. Null when the entry protects several services or the whole app environment.
      * @type {number}
      * @memberof AppAuth
      * @deprecated
@@ -913,6 +913,12 @@ export interface AppDeployment {
     skipRollback: boolean;
     /**
      * 
+     * @type {boolean}
+     * @memberof AppDeployment
+     */
+    canCancel: boolean;
+    /**
+     * 
      * @type {number}
      * @memberof AppDeployment
      */
@@ -923,6 +929,18 @@ export interface AppDeployment {
      * @memberof AppDeployment
      */
     builds: Array<AppBuild>;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppDeployment
+     */
+    preparationTaskId?: number | null;
+    /**
+     * 
+     * @type {Task}
+     * @memberof AppDeployment
+     */
+    preparationTask?: Task | null;
     /**
      * 
      * @type {number}
@@ -1030,6 +1048,486 @@ export interface AppDeploymentsResponse {
      * @memberof AppDeploymentsResponse
      */
     nextPage?: number | null;
+}
+/**
+ * 
+ * @export
+ * @interface AppEnvironment
+ */
+export interface AppEnvironment {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironment
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironment
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironment
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironment
+     */
+    environmentType: AppEnvironmentEnvironmentTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironment
+     */
+    status: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironment
+     */
+    outdated: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironment
+     */
+    mainDomain?: string | null;
+    /**
+     * 
+     * @type {AppEnvironmentMainRouteCert}
+     * @memberof AppEnvironment
+     */
+    mainRouteCert: AppEnvironmentMainRouteCert | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironment
+     */
+    appId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironment
+     */
+    clusterId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironment
+     */
+    stackId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironment
+     */
+    stackRevId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironment
+     */
+    stackName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironment
+     */
+    stackTitle: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironment
+     */
+    stackIcon: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironment
+     */
+    stackRevNumber: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironment
+     */
+    stackVersion: string;
+    /**
+     * 
+     * @type {AppAccess}
+     * @memberof AppEnvironment
+     */
+    access?: AppAccess | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironment
+     */
+    routingMode: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironment
+     */
+    routingPending: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironment
+     */
+    maintenanceMode: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironment
+     */
+    maintenanceModeActive: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironment
+     */
+    configurationReady: boolean;
+    /**
+     * 
+     * @type {Array<AppServiceConfigurationIssue>}
+     * @memberof AppEnvironment
+     */
+    configurationIssues: Array<AppServiceConfigurationIssue>;
+    /**
+     * 
+     * @type {AppEnvironmentSettings}
+     * @memberof AppEnvironment
+     */
+    settings?: AppEnvironmentSettings;
+    /**
+     * 
+     * @type {AppEnvironmentHealth}
+     * @memberof AppEnvironment
+     */
+    health: AppEnvironmentHealth;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironment
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironment
+     */
+    updatedAt: string;
+}
+
+
+/**
+ * @export
+ */
+export const AppEnvironmentEnvironmentTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type AppEnvironmentEnvironmentTypeEnum = typeof AppEnvironmentEnvironmentTypeEnum[keyof typeof AppEnvironmentEnvironmentTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentCICDSettings
+ */
+export interface AppEnvironmentCICDSettings {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentCICDSettings
+     */
+    appEnvironmentId: number;
+    /**
+     * Effective CI integration ID. Zero selects the built-in Wodby CI service.
+     * @type {number}
+     * @memberof AppEnvironmentCICDSettings
+     */
+    ciIntegrationId: number;
+    /**
+     * Effective registry integration ID. Zero selects the built-in Wodby registry service.
+     * @type {number}
+     * @memberof AppEnvironmentCICDSettings
+     */
+    registryIntegrationId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentCICDSettings
+     */
+    registryRepository: string;
+}
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentCICDSettingsInput
+ */
+export interface AppEnvironmentCICDSettingsInput {
+    /**
+     * CI integration ID. Set to zero to use the built-in Wodby CI service.
+     * @type {number}
+     * @memberof AppEnvironmentCICDSettingsInput
+     */
+    ciIntegrationId: number;
+    /**
+     * Registry integration ID. Set to zero to use the built-in Wodby registry service.
+     * @type {number}
+     * @memberof AppEnvironmentCICDSettingsInput
+     */
+    registryIntegrationId: number;
+}
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentHealth
+ */
+export interface AppEnvironmentHealth {
+    /**
+     * 
+     * @type {AppInstanceCronHealth}
+     * @memberof AppEnvironmentHealth
+     */
+    cron: AppInstanceCronHealth;
+    /**
+     * 
+     * @type {AppInstanceBackupHealth}
+     * @memberof AppEnvironmentHealth
+     */
+    backups: AppInstanceBackupHealth;
+}
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentMainRouteCert
+ */
+export interface AppEnvironmentMainRouteCert {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentMainRouteCert
+     */
+    issuer: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentMainRouteCert
+     */
+    custom: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentMaintenanceModeInput
+ */
+export interface AppEnvironmentMaintenanceModeInput {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentMaintenanceModeInput
+     */
+    enabled: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentSettings
+ */
+export interface AppEnvironmentSettings {
+    /**
+     * 
+     * @type {AppInstanceAutoStackUpgradeSettings}
+     * @memberof AppEnvironmentSettings
+     */
+    autoStackUpgrade?: AppInstanceAutoStackUpgradeSettings;
+}
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentSettingsInput
+ */
+export interface AppEnvironmentSettingsInput {
+    /**
+     * 
+     * @type {AppInstanceAutoStackUpgradeSettingsInput}
+     * @memberof AppEnvironmentSettingsInput
+     */
+    autoStackUpgrade?: AppInstanceAutoStackUpgradeSettingsInput;
+}
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentStackReconciliationInput
+ */
+export interface AppEnvironmentStackReconciliationInput {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackReconciliationInput
+     */
+    versions: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackReconciliationInput
+     */
+    replicas: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackReconciliationInput
+     */
+    resources: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackReconciliationInput
+     */
+    integrations: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackReconciliationInput
+     */
+    services: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackReconciliationInput
+     */
+    settings: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackReconciliationInput
+     */
+    links: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackReconciliationInput
+     */
+    tokens: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackReconciliationInput
+     */
+    configs: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackReconciliationInput
+     */
+    cron: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackReconciliationInput
+     */
+    volumes: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackReconciliationInput
+     */
+    main: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentStackUpgradeInput
+ */
+export interface AppEnvironmentStackUpgradeInput {
+    /**
+     * Build affected services when required and deploy the upgraded stack configuration.
+     * @type {boolean}
+     * @memberof AppEnvironmentStackUpgradeInput
+     */
+    deployment?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackUpgradeInput
+     */
+    versions: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackUpgradeInput
+     */
+    replicas: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackUpgradeInput
+     */
+    resources: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackUpgradeInput
+     */
+    integrations: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackUpgradeInput
+     */
+    services: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackUpgradeInput
+     */
+    settings: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackUpgradeInput
+     */
+    links: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackUpgradeInput
+     */
+    tokens: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackUpgradeInput
+     */
+    configs: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackUpgradeInput
+     */
+    cron: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackUpgradeInput
+     */
+    volumes: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentStackUpgradeInput
+     */
+    main: boolean;
 }
 /**
  * 
@@ -1424,6 +1922,85 @@ export interface AppInstanceSettingsInput {
 /**
  * 
  * @export
+ * @interface AppInstanceStackReconciliationInput
+ */
+export interface AppInstanceStackReconciliationInput {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstanceStackReconciliationInput
+     */
+    versions: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstanceStackReconciliationInput
+     */
+    replicas: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstanceStackReconciliationInput
+     */
+    resources: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstanceStackReconciliationInput
+     */
+    integrations: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstanceStackReconciliationInput
+     */
+    services: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstanceStackReconciliationInput
+     */
+    settings: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstanceStackReconciliationInput
+     */
+    links: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstanceStackReconciliationInput
+     */
+    tokens: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstanceStackReconciliationInput
+     */
+    configs: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstanceStackReconciliationInput
+     */
+    cron: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstanceStackReconciliationInput
+     */
+    volumes: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppInstanceStackReconciliationInput
+     */
+    main: boolean;
+}
+/**
+ * 
+ * @export
  * @interface AppInstanceStackUpgradeChangelog
  */
 export interface AppInstanceStackUpgradeChangelog {
@@ -1464,6 +2041,12 @@ export interface AppInstanceStackUpgradeChangelog {
  * @interface AppInstanceStackUpgradeInput
  */
 export interface AppInstanceStackUpgradeInput {
+    /**
+     * Build affected services when required and deploy the upgraded stack configuration.
+     * @type {boolean}
+     * @memberof AppInstanceStackUpgradeInput
+     */
+    deployment?: boolean;
     /**
      * 
      * @type {boolean}
@@ -2008,9 +2591,23 @@ export const AppRouteSettingName = {
     RequestBodySize: 'REQUEST_BODY_SIZE',
     SessionAffinity: 'SESSION_AFFINITY',
     PathRewrite: 'PATH_REWRITE',
-    Hsts: 'HSTS'
+    Hsts: 'HSTS',
+    RequestTimeout: 'REQUEST_TIMEOUT',
+    BackendRequestTimeout: 'BACKEND_REQUEST_TIMEOUT'
 } as const;
 export type AppRouteSettingName = typeof AppRouteSettingName[keyof typeof AppRouteSettingName];
+
+
+/**
+ * 
+ * @export
+ */
+export const AppRouteSettingSource = {
+    AppDefault: 'APP_DEFAULT',
+    ServiceDefault: 'SERVICE_DEFAULT',
+    RouteOverride: 'ROUTE_OVERRIDE'
+} as const;
+export type AppRouteSettingSource = typeof AppRouteSettingSource[keyof typeof AppRouteSettingSource];
 
 /**
  * 
@@ -2135,6 +2732,12 @@ export interface AppService {
     needsRedeploy: boolean;
     /**
      * 
+     * @type {string}
+     * @memberof AppService
+     */
+    stackState: AppServiceStackStateEnum;
+    /**
+     * 
      * @type {boolean}
      * @memberof AppService
      */
@@ -2183,6 +2786,12 @@ export interface AppService {
     parentAppServiceId?: number | null;
     /**
      * 
+     * @type {ServiceDeploymentConfiguration}
+     * @memberof AppService
+     */
+    deploymentConfiguration: ServiceDeploymentConfiguration;
+    /**
+     * 
      * @type {string}
      * @memberof AppService
      */
@@ -2195,6 +2804,16 @@ export interface AppService {
     updatedAt: string;
 }
 
+
+/**
+ * @export
+ */
+export const AppServiceStackStateEnum = {
+    Current: 'current',
+    NeedsRebuild: 'needs_rebuild',
+    NeedsRedeploy: 'needs_redeploy'
+} as const;
+export type AppServiceStackStateEnum = typeof AppServiceStackStateEnum[keyof typeof AppServiceStackStateEnum];
 
 /**
  * @export
@@ -2445,17 +3064,11 @@ export interface AppServiceBuildConfig {
      */
     dockerignore?: string | null;
     /**
-     * Build context subdirectory to copy, relative to the CI --from path. Empty means the whole context.
+     * Resolved subdirectory this build copies, applied under both the CI --from and --to paths. Empty means the whole context.
      * @type {string}
      * @memberof AppServiceBuildConfig
      */
-    copyFrom: string;
-    /**
-     * Image subdirectory to copy into, relative to the CI --to path. Empty means the image working directory.
-     * @type {string}
-     * @memberof AppServiceBuildConfig
-     */
-    copyTo: string;
+    copySubdir: string;
     /**
      * 
      * @type {Array<AppServiceBuildArg>}
@@ -3186,6 +3799,12 @@ export interface AppServiceInput {
      * @memberof AppServiceInput
      */
     buildSource?: BuildSourceInput;
+    /**
+     * 
+     * @type {ServiceDeploymentConfigurationInput}
+     * @memberof AppServiceInput
+     */
+    deployment?: ServiceDeploymentConfigurationInput;
 }
 /**
  * 
@@ -3763,6 +4382,18 @@ export interface Backup {
      */
     databaseDbId?: number | null;
     /**
+     * 
+     * @type {number}
+     * @memberof Backup
+     */
+    backupPresetId?: number | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Backup
+     */
+    manual: boolean;
+    /**
      * Storage integration that owns the backup. Null identifies Wodby's built-in blob storage.
      * @type {number}
      * @memberof Backup
@@ -3774,6 +4405,12 @@ export interface Backup {
      * @memberof Backup
      */
     taskId?: number | null;
+    /**
+     * Final stored archive size in bytes. Null when the size has not been recorded.
+     * @type {number}
+     * @memberof Backup
+     */
+    size?: number | null;
     /**
      * 
      * @type {Array<BackupOption>}
@@ -3874,6 +4511,18 @@ export interface BackupPreset {
     envId?: number | null;
     /**
      * 
+     * @type {Array<string>}
+     * @memberof BackupPreset
+     */
+    envTypes: Array<BackupPresetEnvTypesEnum>;
+    /**
+     * 
+     * @type {string}
+     * @memberof BackupPreset
+     */
+    backupCategory: BackupPresetBackupCategoryEnum;
+    /**
+     * 
      * @type {string}
      * @memberof BackupPreset
      */
@@ -3956,6 +4605,55 @@ export interface BackupPreset {
      * @memberof BackupPreset
      */
     updatedAt: string;
+}
+
+
+/**
+ * @export
+ */
+export const BackupPresetEnvTypesEnum = {
+    Dev: 'dev',
+    Feature: 'feature',
+    Test: 'test',
+    Staging: 'staging',
+    Prod: 'prod'
+} as const;
+export type BackupPresetEnvTypesEnum = typeof BackupPresetEnvTypesEnum[keyof typeof BackupPresetEnvTypesEnum];
+
+/**
+ * @export
+ */
+export const BackupPresetBackupCategoryEnum = {
+    Any: 'any',
+    Files: 'files',
+    Database: 'database'
+} as const;
+export type BackupPresetBackupCategoryEnum = typeof BackupPresetBackupCategoryEnum[keyof typeof BackupPresetBackupCategoryEnum];
+
+/**
+ * 
+ * @export
+ * @interface BackupsResponse
+ */
+export interface BackupsResponse {
+    /**
+     * 
+     * @type {Array<Backup>}
+     * @memberof BackupsResponse
+     */
+    items: Array<Backup>;
+    /**
+     * 
+     * @type {number}
+     * @memberof BackupsResponse
+     */
+    totalCount: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof BackupsResponse
+     */
+    nextPage?: number | null;
 }
 
 /**
@@ -4264,6 +4962,38 @@ export interface Cluster {
      */
     integrationId?: number | null;
     /**
+     * Legacy internal environment entity ID. Use envType.
+     * @type {number}
+     * @memberof Cluster
+     * @deprecated
+     */
+    envId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Cluster
+     */
+    envType: ClusterEnvTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof Cluster
+     */
+    envScope: ClusterEnvScopeEnum;
+    /**
+     * Legacy internal environment entity IDs. Use allowedEnvTypes.
+     * @type {Array<number>}
+     * @memberof Cluster
+     * @deprecated
+     */
+    allowedEnvIds: Array<number>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Cluster
+     */
+    allowedEnvTypes: Array<ClusterAllowedEnvTypesEnum>;
+    /**
      * 
      * @type {number}
      * @memberof Cluster
@@ -4319,6 +5049,39 @@ export interface Cluster {
     updatedAt: string;
 }
 
+
+/**
+ * @export
+ */
+export const ClusterEnvTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type ClusterEnvTypeEnum = typeof ClusterEnvTypeEnum[keyof typeof ClusterEnvTypeEnum];
+
+/**
+ * @export
+ */
+export const ClusterEnvScopeEnum = {
+    All: 'all',
+    Selected: 'selected'
+} as const;
+export type ClusterEnvScopeEnum = typeof ClusterEnvScopeEnum[keyof typeof ClusterEnvScopeEnum];
+
+/**
+ * @export
+ */
+export const ClusterAllowedEnvTypesEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type ClusterAllowedEnvTypesEnum = typeof ClusterAllowedEnvTypesEnum[keyof typeof ClusterAllowedEnvTypesEnum];
 
 /**
  * @export
@@ -4510,6 +5273,80 @@ export interface ClusterCapabilities {
      */
     redirectRoutes: boolean;
 }
+/**
+ * Use envType and allowedEnvTypes. Legacy ID fields remain accepted but cannot be mixed with their type equivalents.
+ * @export
+ * @interface ClusterEnvironmentPolicyInput
+ */
+export interface ClusterEnvironmentPolicyInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof ClusterEnvironmentPolicyInput
+     * @deprecated
+     */
+    envId?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterEnvironmentPolicyInput
+     */
+    envType?: ClusterEnvironmentPolicyInputEnvTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterEnvironmentPolicyInput
+     */
+    scope: ClusterEnvironmentPolicyInputScopeEnum;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof ClusterEnvironmentPolicyInput
+     * @deprecated
+     */
+    allowedEnvIds?: Array<number>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ClusterEnvironmentPolicyInput
+     */
+    allowedEnvTypes?: Array<ClusterEnvironmentPolicyInputAllowedEnvTypesEnum>;
+}
+
+
+/**
+ * @export
+ */
+export const ClusterEnvironmentPolicyInputEnvTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type ClusterEnvironmentPolicyInputEnvTypeEnum = typeof ClusterEnvironmentPolicyInputEnvTypeEnum[keyof typeof ClusterEnvironmentPolicyInputEnvTypeEnum];
+
+/**
+ * @export
+ */
+export const ClusterEnvironmentPolicyInputScopeEnum = {
+    All: 'all',
+    Selected: 'selected'
+} as const;
+export type ClusterEnvironmentPolicyInputScopeEnum = typeof ClusterEnvironmentPolicyInputScopeEnum[keyof typeof ClusterEnvironmentPolicyInputScopeEnum];
+
+/**
+ * @export
+ */
+export const ClusterEnvironmentPolicyInputAllowedEnvTypesEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type ClusterEnvironmentPolicyInputAllowedEnvTypesEnum = typeof ClusterEnvironmentPolicyInputAllowedEnvTypesEnum[keyof typeof ClusterEnvironmentPolicyInputAllowedEnvTypesEnum];
+
 /**
  * 
  * @export
@@ -4826,11 +5663,18 @@ export interface Database {
      */
     appServiceId?: number | null;
     /**
-     * 
+     * Legacy internal environment entity ID. Use envType.
      * @type {number}
      * @memberof Database
+     * @deprecated
      */
     envId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Database
+     */
+    envType: DatabaseEnvTypeEnum;
     /**
      * 
      * @type {number}
@@ -4850,6 +5694,20 @@ export interface Database {
      */
     updatedAt: string;
 }
+
+
+/**
+ * @export
+ */
+export const DatabaseEnvTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type DatabaseEnvTypeEnum = typeof DatabaseEnvTypeEnum[keyof typeof DatabaseEnvTypeEnum];
+
 /**
  * 
  * @export
@@ -5116,6 +5974,33 @@ export interface DuplicateStackRequest {
      */
     settings?: CopyStackSettingsInput;
 }
+/**
+ * 
+ * @export
+ * @interface EffectiveAppRouteSetting
+ */
+export interface EffectiveAppRouteSetting {
+    /**
+     * 
+     * @type {AppRouteSettingName}
+     * @memberof EffectiveAppRouteSetting
+     */
+    name: AppRouteSettingName;
+    /**
+     * 
+     * @type {string}
+     * @memberof EffectiveAppRouteSetting
+     */
+    value: string;
+    /**
+     * 
+     * @type {AppRouteSettingSource}
+     * @memberof EffectiveAppRouteSetting
+     */
+    source: AppRouteSettingSource;
+}
+
+
 /**
  * 
  * @export
@@ -6261,6 +7146,12 @@ export interface Integration {
     auth?: string | null;
     /**
      * 
+     * @type {boolean}
+     * @memberof Integration
+     */
+    outdated: boolean;
+    /**
+     * 
      * @type {number}
      * @memberof Integration
      */
@@ -6272,9 +7163,10 @@ export interface Integration {
      */
     orgId: number;
     /**
-     * 
+     * Legacy internal environment entity ID. Use primaryEnvType.
      * @type {number}
      * @memberof Integration
+     * @deprecated
      */
     primaryEnvId?: number | null;
     /**
@@ -6282,13 +7174,26 @@ export interface Integration {
      * @type {string}
      * @memberof Integration
      */
-    envScope: IntegrationEnvScopeEnum;
+    primaryEnvType?: IntegrationPrimaryEnvTypeEnum | null;
     /**
      * 
-     * @type {Array<number>}
+     * @type {string}
      * @memberof Integration
      */
+    envScope: IntegrationEnvScopeEnum;
+    /**
+     * Legacy internal environment entity IDs. Use allowedEnvTypes.
+     * @type {Array<number>}
+     * @memberof Integration
+     * @deprecated
+     */
     allowedEnvIds: Array<number>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Integration
+     */
+    allowedEnvTypes: Array<IntegrationAllowedEnvTypesEnum>;
     /**
      * 
      * @type {string}
@@ -6307,11 +7212,35 @@ export interface Integration {
 /**
  * @export
  */
+export const IntegrationPrimaryEnvTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type IntegrationPrimaryEnvTypeEnum = typeof IntegrationPrimaryEnvTypeEnum[keyof typeof IntegrationPrimaryEnvTypeEnum];
+
+/**
+ * @export
+ */
 export const IntegrationEnvScopeEnum = {
     All: 'all',
     Selected: 'selected'
 } as const;
 export type IntegrationEnvScopeEnum = typeof IntegrationEnvScopeEnum[keyof typeof IntegrationEnvScopeEnum];
+
+/**
+ * @export
+ */
+export const IntegrationAllowedEnvTypesEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type IntegrationAllowedEnvTypesEnum = typeof IntegrationAllowedEnvTypesEnum[keyof typeof IntegrationAllowedEnvTypesEnum];
 
 /**
  * 
@@ -6339,7 +7268,7 @@ export interface IntegrationConfigurationResult {
     warnings: Array<string>;
 }
 /**
- * 
+ * Use primaryEnvType and allowedEnvTypes. Legacy ID fields remain accepted but cannot be mixed with their type equivalents.
  * @export
  * @interface IntegrationEnvironmentPolicyInput
  */
@@ -6348,8 +7277,15 @@ export interface IntegrationEnvironmentPolicyInput {
      * 
      * @type {number}
      * @memberof IntegrationEnvironmentPolicyInput
+     * @deprecated
      */
     primaryEnvId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationEnvironmentPolicyInput
+     */
+    primaryEnvType?: IntegrationEnvironmentPolicyInputPrimaryEnvTypeEnum | null;
     /**
      * 
      * @type {string}
@@ -6360,10 +7296,29 @@ export interface IntegrationEnvironmentPolicyInput {
      * 
      * @type {Array<number>}
      * @memberof IntegrationEnvironmentPolicyInput
+     * @deprecated
      */
-    allowedEnvIds: Array<number>;
+    allowedEnvIds?: Array<number>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof IntegrationEnvironmentPolicyInput
+     */
+    allowedEnvTypes?: Array<IntegrationEnvironmentPolicyInputAllowedEnvTypesEnum>;
 }
 
+
+/**
+ * @export
+ */
+export const IntegrationEnvironmentPolicyInputPrimaryEnvTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type IntegrationEnvironmentPolicyInputPrimaryEnvTypeEnum = typeof IntegrationEnvironmentPolicyInputPrimaryEnvTypeEnum[keyof typeof IntegrationEnvironmentPolicyInputPrimaryEnvTypeEnum];
 
 /**
  * @export
@@ -6373,6 +7328,18 @@ export const IntegrationEnvironmentPolicyInputScopeEnum = {
     Selected: 'selected'
 } as const;
 export type IntegrationEnvironmentPolicyInputScopeEnum = typeof IntegrationEnvironmentPolicyInputScopeEnum[keyof typeof IntegrationEnvironmentPolicyInputScopeEnum];
+
+/**
+ * @export
+ */
+export const IntegrationEnvironmentPolicyInputAllowedEnvTypesEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type IntegrationEnvironmentPolicyInputAllowedEnvTypesEnum = typeof IntegrationEnvironmentPolicyInputAllowedEnvTypesEnum[keyof typeof IntegrationEnvironmentPolicyInputAllowedEnvTypesEnum];
 
 /**
  * 
@@ -6393,6 +7360,63 @@ export interface IntegrationLinkInput {
      */
     integrationId: number;
 }
+/**
+ * 
+ * @export
+ * @interface IntegrationProviderRevisionUpgrade
+ */
+export interface IntegrationProviderRevisionUpgrade {
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationProviderRevisionUpgrade
+     */
+    state: IntegrationProviderRevisionUpgradeStateEnum;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof IntegrationProviderRevisionUpgrade
+     */
+    reasons: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof IntegrationProviderRevisionUpgrade
+     */
+    removedFields: Array<string>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof IntegrationProviderRevisionUpgrade
+     */
+    canDropRemovedFields: boolean;
+    /**
+     * 
+     * @type {ProviderRevision}
+     * @memberof IntegrationProviderRevisionUpgrade
+     */
+    currentRevision: ProviderRevision;
+    /**
+     * 
+     * @type {ProviderRevision}
+     * @memberof IntegrationProviderRevisionUpgrade
+     */
+    targetRevision: ProviderRevision;
+}
+
+
+/**
+ * @export
+ */
+export const IntegrationProviderRevisionUpgradeStateEnum = {
+    Current: 'current',
+    Safe: 'safe',
+    Blocked: 'blocked',
+    MigrationRequired: 'migration_required',
+    Error: 'error'
+} as const;
+export type IntegrationProviderRevisionUpgradeStateEnum = typeof IntegrationProviderRevisionUpgradeStateEnum[keyof typeof IntegrationProviderRevisionUpgradeStateEnum];
+
 /**
  * 
  * @export
@@ -6481,6 +7505,103 @@ export interface KubeVersion {
      */
     title: string;
 }
+/**
+ * 
+ * @export
+ * @interface KubernetesVersionUpgradePlan
+ */
+export interface KubernetesVersionUpgradePlan {
+    /**
+     * 
+     * @type {string}
+     * @memberof KubernetesVersionUpgradePlan
+     */
+    currentVersion: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof KubernetesVersionUpgradePlan
+     */
+    providerVersion: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof KubernetesVersionUpgradePlan
+     */
+    provider: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof KubernetesVersionUpgradePlan
+     */
+    supported: boolean;
+    /**
+     * 
+     * @type {Array<KubernetesVersionUpgradeTarget>}
+     * @memberof KubernetesVersionUpgradePlan
+     */
+    targets: Array<KubernetesVersionUpgradeTarget>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof KubernetesVersionUpgradePlan
+     */
+    blockers: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof KubernetesVersionUpgradePlan
+     */
+    warnings: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof KubernetesVersionUpgradePlan
+     */
+    observedAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface KubernetesVersionUpgradeTarget
+ */
+export interface KubernetesVersionUpgradeTarget {
+    /**
+     * 
+     * @type {string}
+     * @memberof KubernetesVersionUpgradeTarget
+     */
+    version: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof KubernetesVersionUpgradeTarget
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof KubernetesVersionUpgradeTarget
+     */
+    kind: KubernetesVersionUpgradeTargetKindEnum;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof KubernetesVersionUpgradeTarget
+     */
+    preview: boolean;
+}
+
+
+/**
+ * @export
+ */
+export const KubernetesVersionUpgradeTargetKindEnum = {
+    Patch: 'patch',
+    Minor: 'minor'
+} as const;
+export type KubernetesVersionUpgradeTargetKindEnum = typeof KubernetesVersionUpgradeTargetKindEnum[keyof typeof KubernetesVersionUpgradeTargetKindEnum];
+
 /**
  * 
  * @export
@@ -6701,7 +7822,7 @@ export interface NewAppAuthInput {
      */
     appInstanceId: number;
     /**
-     * App services to protect. Omit or pass an empty list to protect the whole app instance.
+     * App services to protect. Omit or pass an empty list to protect the whole app environment.
      * @type {Array<number>}
      * @memberof NewAppAuthInput
      */
@@ -6741,6 +7862,168 @@ export interface NewAppAuthInput {
 /**
  * 
  * @export
+ * @interface NewAppEnvironmentAccessInput
+ */
+export interface NewAppEnvironmentAccessInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof NewAppEnvironmentAccessInput
+     */
+    integrationId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppEnvironmentAccessInput
+     */
+    mode: NewAppEnvironmentAccessInputModeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppEnvironmentAccessInput
+     */
+    scope: NewAppEnvironmentAccessInputScopeEnum;
+    /**
+     * 
+     * @type {Array<AppAccessSettingInput>}
+     * @memberof NewAppEnvironmentAccessInput
+     */
+    settings?: Array<AppAccessSettingInput>;
+    /**
+     * Required only when the selected provider uses a customer-assigned hostname.
+     * @type {string}
+     * @memberof NewAppEnvironmentAccessInput
+     */
+    host?: string | null;
+    /**
+     * HTTP endpoints selected during creation. Used only with SELECTED_ENDPOINTS scope; older clients may omit it to select the main endpoint.
+     * @type {Array<NewAppInstanceAccessEndpointInput>}
+     * @memberof NewAppEnvironmentAccessInput
+     */
+    endpoints?: Array<NewAppInstanceAccessEndpointInput>;
+}
+
+
+/**
+ * @export
+ */
+export const NewAppEnvironmentAccessInputModeEnum = {
+    Protected: 'PROTECTED',
+    PrivateNetwork: 'PRIVATE_NETWORK'
+} as const;
+export type NewAppEnvironmentAccessInputModeEnum = typeof NewAppEnvironmentAccessInputModeEnum[keyof typeof NewAppEnvironmentAccessInputModeEnum];
+
+/**
+ * @export
+ */
+export const NewAppEnvironmentAccessInputScopeEnum = {
+    EntireApp: 'ENTIRE_APP',
+    SelectedEndpoints: 'SELECTED_ENDPOINTS'
+} as const;
+export type NewAppEnvironmentAccessInputScopeEnum = typeof NewAppEnvironmentAccessInputScopeEnum[keyof typeof NewAppEnvironmentAccessInputScopeEnum];
+
+/**
+ * 
+ * @export
+ * @interface NewAppEnvironmentInput
+ */
+export interface NewAppEnvironmentInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof NewAppEnvironmentInput
+     */
+    appId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppEnvironmentInput
+     */
+    environmentName: string;
+    /**
+     * Defaults to environmentName when omitted.
+     * @type {string}
+     * @memberof NewAppEnvironmentInput
+     */
+    environmentTitle?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppEnvironmentInput
+     */
+    environmentType: NewAppEnvironmentInputEnvironmentTypeEnum;
+    /**
+     * Defaults to environmentName.appName.orgDomain when omitted.
+     * @type {string}
+     * @memberof NewAppEnvironmentInput
+     */
+    domain?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewAppEnvironmentInput
+     */
+    stackRevId: number;
+    /**
+     * Defaults to the stack revision's service defaults when omitted.
+     * @type {Array<NewAppServiceInput>}
+     * @memberof NewAppEnvironmentInput
+     */
+    services?: Array<NewAppServiceInput>;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewAppEnvironmentInput
+     */
+    clusterId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewAppEnvironmentInput
+     */
+    ciIntegrationId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewAppEnvironmentInput
+     */
+    registryIntegrationId?: number | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewAppEnvironmentInput
+     */
+    deferInitialDeployment?: boolean;
+    /**
+     * 
+     * @type {AppEnvironmentSettingsInput}
+     * @memberof NewAppEnvironmentInput
+     */
+    settings?: AppEnvironmentSettingsInput;
+    /**
+     * 
+     * @type {NewAppEnvironmentAccessInput}
+     * @memberof NewAppEnvironmentInput
+     */
+    access?: NewAppEnvironmentAccessInput;
+}
+
+
+/**
+ * @export
+ */
+export const NewAppEnvironmentInputEnvironmentTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type NewAppEnvironmentInputEnvironmentTypeEnum = typeof NewAppEnvironmentInputEnvironmentTypeEnum[keyof typeof NewAppEnvironmentInputEnvironmentTypeEnum];
+
+/**
+ * 
+ * @export
  * @interface NewAppInput
  */
 export interface NewAppInput {
@@ -6763,19 +8046,39 @@ export interface NewAppInput {
      */
     title?: string;
     /**
-     * 
+     * Required for the canonical app environment contract.
      * @type {string}
      * @memberof NewAppInput
      */
-    instanceName: string;
+    environmentName?: string;
     /**
-     * Defaults to instanceName when omitted.
+     * Defaults to environmentName when omitted.
      * @type {string}
      * @memberof NewAppInput
+     */
+    environmentTitle?: string;
+    /**
+     * Required for the canonical app environment contract.
+     * @type {string}
+     * @memberof NewAppInput
+     */
+    environmentType?: NewAppInputEnvironmentTypeEnum;
+    /**
+     * Legacy alternative to environmentName. Requires envId and cannot be combined with canonical app environment fields.
+     * @type {string}
+     * @memberof NewAppInput
+     * @deprecated
+     */
+    instanceName?: string;
+    /**
+     * Legacy alternative to environmentTitle. Defaults to instanceName when omitted.
+     * @type {string}
+     * @memberof NewAppInput
+     * @deprecated
      */
     instanceTitle?: string;
     /**
-     * Defaults to instanceName.name.orgDomain when omitted.
+     * Defaults to environmentName.name.orgDomain for the canonical contract, or instanceName.name.orgDomain for the legacy contract.
      * @type {string}
      * @memberof NewAppInput
      */
@@ -6805,11 +8108,12 @@ export interface NewAppInput {
      */
     clusterId?: number | null;
     /**
-     * 
+     * Legacy environment entity ID. Required with instanceName and cannot be combined with canonical app environment fields.
      * @type {number}
      * @memberof NewAppInput
+     * @deprecated
      */
-    envId: number;
+    envId?: number;
     /**
      * Omit or use null to inherit the organization default, use 0 for the built-in CI service, or use an accessible CI integration ID. A project-owned integration must be shared with the app's project.
      * @type {number}
@@ -6823,24 +8127,38 @@ export interface NewAppInput {
      */
     registryIntegrationId?: number | null;
     /**
-     * Defers the automatic initial build and deployment while preserving app instance initialization. Intended for automation that configures the instance before explicitly starting its first build.
+     * Defers the automatic initial build and deployment while preserving app environment initialization. Intended for automation that configures the environment before explicitly starting its first build.
      * @type {boolean}
      * @memberof NewAppInput
      */
     deferInitialDeployment?: boolean;
     /**
      * 
-     * @type {AppInstanceSettingsInput}
+     * @type {AppEnvironmentSettingsInput}
      * @memberof NewAppInput
      */
-    settings?: AppInstanceSettingsInput;
+    settings?: AppEnvironmentSettingsInput;
     /**
      * 
-     * @type {NewAppInstanceAccessInput}
+     * @type {NewAppEnvironmentAccessInput}
      * @memberof NewAppInput
      */
-    access?: NewAppInstanceAccessInput;
+    access?: NewAppEnvironmentAccessInput;
 }
+
+
+/**
+ * @export
+ */
+export const NewAppInputEnvironmentTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type NewAppInputEnvironmentTypeEnum = typeof NewAppInputEnvironmentTypeEnum[keyof typeof NewAppInputEnvironmentTypeEnum];
+
 /**
  * 
  * @export
@@ -7421,6 +8739,18 @@ export interface NewBackupPresetInput {
     envId?: number | null;
     /**
      * 
+     * @type {Array<string>}
+     * @memberof NewBackupPresetInput
+     */
+    envTypes?: Array<NewBackupPresetInputEnvTypesEnum> | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewBackupPresetInput
+     */
+    backupCategory?: NewBackupPresetInputBackupCategoryEnum | null;
+    /**
+     * 
      * @type {string}
      * @memberof NewBackupPresetInput
      */
@@ -7486,6 +8816,30 @@ export interface NewBackupPresetInput {
      */
     duration?: number | null;
 }
+
+
+/**
+ * @export
+ */
+export const NewBackupPresetInputEnvTypesEnum = {
+    Dev: 'dev',
+    Feature: 'feature',
+    Test: 'test',
+    Staging: 'staging',
+    Prod: 'prod'
+} as const;
+export type NewBackupPresetInputEnvTypesEnum = typeof NewBackupPresetInputEnvTypesEnum[keyof typeof NewBackupPresetInputEnvTypesEnum];
+
+/**
+ * @export
+ */
+export const NewBackupPresetInputBackupCategoryEnum = {
+    Any: 'any',
+    Files: 'files',
+    Database: 'database'
+} as const;
+export type NewBackupPresetInputBackupCategoryEnum = typeof NewBackupPresetInputBackupCategoryEnum[keyof typeof NewBackupPresetInputBackupCategoryEnum];
+
 /**
  * 
  * @export
@@ -7673,6 +9027,12 @@ export interface NewClusterInput {
      * @memberof NewClusterInput
      */
     autoInfrastructureUpgrade?: boolean | null;
+    /**
+     * 
+     * @type {ClusterEnvironmentPolicyInput}
+     * @memberof NewClusterInput
+     */
+    environmentPolicy?: ClusterEnvironmentPolicyInput;
 }
 /**
  * 
@@ -7706,7 +9066,7 @@ export interface NewDatabaseDBInput {
     collation?: string | null;
 }
 /**
- * 
+ * envType is required for the canonical contract. The legacy envId alternative remains accepted, but the two fields cannot be combined.
  * @export
  * @interface NewDatabaseInput
  */
@@ -7727,8 +9087,15 @@ export interface NewDatabaseInput {
      * 
      * @type {number}
      * @memberof NewDatabaseInput
+     * @deprecated
      */
-    envId: number;
+    envId?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewDatabaseInput
+     */
+    envType?: NewDatabaseInputEnvTypeEnum;
     /**
      * 
      * @type {string}
@@ -7814,6 +9181,20 @@ export interface NewDatabaseInput {
      */
     iops?: number | null;
 }
+
+
+/**
+ * @export
+ */
+export const NewDatabaseInputEnvTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type NewDatabaseInputEnvTypeEnum = typeof NewDatabaseInputEnvTypeEnum[keyof typeof NewDatabaseInputEnvTypeEnum];
+
 /**
  * 
  * @export
@@ -8470,6 +9851,18 @@ export interface OrgCapabilities {
      * @type {boolean}
      * @memberof OrgCapabilities
      */
+    appAccess: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OrgCapabilities
+     */
+    orgSSO: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OrgCapabilities
+     */
     wodbyCloud: boolean;
 }
 /**
@@ -8894,6 +10287,12 @@ export interface ProviderRevision {
      * @type {string}
      * @memberof ProviderRevision
      */
+    icon: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProviderRevision
+     */
     title: string;
     /**
      * 
@@ -9148,8 +10547,15 @@ export interface SearchIntegrationsInput {
      * 
      * @type {number}
      * @memberof SearchIntegrationsInput
+     * @deprecated
      */
     envId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof SearchIntegrationsInput
+     */
+    envType?: SearchIntegrationsInputEnvTypeEnum | null;
 }
 
 
@@ -9188,6 +10594,18 @@ export const SearchIntegrationsInputStatusesEnum = {
     Expired: 'EXPIRED'
 } as const;
 export type SearchIntegrationsInputStatusesEnum = typeof SearchIntegrationsInputStatusesEnum[keyof typeof SearchIntegrationsInputStatusesEnum];
+
+/**
+ * @export
+ */
+export const SearchIntegrationsInputEnvTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type SearchIntegrationsInputEnvTypeEnum = typeof SearchIntegrationsInputEnvTypeEnum[keyof typeof SearchIntegrationsInputEnvTypeEnum];
 
 /**
  * 
@@ -9277,6 +10695,108 @@ export interface Service {
 /**
  * 
  * @export
+ * @interface ServiceAutoBaseRevisionUpdateSettings
+ */
+export interface ServiceAutoBaseRevisionUpdateSettings {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ServiceAutoBaseRevisionUpdateSettings
+     */
+    enabled: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ServiceAutoBaseRevisionUpdateSettingsInput
+ */
+export interface ServiceAutoBaseRevisionUpdateSettingsInput {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ServiceAutoBaseRevisionUpdateSettingsInput
+     */
+    enabled: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ServiceDeploymentConfiguration
+ */
+export interface ServiceDeploymentConfiguration {
+    /**
+     * 
+     * @type {ServiceDeploymentPolicy}
+     * @memberof ServiceDeploymentConfiguration
+     */
+    override: ServiceDeploymentPolicy;
+    /**
+     * 
+     * @type {ServiceDeploymentPolicy}
+     * @memberof ServiceDeploymentConfiguration
+     */
+    effective: ServiceDeploymentPolicy;
+    /**
+     * 
+     * @type {Array<ServiceWorkloadDeploymentConfiguration>}
+     * @memberof ServiceDeploymentConfiguration
+     */
+    workloads: Array<ServiceWorkloadDeploymentConfiguration>;
+}
+/**
+ * Replaces the complete service-level deployment override. An empty object clears it.
+ * @export
+ * @interface ServiceDeploymentConfigurationInput
+ */
+export interface ServiceDeploymentConfigurationInput {
+    /**
+     * 
+     * @type {ServiceDeploymentStrategy}
+     * @memberof ServiceDeploymentConfigurationInput
+     */
+    strategy?: ServiceDeploymentStrategy;
+    /**
+     * Absolute number or percentage, such as `0` or `25%`.
+     * @type {string}
+     * @memberof ServiceDeploymentConfigurationInput
+     */
+    maxUnavailable?: string;
+    /**
+     * Absolute number or percentage, such as `1` or `25%`.
+     * @type {string}
+     * @memberof ServiceDeploymentConfigurationInput
+     */
+    maxSurge?: string;
+    /**
+     * Go duration, such as `10s`.
+     * @type {string}
+     * @memberof ServiceDeploymentConfigurationInput
+     */
+    minReady?: string;
+    /**
+     * Go duration, such as `15m`.
+     * @type {string}
+     * @memberof ServiceDeploymentConfigurationInput
+     */
+    progressDeadline?: string;
+    /**
+     * Go duration, such as `11m`.
+     * @type {string}
+     * @memberof ServiceDeploymentConfigurationInput
+     */
+    shutdownGracePeriod?: string;
+    /**
+     * 
+     * @type {Array<ServiceWorkloadDeploymentInput>}
+     * @memberof ServiceDeploymentConfigurationInput
+     */
+    workloads?: Array<ServiceWorkloadDeploymentInput>;
+}
+
+
+/**
+ * 
+ * @export
  * @interface ServiceDeploymentInput
  */
 export interface ServiceDeploymentInput {
@@ -9314,6 +10834,63 @@ export interface ServiceDeploymentInput {
 /**
  * 
  * @export
+ * @interface ServiceDeploymentPolicy
+ */
+export interface ServiceDeploymentPolicy {
+    /**
+     * 
+     * @type {ServiceDeploymentStrategy}
+     * @memberof ServiceDeploymentPolicy
+     */
+    strategy?: ServiceDeploymentStrategy;
+    /**
+     * Absolute number or percentage, such as `0` or `25%`.
+     * @type {string}
+     * @memberof ServiceDeploymentPolicy
+     */
+    maxUnavailable?: string;
+    /**
+     * Absolute number or percentage, such as `1` or `25%`.
+     * @type {string}
+     * @memberof ServiceDeploymentPolicy
+     */
+    maxSurge?: string;
+    /**
+     * Go duration, such as `10s`.
+     * @type {string}
+     * @memberof ServiceDeploymentPolicy
+     */
+    minReady?: string;
+    /**
+     * Go duration, such as `15m`.
+     * @type {string}
+     * @memberof ServiceDeploymentPolicy
+     */
+    progressDeadline?: string;
+    /**
+     * Go duration, such as `11m`.
+     * @type {string}
+     * @memberof ServiceDeploymentPolicy
+     */
+    shutdownGracePeriod?: string;
+}
+
+
+
+/**
+ * 
+ * @export
+ */
+export const ServiceDeploymentStrategy = {
+    Rolling: 'ROLLING',
+    Recreate: 'RECREATE',
+    OnDelete: 'ON_DELETE'
+} as const;
+export type ServiceDeploymentStrategy = typeof ServiceDeploymentStrategy[keyof typeof ServiceDeploymentStrategy];
+
+/**
+ * 
+ * @export
  * @interface ServiceIntegrationRequirement
  */
 export interface ServiceIntegrationRequirement {
@@ -9347,6 +10924,12 @@ export interface ServiceIntegrationRequirement {
      * @memberof ServiceIntegrationRequirement
      */
     variables: Array<IntegrationVariableRequirement>;
+    /**
+     * 
+     * @type {Array<ServiceManifestEnvVar>}
+     * @memberof ServiceIntegrationRequirement
+     */
+    env: Array<ServiceManifestEnvVar>;
     /**
      * 
      * @type {boolean}
@@ -9405,6 +10988,49 @@ export interface ServiceManifest {
      * @memberof ServiceManifest
      */
     integrations?: Array<ServiceIntegrationRequirement>;
+}
+/**
+ * 
+ * @export
+ * @interface ServiceManifestEnvVar
+ */
+export interface ServiceManifestEnvVar {
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceManifestEnvVar
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceManifestEnvVar
+     */
+    value: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ServiceManifestEnvVar
+     */
+    secret: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceManifestEnvVar
+     */
+    env?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ServiceManifestEnvVar
+     */
+    runtime: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ServiceManifestEnvVar
+     */
+    build: boolean;
 }
 /**
  * 
@@ -9571,6 +11197,12 @@ export interface ServiceSettings {
      * @memberof ServiceSettings
      */
     gitAutoUpdate?: GitAutoUpdateSettings;
+    /**
+     * 
+     * @type {ServiceAutoBaseRevisionUpdateSettings}
+     * @memberof ServiceSettings
+     */
+    autoBaseRevisionUpdate?: ServiceAutoBaseRevisionUpdateSettings;
 }
 /**
  * 
@@ -9584,7 +11216,107 @@ export interface ServiceSettingsInput {
      * @memberof ServiceSettingsInput
      */
     gitAutoUpdate?: GitAutoUpdateSettingsInput;
+    /**
+     * 
+     * @type {ServiceAutoBaseRevisionUpdateSettingsInput}
+     * @memberof ServiceSettingsInput
+     */
+    autoBaseRevisionUpdate?: ServiceAutoBaseRevisionUpdateSettingsInput;
 }
+/**
+ * 
+ * @export
+ * @interface ServiceWorkloadDeploymentConfiguration
+ */
+export interface ServiceWorkloadDeploymentConfiguration {
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceWorkloadDeploymentConfiguration
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceWorkloadDeploymentConfiguration
+     */
+    kind: ServiceWorkloadDeploymentConfigurationKindEnum;
+    /**
+     * 
+     * @type {ServiceDeploymentPolicy}
+     * @memberof ServiceWorkloadDeploymentConfiguration
+     */
+    override: ServiceDeploymentPolicy;
+    /**
+     * 
+     * @type {ServiceDeploymentPolicy}
+     * @memberof ServiceWorkloadDeploymentConfiguration
+     */
+    effective: ServiceDeploymentPolicy;
+}
+
+
+/**
+ * @export
+ */
+export const ServiceWorkloadDeploymentConfigurationKindEnum = {
+    Deployment: 'deployment',
+    Statefulset: 'statefulset',
+    Daemonset: 'daemonset'
+} as const;
+export type ServiceWorkloadDeploymentConfigurationKindEnum = typeof ServiceWorkloadDeploymentConfigurationKindEnum[keyof typeof ServiceWorkloadDeploymentConfigurationKindEnum];
+
+/**
+ * 
+ * @export
+ * @interface ServiceWorkloadDeploymentInput
+ */
+export interface ServiceWorkloadDeploymentInput {
+    /**
+     * 
+     * @type {ServiceDeploymentStrategy}
+     * @memberof ServiceWorkloadDeploymentInput
+     */
+    strategy?: ServiceDeploymentStrategy;
+    /**
+     * Absolute number or percentage, such as `0` or `25%`.
+     * @type {string}
+     * @memberof ServiceWorkloadDeploymentInput
+     */
+    maxUnavailable?: string;
+    /**
+     * Absolute number or percentage, such as `1` or `25%`.
+     * @type {string}
+     * @memberof ServiceWorkloadDeploymentInput
+     */
+    maxSurge?: string;
+    /**
+     * Go duration, such as `10s`.
+     * @type {string}
+     * @memberof ServiceWorkloadDeploymentInput
+     */
+    minReady?: string;
+    /**
+     * Go duration, such as `15m`.
+     * @type {string}
+     * @memberof ServiceWorkloadDeploymentInput
+     */
+    progressDeadline?: string;
+    /**
+     * Go duration, such as `11m`.
+     * @type {string}
+     * @memberof ServiceWorkloadDeploymentInput
+     */
+    shutdownGracePeriod?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceWorkloadDeploymentInput
+     */
+    name: string;
+}
+
+
 /**
  * 
  * @export
@@ -10361,6 +12093,12 @@ export interface StackService {
     containers?: Array<StackServiceContainer>;
     /**
      * 
+     * @type {ServiceDeploymentConfiguration}
+     * @memberof StackService
+     */
+    deploymentConfiguration: ServiceDeploymentConfiguration;
+    /**
+     * 
      * @type {string}
      * @memberof StackService
      */
@@ -10751,6 +12489,12 @@ export interface StackServiceInput {
      * @memberof StackServiceInput
      */
     buildSource?: BuildSourceInput;
+    /**
+     * 
+     * @type {ServiceDeploymentConfigurationInput}
+     * @memberof StackServiceInput
+     */
+    deployment?: ServiceDeploymentConfigurationInput;
 }
 /**
  * 
@@ -11363,6 +13107,12 @@ export interface Task {
      * @type {string}
      * @memberof Task
      */
+    compactTitle: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Task
+     */
     executionScope: TaskExecutionScopeEnum;
     /**
      * 
@@ -11429,7 +13179,19 @@ export interface Task {
      * @type {number}
      * @memberof Task
      */
+    appServiceId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Task
+     */
     clusterId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Task
+     */
+    databaseId?: number | null;
     /**
      * 
      * @type {number}
@@ -11743,6 +13505,12 @@ export interface TasksResponse {
      */
     treeTruncated: boolean;
     /**
+     * True when the current user may request operator-only system tasks.
+     * @type {boolean}
+     * @memberof TasksResponse
+     */
+    canIncludeSystem: boolean;
+    /**
      * 
      * @type {number}
      * @memberof TasksResponse
@@ -11811,7 +13579,7 @@ export type UpdateAppAccessInputScopeEnum = typeof UpdateAppAccessInputScopeEnum
  */
 export interface UpdateAppAuthInput {
     /**
-     * App services to protect. Omit every scope field to preserve the current scope, or pass an empty list to protect the whole app instance.
+     * App services to protect. Omit every scope field to preserve the current scope, or pass an empty list to protect the whole app environment.
      * @type {Array<number>}
      * @memberof UpdateAppAuthInput
      */
@@ -12048,6 +13816,18 @@ export interface UpdateAppServiceEnvVarInput {
  */
 export interface UpdateBackupPresetInput {
     /**
+     * Omit to preserve the current filter; use an empty array to clear it.
+     * @type {Array<string>}
+     * @memberof UpdateBackupPresetInput
+     */
+    envTypes?: Array<UpdateBackupPresetInputEnvTypesEnum> | null;
+    /**
+     * Omit to preserve the current category.
+     * @type {string}
+     * @memberof UpdateBackupPresetInput
+     */
+    backupCategory?: UpdateBackupPresetInputBackupCategoryEnum | null;
+    /**
      * Use 0 for Wodby Blob Storage. Enabling the preset requires a paid subscription.
      * @type {number}
      * @memberof UpdateBackupPresetInput
@@ -12108,6 +13888,30 @@ export interface UpdateBackupPresetInput {
      */
     duration?: number | null;
 }
+
+
+/**
+ * @export
+ */
+export const UpdateBackupPresetInputEnvTypesEnum = {
+    Dev: 'dev',
+    Feature: 'feature',
+    Test: 'test',
+    Staging: 'staging',
+    Prod: 'prod'
+} as const;
+export type UpdateBackupPresetInputEnvTypesEnum = typeof UpdateBackupPresetInputEnvTypesEnum[keyof typeof UpdateBackupPresetInputEnvTypesEnum];
+
+/**
+ * @export
+ */
+export const UpdateBackupPresetInputBackupCategoryEnum = {
+    Any: 'any',
+    Files: 'files',
+    Database: 'database'
+} as const;
+export type UpdateBackupPresetInputBackupCategoryEnum = typeof UpdateBackupPresetInputBackupCategoryEnum[keyof typeof UpdateBackupPresetInputBackupCategoryEnum];
+
 /**
  * 
  * @export
@@ -12409,6 +14213,19 @@ export interface UpdateTitleRequest {
      * @memberof UpdateTitleRequest
      */
     title: string;
+}
+/**
+ * 
+ * @export
+ * @interface UpgradeIntegrationProviderRevisionInput
+ */
+export interface UpgradeIntegrationProviderRevisionInput {
+    /**
+     * Permanently deletes fields absent from the target revision when the preview allows it.
+     * @type {boolean}
+     * @memberof UpgradeIntegrationProviderRevisionInput
+     */
+    dropRemovedFields: boolean;
 }
 /**
  * 

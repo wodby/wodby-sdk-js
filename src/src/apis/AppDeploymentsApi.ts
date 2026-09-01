@@ -22,6 +22,10 @@ import type {
   ProblemDetails,
 } from '../models/index';
 
+export interface CancelAppDeploymentRequest {
+    id: number;
+}
+
 export interface CreateAppDeploymentRequest {
     createDeploymentRequest: CreateDeploymentRequest;
 }
@@ -51,6 +55,22 @@ export interface RedeployAppDeploymentRequest {
  * @interface AppDeploymentsApiInterface
  */
 export interface AppDeploymentsApiInterface {
+    /**
+     * Cancels an active deployment and returns its updated state.
+     * @summary Cancel deployment
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppDeploymentsApiInterface
+     */
+    cancelAppDeploymentRaw(requestParameters: CancelAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>>;
+
+    /**
+     * Cancels an active deployment and returns its updated state.
+     * Cancel deployment
+     */
+    cancelAppDeployment(requestParameters: CancelAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment>;
+
     /**
      * Creates a deployment and returns the created resource.
      * @summary Create deployment
@@ -139,6 +159,45 @@ export interface AppDeploymentsApiInterface {
  * 
  */
 export class AppDeploymentsApi extends runtime.BaseAPI implements AppDeploymentsApiInterface {
+
+    /**
+     * Cancels an active deployment and returns its updated state.
+     * Cancel deployment
+     */
+    async cancelAppDeploymentRaw(requestParameters: CancelAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppDeployment>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling cancelAppDeployment().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-deployments/{id}/actions/cancel`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Cancels an active deployment and returns its updated state.
+     * Cancel deployment
+     */
+    async cancelAppDeployment(requestParameters: CancelAppDeploymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppDeployment> {
+        const response = await this.cancelAppDeploymentRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Creates a deployment and returns the created resource.

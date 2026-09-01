@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   Backup,
   BackupPreset,
+  BackupsResponse,
   NewBackupInput,
   NewBackupPresetInput,
   OperationResult,
@@ -44,6 +45,12 @@ export interface GetBackupPresetRequest {
     id: number;
 }
 
+export interface ListBackupPresetBackupsRequest {
+    id: number;
+    page?: number;
+    pageSize?: number;
+}
+
 export interface ListBackupPresetsRequest {
     appInstanceId?: number;
     appServiceId?: number;
@@ -51,6 +58,8 @@ export interface ListBackupPresetsRequest {
     databaseDbId?: number;
     orgId?: number;
     backupName?: string;
+    applicableEnvId?: number;
+    applicableBackupCategory?: ListBackupPresetsApplicableBackupCategoryEnum;
 }
 
 export interface ListBackupsRequest {
@@ -154,6 +163,24 @@ export interface BackupsApiInterface {
     getBackupPreset(requestParameters: GetBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackupPreset>;
 
     /**
+     * Returns a paginated list of backups created from the preset.
+     * @summary List backup preset backups
+     * @param {number} id 
+     * @param {number} [page] Page number, defaults to 1
+     * @param {number} [pageSize] Page size, defaults to 30
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BackupsApiInterface
+     */
+    listBackupPresetBackupsRaw(requestParameters: ListBackupPresetBackupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackupsResponse>>;
+
+    /**
+     * Returns a paginated list of backups created from the preset.
+     * List backup preset backups
+     */
+    listBackupPresetBackups(requestParameters: ListBackupPresetBackupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackupsResponse>;
+
+    /**
      * Returns backup presets matching the request filters. At least one target filter is required for user-session requests; API-key requests default to the key\'s organization.
      * @summary List backup presets
      * @param {number} [appInstanceId] 
@@ -162,6 +189,8 @@ export interface BackupsApiInterface {
      * @param {number} [databaseDbId] 
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [backupName] 
+     * @param {number} [applicableEnvId] Return only presets that apply to this environment.
+     * @param {'files' | 'database'} [applicableBackupCategory] Return only presets that apply to this backup category.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BackupsApiInterface
@@ -420,6 +449,53 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
     }
 
     /**
+     * Returns a paginated list of backups created from the preset.
+     * List backup preset backups
+     */
+    async listBackupPresetBackupsRaw(requestParameters: ListBackupPresetBackupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackupsResponse>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listBackupPresetBackups().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['page'] != null) {
+            queryParameters['page'] = requestParameters['page'];
+        }
+
+        if (requestParameters['pageSize'] != null) {
+            queryParameters['pageSize'] = requestParameters['pageSize'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/backup-presets/{id}/backups`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns a paginated list of backups created from the preset.
+     * List backup preset backups
+     */
+    async listBackupPresetBackups(requestParameters: ListBackupPresetBackupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackupsResponse> {
+        const response = await this.listBackupPresetBackupsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns backup presets matching the request filters. At least one target filter is required for user-session requests; API-key requests default to the key\'s organization.
      * List backup presets
      */
@@ -448,6 +524,14 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
 
         if (requestParameters['backupName'] != null) {
             queryParameters['backupName'] = requestParameters['backupName'];
+        }
+
+        if (requestParameters['applicableEnvId'] != null) {
+            queryParameters['applicableEnvId'] = requestParameters['applicableEnvId'];
+        }
+
+        if (requestParameters['applicableBackupCategory'] != null) {
+            queryParameters['applicableBackupCategory'] = requestParameters['applicableBackupCategory'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -577,3 +661,12 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
     }
 
 }
+
+/**
+ * @export
+ */
+export const ListBackupPresetsApplicableBackupCategoryEnum = {
+    Files: 'files',
+    Database: 'database'
+} as const;
+export type ListBackupPresetsApplicableBackupCategoryEnum = typeof ListBackupPresetsApplicableBackupCategoryEnum[keyof typeof ListBackupPresetsApplicableBackupCategoryEnum];

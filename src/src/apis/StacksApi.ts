@@ -132,6 +132,7 @@ export interface UpdateStackFromGitOperationRequest {
 
 export interface UpdateStackServiceRevisionsRequest {
     id: number;
+    scope?: UpdateStackServiceRevisionsScopeEnum;
 }
 
 export interface UpdateStackSettingsRequest {
@@ -501,6 +502,7 @@ export interface StacksApiInterface {
      * Starts a task that advances unpinned stack services to their eligible revisions.
      * @summary Update stack service revisions
      * @param {number} id 
+     * @param {'all' | 'stateless_only'} [scope] Limits the update to all services or stateless services. Defaults to all.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof StacksApiInterface
@@ -1462,6 +1464,10 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
 
         const queryParameters: any = {};
 
+        if (requestParameters['scope'] != null) {
+            queryParameters['scope'] = requestParameters['scope'];
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         if (this.configuration && this.configuration.apiKey) {
@@ -1579,3 +1585,12 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
 }
+
+/**
+ * @export
+ */
+export const UpdateStackServiceRevisionsScopeEnum = {
+    All: 'all',
+    StatelessOnly: 'stateless_only'
+} as const;
+export type UpdateStackServiceRevisionsScopeEnum = typeof UpdateStackServiceRevisionsScopeEnum[keyof typeof UpdateStackServiceRevisionsScopeEnum];

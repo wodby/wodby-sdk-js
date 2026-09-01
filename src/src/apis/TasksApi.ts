@@ -36,6 +36,7 @@ export interface ListTasksRequest {
     projectIds?: string;
     view?: ListTasksViewEnum;
     withoutOrigin?: boolean;
+    includeSystem?: boolean;
     statuses?: string;
     names?: string;
     search?: string;
@@ -103,6 +104,7 @@ export interface TasksApiInterface {
      * @param {string} [projectIds] Comma-separated project ids
      * @param {'flat' | 'tree'} [view] Return matching tasks as a flat page or as filter-scoped task trees. Tree responses support user, organization, project, and resource filters, keep paginated roots in items, and include current-page tree nodes in treeItems. Root pages are capped at 100 tasks. Tree responses include up to 250 authorized tasks and set treeTruncated when additional visible descendants exist; exceeding the 10-level depth limit still returns 422.
      * @param {boolean} [withoutOrigin] Deprecated compatibility alias for view&#x3D;tree
+     * @param {boolean} [includeSystem] Include operator-only system tasks when authorized
      * @param {string} [statuses] Comma-separated task statuses
      * @param {string} [names] Comma-separated exact task names
      * @param {string} [search] 
@@ -255,6 +257,10 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
 
         if (requestParameters['withoutOrigin'] != null) {
             queryParameters['withoutOrigin'] = requestParameters['withoutOrigin'];
+        }
+
+        if (requestParameters['includeSystem'] != null) {
+            queryParameters['includeSystem'] = requestParameters['includeSystem'];
         }
 
         if (requestParameters['statuses'] != null) {

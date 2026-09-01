@@ -3,6 +3,7 @@
 export * from './AppAuthsApi';
 export * from './AppBuildsApi';
 export * from './AppDeploymentsApi';
+export * from './AppEnvironmentsApi';
 export * from './AppInstancesApi';
 export * from './AppPortsApi';
 export * from './AppRoutesApi';

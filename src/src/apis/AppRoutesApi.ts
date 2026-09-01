@@ -18,6 +18,7 @@ import type {
   AppRoute,
   AppRouteSetting,
   AppRouteSettingName,
+  EffectiveAppRouteSetting,
   NewAppRouteInput,
   OperationResult,
   ProblemDetails,
@@ -48,6 +49,10 @@ export interface ListAppRouteSettingsRequest {
 
 export interface ListAppRoutesRequest {
     appInstanceId: number;
+}
+
+export interface ListEffectiveAppRouteSettingsRequest {
+    id: number;
 }
 
 export interface RetryAppRouteCertificateRequest {
@@ -138,7 +143,7 @@ export interface AppRoutesApiInterface {
     getAppRoute(requestParameters: GetAppRouteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppRoute>;
 
     /**
-     * Returns route-specific setting overrides. Inherited app-instance defaults are not included.
+     * Returns route-specific setting overrides. Inherited app-environment defaults are not included.
      * @summary List app route settings
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -148,7 +153,7 @@ export interface AppRoutesApiInterface {
     listAppRouteSettingsRaw(requestParameters: ListAppRouteSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppRouteSetting>>>;
 
     /**
-     * Returns route-specific setting overrides. Inherited app-instance defaults are not included.
+     * Returns route-specific setting overrides. Inherited app-environment defaults are not included.
      * List app route settings
      */
     listAppRouteSettings(requestParameters: ListAppRouteSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppRouteSetting>>;
@@ -168,6 +173,22 @@ export interface AppRoutesApiInterface {
      * List app routes
      */
     listAppRoutes(requestParameters: ListAppRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppRoute>>;
+
+    /**
+     * Returns the resolved route settings together with whether each value came from the app defaults, active service manifest, or route override.
+     * @summary List effective app route settings
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppRoutesApiInterface
+     */
+    listEffectiveAppRouteSettingsRaw(requestParameters: ListEffectiveAppRouteSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EffectiveAppRouteSetting>>>;
+
+    /**
+     * Returns the resolved route settings together with whether each value came from the app defaults, active service manifest, or route override.
+     * List effective app route settings
+     */
+    listEffectiveAppRouteSettings(requestParameters: ListEffectiveAppRouteSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EffectiveAppRouteSetting>>;
 
     /**
      * Starts certificate reconciliation again for a route whose managed certificate issuance failed or stalled.
@@ -394,7 +415,7 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
     }
 
     /**
-     * Returns route-specific setting overrides. Inherited app-instance defaults are not included.
+     * Returns route-specific setting overrides. Inherited app-environment defaults are not included.
      * List app route settings
      */
     async listAppRouteSettingsRaw(requestParameters: ListAppRouteSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppRouteSetting>>> {
@@ -424,7 +445,7 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
     }
 
     /**
-     * Returns route-specific setting overrides. Inherited app-instance defaults are not included.
+     * Returns route-specific setting overrides. Inherited app-environment defaults are not included.
      * List app route settings
      */
     async listAppRouteSettings(requestParameters: ListAppRouteSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppRouteSetting>> {
@@ -472,6 +493,45 @@ export class AppRoutesApi extends runtime.BaseAPI implements AppRoutesApiInterfa
      */
     async listAppRoutes(requestParameters: ListAppRoutesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppRoute>> {
         const response = await this.listAppRoutesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the resolved route settings together with whether each value came from the app defaults, active service manifest, or route override.
+     * List effective app route settings
+     */
+    async listEffectiveAppRouteSettingsRaw(requestParameters: ListEffectiveAppRouteSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<EffectiveAppRouteSetting>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listEffectiveAppRouteSettings().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-routes/{id}/effective-settings`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the resolved route settings together with whether each value came from the app defaults, active service manifest, or route override.
+     * List effective app route settings
+     */
+    async listEffectiveAppRouteSettings(requestParameters: ListEffectiveAppRouteSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<EffectiveAppRouteSetting>> {
+        const response = await this.listEffectiveAppRouteSettingsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -79,7 +79,7 @@ export interface AppAuthsApiInterface {
     deleteAppAuth(requestParameters: DeleteAppAuthRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * Returns HTTP basic authentication entries for an app instance without exposing passwords or secret identifiers.
+     * Returns HTTP basic authentication entries for an app environment without exposing passwords or secret identifiers.
      * @summary List app auths
      * @param {number} appInstanceId 
      * @param {*} [options] Override http request option.
@@ -89,7 +89,7 @@ export interface AppAuthsApiInterface {
     listAppAuthsRaw(requestParameters: ListAppAuthsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppAuth>>>;
 
     /**
-     * Returns HTTP basic authentication entries for an app instance without exposing passwords or secret identifiers.
+     * Returns HTTP basic authentication entries for an app environment without exposing passwords or secret identifiers.
      * List app auths
      */
     listAppAuths(requestParameters: ListAppAuthsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppAuth>>;
@@ -200,7 +200,7 @@ export class AppAuthsApi extends runtime.BaseAPI implements AppAuthsApiInterface
     }
 
     /**
-     * Returns HTTP basic authentication entries for an app instance without exposing passwords or secret identifiers.
+     * Returns HTTP basic authentication entries for an app environment without exposing passwords or secret identifiers.
      * List app auths
      */
     async listAppAuthsRaw(requestParameters: ListAppAuthsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppAuth>>> {
@@ -234,7 +234,7 @@ export class AppAuthsApi extends runtime.BaseAPI implements AppAuthsApiInterface
     }
 
     /**
-     * Returns HTTP basic authentication entries for an app instance without exposing passwords or secret identifiers.
+     * Returns HTTP basic authentication entries for an app environment without exposing passwords or secret identifiers.
      * List app auths
      */
     async listAppAuths(requestParameters: ListAppAuthsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppAuth>> {
