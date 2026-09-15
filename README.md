@@ -21,7 +21,7 @@ The JavaScript and TypeScript SDK starts at 4.x and supports Wodby 2.0 only. Wod
 ## Documentation
 
 - [API reference](https://wodby.com/docs/2.0/api/)
-- [OpenAPI schema](https://wodby.com/docs/2.0/api/openapi.yaml)
+- [OpenAPI schema](https://wodby.com/docs/2.0/api/openapi.json)
 
 ## Usage
 
