@@ -1,18 +1,34 @@
 # Wodby 2.0 SDK for JavaScript and TypeScript
 
-JavaScript and TypeScript SDK for the Wodby 2.0 Public API.
+[![Build](https://github.com/wodby/wodby-sdk-js/actions/workflows/build.yml/badge.svg?branch=2.0)](https://github.com/wodby/wodby-sdk-js/actions/workflows/build.yml?query=branch%3A2.0)
+
+JavaScript and TypeScript client for the Wodby 2.0 public API. This branch maintains SDK 4.x.
+
+## Version compatibility
+
+| Wodby platform | SDK version | Branch | API reference |
+| --- | --- | --- | --- |
+| Wodby 1.0 | Not supported | — | [Wodby 1.0 API](https://wodby.com/docs/1.0/api/) |
+| Wodby 2.0 | 4.x | [2.0](https://github.com/wodby/wodby-sdk-js/tree/2.0) | [Wodby 2.0 API](https://wodby.com/docs/2.0/api/) |
+
+The JavaScript and TypeScript SDK starts at 4.x and supports Wodby 2.0 only. Wodby 1.0 has 3.x SDKs for PHP, Go, and Python.
 
 ## Package
 
 - [npm: `@wodby/sdk`](https://www.npmjs.com/package/@wodby/sdk)
 - npm package: `@wodby/sdk`
 
+## Documentation
+
+- [API reference](https://wodby.com/docs/2.0/api/)
+- [OpenAPI schema](https://wodby.com/docs/2.0/api/openapi.yaml)
+
 ## Usage
 
 Install the package:
 
 ```bash
-npm install @wodby/sdk
+npm install @wodby/sdk@^4
 ```
 
 Use it from TypeScript:
