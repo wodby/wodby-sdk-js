@@ -1,17 +1,17 @@
-# Wodby 2.0 SDK for JavaScript and TypeScript
+# Wodby 2 SDK for JavaScript and TypeScript
 
 [![Build](https://github.com/wodby/wodby-sdk-js/actions/workflows/build.yml/badge.svg?branch=2.0)](https://github.com/wodby/wodby-sdk-js/actions/workflows/build.yml?query=branch%3A2.0)
 
-JavaScript and TypeScript client for the Wodby 2.0 public API. This branch maintains SDK 4.x.
+JavaScript and TypeScript client for the Wodby 2 public API. This branch maintains SDK 4.x.
 
 ## Version compatibility
 
 | Wodby platform | SDK version | Branch | API reference |
 | --- | --- | --- | --- |
-| Wodby 1.0 | Not supported | — | [Wodby 1.0 API](https://wodby.com/docs/1.0/api/) |
-| Wodby 2.0 | 4.x | [2.0](https://github.com/wodby/wodby-sdk-js/tree/2.0) | [Wodby 2.0 API](https://wodby.com/docs/2.0/api/) |
+| Wodby 1 | Not supported | — | [Wodby 1 API](https://wodby.com/docs/1.0/api/) |
+| Wodby 2 | 4.x | [2.0](https://github.com/wodby/wodby-sdk-js/tree/2.0) | [Wodby 2 API](https://wodby.com/docs/2.0/api/) |
 
-The JavaScript and TypeScript SDK starts at 4.x and supports Wodby 2.0 only. Wodby 1.0 has 3.x SDKs for PHP, Go, and Python.
+The JavaScript and TypeScript SDK starts at 4.x and supports Wodby 2 only. Wodby 1 has 3.x SDKs for PHP, Go, and Python.
 
 ## Package
 
