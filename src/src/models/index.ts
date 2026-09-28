@@ -1057,6 +1057,18 @@ export interface AppDeploymentsResponse {
 export interface AppEnvironment {
     /**
      * 
+     * @type {string}
+     * @memberof AppEnvironment
+     */
+    executionMode?: AppEnvironmentExecutionModeEnum;
+    /**
+     * 
+     * @type {Workspace}
+     * @memberof AppEnvironment
+     */
+    workspace?: Workspace;
+    /**
+     * 
      * @type {number}
      * @memberof AppEnvironment
      */
@@ -1225,6 +1237,15 @@ export interface AppEnvironment {
     updatedAt: string;
 }
 
+
+/**
+ * @export
+ */
+export const AppEnvironmentExecutionModeEnum = {
+    Standard: 'standard',
+    Workspace: 'workspace'
+} as const;
+export type AppEnvironmentExecutionModeEnum = typeof AppEnvironmentExecutionModeEnum[keyof typeof AppEnvironmentExecutionModeEnum];
 
 /**
  * @export
@@ -7409,6 +7430,18 @@ export type NewAppEnvironmentAccessInputScopeEnum = typeof NewAppEnvironmentAcce
 export interface NewAppEnvironmentInput {
     /**
      * 
+     * @type {string}
+     * @memberof NewAppEnvironmentInput
+     */
+    executionMode?: NewAppEnvironmentInputExecutionModeEnum;
+    /**
+     * 
+     * @type {NewWorkspaceInput}
+     * @memberof NewAppEnvironmentInput
+     */
+    workspace?: NewWorkspaceInput;
+    /**
+     * 
      * @type {number}
      * @memberof NewAppEnvironmentInput
      */
@@ -7491,6 +7524,15 @@ export interface NewAppEnvironmentInput {
 /**
  * @export
  */
+export const NewAppEnvironmentInputExecutionModeEnum = {
+    Standard: 'standard',
+    Workspace: 'workspace'
+} as const;
+export type NewAppEnvironmentInputExecutionModeEnum = typeof NewAppEnvironmentInputExecutionModeEnum[keyof typeof NewAppEnvironmentInputExecutionModeEnum];
+
+/**
+ * @export
+ */
 export const NewAppEnvironmentInputEnvironmentTypeEnum = {
     Prod: 'prod',
     Test: 'test',
@@ -7506,6 +7548,18 @@ export type NewAppEnvironmentInputEnvironmentTypeEnum = typeof NewAppEnvironment
  * @interface NewAppInput
  */
 export interface NewAppInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppInput
+     */
+    executionMode?: NewAppInputExecutionModeEnum;
+    /**
+     * 
+     * @type {NewWorkspaceInput}
+     * @memberof NewAppInput
+     */
+    workspace?: NewWorkspaceInput;
     /**
      * Optional for API-key requests; defaults to the API key's organization.
      * @type {number}
@@ -7604,6 +7658,15 @@ export interface NewAppInput {
     access?: NewAppEnvironmentAccessInput;
 }
 
+
+/**
+ * @export
+ */
+export const NewAppInputExecutionModeEnum = {
+    Standard: 'standard',
+    Workspace: 'workspace'
+} as const;
+export type NewAppInputExecutionModeEnum = typeof NewAppInputExecutionModeEnum[keyof typeof NewAppInputExecutionModeEnum];
 
 /**
  * @export
@@ -8984,6 +9047,43 @@ export interface NewVariableProviderInput {
      * @memberof NewVariableProviderInput
      */
     fields: Array<NewVariableProviderFieldInput>;
+}
+/**
+ * 
+ * @export
+ * @interface NewWorkspaceInput
+ */
+export interface NewWorkspaceInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof NewWorkspaceInput
+     */
+    branch: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewWorkspaceInput
+     */
+    storageClassName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewWorkspaceInput
+     */
+    storageServiceName?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewWorkspaceInput
+     */
+    codeSize?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewWorkspaceInput
+     */
+    homeSize?: number;
 }
 /**
  * 
@@ -13562,4 +13662,182 @@ export interface VolumeSizeInput {
      * @memberof VolumeSizeInput
      */
     storageClassName?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface Workspace
+ */
+export interface Workspace {
+    /**
+     * 
+     * @type {number}
+     * @memberof Workspace
+     */
+    ownerUserId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Workspace
+     */
+    sourceAppServiceId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Workspace
+     */
+    runnerState: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Workspace
+     */
+    preparationState: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Workspace
+     */
+    accessError: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Workspace
+     */
+    baseRef: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Workspace
+     */
+    branch: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Workspace
+     */
+    initialCommit: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Workspace
+     */
+    initialized: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof Workspace
+     */
+    error: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Workspace
+     */
+    taskId: number;
+}
+/**
+ * 
+ * @export
+ * @interface WorkspaceConnection
+ */
+export interface WorkspaceConnection {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof WorkspaceConnection
+     */
+    ready: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkspaceConnection
+     */
+    reason: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkspaceConnection
+     */
+    host: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof WorkspaceConnection
+     */
+    port: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkspaceConnection
+     */
+    username: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkspaceConnection
+     */
+    workingDirectory: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkspaceConnection
+     */
+    hostKeyFingerprint: string;
+}
+/**
+ * 
+ * @export
+ * @interface WorkspaceEligibility200Response
+ */
+export interface WorkspaceEligibility200Response {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof WorkspaceEligibility200Response
+     */
+    eligible?: boolean;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof WorkspaceEligibility200Response
+     */
+    reasons?: Array<string>;
+    /**
+     * 
+     * @type {number}
+     * @memberof WorkspaceEligibility200Response
+     */
+    sourceStackServiceId?: number | null;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof WorkspaceEligibility200Response
+     */
+    consumerStackServiceIds?: Array<number>;
+}
+/**
+ * 
+ * @export
+ * @interface WorkspaceEligibilityRequest
+ */
+export interface WorkspaceEligibilityRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof WorkspaceEligibilityRequest
+     */
+    stackRevId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof WorkspaceEligibilityRequest
+     */
+    clusterId?: number | null;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof WorkspaceEligibilityRequest
+     */
+    disabledServiceIds: Array<number>;
 }

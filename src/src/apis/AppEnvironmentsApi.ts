@@ -31,9 +31,13 @@ import type {
   NewAppEnvironmentInput,
   OperationResult,
   ProblemDetails,
+  Task,
   UpdateAppAccessInput,
   UpdateTitleRequest,
   ValidationResult,
+  WorkspaceConnection,
+  WorkspaceEligibility200Response,
+  WorkspaceEligibilityRequest,
 } from '../models/index';
 
 export interface CreateAppAccessRequest {
@@ -76,6 +80,10 @@ export interface GetAppEnvironmentStackUpgradeChangelogRequest {
     id: number;
 }
 
+export interface GetWorkspaceConnectionRequest {
+    id: number;
+}
+
 export interface ListAppAccessCleanupsRequest {
     appInstanceId?: number;
     integrationId?: number;
@@ -89,13 +97,29 @@ export interface ListAppEnvironmentsRequest {
     clusterApp?: boolean;
 }
 
+export interface PauseWorkspaceRequest {
+    id: number;
+}
+
 export interface PreflightAppAccessRequest {
     newAppEnvironmentAccessInput: NewAppEnvironmentAccessInput;
+}
+
+export interface PrepareWorkspaceRequest {
+    id: number;
 }
 
 export interface ReconcileAppEnvironmentStackRequest {
     id: number;
     appEnvironmentStackReconciliationInput: AppEnvironmentStackReconciliationInput;
+}
+
+export interface RestartWorkspaceRequest {
+    id: number;
+}
+
+export interface ResumeWorkspaceRequest {
+    id: number;
 }
 
 export interface RetryAppAccessCleanupRequest {
@@ -130,6 +154,10 @@ export interface UpdateAppEnvironmentSettingsRequest {
 export interface UpgradeAppEnvironmentStackRequest {
     id: number;
     appEnvironmentStackUpgradeInput: AppEnvironmentStackUpgradeInput;
+}
+
+export interface WorkspaceEligibilityOperationRequest {
+    workspaceEligibilityRequest: WorkspaceEligibilityRequest;
 }
 
 /**
@@ -288,6 +316,22 @@ export interface AppEnvironmentsApiInterface {
     getAppEnvironmentStackUpgradeChangelog(requestParameters: GetAppEnvironmentStackUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironmentStackUpgradeChangelog>;
 
     /**
+     * Return the owner-only SSH endpoint, readiness and stable host fingerprint.
+     * @summary Get workspace SSH connection
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    getWorkspaceConnectionRaw(requestParameters: GetWorkspaceConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<WorkspaceConnection>>;
+
+    /**
+     * Return the owner-only SSH endpoint, readiness and stable host fingerprint.
+     * Get workspace SSH connection
+     */
+    getWorkspaceConnection(requestParameters: GetWorkspaceConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WorkspaceConnection>;
+
+    /**
      * Returns cleanup records for exactly one app instance or integration.
      * @summary List app-access cleanups
      * @param {number} [appInstanceId] 
@@ -325,6 +369,22 @@ export interface AppEnvironmentsApiInterface {
     listAppEnvironments(requestParameters: ListAppEnvironmentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppEnvironment>>;
 
     /**
+     * Pause workspace. Workspace operations preserve the persistent checkout.
+     * @summary Pause workspace
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    pauseWorkspaceRaw(requestParameters: PauseWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>>;
+
+    /**
+     * Pause workspace. Workspace operations preserve the persistent checkout.
+     * Pause workspace
+     */
+    pauseWorkspace(requestParameters: PauseWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task>;
+
+    /**
      * Validates a proposed app-access configuration before an app environment or access resource is created. An active paid subscription is required.
      * @summary Preflight app environment access
      * @param {NewAppEnvironmentAccessInput} newAppEnvironmentAccessInput 
@@ -339,6 +399,22 @@ export interface AppEnvironmentsApiInterface {
      * Preflight app environment access
      */
     preflightAppAccess(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidationResult>;
+
+    /**
+     * Prepare workspace. Workspace operations preserve the persistent checkout.
+     * @summary Prepare workspace
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    prepareWorkspaceRaw(requestParameters: PrepareWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>>;
+
+    /**
+     * Prepare workspace. Workspace operations preserve the persistent checkout.
+     * Prepare workspace
+     */
+    prepareWorkspace(requestParameters: PrepareWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task>;
 
     /**
      * Reapplies the app environment\'s assigned stack revision using the selected override sections without changing its stack revision.
@@ -356,6 +432,38 @@ export interface AppEnvironmentsApiInterface {
      * Reconcile app environment stack
      */
     reconcileAppEnvironmentStack(requestParameters: ReconcileAppEnvironmentStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Restart the SSH runner, ending existing sessions while preserving code and home volumes.
+     * @summary Restart workspace
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    restartWorkspaceRaw(requestParameters: RestartWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>>;
+
+    /**
+     * Restart the SSH runner, ending existing sessions while preserving code and home volumes.
+     * Restart workspace
+     */
+    restartWorkspace(requestParameters: RestartWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task>;
+
+    /**
+     * Resume workspace. Workspace operations preserve the persistent checkout.
+     * @summary Resume workspace
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    resumeWorkspaceRaw(requestParameters: ResumeWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>>;
+
+    /**
+     * Resume workspace. Workspace operations preserve the persistent checkout.
+     * Resume workspace
+     */
+    resumeWorkspace(requestParameters: ResumeWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task>;
 
     /**
      * Retries a failed app-access cleanup and returns its task identifier.
@@ -474,6 +582,22 @@ export interface AppEnvironmentsApiInterface {
      * Upgrade app environment stack
      */
     upgradeAppEnvironmentStack(requestParameters: UpgradeAppEnvironmentStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Check the selected stack service graph. Creation separately validates repository, shared storage, access and resource limits.
+     * @summary Check workspace service eligibility
+     * @param {WorkspaceEligibilityRequest} workspaceEligibilityRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    workspaceEligibilityRaw(requestParameters: WorkspaceEligibilityOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<WorkspaceEligibility200Response>>;
+
+    /**
+     * Check the selected stack service graph. Creation separately validates repository, shared storage, access and resource limits.
+     * Check workspace service eligibility
+     */
+    workspaceEligibility(requestParameters: WorkspaceEligibilityOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WorkspaceEligibility200Response>;
 
 }
 
@@ -862,6 +986,45 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
+     * Return the owner-only SSH endpoint, readiness and stable host fingerprint.
+     * Get workspace SSH connection
+     */
+    async getWorkspaceConnectionRaw(requestParameters: GetWorkspaceConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<WorkspaceConnection>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getWorkspaceConnection().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/workspaces/{id}/connection`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Return the owner-only SSH endpoint, readiness and stable host fingerprint.
+     * Get workspace SSH connection
+     */
+    async getWorkspaceConnection(requestParameters: GetWorkspaceConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WorkspaceConnection> {
+        const response = await this.getWorkspaceConnectionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns cleanup records for exactly one app instance or integration.
      * List app-access cleanups
      */
@@ -954,6 +1117,45 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
+     * Pause workspace. Workspace operations preserve the persistent checkout.
+     * Pause workspace
+     */
+    async pauseWorkspaceRaw(requestParameters: PauseWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling pauseWorkspace().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/workspaces/{id}/actions/pause`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Pause workspace. Workspace operations preserve the persistent checkout.
+     * Pause workspace
+     */
+    async pauseWorkspace(requestParameters: PauseWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task> {
+        const response = await this.pauseWorkspaceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Validates a proposed app-access configuration before an app environment or access resource is created. An active paid subscription is required.
      * Preflight app environment access
      */
@@ -992,6 +1194,45 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
      */
     async preflightAppAccess(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidationResult> {
         const response = await this.preflightAppAccessRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Prepare workspace. Workspace operations preserve the persistent checkout.
+     * Prepare workspace
+     */
+    async prepareWorkspaceRaw(requestParameters: PrepareWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling prepareWorkspace().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/workspaces/{id}/actions/prepare`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Prepare workspace. Workspace operations preserve the persistent checkout.
+     * Prepare workspace
+     */
+    async prepareWorkspace(requestParameters: PrepareWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task> {
+        const response = await this.prepareWorkspaceRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1041,6 +1282,84 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
      */
     async reconcileAppEnvironmentStack(requestParameters: ReconcileAppEnvironmentStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.reconcileAppEnvironmentStackRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Restart the SSH runner, ending existing sessions while preserving code and home volumes.
+     * Restart workspace
+     */
+    async restartWorkspaceRaw(requestParameters: RestartWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling restartWorkspace().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/workspaces/{id}/actions/restart`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Restart the SSH runner, ending existing sessions while preserving code and home volumes.
+     * Restart workspace
+     */
+    async restartWorkspace(requestParameters: RestartWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task> {
+        const response = await this.restartWorkspaceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Resume workspace. Workspace operations preserve the persistent checkout.
+     * Resume workspace
+     */
+    async resumeWorkspaceRaw(requestParameters: ResumeWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling resumeWorkspace().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/workspaces/{id}/actions/resume`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Resume workspace. Workspace operations preserve the persistent checkout.
+     * Resume workspace
+     */
+    async resumeWorkspace(requestParameters: ResumeWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task> {
+        const response = await this.resumeWorkspaceRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1374,6 +1693,48 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
      */
     async upgradeAppEnvironmentStack(requestParameters: UpgradeAppEnvironmentStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.upgradeAppEnvironmentStackRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Check the selected stack service graph. Creation separately validates repository, shared storage, access and resource limits.
+     * Check workspace service eligibility
+     */
+    async workspaceEligibilityRaw(requestParameters: WorkspaceEligibilityOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<WorkspaceEligibility200Response>> {
+        if (requestParameters['workspaceEligibilityRequest'] == null) {
+            throw new runtime.RequiredError(
+                'workspaceEligibilityRequest',
+                'Required parameter "workspaceEligibilityRequest" was null or undefined when calling workspaceEligibility().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/workspace-eligibility`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['workspaceEligibilityRequest'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Check the selected stack service graph. Creation separately validates repository, shared storage, access and resource limits.
+     * Check workspace service eligibility
+     */
+    async workspaceEligibility(requestParameters: WorkspaceEligibilityOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WorkspaceEligibility200Response> {
+        const response = await this.workspaceEligibilityRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
