@@ -22,6 +22,9 @@ import type {
   AppEnvironmentCICDSettings,
   AppEnvironmentCICDSettingsInput,
   AppEnvironmentMaintenanceModeInput,
+  AppEnvironmentMigration,
+  AppEnvironmentMigrationInput,
+  AppEnvironmentMigrationOperationResult,
   AppEnvironmentSettingsInput,
   AppEnvironmentStackReconciliationInput,
   AppEnvironmentStackUpgradeChangelog,
@@ -38,7 +41,14 @@ import type {
   WorkspaceConnection,
   WorkspaceEligibility200Response,
   WorkspaceEligibilityRequest,
+  WorkspaceGitDiff,
+  WorkspaceGitStatus,
+  WorkspacePullInput,
 } from '../models/index';
+
+export interface CleanupAppEnvironmentMigrationRequest {
+    id: number;
+}
 
 export interface CreateAppAccessRequest {
     id: number;
@@ -76,6 +86,10 @@ export interface GetAppEnvironmentCICDSettingsRequest {
     id: number;
 }
 
+export interface GetAppEnvironmentMigrationRequest {
+    id: number;
+}
+
 export interface GetAppEnvironmentStackUpgradeChangelogRequest {
     id: number;
 }
@@ -84,9 +98,23 @@ export interface GetWorkspaceConnectionRequest {
     id: number;
 }
 
+export interface GetWorkspaceGitDiffRequest {
+    id: number;
+    path: string;
+    originalPath?: string;
+}
+
+export interface GetWorkspaceGitStatusRequest {
+    id: number;
+}
+
 export interface ListAppAccessCleanupsRequest {
     appInstanceId?: number;
     integrationId?: number;
+}
+
+export interface ListAppEnvironmentMigrationsRequest {
+    appEnvironmentId: number;
 }
 
 export interface ListAppEnvironmentsRequest {
@@ -95,6 +123,11 @@ export interface ListAppEnvironmentsRequest {
     appId?: number;
     clusterId?: number;
     clusterApp?: boolean;
+}
+
+export interface MigrateAppEnvironmentRequest {
+    id: number;
+    appEnvironmentMigrationInput: AppEnvironmentMigrationInput;
 }
 
 export interface PauseWorkspaceRequest {
@@ -107,6 +140,11 @@ export interface PreflightAppAccessRequest {
 
 export interface PrepareWorkspaceRequest {
     id: number;
+}
+
+export interface PullWorkspaceRequest {
+    id: number;
+    workspacePullInput?: WorkspacePullInput;
 }
 
 export interface ReconcileAppEnvironmentStackRequest {
@@ -123,6 +161,10 @@ export interface ResumeWorkspaceRequest {
 }
 
 export interface RetryAppAccessCleanupRequest {
+    id: number;
+}
+
+export interface RollbackAppEnvironmentMigrationRequest {
     id: number;
 }
 
@@ -167,6 +209,22 @@ export interface WorkspaceEligibilityOperationRequest {
  * @interface AppEnvironmentsApiInterface
  */
 export interface AppEnvironmentsApiInterface {
+    /**
+     * Removes the app environment\'s retained resources from the source cluster after a completed migration. The migration can no longer be rolled back afterwards.
+     * @summary Clean up app environment migration
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    cleanupAppEnvironmentMigrationRaw(requestParameters: CleanupAppEnvironmentMigrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppEnvironmentMigrationOperationResult>>;
+
+    /**
+     * Removes the app environment\'s retained resources from the source cluster after a completed migration. The migration can no longer be rolled back afterwards.
+     * Clean up app environment migration
+     */
+    cleanupAppEnvironmentMigration(requestParameters: CleanupAppEnvironmentMigrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironmentMigrationOperationResult>;
+
     /**
      * Creates external access for the app environment identified by the path. An active paid subscription is required.
      * @summary Create app environment access
@@ -300,6 +358,22 @@ export interface AppEnvironmentsApiInterface {
     getAppEnvironmentCICDSettings(requestParameters: GetAppEnvironmentCICDSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironmentCICDSettings>;
 
     /**
+     * Returns one cluster migration with the progress of each copied service.
+     * @summary Get app environment migration
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    getAppEnvironmentMigrationRaw(requestParameters: GetAppEnvironmentMigrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppEnvironmentMigration>>;
+
+    /**
+     * Returns one cluster migration with the progress of each copied service.
+     * Get app environment migration
+     */
+    getAppEnvironmentMigration(requestParameters: GetAppEnvironmentMigrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironmentMigration>;
+
+    /**
      * Returns the stack and service revision changes that an app environment stack upgrade would apply.
      * @summary Preview app environment stack upgrade
      * @param {number} id 
@@ -332,7 +406,41 @@ export interface AppEnvironmentsApiInterface {
     getWorkspaceConnection(requestParameters: GetWorkspaceConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WorkspaceConnection>;
 
     /**
-     * Returns cleanup records for exactly one app instance or integration.
+     * Owner-only. Returns how one file in the workspace checkout differs from the last commit, with staged and unstaged changes together. An untracked file is shown as added. When the diff cannot be read, available is false and reason explains why.
+     * @summary Get workspace file diff
+     * @param {number} id 
+     * @param {string} path File path relative to the checkout, as listed by the workspace Git status.
+     * @param {string} [originalPath] Previous path of a renamed or copied file.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    getWorkspaceGitDiffRaw(requestParameters: GetWorkspaceGitDiffRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<WorkspaceGitDiff>>;
+
+    /**
+     * Owner-only. Returns how one file in the workspace checkout differs from the last commit, with staged and unstaged changes together. An untracked file is shown as added. When the diff cannot be read, available is false and reason explains why.
+     * Get workspace file diff
+     */
+    getWorkspaceGitDiff(requestParameters: GetWorkspaceGitDiffRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WorkspaceGitDiff>;
+
+    /**
+     * Owner-only. Run a read-only Git command in the workspace runner and return the current branch, HEAD commit and uncommitted changes. When the state cannot be read, available is false and reason explains why.
+     * @summary Get workspace Git status
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    getWorkspaceGitStatusRaw(requestParameters: GetWorkspaceGitStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<WorkspaceGitStatus>>;
+
+    /**
+     * Owner-only. Run a read-only Git command in the workspace runner and return the current branch, HEAD commit and uncommitted changes. When the state cannot be read, available is false and reason explains why.
+     * Get workspace Git status
+     */
+    getWorkspaceGitStatus(requestParameters: GetWorkspaceGitStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WorkspaceGitStatus>;
+
+    /**
+     * Returns cleanup records for exactly one app environment or integration.
      * @summary List app-access cleanups
      * @param {number} [appInstanceId] 
      * @param {number} [integrationId] 
@@ -343,10 +451,26 @@ export interface AppEnvironmentsApiInterface {
     listAppAccessCleanupsRaw(requestParameters: ListAppAccessCleanupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppAccessCleanup>>>;
 
     /**
-     * Returns cleanup records for exactly one app instance or integration.
+     * Returns cleanup records for exactly one app environment or integration.
      * List app-access cleanups
      */
     listAppAccessCleanups(requestParameters: ListAppAccessCleanupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppAccessCleanup>>;
+
+    /**
+     * Returns the cluster migrations of one app environment.
+     * @summary List app environment migrations
+     * @param {number} appEnvironmentId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    listAppEnvironmentMigrationsRaw(requestParameters: ListAppEnvironmentMigrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppEnvironmentMigration>>>;
+
+    /**
+     * Returns the cluster migrations of one app environment.
+     * List app environment migrations
+     */
+    listAppEnvironmentMigrations(requestParameters: ListAppEnvironmentMigrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppEnvironmentMigration>>;
 
     /**
      * Returns app environments matching the request filters.
@@ -367,6 +491,23 @@ export interface AppEnvironmentsApiInterface {
      * List app environments
      */
     listAppEnvironments(requestParameters: ListAppEnvironmentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppEnvironment>>;
+
+    /**
+     * Starts moving the app environment and its data to another cluster of the same organization. The source stays available for rollback until the migration is cleaned up or its retention ends.
+     * @summary Migrate app environment to another cluster
+     * @param {number} id 
+     * @param {AppEnvironmentMigrationInput} appEnvironmentMigrationInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    migrateAppEnvironmentRaw(requestParameters: MigrateAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppEnvironmentMigrationOperationResult>>;
+
+    /**
+     * Starts moving the app environment and its data to another cluster of the same organization. The source stays available for rollback until the migration is cleaned up or its retention ends.
+     * Migrate app environment to another cluster
+     */
+    migrateAppEnvironment(requestParameters: MigrateAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironmentMigrationOperationResult>;
 
     /**
      * Pause workspace. Workspace operations preserve the persistent checkout.
@@ -415,6 +556,23 @@ export interface AppEnvironmentsApiInterface {
      * Prepare workspace
      */
     prepareWorkspace(requestParameters: PrepareWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task>;
+
+    /**
+     * Owner-only. Fast-forwards the workspace checkout to its upstream branch, keeping uncommitted changes, then runs the environment\'s post-deployment scripts unless scripts is false.
+     * @summary Pull workspace
+     * @param {number} id 
+     * @param {WorkspacePullInput} [workspacePullInput] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    pullWorkspaceRaw(requestParameters: PullWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>>;
+
+    /**
+     * Owner-only. Fast-forwards the workspace checkout to its upstream branch, keeping uncommitted changes, then runs the environment\'s post-deployment scripts unless scripts is false.
+     * Pull workspace
+     */
+    pullWorkspace(requestParameters: PullWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task>;
 
     /**
      * Reapplies the app environment\'s assigned stack revision using the selected override sections without changing its stack revision.
@@ -480,6 +638,22 @@ export interface AppEnvironmentsApiInterface {
      * Retry app-access cleanup
      */
     retryAppAccessCleanup(requestParameters: RetryAppAccessCleanupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Moves the app environment back to its source cluster while the source is still retained.
+     * @summary Roll back app environment migration
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    rollbackAppEnvironmentMigrationRaw(requestParameters: RollbackAppEnvironmentMigrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppEnvironmentMigrationOperationResult>>;
+
+    /**
+     * Moves the app environment back to its source cluster while the source is still retained.
+     * Roll back app environment migration
+     */
+    rollbackAppEnvironmentMigration(requestParameters: RollbackAppEnvironmentMigrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironmentMigrationOperationResult>;
 
     /**
      * Updates an existing app-access configuration and starts its reconciliation task. An active paid subscription is required.
@@ -605,6 +779,45 @@ export interface AppEnvironmentsApiInterface {
  * 
  */
 export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmentsApiInterface {
+
+    /**
+     * Removes the app environment\'s retained resources from the source cluster after a completed migration. The migration can no longer be rolled back afterwards.
+     * Clean up app environment migration
+     */
+    async cleanupAppEnvironmentMigrationRaw(requestParameters: CleanupAppEnvironmentMigrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppEnvironmentMigrationOperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling cleanupAppEnvironmentMigration().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-environment-migrations/{id}/actions/cleanup`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Removes the app environment\'s retained resources from the source cluster after a completed migration. The migration can no longer be rolled back afterwards.
+     * Clean up app environment migration
+     */
+    async cleanupAppEnvironmentMigration(requestParameters: CleanupAppEnvironmentMigrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironmentMigrationOperationResult> {
+        const response = await this.cleanupAppEnvironmentMigrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Creates external access for the app environment identified by the path. An active paid subscription is required.
@@ -947,6 +1160,45 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
+     * Returns one cluster migration with the progress of each copied service.
+     * Get app environment migration
+     */
+    async getAppEnvironmentMigrationRaw(requestParameters: GetAppEnvironmentMigrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppEnvironmentMigration>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppEnvironmentMigration().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-environment-migrations/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns one cluster migration with the progress of each copied service.
+     * Get app environment migration
+     */
+    async getAppEnvironmentMigration(requestParameters: GetAppEnvironmentMigrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironmentMigration> {
+        const response = await this.getAppEnvironmentMigrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns the stack and service revision changes that an app environment stack upgrade would apply.
      * Preview app environment stack upgrade
      */
@@ -1025,7 +1277,100 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Returns cleanup records for exactly one app instance or integration.
+     * Owner-only. Returns how one file in the workspace checkout differs from the last commit, with staged and unstaged changes together. An untracked file is shown as added. When the diff cannot be read, available is false and reason explains why.
+     * Get workspace file diff
+     */
+    async getWorkspaceGitDiffRaw(requestParameters: GetWorkspaceGitDiffRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<WorkspaceGitDiff>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getWorkspaceGitDiff().'
+            );
+        }
+
+        if (requestParameters['path'] == null) {
+            throw new runtime.RequiredError(
+                'path',
+                'Required parameter "path" was null or undefined when calling getWorkspaceGitDiff().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['path'] != null) {
+            queryParameters['path'] = requestParameters['path'];
+        }
+
+        if (requestParameters['originalPath'] != null) {
+            queryParameters['originalPath'] = requestParameters['originalPath'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/workspaces/{id}/git-diff`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Owner-only. Returns how one file in the workspace checkout differs from the last commit, with staged and unstaged changes together. An untracked file is shown as added. When the diff cannot be read, available is false and reason explains why.
+     * Get workspace file diff
+     */
+    async getWorkspaceGitDiff(requestParameters: GetWorkspaceGitDiffRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WorkspaceGitDiff> {
+        const response = await this.getWorkspaceGitDiffRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Owner-only. Run a read-only Git command in the workspace runner and return the current branch, HEAD commit and uncommitted changes. When the state cannot be read, available is false and reason explains why.
+     * Get workspace Git status
+     */
+    async getWorkspaceGitStatusRaw(requestParameters: GetWorkspaceGitStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<WorkspaceGitStatus>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getWorkspaceGitStatus().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/workspaces/{id}/git-status`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Owner-only. Run a read-only Git command in the workspace runner and return the current branch, HEAD commit and uncommitted changes. When the state cannot be read, available is false and reason explains why.
+     * Get workspace Git status
+     */
+    async getWorkspaceGitStatus(requestParameters: GetWorkspaceGitStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WorkspaceGitStatus> {
+        const response = await this.getWorkspaceGitStatusRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns cleanup records for exactly one app environment or integration.
      * List app-access cleanups
      */
     async listAppAccessCleanupsRaw(requestParameters: ListAppAccessCleanupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppAccessCleanup>>> {
@@ -1056,11 +1401,54 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Returns cleanup records for exactly one app instance or integration.
+     * Returns cleanup records for exactly one app environment or integration.
      * List app-access cleanups
      */
     async listAppAccessCleanups(requestParameters: ListAppAccessCleanupsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppAccessCleanup>> {
         const response = await this.listAppAccessCleanupsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the cluster migrations of one app environment.
+     * List app environment migrations
+     */
+    async listAppEnvironmentMigrationsRaw(requestParameters: ListAppEnvironmentMigrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppEnvironmentMigration>>> {
+        if (requestParameters['appEnvironmentId'] == null) {
+            throw new runtime.RequiredError(
+                'appEnvironmentId',
+                'Required parameter "appEnvironmentId" was null or undefined when calling listAppEnvironmentMigrations().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['appEnvironmentId'] != null) {
+            queryParameters['appEnvironmentId'] = requestParameters['appEnvironmentId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-environment-migrations`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the cluster migrations of one app environment.
+     * List app environment migrations
+     */
+    async listAppEnvironmentMigrations(requestParameters: ListAppEnvironmentMigrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppEnvironmentMigration>> {
+        const response = await this.listAppEnvironmentMigrationsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1113,6 +1501,55 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
      */
     async listAppEnvironments(requestParameters: ListAppEnvironmentsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppEnvironment>> {
         const response = await this.listAppEnvironmentsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Starts moving the app environment and its data to another cluster of the same organization. The source stays available for rollback until the migration is cleaned up or its retention ends.
+     * Migrate app environment to another cluster
+     */
+    async migrateAppEnvironmentRaw(requestParameters: MigrateAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppEnvironmentMigrationOperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling migrateAppEnvironment().'
+            );
+        }
+
+        if (requestParameters['appEnvironmentMigrationInput'] == null) {
+            throw new runtime.RequiredError(
+                'appEnvironmentMigrationInput',
+                'Required parameter "appEnvironmentMigrationInput" was null or undefined when calling migrateAppEnvironment().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-environments/{id}/actions/migrate`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['appEnvironmentMigrationInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Starts moving the app environment and its data to another cluster of the same organization. The source stays available for rollback until the migration is cleaned up or its retention ends.
+     * Migrate app environment to another cluster
+     */
+    async migrateAppEnvironment(requestParameters: MigrateAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironmentMigrationOperationResult> {
+        const response = await this.migrateAppEnvironmentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1233,6 +1670,48 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
      */
     async prepareWorkspace(requestParameters: PrepareWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task> {
         const response = await this.prepareWorkspaceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Owner-only. Fast-forwards the workspace checkout to its upstream branch, keeping uncommitted changes, then runs the environment\'s post-deployment scripts unless scripts is false.
+     * Pull workspace
+     */
+    async pullWorkspaceRaw(requestParameters: PullWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling pullWorkspace().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/workspaces/{id}/actions/pull`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['workspacePullInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Owner-only. Fast-forwards the workspace checkout to its upstream branch, keeping uncommitted changes, then runs the environment\'s post-deployment scripts unless scripts is false.
+     * Pull workspace
+     */
+    async pullWorkspace(requestParameters: PullWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task> {
+        const response = await this.pullWorkspaceRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1399,6 +1878,45 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
      */
     async retryAppAccessCleanup(requestParameters: RetryAppAccessCleanupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.retryAppAccessCleanupRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Moves the app environment back to its source cluster while the source is still retained.
+     * Roll back app environment migration
+     */
+    async rollbackAppEnvironmentMigrationRaw(requestParameters: RollbackAppEnvironmentMigrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppEnvironmentMigrationOperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling rollbackAppEnvironmentMigration().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-environment-migrations/{id}/actions/rollback`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Moves the app environment back to its source cluster while the source is still retained.
+     * Roll back app environment migration
+     */
+    async rollbackAppEnvironmentMigration(requestParameters: RollbackAppEnvironmentMigrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironmentMigrationOperationResult> {
+        const response = await this.rollbackAppEnvironmentMigrationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

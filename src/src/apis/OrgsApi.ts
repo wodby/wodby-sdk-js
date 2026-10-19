@@ -18,6 +18,7 @@ import type {
   AppServiceCapacityPreflight,
   AppServiceCapacityPreflightRequest,
   Org,
+  OrgSettingsInput,
   OrgSubscriptionDetails,
   ProblemDetails,
   UpdateOrgRequest,
@@ -39,6 +40,11 @@ export interface PreflightAppServiceCapacityRequest {
 export interface UpdateOrgOperationRequest {
     id: number;
     updateOrgRequest: UpdateOrgRequest;
+}
+
+export interface UpdateOrgSettingsRequest {
+    id: number;
+    orgSettingsInput: OrgSettingsInput;
 }
 
 /**
@@ -128,6 +134,23 @@ export interface OrgsApiInterface {
      * Update org
      */
     updateOrg(requestParameters: UpdateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org>;
+
+    /**
+     * Updates organization defaults and returns the organization. A new build image retention also applies to every app environment that still uses the previous organization value; environments with their own value keep it, and new environments inherit the new value.
+     * @summary Update organization settings
+     * @param {number} id 
+     * @param {OrgSettingsInput} orgSettingsInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrgsApiInterface
+     */
+    updateOrgSettingsRaw(requestParameters: UpdateOrgSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>>;
+
+    /**
+     * Updates organization defaults and returns the organization. A new build image retention also applies to every app environment that still uses the previous organization value; environments with their own value keep it, and new environments inherit the new value.
+     * Update organization settings
+     */
+    updateOrgSettings(requestParameters: UpdateOrgSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org>;
 
 }
 
@@ -341,6 +364,55 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
      */
     async updateOrg(requestParameters: UpdateOrgOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org> {
         const response = await this.updateOrgRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates organization defaults and returns the organization. A new build image retention also applies to every app environment that still uses the previous organization value; environments with their own value keep it, and new environments inherit the new value.
+     * Update organization settings
+     */
+    async updateOrgSettingsRaw(requestParameters: UpdateOrgSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Org>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateOrgSettings().'
+            );
+        }
+
+        if (requestParameters['orgSettingsInput'] == null) {
+            throw new runtime.RequiredError(
+                'orgSettingsInput',
+                'Required parameter "orgSettingsInput" was null or undefined when calling updateOrgSettings().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/orgs/{id}/settings`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['orgSettingsInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Updates organization defaults and returns the organization. A new build image retention also applies to every app environment that still uses the previous organization value; environments with their own value keep it, and new environments inherit the new value.
+     * Update organization settings
+     */
+    async updateOrgSettings(requestParameters: UpdateOrgSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Org> {
+        const response = await this.updateOrgSettingsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

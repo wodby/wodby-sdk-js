@@ -18,12 +18,15 @@ import type {
   DuplicateStackRequest,
   HelmChartStackScaffoldInput,
   HelmChartStackScaffoldResponse,
-  ImportCatalogFromGitInput,
+  IgnoreStackServiceRevisionInput,
+  ImportStacksFromGitInput,
   ManifestFromYAMLInput,
   ManifestValidationResponse,
   NewStackEnvVarInput,
   OperationResult,
   ProblemDetails,
+  ResourceSharing,
+  ResourceSharingInput,
   Stack,
   StackEnvVar,
   StackOriginSyncChangelog,
@@ -82,8 +85,17 @@ export interface GetStackServiceUpdateChangelogRequest {
     stackServiceId?: number;
 }
 
+export interface GetStackSharingRequest {
+    id: number;
+}
+
+export interface IgnoreStackServiceRevisionRequest {
+    id: number;
+    ignoreStackServiceRevisionInput: IgnoreStackServiceRevisionInput;
+}
+
 export interface ImportStacksRequest {
-    importCatalogFromGitInput: ImportCatalogFromGitInput;
+    importStacksFromGitInput: ImportStacksFromGitInput;
 }
 
 export interface ListStackEnvVarsRequest {
@@ -138,6 +150,11 @@ export interface UpdateStackServiceRevisionsRequest {
 export interface UpdateStackSettingsRequest {
     id: number;
     stackSettingsInput: StackSettingsInput;
+}
+
+export interface UpdateStackSharingRequest {
+    id: number;
+    resourceSharingInput: ResourceSharingInput;
 }
 
 export interface ValidateStackManifestRequest {
@@ -316,9 +333,42 @@ export interface StacksApiInterface {
     getStackServiceUpdateChangelog(requestParameters: GetStackServiceUpdateChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackServiceUpdateChangelog>>;
 
     /**
+     * Returns who owns the stack and which projects can use it.
+     * @summary Get stack sharing
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    getStackSharingRaw(requestParameters: GetStackSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>>;
+
+    /**
+     * Returns who owns the stack and which projects can use it.
+     * Get stack sharing
+     */
+    getStackSharing(requestParameters: GetStackSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
+
+    /**
+     * Stops offering one service revision as an update for a stack service and its derivatives. A newer service revision is offered again. Returns the stack.
+     * @summary Ignore stack service revision
+     * @param {number} id 
+     * @param {IgnoreStackServiceRevisionInput} ignoreStackServiceRevisionInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    ignoreStackServiceRevisionRaw(requestParameters: IgnoreStackServiceRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>>;
+
+    /**
+     * Stops offering one service revision as an update for a stack service and its derivatives. A newer service revision is offered again. Returns the stack.
+     * Ignore stack service revision
+     */
+    ignoreStackServiceRevision(requestParameters: IgnoreStackServiceRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
+
+    /**
      * Starts a task that imports stacks from a Git repository.
      * @summary Import stacks from Git
-     * @param {ImportCatalogFromGitInput} importCatalogFromGitInput 
+     * @param {ImportStacksFromGitInput} importStacksFromGitInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof StacksApiInterface
@@ -531,6 +581,23 @@ export interface StacksApiInterface {
      * Update stack settings
      */
     updateStackSettings(requestParameters: UpdateStackSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
+
+    /**
+     * Changes the stack owner and replaces the projects it is shared with. It can also make an organization-owned stack available to every project. Returns the resulting sharing.
+     * @summary Update stack sharing
+     * @param {number} id 
+     * @param {ResourceSharingInput} resourceSharingInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    updateStackSharingRaw(requestParameters: UpdateStackSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>>;
+
+    /**
+     * Changes the stack owner and replaces the projects it is shared with. It can also make an organization-owned stack available to every project. Returns the resulting sharing.
+     * Update stack sharing
+     */
+    updateStackSharing(requestParameters: UpdateStackSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
 
     /**
      * Validates a Wodby stack manifest without creating a stack.
@@ -977,14 +1044,102 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Returns who owns the stack and which projects can use it.
+     * Get stack sharing
+     */
+    async getStackSharingRaw(requestParameters: GetStackSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getStackSharing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/sharing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns who owns the stack and which projects can use it.
+     * Get stack sharing
+     */
+    async getStackSharing(requestParameters: GetStackSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing> {
+        const response = await this.getStackSharingRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Stops offering one service revision as an update for a stack service and its derivatives. A newer service revision is offered again. Returns the stack.
+     * Ignore stack service revision
+     */
+    async ignoreStackServiceRevisionRaw(requestParameters: IgnoreStackServiceRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling ignoreStackServiceRevision().'
+            );
+        }
+
+        if (requestParameters['ignoreStackServiceRevisionInput'] == null) {
+            throw new runtime.RequiredError(
+                'ignoreStackServiceRevisionInput',
+                'Required parameter "ignoreStackServiceRevisionInput" was null or undefined when calling ignoreStackServiceRevision().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/{id}/actions/ignore-service-revision`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['ignoreStackServiceRevisionInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Stops offering one service revision as an update for a stack service and its derivatives. A newer service revision is offered again. Returns the stack.
+     * Ignore stack service revision
+     */
+    async ignoreStackServiceRevision(requestParameters: IgnoreStackServiceRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
+        const response = await this.ignoreStackServiceRevisionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Starts a task that imports stacks from a Git repository.
      * Import stacks from Git
      */
     async importStacksRaw(requestParameters: ImportStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
-        if (requestParameters['importCatalogFromGitInput'] == null) {
+        if (requestParameters['importStacksFromGitInput'] == null) {
             throw new runtime.RequiredError(
-                'importCatalogFromGitInput',
-                'Required parameter "importCatalogFromGitInput" was null or undefined when calling importStacks().'
+                'importStacksFromGitInput',
+                'Required parameter "importStacksFromGitInput" was null or undefined when calling importStacks().'
             );
         }
 
@@ -1003,7 +1158,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['importCatalogFromGitInput'],
+            body: requestParameters['importStacksFromGitInput'],
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
@@ -1539,6 +1694,55 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
      */
     async updateStackSettings(requestParameters: UpdateStackSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
         const response = await this.updateStackSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes the stack owner and replaces the projects it is shared with. It can also make an organization-owned stack available to every project. Returns the resulting sharing.
+     * Update stack sharing
+     */
+    async updateStackSharingRaw(requestParameters: UpdateStackSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateStackSharing().'
+            );
+        }
+
+        if (requestParameters['resourceSharingInput'] == null) {
+            throw new runtime.RequiredError(
+                'resourceSharingInput',
+                'Required parameter "resourceSharingInput" was null or undefined when calling updateStackSharing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/sharing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['resourceSharingInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Changes the stack owner and replaces the projects it is shared with. It can also make an organization-owned stack available to every project. Returns the resulting sharing.
+     * Update stack sharing
+     */
+    async updateStackSharing(requestParameters: UpdateStackSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing> {
+        const response = await this.updateStackSharingRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

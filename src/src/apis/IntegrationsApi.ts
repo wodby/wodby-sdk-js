@@ -16,11 +16,13 @@
 import * as runtime from '../runtime';
 import type {
   AppAccessProviderOptions,
+  CloudMachineType,
   Integration,
   IntegrationConfigurationResult,
   IntegrationEnvironmentPolicyInput,
   IntegrationProviderRevisionUpgrade,
   IntegrationScope,
+  IntegrationUsagesResponse,
   KubeVersion,
   NewIntegrationInput,
   OperationResult,
@@ -28,6 +30,8 @@ import type {
   RemoteGitRepo,
   RemoteGitRepoFilePresence,
   ResolveIntegrationResult,
+  ResourceSharing,
+  ResourceSharingInput,
   SearchIntegrationsInput,
   UpdateIntegrationInput,
   UpgradeIntegrationProviderRevisionInput,
@@ -69,6 +73,10 @@ export interface GetIntegrationRemoteGitRepoFilePresenceRequest {
     remoteGitRepoId: string;
     path: string;
     ref: string;
+}
+
+export interface GetIntegrationSharingRequest {
+    id: number;
 }
 
 export interface ListIntegrationKubeMachineTypesRequest {
@@ -115,6 +123,12 @@ export interface ListIntegrationStorageClassesRequest {
     id: number;
 }
 
+export interface ListIntegrationUsagesRequest {
+    id: number;
+    page?: number;
+    pageSize?: number;
+}
+
 export interface ListIntegrationsRequest {
     orgId?: number;
     projectIds?: string;
@@ -143,6 +157,11 @@ export interface UpdateIntegrationRequest {
 export interface UpdateIntegrationEnvironmentPolicyRequest {
     id: number;
     integrationEnvironmentPolicyInput: IntegrationEnvironmentPolicyInput;
+}
+
+export interface UpdateIntegrationSharingRequest {
+    id: number;
+    resourceSharingInput: ResourceSharingInput;
 }
 
 export interface UpgradeIntegrationProviderRevisionRequest {
@@ -295,6 +314,22 @@ export interface IntegrationsApiInterface {
     getIntegrationRemoteGitRepoFilePresence(requestParameters: GetIntegrationRemoteGitRepoFilePresenceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RemoteGitRepoFilePresence>;
 
     /**
+     * Returns who owns the integration and which projects can use it.
+     * @summary Get integration sharing
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    getIntegrationSharingRaw(requestParameters: GetIntegrationSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>>;
+
+    /**
+     * Returns who owns the integration and which projects can use it.
+     * Get integration sharing
+     */
+    getIntegrationSharing(requestParameters: GetIntegrationSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
+
+    /**
      * Returns Kubernetes machine types matching the request filters.
      * @summary List Kubernetes machine types
      * @param {number} id 
@@ -303,13 +338,13 @@ export interface IntegrationsApiInterface {
      * @throws {RequiredError}
      * @memberof IntegrationsApiInterface
      */
-    listIntegrationKubeMachineTypesRaw(requestParameters: ListIntegrationKubeMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
+    listIntegrationKubeMachineTypesRaw(requestParameters: ListIntegrationKubeMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<CloudMachineType>>>;
 
     /**
      * Returns Kubernetes machine types matching the request filters.
      * List Kubernetes machine types
      */
-    listIntegrationKubeMachineTypes(requestParameters: ListIntegrationKubeMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
+    listIntegrationKubeMachineTypes(requestParameters: ListIntegrationKubeMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CloudMachineType>>;
 
     /**
      * Returns Kubernetes regions matching the request filters.
@@ -459,6 +494,24 @@ export interface IntegrationsApiInterface {
     listIntegrationStorageClasses(requestParameters: ListIntegrationStorageClassesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>>;
 
     /**
+     * Lists what uses the integration, such as services, environments, builds, backups and organization defaults, so you can check it before you change or delete the integration. Only usages you can see are listed.
+     * @summary List integration usages
+     * @param {number} id 
+     * @param {number} [page] Page number, defaults to 1
+     * @param {number} [pageSize] Page size, defaults to 30
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    listIntegrationUsagesRaw(requestParameters: ListIntegrationUsagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IntegrationUsagesResponse>>;
+
+    /**
+     * Lists what uses the integration, such as services, environments, builds, backups and organization defaults, so you can check it before you change or delete the integration. Only usages you can see are listed.
+     * List integration usages
+     */
+    listIntegrationUsages(requestParameters: ListIntegrationUsagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IntegrationUsagesResponse>;
+
+    /**
      * Returns integrations matching the request filters.
      * @summary List integrations
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -559,6 +612,23 @@ export interface IntegrationsApiInterface {
      * Update integration environment policy
      */
     updateIntegrationEnvironmentPolicy(requestParameters: UpdateIntegrationEnvironmentPolicyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
+
+    /**
+     * Changes the integration owner and replaces the projects it is shared with. It can also make an organization-owned integration available to every project. Returns the resulting sharing.
+     * @summary Update integration sharing
+     * @param {number} id 
+     * @param {ResourceSharingInput} resourceSharingInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IntegrationsApiInterface
+     */
+    updateIntegrationSharingRaw(requestParameters: UpdateIntegrationSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>>;
+
+    /**
+     * Changes the integration owner and replaces the projects it is shared with. It can also make an organization-owned integration available to every project. Returns the resulting sharing.
+     * Update integration sharing
+     */
+    updateIntegrationSharing(requestParameters: UpdateIntegrationSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
 
     /**
      * Upgrades an integration to its eligible provider revision and optionally drops fields removed by the target contract.
@@ -960,10 +1030,49 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Returns who owns the integration and which projects can use it.
+     * Get integration sharing
+     */
+    async getIntegrationSharingRaw(requestParameters: GetIntegrationSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getIntegrationSharing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/sharing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns who owns the integration and which projects can use it.
+     * Get integration sharing
+     */
+    async getIntegrationSharing(requestParameters: GetIntegrationSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing> {
+        const response = await this.getIntegrationSharingRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns Kubernetes machine types matching the request filters.
      * List Kubernetes machine types
      */
-    async listIntegrationKubeMachineTypesRaw(requestParameters: ListIntegrationKubeMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
+    async listIntegrationKubeMachineTypesRaw(requestParameters: ListIntegrationKubeMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<CloudMachineType>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -997,14 +1106,14 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse<any>(response);
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
      * Returns Kubernetes machine types matching the request filters.
      * List Kubernetes machine types
      */
-    async listIntegrationKubeMachineTypes(requestParameters: ListIntegrationKubeMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
+    async listIntegrationKubeMachineTypes(requestParameters: ListIntegrationKubeMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CloudMachineType>> {
         const response = await this.listIntegrationKubeMachineTypesRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -1394,6 +1503,53 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
+     * Lists what uses the integration, such as services, environments, builds, backups and organization defaults, so you can check it before you change or delete the integration. Only usages you can see are listed.
+     * List integration usages
+     */
+    async listIntegrationUsagesRaw(requestParameters: ListIntegrationUsagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IntegrationUsagesResponse>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listIntegrationUsages().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['page'] != null) {
+            queryParameters['page'] = requestParameters['page'];
+        }
+
+        if (requestParameters['pageSize'] != null) {
+            queryParameters['pageSize'] = requestParameters['pageSize'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/usages/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Lists what uses the integration, such as services, environments, builds, backups and organization defaults, so you can check it before you change or delete the integration. Only usages you can see are listed.
+     * List integration usages
+     */
+    async listIntegrationUsages(requestParameters: ListIntegrationUsagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IntegrationUsagesResponse> {
+        const response = await this.listIntegrationUsagesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns integrations matching the request filters.
      * List integrations
      */
@@ -1663,6 +1819,55 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
      */
     async updateIntegrationEnvironmentPolicy(requestParameters: UpdateIntegrationEnvironmentPolicyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
         const response = await this.updateIntegrationEnvironmentPolicyRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes the integration owner and replaces the projects it is shared with. It can also make an organization-owned integration available to every project. Returns the resulting sharing.
+     * Update integration sharing
+     */
+    async updateIntegrationSharingRaw(requestParameters: UpdateIntegrationSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateIntegrationSharing().'
+            );
+        }
+
+        if (requestParameters['resourceSharingInput'] == null) {
+            throw new runtime.RequiredError(
+                'resourceSharingInput',
+                'Required parameter "resourceSharingInput" was null or undefined when calling updateIntegrationSharing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/integrations/sharing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['resourceSharingInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Changes the integration owner and replaces the projects it is shared with. It can also make an organization-owned integration available to every project. Returns the resulting sharing.
+     * Update integration sharing
+     */
+    async updateIntegrationSharing(requestParameters: UpdateIntegrationSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing> {
+        const response = await this.updateIntegrationSharingRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -25,6 +25,8 @@ import type {
   ProviderRevision,
   ProviderSettingsInput,
   ProvidersResponse,
+  ResourceSharing,
+  ResourceSharingInput,
   UpdateStackFromGitRequest,
 } from '../models/index';
 
@@ -45,6 +47,10 @@ export interface GetProviderByNameRequest {
 }
 
 export interface GetProviderRevisionRequest {
+    id: number;
+}
+
+export interface GetProviderSharingRequest {
     id: number;
 }
 
@@ -74,6 +80,11 @@ export interface UpdateProviderFromManifestRequest {
 export interface UpdateProviderSettingsRequest {
     id: number;
     providerSettingsInput: ProviderSettingsInput;
+}
+
+export interface UpdateProviderSharingRequest {
+    id: number;
+    resourceSharingInput: ResourceSharingInput;
 }
 
 /**
@@ -164,6 +175,22 @@ export interface ProvidersApiInterface {
     getProviderRevision(requestParameters: GetProviderRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProviderRevision>;
 
     /**
+     * Returns who owns the provider and which projects can use it.
+     * @summary Get provider sharing
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProvidersApiInterface
+     */
+    getProviderSharingRaw(requestParameters: GetProviderSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>>;
+
+    /**
+     * Returns who owns the provider and which projects can use it.
+     * Get provider sharing
+     */
+    getProviderSharing(requestParameters: GetProviderSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
+
+    /**
      * Starts a task that imports provider.yml or all providers listed by index.yml from a Git repository.
      * @summary Import providers from Git
      * @param {ImportCatalogFromGitInput} importCatalogFromGitInput 
@@ -250,6 +277,23 @@ export interface ProvidersApiInterface {
      * Update provider settings
      */
     updateProviderSettings(requestParameters: UpdateProviderSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider>;
+
+    /**
+     * Changes the provider owner and replaces the projects it is shared with. Returns the resulting sharing.
+     * @summary Update provider sharing
+     * @param {number} id 
+     * @param {ResourceSharingInput} resourceSharingInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProvidersApiInterface
+     */
+    updateProviderSharingRaw(requestParameters: UpdateProviderSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>>;
+
+    /**
+     * Changes the provider owner and replaces the projects it is shared with. Returns the resulting sharing.
+     * Update provider sharing
+     */
+    updateProviderSharing(requestParameters: UpdateProviderSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
 
 }
 
@@ -456,6 +500,45 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
      */
     async getProviderRevision(requestParameters: GetProviderRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProviderRevision> {
         const response = await this.getProviderRevisionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns who owns the provider and which projects can use it.
+     * Get provider sharing
+     */
+    async getProviderSharingRaw(requestParameters: GetProviderSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getProviderSharing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/providers/sharing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns who owns the provider and which projects can use it.
+     * Get provider sharing
+     */
+    async getProviderSharing(requestParameters: GetProviderSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing> {
+        const response = await this.getProviderSharingRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -701,6 +784,55 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
      */
     async updateProviderSettings(requestParameters: UpdateProviderSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider> {
         const response = await this.updateProviderSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes the provider owner and replaces the projects it is shared with. Returns the resulting sharing.
+     * Update provider sharing
+     */
+    async updateProviderSharingRaw(requestParameters: UpdateProviderSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateProviderSharing().'
+            );
+        }
+
+        if (requestParameters['resourceSharingInput'] == null) {
+            throw new runtime.RequiredError(
+                'resourceSharingInput',
+                'Required parameter "resourceSharingInput" was null or undefined when calling updateProviderSharing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/providers/sharing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['resourceSharingInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Changes the provider owner and replaces the projects it is shared with. Returns the resulting sharing.
+     * Update provider sharing
+     */
+    async updateProviderSharing(requestParameters: UpdateProviderSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing> {
+        const response = await this.updateProviderSharingRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

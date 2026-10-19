@@ -75,6 +75,10 @@ export interface UpdateBackupPresetRequest {
     updateBackupPresetInput: UpdateBackupPresetInput;
 }
 
+export interface VoidBackupFileRequest {
+    id: number;
+}
+
 /**
  * BackupsApi - interface
  * 
@@ -239,6 +243,22 @@ export interface BackupsApiInterface {
      * Update backup preset
      */
     updateBackupPreset(requestParameters: UpdateBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackupPreset>;
+
+    /**
+     * Permanently removes a completed backup file from Wodby Blob Storage while retaining its backup record. The operation is unavailable while an import is using the backup.
+     * @summary Void backup file
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BackupsApiInterface
+     */
+    voidBackupFileRaw(requestParameters: VoidBackupFileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Backup>>;
+
+    /**
+     * Permanently removes a completed backup file from Wodby Blob Storage while retaining its backup record. The operation is unavailable while an import is using the backup.
+     * Void backup file
+     */
+    voidBackupFile(requestParameters: VoidBackupFileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Backup>;
 
 }
 
@@ -657,6 +677,45 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
      */
     async updateBackupPreset(requestParameters: UpdateBackupPresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackupPreset> {
         const response = await this.updateBackupPresetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Permanently removes a completed backup file from Wodby Blob Storage while retaining its backup record. The operation is unavailable while an import is using the backup.
+     * Void backup file
+     */
+    async voidBackupFileRaw(requestParameters: VoidBackupFileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Backup>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling voidBackupFile().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/backups/{id}/actions/void-file`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Permanently removes a completed backup file from Wodby Blob Storage while retaining its backup record. The operation is unavailable while an import is using the backup.
+     * Void backup file
+     */
+    async voidBackupFile(requestParameters: VoidBackupFileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Backup> {
+        const response = await this.voidBackupFileRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

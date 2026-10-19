@@ -22,6 +22,8 @@ import type {
   ManifestValidationResponse,
   OperationResult,
   ProblemDetails,
+  ResourceSharing,
+  ResourceSharingInput,
   Service,
   ServiceManifestUpdateInput,
   ServiceRevision,
@@ -43,6 +45,10 @@ export interface GetServiceByNameRequest {
 }
 
 export interface GetServiceRevisionRequest {
+    id: number;
+}
+
+export interface GetServiceSharingRequest {
     id: number;
 }
 
@@ -74,6 +80,11 @@ export interface UpdateServiceFromManifestRequest {
 export interface UpdateServiceSettingsRequest {
     id: number;
     serviceSettingsInput: ServiceSettingsInput;
+}
+
+export interface UpdateServiceSharingRequest {
+    id: number;
+    resourceSharingInput: ResourceSharingInput;
 }
 
 export interface ValidateServiceManifestRequest {
@@ -151,6 +162,22 @@ export interface ServicesApiInterface {
      * Get service revision
      */
     getServiceRevision(requestParameters: GetServiceRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServiceRevision>;
+
+    /**
+     * Returns who owns the service and which projects can use it.
+     * @summary Get service sharing
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServicesApiInterface
+     */
+    getServiceSharingRaw(requestParameters: GetServiceSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>>;
+
+    /**
+     * Returns who owns the service and which projects can use it.
+     * Get service sharing
+     */
+    getServiceSharing(requestParameters: GetServiceSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
 
     /**
      * Starts a task that imports services from a Git repository.
@@ -253,6 +280,23 @@ export interface ServicesApiInterface {
      * Update service settings
      */
     updateServiceSettings(requestParameters: UpdateServiceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service>;
+
+    /**
+     * Changes the service owner and replaces the projects it is shared with. It can also make an organization-owned service available to every project. Returns the resulting sharing.
+     * @summary Update service sharing
+     * @param {number} id 
+     * @param {ResourceSharingInput} resourceSharingInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServicesApiInterface
+     */
+    updateServiceSharingRaw(requestParameters: UpdateServiceSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>>;
+
+    /**
+     * Changes the service owner and replaces the projects it is shared with. It can also make an organization-owned service available to every project. Returns the resulting sharing.
+     * Update service sharing
+     */
+    updateServiceSharing(requestParameters: UpdateServiceSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
 
     /**
      * Validates a Wodby service manifest without creating a service.
@@ -437,6 +481,45 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
      */
     async getServiceRevision(requestParameters: GetServiceRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ServiceRevision> {
         const response = await this.getServiceRevisionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns who owns the service and which projects can use it.
+     * Get service sharing
+     */
+    async getServiceSharingRaw(requestParameters: GetServiceSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getServiceSharing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/services/sharing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns who owns the service and which projects can use it.
+     * Get service sharing
+     */
+    async getServiceSharing(requestParameters: GetServiceSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing> {
+        const response = await this.getServiceSharingRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -710,6 +793,55 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
      */
     async updateServiceSettings(requestParameters: UpdateServiceSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service> {
         const response = await this.updateServiceSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes the service owner and replaces the projects it is shared with. It can also make an organization-owned service available to every project. Returns the resulting sharing.
+     * Update service sharing
+     */
+    async updateServiceSharingRaw(requestParameters: UpdateServiceSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateServiceSharing().'
+            );
+        }
+
+        if (requestParameters['resourceSharingInput'] == null) {
+            throw new runtime.RequiredError(
+                'resourceSharingInput',
+                'Required parameter "resourceSharingInput" was null or undefined when calling updateServiceSharing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/services/sharing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['resourceSharingInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Changes the service owner and replaces the projects it is shared with. It can also make an organization-owned service available to every project. Returns the resulting sharing.
+     * Update service sharing
+     */
+    async updateServiceSharing(requestParameters: UpdateServiceSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing> {
+        const response = await this.updateServiceSharingRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

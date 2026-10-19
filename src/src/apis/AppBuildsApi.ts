@@ -56,6 +56,10 @@ export interface ListAppBuildsRequest {
     pageSize?: number;
 }
 
+export interface VoidAppBuildImagesRequest {
+    id: number;
+}
+
 /**
  * AppBuildsApi - interface
  * 
@@ -176,6 +180,22 @@ export interface AppBuildsApiInterface {
      * List app builds
      */
     listAppBuilds(requestParameters: ListAppBuildsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildsResponse>;
+
+    /**
+     * Removes the build\'s images from a Wodby-managed registry when possible and marks them unavailable, so the build can no longer be deployed. Refused while the build is pending or used by the environment. Returns the build.
+     * @summary Void build images
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppBuildsApiInterface
+     */
+    voidAppBuildImagesRaw(requestParameters: VoidAppBuildImagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>>;
+
+    /**
+     * Removes the build\'s images from a Wodby-managed registry when possible and marks them unavailable, so the build can no longer be deployed. Refused while the build is pending or used by the environment. Returns the build.
+     * Void build images
+     */
+    voidAppBuildImages(requestParameters: VoidAppBuildImagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild>;
 
 }
 
@@ -484,6 +504,45 @@ export class AppBuildsApi extends runtime.BaseAPI implements AppBuildsApiInterfa
      */
     async listAppBuilds(requestParameters: ListAppBuildsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuildsResponse> {
         const response = await this.listAppBuildsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Removes the build\'s images from a Wodby-managed registry when possible and marks them unavailable, so the build can no longer be deployed. Refused while the build is pending or used by the environment. Returns the build.
+     * Void build images
+     */
+    async voidAppBuildImagesRaw(requestParameters: VoidAppBuildImagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppBuild>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling voidAppBuildImages().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-builds/{id}/actions/void-images`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Removes the build\'s images from a Wodby-managed registry when possible and marks them unavailable, so the build can no longer be deployed. Refused while the build is pending or used by the environment. Returns the build.
+     * Void build images
+     */
+    async voidAppBuildImages(requestParameters: VoidAppBuildImagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppBuild> {
+        const response = await this.voidAppBuildImagesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

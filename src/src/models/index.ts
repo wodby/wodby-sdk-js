@@ -710,7 +710,7 @@ export interface AppBuild {
      */
     id: number;
     /**
-     * App-instance build-launch number. Build records created by the same Wodby CI launch share this number.
+     * App environment build-launch number. Build records created by the same Wodby CI launch share this number.
      * @type {number}
      * @memberof AppBuild
      */
@@ -780,6 +780,60 @@ export interface AppBuild {
      * @type {string}
      * @memberof AppBuild
      */
+    authorName?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppBuild
+     */
+    authorEmail?: string | null;
+    /**
+     * CI workflow that produced an externally built image. Empty for Wodby CI builds.
+     * @type {string}
+     * @memberof AppBuild
+     */
+    workflow: string;
+    /**
+     * Stack revision the build was made for.
+     * @type {number}
+     * @memberof AppBuild
+     */
+    stackRevId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppBuild
+     */
+    gitRepoId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppBuild
+     */
+    ciIntegrationId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppBuild
+     */
+    registryIntegrationId?: number | null;
+    /**
+     * Whether the build's images were voided and can no longer be deployed.
+     * @type {string}
+     * @memberof AppBuild
+     */
+    imageVoidStatus: AppBuildImageVoidStatusEnum;
+    /**
+     * True when the build's images can be voided now.
+     * @type {boolean}
+     * @memberof AppBuild
+     */
+    canVoidImages: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppBuild
+     */
     createdAt: string;
     /**
      * 
@@ -800,6 +854,18 @@ export interface AppBuild {
      */
     endedAt?: string | null;
 }
+
+
+/**
+ * @export
+ */
+export const AppBuildImageVoidStatusEnum = {
+    None: 'none',
+    PartiallyVoided: 'partially_voided',
+    Voided: 'voided'
+} as const;
+export type AppBuildImageVoidStatusEnum = typeof AppBuildImageVoidStatusEnum[keyof typeof AppBuildImageVoidStatusEnum];
+
 /**
  * 
  * @export
@@ -888,11 +954,23 @@ export interface AppDeployment {
      */
     number: number;
     /**
-     * 
+     * Overall result, including the routing updates that follow the service rollout.
      * @type {string}
      * @memberof AppDeployment
      */
     status: string;
+    /**
+     * Progress of rolling out the selected services. It does not show whether routing has finished.
+     * @type {string}
+     * @memberof AppDeployment
+     */
+    rolloutStatus: AppDeploymentRolloutStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppDeployment
+     */
+    rolloutEndedAt?: string | null;
     /**
      * 
      * @type {string}
@@ -972,6 +1050,18 @@ export interface AppDeployment {
      */
     appServiceDeployments: Array<AppServiceDeployment>;
     /**
+     * Post-deployment scripts that the deployment's builds provide.
+     * @type {Array<string>}
+     * @memberof AppDeployment
+     */
+    postDeploymentScripts: Array<string>;
+    /**
+     * True when the deployment does not run the post-deployment scripts its builds provide.
+     * @type {boolean}
+     * @memberof AppDeployment
+     */
+    skipPostDeploymentScripts: boolean;
+    /**
      * 
      * @type {string}
      * @memberof AppDeployment
@@ -997,6 +1087,19 @@ export interface AppDeployment {
     endedAt?: string | null;
 }
 
+
+/**
+ * @export
+ */
+export const AppDeploymentRolloutStatusEnum = {
+    Unknown: 'unknown',
+    Pending: 'pending',
+    InProgress: 'in_progress',
+    Completed: 'completed',
+    Canceled: 'canceled',
+    Errored: 'errored'
+} as const;
+export type AppDeploymentRolloutStatusEnum = typeof AppDeploymentRolloutStatusEnum[keyof typeof AppDeploymentRolloutStatusEnum];
 
 /**
  * @export
@@ -1451,6 +1554,248 @@ export interface AppEnvironmentMaintenanceModeInput {
 /**
  * 
  * @export
+ * @interface AppEnvironmentMigration
+ */
+export interface AppEnvironmentMigration {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentMigration
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentMigration
+     */
+    appEnvironmentId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentMigration
+     */
+    sourceClusterId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentMigration
+     */
+    targetClusterId: number;
+    /**
+     * Task that runs the migration.
+     * @type {number}
+     * @memberof AppEnvironmentMigration
+     */
+    taskId: number;
+    /**
+     * Deployment that brings the environment up on the target cluster.
+     * @type {number}
+     * @memberof AppEnvironmentMigration
+     */
+    deploymentId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentMigration
+     */
+    status: AppEnvironmentMigrationStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentMigration
+     */
+    phase: AppEnvironmentMigrationPhaseEnum;
+    /**
+     * Services whose data the migration copies with a backup on the source and an import on the target.
+     * @type {Array<AppEnvironmentMigrationComponent>}
+     * @memberof AppEnvironmentMigration
+     */
+    components: Array<AppEnvironmentMigrationComponent>;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentMigration
+     */
+    failureMessage: string;
+    /**
+     * When the retained source is removed automatically.
+     * @type {string}
+     * @memberof AppEnvironmentMigration
+     */
+    retainUntil?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentMigration
+     */
+    cutoverAt?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentMigration
+     */
+    endedAt?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentMigration
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentMigration
+     */
+    updatedAt: string;
+}
+
+
+/**
+ * @export
+ */
+export const AppEnvironmentMigrationStatusEnum = {
+    Pending: 'pending',
+    InProgress: 'in_progress',
+    Completed: 'completed',
+    Failed: 'failed',
+    RollingBack: 'rolling_back',
+    RolledBack: 'rolled_back',
+    RollbackFailed: 'rollback_failed',
+    Cleaned: 'cleaned'
+} as const;
+export type AppEnvironmentMigrationStatusEnum = typeof AppEnvironmentMigrationStatusEnum[keyof typeof AppEnvironmentMigrationStatusEnum];
+
+/**
+ * @export
+ */
+export const AppEnvironmentMigrationPhaseEnum = {
+    Preparing: 'preparing',
+    FreezingSource: 'freezing_source',
+    BackingUp: 'backing_up',
+    RestoringTarget: 'restoring_target',
+    CuttingOver: 'cutting_over',
+    RetainingSource: 'retaining_source',
+    RollingBack: 'rolling_back',
+    CleaningSource: 'cleaning_source',
+    Done: 'done'
+} as const;
+export type AppEnvironmentMigrationPhaseEnum = typeof AppEnvironmentMigrationPhaseEnum[keyof typeof AppEnvironmentMigrationPhaseEnum];
+
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentMigrationComponent
+ */
+export interface AppEnvironmentMigrationComponent {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentMigrationComponent
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentMigrationComponent
+     */
+    appServiceId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentMigrationComponent
+     */
+    name: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentMigrationComponent
+     */
+    backupId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentMigrationComponent
+     */
+    backupStatus?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentMigrationComponent
+     */
+    importId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentMigrationComponent
+     */
+    importStatus?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentMigrationInput
+ */
+export interface AppEnvironmentMigrationInput {
+    /**
+     * Cluster of the same organization that the environment moves to.
+     * @type {number}
+     * @memberof AppEnvironmentMigrationInput
+     */
+    targetClusterId: number;
+    /**
+     * Target cluster storage classes for the environment's volumes. A volume left out uses its current storage class, which must exist on the target cluster.
+     * @type {Array<AppEnvironmentMigrationVolumeInput>}
+     * @memberof AppEnvironmentMigrationInput
+     */
+    volumes?: Array<AppEnvironmentMigrationVolumeInput>;
+}
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentMigrationOperationResult
+ */
+export interface AppEnvironmentMigrationOperationResult {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentMigrationOperationResult
+     */
+    success: boolean;
+    /**
+     * Task that runs the requested step.
+     * @type {number}
+     * @memberof AppEnvironmentMigrationOperationResult
+     */
+    taskId?: number | null;
+    /**
+     * 
+     * @type {AppEnvironmentMigration}
+     * @memberof AppEnvironmentMigrationOperationResult
+     */
+    migration: AppEnvironmentMigration;
+}
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentMigrationVolumeInput
+ */
+export interface AppEnvironmentMigrationVolumeInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentMigrationVolumeInput
+     */
+    appServiceVolumeId: number;
+    /**
+     * Target cluster storage class for the volume.
+     * @type {string}
+     * @memberof AppEnvironmentMigrationVolumeInput
+     */
+    storageClassName?: string | null;
+}
+/**
+ * 
+ * @export
  * @interface AppEnvironmentSettings
  */
 export interface AppEnvironmentSettings {
@@ -1460,6 +1805,12 @@ export interface AppEnvironmentSettings {
      * @memberof AppEnvironmentSettings
      */
     autoStackUpgrade?: AppEnvironmentAutoStackUpgradeSettings;
+    /**
+     * 
+     * @type {BuildImageCleanupSettings}
+     * @memberof AppEnvironmentSettings
+     */
+    buildImageCleanup?: BuildImageCleanupSettings;
 }
 /**
  * 
@@ -1473,6 +1824,12 @@ export interface AppEnvironmentSettingsInput {
      * @memberof AppEnvironmentSettingsInput
      */
     autoStackUpgrade?: AppEnvironmentAutoStackUpgradeSettingsInput;
+    /**
+     * Omit it to keep the current build image retention.
+     * @type {BuildImageCleanupSettingsInput}
+     * @memberof AppEnvironmentSettingsInput
+     */
+    buildImageCleanup?: BuildImageCleanupSettingsInput;
 }
 /**
  * 
@@ -2135,6 +2492,27 @@ export interface AppRouteSetting {
 }
 
 
+/**
+ * 
+ * @export
+ * @interface AppRouteSettingInput
+ */
+export interface AppRouteSettingInput {
+    /**
+     * 
+     * @type {AppRouteSettingName}
+     * @memberof AppRouteSettingInput
+     */
+    name: AppRouteSettingName;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppRouteSettingInput
+     */
+    value: string;
+}
+
+
 
 /**
  * 
@@ -2148,7 +2526,9 @@ export const AppRouteSettingName = {
     PathRewrite: 'PATH_REWRITE',
     Hsts: 'HSTS',
     RequestTimeout: 'REQUEST_TIMEOUT',
-    BackendRequestTimeout: 'BACKEND_REQUEST_TIMEOUT'
+    BackendRequestTimeout: 'BACKEND_REQUEST_TIMEOUT',
+    RateLimitPerIp: 'RATE_LIMIT_PER_IP',
+    RateLimitTotal: 'RATE_LIMIT_TOTAL'
 } as const;
 export type AppRouteSettingName = typeof AppRouteSettingName[keyof typeof AppRouteSettingName];
 
@@ -2164,6 +2544,19 @@ export const AppRouteSettingSource = {
 } as const;
 export type AppRouteSettingSource = typeof AppRouteSettingSource[keyof typeof AppRouteSettingSource];
 
+/**
+ * 
+ * @export
+ * @interface AppRouteSettingsInput
+ */
+export interface AppRouteSettingsInput {
+    /**
+     * The complete list of settings. A setting left out is removed.
+     * @type {Array<AppRouteSettingInput>}
+     * @memberof AppRouteSettingsInput
+     */
+    settings: Array<AppRouteSettingInput>;
+}
 /**
  * 
  * @export
@@ -2779,6 +3172,12 @@ export interface AppServiceConfigurationIssue {
  * @interface AppServiceContainer
  */
 export interface AppServiceContainer {
+    /**
+     * 
+     * @type {GPUResources}
+     * @memberof AppServiceContainer
+     */
+    gpu?: GPUResources | null;
     /**
      * 
      * @type {number}
@@ -3955,6 +4354,12 @@ export interface Backup {
      */
     integrationId: number | null;
     /**
+     * Region used by Wodby Blob Storage. Null for third-party storage and legacy backups.
+     * @type {string}
+     * @memberof Backup
+     */
+    blobStorageRegion?: BackupBlobStorageRegionEnum | null;
+    /**
      * 
      * @type {number}
      * @memberof Backup
@@ -3966,6 +4371,18 @@ export interface Backup {
      * @memberof Backup
      */
     size?: number | null;
+    /**
+     * Whether the stored backup file has been permanently removed.
+     * @type {boolean}
+     * @memberof Backup
+     */
+    fileDeleted: boolean;
+    /**
+     * Whether the backup file can be permanently removed now.
+     * @type {boolean}
+     * @memberof Backup
+     */
+    canVoidFile: boolean;
     /**
      * 
      * @type {Array<BackupOption>}
@@ -3997,6 +4414,17 @@ export interface Backup {
      */
     endedAt?: string | null;
 }
+
+
+/**
+ * @export
+ */
+export const BackupBlobStorageRegionEnum = {
+    Eu: 'eu',
+    Us: 'us'
+} as const;
+export type BackupBlobStorageRegionEnum = typeof BackupBlobStorageRegionEnum[keyof typeof BackupBlobStorageRegionEnum];
+
 /**
  * 
  * @export
@@ -4101,6 +4529,12 @@ export interface BackupPreset {
      */
     storageClass?: string | null;
     /**
+     * Region used by Wodby Blob Storage. Null for third-party storage and legacy presets.
+     * @type {string}
+     * @memberof BackupPreset
+     */
+    blobStorageRegion?: BackupPresetBlobStorageRegionEnum | null;
+    /**
      * 
      * @type {Array<BackupOption>}
      * @memberof BackupPreset
@@ -4186,6 +4620,15 @@ export const BackupPresetBackupCategoryEnum = {
 export type BackupPresetBackupCategoryEnum = typeof BackupPresetBackupCategoryEnum[keyof typeof BackupPresetBackupCategoryEnum];
 
 /**
+ * @export
+ */
+export const BackupPresetBlobStorageRegionEnum = {
+    Eu: 'eu',
+    Us: 'us'
+} as const;
+export type BackupPresetBlobStorageRegionEnum = typeof BackupPresetBlobStorageRegionEnum[keyof typeof BackupPresetBlobStorageRegionEnum];
+
+/**
  * 
  * @export
  * @interface BackupsResponse
@@ -4225,6 +4668,60 @@ export const BillingSubscriptionStatus = {
     Canceling: 'CANCELING'
 } as const;
 export type BillingSubscriptionStatus = typeof BillingSubscriptionStatus[keyof typeof BillingSubscriptionStatus];
+
+/**
+ * How long images of unused builds are kept in the Wodby container registry before they are voided.
+ * @export
+ * @interface BuildImageCleanupSettings
+ */
+export interface BuildImageCleanupSettings {
+    /**
+     * Age after which images of unused builds are voided automatically. never disables the cleanup.
+     * @type {string}
+     * @memberof BuildImageCleanupSettings
+     */
+    retention: BuildImageCleanupSettingsRetentionEnum;
+}
+
+
+/**
+ * @export
+ */
+export const BuildImageCleanupSettingsRetentionEnum = {
+    Never: 'never',
+    OneMonth: 'one_month',
+    ThreeMonths: 'three_months',
+    SixMonths: 'six_months',
+    OneYear: 'one_year'
+} as const;
+export type BuildImageCleanupSettingsRetentionEnum = typeof BuildImageCleanupSettingsRetentionEnum[keyof typeof BuildImageCleanupSettingsRetentionEnum];
+
+/**
+ * 
+ * @export
+ * @interface BuildImageCleanupSettingsInput
+ */
+export interface BuildImageCleanupSettingsInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof BuildImageCleanupSettingsInput
+     */
+    retention: BuildImageCleanupSettingsInputRetentionEnum;
+}
+
+
+/**
+ * @export
+ */
+export const BuildImageCleanupSettingsInputRetentionEnum = {
+    Never: 'never',
+    OneMonth: 'one_month',
+    ThreeMonths: 'three_months',
+    SixMonths: 'six_months',
+    OneYear: 'one_year'
+} as const;
+export type BuildImageCleanupSettingsInputRetentionEnum = typeof BuildImageCleanupSettingsInputRetentionEnum[keyof typeof BuildImageCleanupSettingsInputRetentionEnum];
 
 /**
  * 
@@ -4278,6 +4775,43 @@ export interface BuildSourceInput {
 /**
  * 
  * @export
+ * @interface BulkAppRouteOperationInput
+ */
+export interface BulkAppRouteOperationInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof BulkAppRouteOperationInput
+     */
+    appEnvironmentId: number;
+    /**
+     * Routes of the app environment to change.
+     * @type {Array<number>}
+     * @memberof BulkAppRouteOperationInput
+     */
+    routeIds: Array<number>;
+    /**
+     * 
+     * @type {string}
+     * @memberof BulkAppRouteOperationInput
+     */
+    operation: BulkAppRouteOperationInputOperationEnum;
+}
+
+
+/**
+ * @export
+ */
+export const BulkAppRouteOperationInputOperationEnum = {
+    Enable: 'enable',
+    Disable: 'disable',
+    Delete: 'delete'
+} as const;
+export type BulkAppRouteOperationInputOperationEnum = typeof BulkAppRouteOperationInputOperationEnum[keyof typeof BulkAppRouteOperationInputOperationEnum];
+
+/**
+ * 
+ * @export
  * @interface Cert
  */
 export interface Cert {
@@ -4294,7 +4828,7 @@ export interface Cert {
      */
     custom: boolean;
     /**
-     * Human-readable certificate authority name parsed from uploaded certificates, or the managed issuer identifier.
+     * Issuer label: a certificate authority name for uploaded or temporary AWS certificates, otherwise the managed issuer identifier.
      * @type {string}
      * @memberof Cert
      */
@@ -4389,6 +4923,128 @@ export interface Cert {
      * @memberof Cert
      */
     expiresAt?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface CloudGPU
+ */
+export interface CloudGPU {
+    /**
+     * 
+     * @type {string}
+     * @memberof CloudGPU
+     */
+    manufacturer: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CloudGPU
+     */
+    model: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CloudGPU
+     */
+    count: number;
+    /**
+     * Memory per device in MiB; absent when the provider does not report it.
+     * @type {number}
+     * @memberof CloudGPU
+     */
+    memoryMiB?: number | null;
+}
+/**
+ * 
+ * @export
+ * @interface CloudMachineType
+ */
+export interface CloudMachineType {
+    /**
+     * 
+     * @type {string}
+     * @memberof CloudMachineType
+     */
+    name?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CloudMachineType
+     */
+    cpu?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CloudMachineType
+     */
+    mem?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CloudMachineType
+     */
+    disk?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CloudMachineType
+     */
+    sharedCPU?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CloudMachineType
+     */
+    available?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof CloudMachineType
+     */
+    family?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CloudMachineType
+     */
+    minStorageSize?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof CloudMachineType
+     */
+    maxStorageSize?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof CloudMachineType
+     */
+    minIOPS?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof CloudMachineType
+     */
+    maxIOPS?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof CloudMachineType
+     */
+    defaultIOPS?: number | null;
+    /**
+     * 
+     * @type {Array<{ [key: string]: any; }>}
+     * @memberof CloudMachineType
+     */
+    storageOptions?: Array<{ [key: string]: any; }>;
+    /**
+     * Provider-reported devices. This does not guarantee driver setup or spare capacity.
+     * @type {Array<CloudGPU>}
+     * @memberof CloudMachineType
+     */
+    gpus?: Array<CloudGPU> | null;
 }
 /**
  * 
@@ -4566,6 +5222,12 @@ export interface Cluster {
      * @memberof Cluster
      */
     ownerProjectId?: number | null;
+    /**
+     * True when every project in the organization can use the resource without a project share.
+     * @type {boolean}
+     * @memberof Cluster
+     */
+    availableToAllProjects: boolean;
     /**
      * 
      * @type {ClusterCapabilities}
@@ -4829,6 +5491,25 @@ export interface ClusterCapabilities {
     redirectRoutes: boolean;
 }
 /**
+ * 
+ * @export
+ * @interface ClusterCapabilityPolicy
+ */
+export interface ClusterCapabilityPolicy {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ClusterCapabilityPolicy
+     */
+    autoInstall: boolean;
+    /**
+     * Approved immutable stack revision IDs for discovery and optional installation.
+     * @type {Set<number>}
+     * @memberof ClusterCapabilityPolicy
+     */
+    stackRevisionIds: Set<number>;
+}
+/**
  * Use envType and allowedEnvTypes. Legacy ID fields remain accepted but cannot be mixed with their type equivalents.
  * @export
  * @interface ClusterEnvironmentPolicyInput
@@ -4969,6 +5650,12 @@ export interface ClusterSettings {
      * @memberof ClusterSettings
      */
     autoInfrastructureUpgrade?: ClusterAutoInfrastructureUpgradeSettings;
+    /**
+     * 
+     * @type {ClusterCapabilityPolicy}
+     * @memberof ClusterSettings
+     */
+    clusterCapabilities?: ClusterCapabilityPolicy;
 }
 /**
  * 
@@ -4982,6 +5669,12 @@ export interface ClusterSettingsInput {
      * @memberof ClusterSettingsInput
      */
     autoInfrastructureUpgrade?: ClusterAutoInfrastructureUpgradeSettingsInput;
+    /**
+     * 
+     * @type {ClusterCapabilityPolicy}
+     * @memberof ClusterSettingsInput
+     */
+    clusterCapabilities?: ClusterCapabilityPolicy;
 }
 /**
  * 
@@ -5187,6 +5880,18 @@ export interface Database {
      */
     appServiceId?: number | null;
     /**
+     * org when the organization owns the resource, project when one project owns it.
+     * @type {string}
+     * @memberof Database
+     */
+    ownershipScope: DatabaseOwnershipScopeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof Database
+     */
+    ownerProjectId?: number | null;
+    /**
      * Legacy internal environment entity ID. Use envType.
      * @type {number}
      * @memberof Database
@@ -5219,6 +5924,15 @@ export interface Database {
     updatedAt: string;
 }
 
+
+/**
+ * @export
+ */
+export const DatabaseOwnershipScopeEnum = {
+    Org: 'org',
+    Project: 'project'
+} as const;
+export type DatabaseOwnershipScopeEnum = typeof DatabaseOwnershipScopeEnum[keyof typeof DatabaseOwnershipScopeEnum];
 
 /**
  * @export
@@ -5486,6 +6200,12 @@ export interface DuplicateStackRequest {
      */
     projectId?: number | null;
     /**
+     * Lets every project in the organization use the new resource without a project share. Only an organization-owned resource, created without projectId, can be available to all projects.
+     * @type {boolean}
+     * @memberof DuplicateStackRequest
+     */
+    availableToAllProjects?: boolean | null;
+    /**
      * Optional immutable source stack revision to duplicate. It must belong to the stack in the request path.
      * @type {number}
      * @memberof DuplicateStackRequest
@@ -5564,6 +6284,25 @@ export const FieldInputEnvTypeEnum = {
 } as const;
 export type FieldInputEnvTypeEnum = typeof FieldInputEnvTypeEnum[keyof typeof FieldInputEnvTypeEnum];
 
+/**
+ * 
+ * @export
+ * @interface GPUResources
+ */
+export interface GPUResources {
+    /**
+     * Qualified device-plugin resource name, such as nvidia.com/gpu or amd.com/gpu. Native and reserved Kubernetes resource names are rejected.
+     * @type {string}
+     * @memberof GPUResources
+     */
+    resourceName: string;
+    /**
+     * Device count per container replica. Kubernetes requests and limits are equal; zero explicitly disables GPUs.
+     * @type {number}
+     * @memberof GPUResources
+     */
+    count: number;
+}
 /**
  * 
  * @export
@@ -6311,6 +7050,25 @@ export interface HelmChartWorkload {
 /**
  * 
  * @export
+ * @interface IgnoreStackServiceRevisionInput
+ */
+export interface IgnoreStackServiceRevisionInput {
+    /**
+     * Root stack service whose update to skip. Its derivatives skip it too.
+     * @type {number}
+     * @memberof IgnoreStackServiceRevisionInput
+     */
+    stackServiceId: number;
+    /**
+     * Service revision to stop offering.
+     * @type {number}
+     * @memberof IgnoreStackServiceRevisionInput
+     */
+    serviceRevId: number;
+}
+/**
+ * 
+ * @export
  * @interface Import
  */
 export interface Import {
@@ -6582,6 +7340,67 @@ export interface ImportServicesFromGitInput {
      * @memberof ImportServicesFromGitInput
      */
     registryIntegrationId?: number | null;
+    /**
+     * Lets every project in the organization use the imported services without a project share. Only organization-owned services, imported without projectId, can be available to all projects.
+     * @type {boolean}
+     * @memberof ImportServicesFromGitInput
+     */
+    availableToAllProjects?: boolean | null;
+}
+/**
+ * 
+ * @export
+ * @interface ImportStacksFromGitInput
+ */
+export interface ImportStacksFromGitInput {
+    /**
+     * Optional for API-key requests; defaults to the API key's organization.
+     * @type {number}
+     * @memberof ImportStacksFromGitInput
+     */
+    orgId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ImportStacksFromGitInput
+     */
+    projectId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof ImportStacksFromGitInput
+     */
+    integrationId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ImportStacksFromGitInput
+     */
+    remoteGitRepoId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ImportStacksFromGitInput
+     */
+    gitRef: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ImportStacksFromGitInput
+     */
+    gitRefType: string;
+    /**
+     * 
+     * @type {GitAutoUpdateSettingsInput}
+     * @memberof ImportStacksFromGitInput
+     */
+    autoUpdate?: GitAutoUpdateSettingsInput;
+    /**
+     * Lets every project in the organization use the imported stacks without a project share. Only organization-owned stacks, imported without projectId, can be available to all projects.
+     * @type {boolean}
+     * @memberof ImportStacksFromGitInput
+     */
+    availableToAllProjects?: boolean | null;
 }
 /**
  * 
@@ -6670,6 +7489,24 @@ export interface Integration {
      */
     allowedEnvTypes: Array<IntegrationAllowedEnvTypesEnum>;
     /**
+     * org when the organization owns the resource, project when one project owns it.
+     * @type {string}
+     * @memberof Integration
+     */
+    ownershipScope: IntegrationOwnershipScopeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof Integration
+     */
+    ownerProjectId?: number | null;
+    /**
+     * True when every project in the organization can use the resource without a project share.
+     * @type {boolean}
+     * @memberof Integration
+     */
+    availableToAllProjects: boolean;
+    /**
      * 
      * @type {string}
      * @memberof Integration
@@ -6716,6 +7553,15 @@ export const IntegrationAllowedEnvTypesEnum = {
     Feature: 'feature'
 } as const;
 export type IntegrationAllowedEnvTypesEnum = typeof IntegrationAllowedEnvTypesEnum[keyof typeof IntegrationAllowedEnvTypesEnum];
+
+/**
+ * @export
+ */
+export const IntegrationOwnershipScopeEnum = {
+    Org: 'org',
+    Project: 'project'
+} as const;
+export type IntegrationOwnershipScopeEnum = typeof IntegrationOwnershipScopeEnum[keyof typeof IntegrationOwnershipScopeEnum];
 
 /**
  * 
@@ -6910,6 +7756,177 @@ export interface IntegrationScope {
      * @memberof IntegrationScope
      */
     title: string;
+}
+/**
+ * 
+ * @export
+ * @interface IntegrationUsage
+ */
+export interface IntegrationUsage {
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationUsage
+     */
+    id: string;
+    /**
+     * current for what uses the integration now, historical for records such as builds and backups, cleanup for pending removal of resources it created.
+     * @type {string}
+     * @memberof IntegrationUsage
+     */
+    category: IntegrationUsageCategoryEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationUsage
+     */
+    kind: IntegrationUsageKindEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationUsage
+     */
+    detail?: string | null;
+    /**
+     * 
+     * @type {IntegrationUsageTarget}
+     * @memberof IntegrationUsage
+     */
+    target: IntegrationUsageTarget;
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationUsage
+     */
+    createdAt: string;
+}
+
+
+/**
+ * @export
+ */
+export const IntegrationUsageCategoryEnum = {
+    Current: 'current',
+    Historical: 'historical',
+    Cleanup: 'cleanup'
+} as const;
+export type IntegrationUsageCategoryEnum = typeof IntegrationUsageCategoryEnum[keyof typeof IntegrationUsageCategoryEnum];
+
+/**
+ * @export
+ */
+export const IntegrationUsageKindEnum = {
+    ApplicationAccess: 'application_access',
+    ApplicationAccessCleanup: 'application_access_cleanup',
+    AppServiceIntegration: 'app_service_integration',
+    AppServiceCi: 'app_service_ci',
+    StackServiceIntegration: 'stack_service_integration',
+    StackServiceBuildSource: 'stack_service_build_source',
+    ServiceRegistry: 'service_registry',
+    OrganizationCi: 'organization_ci',
+    OrganizationRegistry: 'organization_registry',
+    AppEnvironmentCi: 'app_environment_ci',
+    AppEnvironmentRegistry: 'app_environment_registry',
+    BackupStorage: 'backup_storage',
+    AppBuildCi: 'app_build_ci',
+    AppBuildRegistry: 'app_build_registry',
+    GitRepository: 'git_repository',
+    ClusterProvider: 'cluster_provider',
+    DatabaseProvider: 'database_provider',
+    BackupPresetStorage: 'backup_preset_storage'
+} as const;
+export type IntegrationUsageKindEnum = typeof IntegrationUsageKindEnum[keyof typeof IntegrationUsageKindEnum];
+
+/**
+ * 
+ * @export
+ * @interface IntegrationUsageTarget
+ */
+export interface IntegrationUsageTarget {
+    /**
+     * 
+     * @type {number}
+     * @memberof IntegrationUsageTarget
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationUsageTarget
+     */
+    type: IntegrationUsageTargetTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationUsageTarget
+     */
+    name?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationUsageTarget
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationUsageTarget
+     */
+    icon?: string | null;
+    /**
+     * Resource that contains the target, such as the app environment of an app service.
+     * @type {IntegrationUsageTarget}
+     * @memberof IntegrationUsageTarget
+     */
+    parent?: IntegrationUsageTarget;
+}
+
+
+/**
+ * @export
+ */
+export const IntegrationUsageTargetTypeEnum = {
+    Organization: 'organization',
+    App: 'app',
+    AppEnvironment: 'app_environment',
+    AppService: 'app_service',
+    Stack: 'stack',
+    StackService: 'stack_service',
+    Service: 'service',
+    Backup: 'backup',
+    AppBuild: 'app_build',
+    GitRepository: 'git_repository',
+    Cluster: 'cluster',
+    Database: 'database',
+    BackupPreset: 'backup_preset',
+    AccessCleanup: 'access_cleanup'
+} as const;
+export type IntegrationUsageTargetTypeEnum = typeof IntegrationUsageTargetTypeEnum[keyof typeof IntegrationUsageTargetTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface IntegrationUsagesResponse
+ */
+export interface IntegrationUsagesResponse {
+    /**
+     * 
+     * @type {Array<IntegrationUsage>}
+     * @memberof IntegrationUsagesResponse
+     */
+    items: Array<IntegrationUsage>;
+    /**
+     * 
+     * @type {number}
+     * @memberof IntegrationUsagesResponse
+     */
+    totalCount: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof IntegrationUsagesResponse
+     */
+    nextPage?: number | null;
 }
 /**
  * 
@@ -7133,6 +8150,12 @@ export interface ManifestFromYAMLInput {
      * @memberof ManifestFromYAMLInput
      */
     projectId?: number | null;
+    /**
+     * Lets every project in the organization use the new resource without a project share. Only an organization-owned resource, created without projectId, can be available to all projects.
+     * @type {boolean}
+     * @memberof ManifestFromYAMLInput
+     */
+    availableToAllProjects?: boolean | null;
     /**
      * Optional revision version label for the generated non-Git resource.
      * @type {string}
@@ -7483,6 +8506,12 @@ export interface NewAppEnvironmentInput {
      */
     services?: Array<NewAppServiceInput>;
     /**
+     * Changes to the stack revision's service defaults. Use it instead of services to set only what differs, such as the repository of a workspace. Not allowed with services.
+     * @type {Array<NewAppServiceOverrideInput>}
+     * @memberof NewAppEnvironmentInput
+     */
+    serviceOverrides?: Array<NewAppServiceOverrideInput>;
+    /**
      * 
      * @type {number}
      * @memberof NewAppEnvironmentInput
@@ -7620,6 +8649,12 @@ export interface NewAppInput {
      * @memberof NewAppInput
      */
     services?: Array<NewAppServiceInput>;
+    /**
+     * Changes to the stack revision's service defaults. Use it instead of services to set only what differs, such as the repository of a workspace. Not allowed with services.
+     * @type {Array<NewAppServiceOverrideInput>}
+     * @memberof NewAppInput
+     */
+    serviceOverrides?: Array<NewAppServiceOverrideInput>;
     /**
      * 
      * @type {number}
@@ -7997,6 +9032,49 @@ export interface NewAppServiceLogStreamInput {
 /**
  * 
  * @export
+ * @interface NewAppServiceOverrideInput
+ */
+export interface NewAppServiceOverrideInput {
+    /**
+     * Stack service ID in the selected stack revision.
+     * @type {number}
+     * @memberof NewAppServiceOverrideInput
+     */
+    id: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewAppServiceOverrideInput
+     */
+    disabled?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppServiceOverrideInput
+     */
+    version?: string;
+    /**
+     * 
+     * @type {BuildSourceInput}
+     * @memberof NewAppServiceOverrideInput
+     */
+    buildSource?: BuildSourceInput;
+    /**
+     * Service settings to set. A setting that is not named keeps its default. Use it to supply a required setting that has no default.
+     * @type {Array<AppServiceSettingInput>}
+     * @memberof NewAppServiceOverrideInput
+     */
+    settings?: Array<AppServiceSettingInput>;
+    /**
+     * The database server, and optionally the database, of a database service. Required to enable an external database service, such as a managed PostgreSQL server.
+     * @type {AppServiceDatabaseInput}
+     * @memberof NewAppServiceOverrideInput
+     */
+    database?: AppServiceDatabaseInput;
+}
+/**
+ * 
+ * @export
  * @interface NewBackupInput
  */
 export interface NewBackupInput {
@@ -8012,6 +9090,12 @@ export interface NewBackupInput {
      * @memberof NewBackupInput
      */
     databaseDbId?: number | null;
+    /**
+     * Associates a one-off backup with the preset used to populate its destination and options.
+     * @type {number}
+     * @memberof NewBackupInput
+     */
+    backupPresetId?: number | null;
     /**
      * 
      * @type {string}
@@ -8037,12 +9121,29 @@ export interface NewBackupInput {
      */
     storageClass?: string | null;
     /**
+     * Wodby Blob Storage region. Omit to use Europe; must be omitted for third-party storage.
+     * @type {string}
+     * @memberof NewBackupInput
+     */
+    blobStorageRegion?: NewBackupInputBlobStorageRegionEnum | null;
+    /**
      * 
      * @type {Array<BackupOption>}
      * @memberof NewBackupInput
      */
     options?: Array<BackupOption> | null;
 }
+
+
+/**
+ * @export
+ */
+export const NewBackupInputBlobStorageRegionEnum = {
+    Eu: 'eu',
+    Us: 'us'
+} as const;
+export type NewBackupInputBlobStorageRegionEnum = typeof NewBackupInputBlobStorageRegionEnum[keyof typeof NewBackupInputBlobStorageRegionEnum];
+
 /**
  * 
  * @export
@@ -8122,6 +9223,12 @@ export interface NewBackupPresetInput {
      */
     storageClass?: string | null;
     /**
+     * Wodby Blob Storage region. Omit to use Europe; must be omitted for third-party storage.
+     * @type {string}
+     * @memberof NewBackupPresetInput
+     */
+    blobStorageRegion?: NewBackupPresetInputBlobStorageRegionEnum | null;
+    /**
      * 
      * @type {Array<BackupOption>}
      * @memberof NewBackupPresetInput
@@ -8187,6 +9294,15 @@ export const NewBackupPresetInputBackupCategoryEnum = {
     Database: 'database'
 } as const;
 export type NewBackupPresetInputBackupCategoryEnum = typeof NewBackupPresetInputBackupCategoryEnum[keyof typeof NewBackupPresetInputBackupCategoryEnum];
+
+/**
+ * @export
+ */
+export const NewBackupPresetInputBlobStorageRegionEnum = {
+    Eu: 'eu',
+    Us: 'us'
+} as const;
+export type NewBackupPresetInputBlobStorageRegionEnum = typeof NewBackupPresetInputBlobStorageRegionEnum[keyof typeof NewBackupPresetInputBlobStorageRegionEnum];
 
 /**
  * 
@@ -8285,6 +9401,12 @@ export interface NewClusterInput {
      * @memberof NewClusterInput
      */
     projectId?: number | null;
+    /**
+     * Lets every project in the organization use the new resource without a project share. Only an organization-owned resource, created without projectId, can be available to all projects.
+     * @type {boolean}
+     * @memberof NewClusterInput
+     */
+    availableToAllProjects?: boolean | null;
     /**
      * 
      * @type {number}
@@ -8647,6 +9769,12 @@ export interface NewIntegrationInput {
      * @memberof NewIntegrationInput
      */
     projectId?: number | null;
+    /**
+     * Lets every project in the organization use the new resource without a project share. Only an organization-owned resource, created without projectId, can be available to all projects.
+     * @type {boolean}
+     * @memberof NewIntegrationInput
+     */
+    availableToAllProjects?: boolean | null;
     /**
      * 
      * @type {Array<FieldInput>}
@@ -9061,13 +10189,13 @@ export interface NewWorkspaceInput {
      */
     branch: string;
     /**
-     * 
+     * Storage class for the workspace code and home volumes. Every Pod that mounts the code then runs on one node. Omit both storage fields to use the cluster's default storage class. Not allowed with storageServiceName.
      * @type {string}
      * @memberof NewWorkspaceInput
      */
     storageClassName?: string;
     /**
-     * 
+     * Enabled storage service in the selected stack that shares the workspace files across nodes. Not allowed with storageClassName.
      * @type {string}
      * @memberof NewWorkspaceInput
      */
@@ -9152,6 +10280,12 @@ export interface Org {
      * @memberof Org
      */
     registryIntegrationId: number;
+    /**
+     * 
+     * @type {OrgSettings}
+     * @memberof Org
+     */
+    settings?: OrgSettings;
     /**
      * 
      * @type {OrgCapabilities}
@@ -9316,6 +10450,32 @@ export interface OrgMembership {
      * @memberof OrgMembership
      */
     updatedAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface OrgSettings
+ */
+export interface OrgSettings {
+    /**
+     * Default build image retention for the organization's app environments.
+     * @type {BuildImageCleanupSettings}
+     * @memberof OrgSettings
+     */
+    buildImageCleanup?: BuildImageCleanupSettings;
+}
+/**
+ * 
+ * @export
+ * @interface OrgSettingsInput
+ */
+export interface OrgSettingsInput {
+    /**
+     * 
+     * @type {BuildImageCleanupSettingsInput}
+     * @memberof OrgSettingsInput
+     */
+    buildImageCleanup: BuildImageCleanupSettingsInput;
 }
 /**
  * 
@@ -9553,6 +10713,36 @@ export interface Project {
 /**
  * 
  * @export
+ * @interface ProjectShareInput
+ */
+export interface ProjectShareInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof ProjectShareInput
+     */
+    projectId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectShareInput
+     */
+    access: ProjectShareInputAccessEnum;
+}
+
+
+/**
+ * @export
+ */
+export const ProjectShareInputAccessEnum = {
+    Read: 'read',
+    Write: 'write'
+} as const;
+export type ProjectShareInputAccessEnum = typeof ProjectShareInputAccessEnum[keyof typeof ProjectShareInputAccessEnum];
+
+/**
+ * 
+ * @export
  * @interface Provider
  */
 export interface Provider {
@@ -9599,6 +10789,18 @@ export interface Provider {
      */
     orgId: number;
     /**
+     * org when the organization owns the resource, project when one project owns it.
+     * @type {string}
+     * @memberof Provider
+     */
+    ownershipScope: ProviderOwnershipScopeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof Provider
+     */
+    ownerProjectId?: number | null;
+    /**
      * 
      * @type {string}
      * @memberof Provider
@@ -9611,6 +10813,17 @@ export interface Provider {
      */
     updatedAt: string;
 }
+
+
+/**
+ * @export
+ */
+export const ProviderOwnershipScopeEnum = {
+    Org: 'org',
+    Project: 'project'
+} as const;
+export type ProviderOwnershipScopeEnum = typeof ProviderOwnershipScopeEnum[keyof typeof ProviderOwnershipScopeEnum];
+
 /**
  * 
  * @export
@@ -9821,9 +11034,130 @@ export interface ResolveIntegrationResult {
 /**
  * 
  * @export
+ * @interface ResourceProjectShare
+ */
+export interface ResourceProjectShare {
+    /**
+     * 
+     * @type {number}
+     * @memberof ResourceProjectShare
+     */
+    projectId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResourceProjectShare
+     */
+    role: ResourceProjectShareRoleEnum;
+}
+
+
+/**
+ * @export
+ */
+export const ResourceProjectShareRoleEnum = {
+    Owner: 'owner',
+    Write: 'write',
+    Read: 'read'
+} as const;
+export type ResourceProjectShareRoleEnum = typeof ResourceProjectShareRoleEnum[keyof typeof ResourceProjectShareRoleEnum];
+
+/**
+ * Who owns a resource and which projects can use it.
+ * @export
+ * @interface ResourceSharing
+ */
+export interface ResourceSharing {
+    /**
+     * org when the organization owns the resource, project when one project owns it.
+     * @type {string}
+     * @memberof ResourceSharing
+     */
+    ownershipScope: ResourceSharingOwnershipScopeEnum;
+    /**
+     * Project that owns the resource when ownershipScope is project.
+     * @type {number}
+     * @memberof ResourceSharing
+     */
+    ownerProjectId?: number | null;
+    /**
+     * True when every project in the organization can use the resource without a project share. Only organization-owned clusters, integrations, services and stacks can be available to all projects; it is always false for other resources.
+     * @type {boolean}
+     * @memberof ResourceSharing
+     */
+    availableToAllProjects: boolean;
+    /**
+     * Projects the resource is shared with that you can see. The owning project has the owner role.
+     * @type {Array<ResourceProjectShare>}
+     * @memberof ResourceSharing
+     */
+    sharedProjects: Array<ResourceProjectShare>;
+}
+
+
+/**
+ * @export
+ */
+export const ResourceSharingOwnershipScopeEnum = {
+    Org: 'org',
+    Project: 'project'
+} as const;
+export type ResourceSharingOwnershipScopeEnum = typeof ResourceSharingOwnershipScopeEnum[keyof typeof ResourceSharingOwnershipScopeEnum];
+
+/**
+ * 
+ * @export
+ * @interface ResourceSharingInput
+ */
+export interface ResourceSharingInput {
+    /**
+     * org to make the organization the owner, project to make one project the owner.
+     * @type {string}
+     * @memberof ResourceSharingInput
+     */
+    ownershipScope: ResourceSharingInputOwnershipScopeEnum;
+    /**
+     * Project that becomes the owner. Required when ownershipScope is project.
+     * @type {number}
+     * @memberof ResourceSharingInput
+     */
+    ownerProjectId?: number | null;
+    /**
+     * The complete list of project shares. A project left out loses its share. The owning project always keeps write access. You need write access to every project whose share you add or remove.
+     * @type {Array<ProjectShareInput>}
+     * @memberof ResourceSharingInput
+     */
+    sharedProjects: Array<ProjectShareInput>;
+    /**
+     * Lets every project in the organization use the resource without a project share. Only organization-owned clusters, integrations, services and stacks can be available to all projects. Omit it to keep the current setting.
+     * @type {boolean}
+     * @memberof ResourceSharingInput
+     */
+    availableToAllProjects?: boolean | null;
+}
+
+
+/**
+ * @export
+ */
+export const ResourceSharingInputOwnershipScopeEnum = {
+    Org: 'org',
+    Project: 'project'
+} as const;
+export type ResourceSharingInputOwnershipScopeEnum = typeof ResourceSharingInputOwnershipScopeEnum[keyof typeof ResourceSharingInputOwnershipScopeEnum];
+
+/**
+ * 
+ * @export
  * @interface ResourcesInput
  */
 export interface ResourcesInput {
+    /**
+     * Omitted or null preserves an existing GPU override. Count zero disables GPUs.
+     * @type {GPUResources}
+     * @memberof ResourcesInput
+     */
+    gpu?: GPUResources | null;
     /**
      * 
      * @type {string}
@@ -10059,6 +11393,24 @@ export interface Service {
      */
     orgId: number;
     /**
+     * org when the organization owns the resource, project when one project owns it.
+     * @type {string}
+     * @memberof Service
+     */
+    ownershipScope: ServiceOwnershipScopeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof Service
+     */
+    ownerProjectId?: number | null;
+    /**
+     * True when every project in the organization can use the resource without a project share.
+     * @type {boolean}
+     * @memberof Service
+     */
+    availableToAllProjects: boolean;
+    /**
      * 
      * @type {ServiceSettings}
      * @memberof Service
@@ -10077,6 +11429,17 @@ export interface Service {
      */
     updatedAt: string;
 }
+
+
+/**
+ * @export
+ */
+export const ServiceOwnershipScopeEnum = {
+    Org: 'org',
+    Project: 'project'
+} as const;
+export type ServiceOwnershipScopeEnum = typeof ServiceOwnershipScopeEnum[keyof typeof ServiceOwnershipScopeEnum];
+
 /**
  * 
  * @export
@@ -10886,6 +12249,24 @@ export interface Stack {
      */
     orgId: number;
     /**
+     * org when the organization owns the resource, project when one project owns it.
+     * @type {string}
+     * @memberof Stack
+     */
+    ownershipScope: StackOwnershipScopeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof Stack
+     */
+    ownerProjectId?: number | null;
+    /**
+     * True when every project in the organization can use the resource without a project share.
+     * @type {boolean}
+     * @memberof Stack
+     */
+    availableToAllProjects: boolean;
+    /**
      * 
      * @type {StackSettings}
      * @memberof Stack
@@ -10904,6 +12285,17 @@ export interface Stack {
      */
     updatedAt: string;
 }
+
+
+/**
+ * @export
+ */
+export const StackOwnershipScopeEnum = {
+    Org: 'org',
+    Project: 'project'
+} as const;
+export type StackOwnershipScopeEnum = typeof StackOwnershipScopeEnum[keyof typeof StackOwnershipScopeEnum];
+
 /**
  * 
  * @export
@@ -11594,6 +12986,12 @@ export interface StackServiceConfigInput {
  * @interface StackServiceContainer
  */
 export interface StackServiceContainer {
+    /**
+     * 
+     * @type {GPUResources}
+     * @memberof StackServiceContainer
+     */
+    gpu?: GPUResources | null;
     /**
      * 
      * @type {number}
@@ -12470,6 +13868,12 @@ export interface StorageClass {
  */
 export interface Task {
     /**
+     * Absent when provenance is unknown; absence does not imply human initiation.
+     * @type {TaskInitiator}
+     * @memberof Task
+     */
+    initiator?: TaskInitiator | null;
+    /**
      * 
      * @type {number}
      * @memberof Task
@@ -12662,6 +14066,83 @@ export const TaskExecutionScopeEnum = {
     LegacyUnknown: 'legacy_unknown'
 } as const;
 export type TaskExecutionScopeEnum = typeof TaskExecutionScopeEnum[keyof typeof TaskExecutionScopeEnum];
+
+/**
+ * Immutable provenance. Client names and versions are self-reported, not verified identities. Contains no credentials.
+ * @export
+ * @interface TaskInitiator
+ */
+export interface TaskInitiator {
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskInitiator
+     */
+    source: TaskInitiatorSourceEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof TaskInitiator
+     */
+    userId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TaskInitiator
+     */
+    apiKeyId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof TaskInitiator
+     */
+    agentConnectionId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskInitiator
+     */
+    oauthClientId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskInitiator
+     */
+    oauthClientName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskInitiator
+     */
+    clientName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskInitiator
+     */
+    clientVersion: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskInitiator
+     */
+    toolName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskInitiator
+     */
+    requestId: string;
+}
+
+
+/**
+ * @export
+ */
+export const TaskInitiatorSourceEnum = {
+    Mcp: 'mcp'
+} as const;
+export type TaskInitiatorSourceEnum = typeof TaskInitiatorSourceEnum[keyof typeof TaskInitiatorSourceEnum];
 
 /**
  * 
@@ -13231,6 +14712,12 @@ export interface UpdateBackupPresetInput {
      */
     storageClass?: string | null;
     /**
+     * Wodby Blob Storage region. Omit to preserve the current region; must be omitted for third-party storage.
+     * @type {string}
+     * @memberof UpdateBackupPresetInput
+     */
+    blobStorageRegion?: UpdateBackupPresetInputBlobStorageRegionEnum | null;
+    /**
      * 
      * @type {Array<BackupOption>}
      * @memberof UpdateBackupPresetInput
@@ -13296,6 +14783,15 @@ export const UpdateBackupPresetInputBackupCategoryEnum = {
     Database: 'database'
 } as const;
 export type UpdateBackupPresetInputBackupCategoryEnum = typeof UpdateBackupPresetInputBackupCategoryEnum[keyof typeof UpdateBackupPresetInputBackupCategoryEnum];
+
+/**
+ * @export
+ */
+export const UpdateBackupPresetInputBlobStorageRegionEnum = {
+    Eu: 'eu',
+    Us: 'us'
+} as const;
+export type UpdateBackupPresetInputBlobStorageRegionEnum = typeof UpdateBackupPresetInputBlobStorageRegionEnum[keyof typeof UpdateBackupPresetInputBlobStorageRegionEnum];
 
 /**
  * 
@@ -13784,6 +15280,24 @@ export interface WorkspaceConnection {
      * @memberof WorkspaceConnection
      */
     hostKeyFingerprint: string;
+    /**
+     * Coding agent commands pre-installed in the SSH runner, such as claude, codex and opencode. Empty when the runner has none.
+     * @type {Array<string>}
+     * @memberof WorkspaceConnection
+     */
+    agents: Array<string>;
+    /**
+     * True when git push and fetch in the SSH runner authenticate to the app's repository with the app's Git integration.
+     * @type {boolean}
+     * @memberof WorkspaceConnection
+     */
+    gitCredentials: boolean;
+    /**
+     * True when opencode in the SSH runner uses the organization's AI credits by default.
+     * @type {boolean}
+     * @memberof WorkspaceConnection
+     */
+    aiCredits: boolean;
 }
 /**
  * 
@@ -13840,4 +15354,193 @@ export interface WorkspaceEligibilityRequest {
      * @memberof WorkspaceEligibilityRequest
      */
     disabledServiceIds: Array<number>;
+}
+/**
+ * 
+ * @export
+ * @interface WorkspaceGitChange
+ */
+export interface WorkspaceGitChange {
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkspaceGitChange
+     */
+    path: string;
+    /**
+     * Previous path of a renamed or copied file.
+     * @type {string}
+     * @memberof WorkspaceGitChange
+     */
+    originalPath?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkspaceGitChange
+     */
+    kind: WorkspaceGitChangeKindEnum;
+    /**
+     * The index differs from HEAD for this path.
+     * @type {boolean}
+     * @memberof WorkspaceGitChange
+     */
+    staged: boolean;
+    /**
+     * The working tree differs from the index for this path.
+     * @type {boolean}
+     * @memberof WorkspaceGitChange
+     */
+    unstaged: boolean;
+}
+
+
+/**
+ * @export
+ */
+export const WorkspaceGitChangeKindEnum = {
+    Modified: 'modified',
+    Added: 'added',
+    Deleted: 'deleted',
+    Renamed: 'renamed',
+    Copied: 'copied',
+    TypeChanged: 'type_changed',
+    Untracked: 'untracked',
+    Conflicted: 'conflicted'
+} as const;
+export type WorkspaceGitChangeKindEnum = typeof WorkspaceGitChangeKindEnum[keyof typeof WorkspaceGitChangeKindEnum];
+
+/**
+ * 
+ * @export
+ * @interface WorkspaceGitDiff
+ */
+export interface WorkspaceGitDiff {
+    /**
+     * False when the diff cannot be read; reason explains why and diff is empty.
+     * @type {boolean}
+     * @memberof WorkspaceGitDiff
+     */
+    available: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkspaceGitDiff
+     */
+    reason?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkspaceGitDiff
+     */
+    path: string;
+    /**
+     * Unified diff of staged and unstaged changes. Empty when the file does not differ.
+     * @type {string}
+     * @memberof WorkspaceGitDiff
+     */
+    diff: string;
+    /**
+     * True for a file Git does not show line by line.
+     * @type {boolean}
+     * @memberof WorkspaceGitDiff
+     */
+    binary: boolean;
+    /**
+     * True when the diff is longer than what is returned.
+     * @type {boolean}
+     * @memberof WorkspaceGitDiff
+     */
+    truncated: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface WorkspaceGitStatus
+ */
+export interface WorkspaceGitStatus {
+    /**
+     * False when the state cannot be read; reason explains why and the other fields are omitted.
+     * @type {boolean}
+     * @memberof WorkspaceGitStatus
+     */
+    available: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkspaceGitStatus
+     */
+    reason?: string;
+    /**
+     * Current branch; omitted for a detached HEAD.
+     * @type {string}
+     * @memberof WorkspaceGitStatus
+     */
+    branch?: string;
+    /**
+     * Upstream branch that the current branch tracks.
+     * @type {string}
+     * @memberof WorkspaceGitStatus
+     */
+    upstream?: string;
+    /**
+     * Commits on the current branch that its upstream does not have.
+     * @type {number}
+     * @memberof WorkspaceGitStatus
+     */
+    ahead?: number;
+    /**
+     * Commits on the upstream that the current branch does not have.
+     * @type {number}
+     * @memberof WorkspaceGitStatus
+     */
+    behind?: number;
+    /**
+     * HEAD commit; omitted before the first commit.
+     * @type {string}
+     * @memberof WorkspaceGitStatus
+     */
+    commit?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkspaceGitStatus
+     */
+    commitSubject?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkspaceGitStatus
+     */
+    committedAt?: string;
+    /**
+     * Uncommitted changes, including untracked files.
+     * @type {Array<WorkspaceGitChange>}
+     * @memberof WorkspaceGitStatus
+     */
+    changes: Array<WorkspaceGitChange>;
+    /**
+     * True when more changes exist than listed.
+     * @type {boolean}
+     * @memberof WorkspaceGitStatus
+     */
+    truncated: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof WorkspaceGitStatus
+     */
+    checkedAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface WorkspacePullInput
+ */
+export interface WorkspacePullInput {
+    /**
+     * Run the environment's post-deployment scripts after the pull.
+     * @type {boolean}
+     * @memberof WorkspacePullInput
+     */
+    scripts?: boolean;
 }

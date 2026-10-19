@@ -36,6 +36,8 @@ export interface ListTasksRequest {
     projectIds?: string;
     view?: ListTasksViewEnum;
     withoutOrigin?: boolean;
+    agentConnectionId?: number;
+    mcpOnly?: boolean;
     includeSystem?: boolean;
     statuses?: string;
     names?: string;
@@ -104,6 +106,8 @@ export interface TasksApiInterface {
      * @param {string} [projectIds] Comma-separated project ids
      * @param {'flat' | 'tree'} [view] Return matching tasks as a flat page or as filter-scoped task trees. Tree responses support user, organization, project, and resource filters, keep paginated roots in items, and include current-page tree nodes in treeItems. Root pages are capped at 100 tasks. Tree responses include up to 250 authorized tasks and set treeTruncated when additional visible descendants exist; exceeding the 10-level depth limit still returns 422.
      * @param {boolean} [withoutOrigin] Deprecated compatibility alias for view&#x3D;tree
+     * @param {number} [agentConnectionId] Restrict tasks to an authorized agent connection in the requested organization.
+     * @param {boolean} [mcpOnly] Only tasks known to originate through MCP, including spawned work. Unknown historical tasks are excluded.
      * @param {boolean} [includeSystem] Include operator-only system tasks when authorized
      * @param {string} [statuses] Comma-separated task statuses
      * @param {string} [names] Comma-separated exact task names
@@ -257,6 +261,14 @@ export class TasksApi extends runtime.BaseAPI implements TasksApiInterface {
 
         if (requestParameters['withoutOrigin'] != null) {
             queryParameters['withoutOrigin'] = requestParameters['withoutOrigin'];
+        }
+
+        if (requestParameters['agentConnectionId'] != null) {
+            queryParameters['agentConnectionId'] = requestParameters['agentConnectionId'];
+        }
+
+        if (requestParameters['mcpOnly'] != null) {
+            queryParameters['mcpOnly'] = requestParameters['mcpOnly'];
         }
 
         if (requestParameters['includeSystem'] != null) {

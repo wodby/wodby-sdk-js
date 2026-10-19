@@ -19,6 +19,8 @@ import type {
   NewAppInput,
   OperationResult,
   ProblemDetails,
+  ResourceSharing,
+  ResourceSharingInput,
   UpdateTitleRequest,
 } from '../models/index';
 
@@ -39,6 +41,10 @@ export interface GetAppByNameRequest {
     orgId?: number;
 }
 
+export interface GetAppSharingRequest {
+    id: number;
+}
+
 export interface ListAppsRequest {
     orgId?: number;
     projectIds?: string;
@@ -48,6 +54,11 @@ export interface ListAppsRequest {
 export interface UpdateAppRequest {
     id: number;
     updateTitleRequest: UpdateTitleRequest;
+}
+
+export interface UpdateAppSharingRequest {
+    id: number;
+    resourceSharingInput: ResourceSharingInput;
 }
 
 /**
@@ -123,6 +134,22 @@ export interface AppsApiInterface {
     getAppByName(requestParameters: GetAppByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
 
     /**
+     * Returns who owns the app and which projects can use it.
+     * @summary Get app sharing
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppsApiInterface
+     */
+    getAppSharingRaw(requestParameters: GetAppSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>>;
+
+    /**
+     * Returns who owns the app and which projects can use it.
+     * Get app sharing
+     */
+    getAppSharing(requestParameters: GetAppSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
+
+    /**
      * Returns apps matching the request filters.
      * @summary List apps
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -156,6 +183,23 @@ export interface AppsApiInterface {
      * Update app
      */
     updateApp(requestParameters: UpdateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
+
+    /**
+     * Changes the app owner and replaces the projects it is shared with. Returns the resulting sharing.
+     * @summary Update app sharing
+     * @param {number} id 
+     * @param {ResourceSharingInput} resourceSharingInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppsApiInterface
+     */
+    updateAppSharingRaw(requestParameters: UpdateAppSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>>;
+
+    /**
+     * Changes the app owner and replaces the projects it is shared with. Returns the resulting sharing.
+     * Update app sharing
+     */
+    updateAppSharing(requestParameters: UpdateAppSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
 
 }
 
@@ -328,6 +372,45 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
+     * Returns who owns the app and which projects can use it.
+     * Get app sharing
+     */
+    async getAppSharingRaw(requestParameters: GetAppSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppSharing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/apps/sharing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns who owns the app and which projects can use it.
+     * Get app sharing
+     */
+    async getAppSharing(requestParameters: GetAppSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing> {
+        const response = await this.getAppSharingRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns apps matching the request filters.
      * List apps
      */
@@ -417,6 +500,55 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
      */
     async updateApp(requestParameters: UpdateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
         const response = await this.updateAppRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes the app owner and replaces the projects it is shared with. Returns the resulting sharing.
+     * Update app sharing
+     */
+    async updateAppSharingRaw(requestParameters: UpdateAppSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateAppSharing().'
+            );
+        }
+
+        if (requestParameters['resourceSharingInput'] == null) {
+            throw new runtime.RequiredError(
+                'resourceSharingInput',
+                'Required parameter "resourceSharingInput" was null or undefined when calling updateAppSharing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/apps/sharing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['resourceSharingInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Changes the app owner and replaces the projects it is shared with. Returns the resulting sharing.
+     * Update app sharing
+     */
+    async updateAppSharing(requestParameters: UpdateAppSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing> {
+        const response = await this.updateAppSharingRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

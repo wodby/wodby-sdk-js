@@ -23,6 +23,8 @@ import type {
   NewClusterInput,
   OperationResult,
   ProblemDetails,
+  ResourceSharing,
+  ResourceSharingInput,
   UpdateTitleRequest,
 } from '../models/index';
 
@@ -49,6 +51,10 @@ export interface GetClusterInfraAppUpgradeChangelogRequest {
     appInstanceId?: number;
 }
 
+export interface GetClusterSharingRequest {
+    id: number;
+}
+
 export interface GetKubernetesVersionUpgradePlanRequest {
     id: number;
 }
@@ -73,6 +79,11 @@ export interface UpdateClusterEnvironmentPolicyRequest {
 export interface UpdateClusterSettingsRequest {
     id: number;
     clusterSettingsInput: ClusterSettingsInput;
+}
+
+export interface UpdateClusterSharingRequest {
+    id: number;
+    resourceSharingInput: ResourceSharingInput;
 }
 
 export interface UpgradeClusterInfraRequest {
@@ -174,6 +185,22 @@ export interface ClustersApiInterface {
     getClusterInfraAppUpgradeChangelog(requestParameters: GetClusterInfraAppUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterInfraAppUpgradeChangelog>>;
 
     /**
+     * Returns who owns the cluster and which projects can use it.
+     * @summary Get cluster sharing
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    getClusterSharingRaw(requestParameters: GetClusterSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>>;
+
+    /**
+     * Returns who owns the cluster and which projects can use it.
+     * Get cluster sharing
+     */
+    getClusterSharing(requestParameters: GetClusterSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
+
+    /**
      * Returns supported Kubernetes upgrade targets, blockers, and warnings for a cluster.
      * @summary Get Kubernetes version upgrade plan
      * @param {number} id 
@@ -258,6 +285,23 @@ export interface ClustersApiInterface {
      * Update cluster settings
      */
     updateClusterSettings(requestParameters: UpdateClusterSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
+
+    /**
+     * Changes the cluster owner and replaces the projects it is shared with. It can also make an organization-owned cluster available to every project. Returns the resulting sharing.
+     * @summary Update cluster sharing
+     * @param {number} id 
+     * @param {ResourceSharingInput} resourceSharingInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    updateClusterSharingRaw(requestParameters: UpdateClusterSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>>;
+
+    /**
+     * Changes the cluster owner and replaces the projects it is shared with. It can also make an organization-owned cluster available to every project. Returns the resulting sharing.
+     * Update cluster sharing
+     */
+    updateClusterSharing(requestParameters: UpdateClusterSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
 
     /**
      * Starts a cluster infrastructure upgrade task and returns the task identifier.
@@ -509,6 +553,45 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Returns who owns the cluster and which projects can use it.
+     * Get cluster sharing
+     */
+    async getClusterSharingRaw(requestParameters: GetClusterSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getClusterSharing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/sharing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns who owns the cluster and which projects can use it.
+     * Get cluster sharing
+     */
+    async getClusterSharing(requestParameters: GetClusterSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing> {
+        const response = await this.getClusterSharingRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns supported Kubernetes upgrade targets, blockers, and warnings for a cluster.
      * Get Kubernetes version upgrade plan
      */
@@ -739,6 +822,55 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async updateClusterSettings(requestParameters: UpdateClusterSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
         const response = await this.updateClusterSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes the cluster owner and replaces the projects it is shared with. It can also make an organization-owned cluster available to every project. Returns the resulting sharing.
+     * Update cluster sharing
+     */
+    async updateClusterSharingRaw(requestParameters: UpdateClusterSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateClusterSharing().'
+            );
+        }
+
+        if (requestParameters['resourceSharingInput'] == null) {
+            throw new runtime.RequiredError(
+                'resourceSharingInput',
+                'Required parameter "resourceSharingInput" was null or undefined when calling updateClusterSharing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/sharing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['resourceSharingInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Changes the cluster owner and replaces the projects it is shared with. It can also make an organization-owned cluster available to every project. Returns the resulting sharing.
+     * Update cluster sharing
+     */
+    async updateClusterSharing(requestParameters: UpdateClusterSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing> {
+        const response = await this.updateClusterSharingRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

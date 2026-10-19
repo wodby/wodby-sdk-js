@@ -24,6 +24,8 @@ import type {
   NewDatabaseUserInput,
   OperationResult,
   ProblemDetails,
+  ResourceSharing,
+  ResourceSharingInput,
   UpdateDatabaseUserDBsInput,
   UpdateTitleRequest,
 } from '../models/index';
@@ -65,6 +67,10 @@ export interface GetDatabaseDBRequest {
     id: number;
 }
 
+export interface GetDatabaseSharingRequest {
+    id: number;
+}
+
 export interface ListDatabaseCharsetsRequest {
     id: number;
 }
@@ -86,6 +92,11 @@ export interface ListDatabasesRequest {
 export interface UpdateDatabaseRequest {
     id: number;
     updateTitleRequest: UpdateTitleRequest;
+}
+
+export interface UpdateDatabaseSharingRequest {
+    id: number;
+    resourceSharingInput: ResourceSharingInput;
 }
 
 export interface UpdateDatabaseUserDBsRequest {
@@ -246,6 +257,22 @@ export interface DatabasesApiInterface {
     getDatabaseDB(requestParameters: GetDatabaseDBRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DatabaseDB>;
 
     /**
+     * Returns who owns the database and which projects can use it.
+     * @summary Get database sharing
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DatabasesApiInterface
+     */
+    getDatabaseSharingRaw(requestParameters: GetDatabaseSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>>;
+
+    /**
+     * Returns who owns the database and which projects can use it.
+     * Get database sharing
+     */
+    getDatabaseSharing(requestParameters: GetDatabaseSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
+
+    /**
      * Returns charset and default collation options supported by a database.
      * @summary List database charsets
      * @param {number} id 
@@ -327,6 +354,23 @@ export interface DatabasesApiInterface {
      * Update database
      */
     updateDatabase(requestParameters: UpdateDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Database>;
+
+    /**
+     * Changes the database owner and replaces the projects it is shared with. Returns the resulting sharing.
+     * @summary Update database sharing
+     * @param {number} id 
+     * @param {ResourceSharingInput} resourceSharingInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DatabasesApiInterface
+     */
+    updateDatabaseSharingRaw(requestParameters: UpdateDatabaseSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>>;
+
+    /**
+     * Changes the database owner and replaces the projects it is shared with. Returns the resulting sharing.
+     * Update database sharing
+     */
+    updateDatabaseSharing(requestParameters: UpdateDatabaseSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
 
     /**
      * Replaces the DB grants for a database user.
@@ -717,6 +761,45 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
     }
 
     /**
+     * Returns who owns the database and which projects can use it.
+     * Get database sharing
+     */
+    async getDatabaseSharingRaw(requestParameters: GetDatabaseSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getDatabaseSharing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/databases/sharing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns who owns the database and which projects can use it.
+     * Get database sharing
+     */
+    async getDatabaseSharing(requestParameters: GetDatabaseSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing> {
+        const response = await this.getDatabaseSharingRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns charset and default collation options supported by a database.
      * List database charsets
      */
@@ -931,6 +1014,55 @@ export class DatabasesApi extends runtime.BaseAPI implements DatabasesApiInterfa
      */
     async updateDatabase(requestParameters: UpdateDatabaseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Database> {
         const response = await this.updateDatabaseRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes the database owner and replaces the projects it is shared with. Returns the resulting sharing.
+     * Update database sharing
+     */
+    async updateDatabaseSharingRaw(requestParameters: UpdateDatabaseSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourceSharing>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateDatabaseSharing().'
+            );
+        }
+
+        if (requestParameters['resourceSharingInput'] == null) {
+            throw new runtime.RequiredError(
+                'resourceSharingInput',
+                'Required parameter "resourceSharingInput" was null or undefined when calling updateDatabaseSharing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/databases/sharing/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['resourceSharingInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Changes the database owner and replaces the projects it is shared with. Returns the resulting sharing.
+     * Update database sharing
+     */
+    async updateDatabaseSharing(requestParameters: UpdateDatabaseSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing> {
+        const response = await this.updateDatabaseSharingRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

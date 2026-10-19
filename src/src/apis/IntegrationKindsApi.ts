@@ -15,6 +15,7 @@
 
 import * as runtime from '../runtime';
 import type {
+  CloudMachineType,
   DatabaseType,
   DatabaseVersion,
   ProblemDetails,
@@ -87,13 +88,13 @@ export interface IntegrationKindsApiInterface {
      * @throws {RequiredError}
      * @memberof IntegrationKindsApiInterface
      */
-    listIntegrationKindDatabaseMachineTypesRaw(requestParameters: ListIntegrationKindDatabaseMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>>;
+    listIntegrationKindDatabaseMachineTypesRaw(requestParameters: ListIntegrationKindDatabaseMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<CloudMachineType>>>;
 
     /**
      * Returns database machine types matching the request filters.
      * List database machine types
      */
-    listIntegrationKindDatabaseMachineTypes(requestParameters: ListIntegrationKindDatabaseMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>>;
+    listIntegrationKindDatabaseMachineTypes(requestParameters: ListIntegrationKindDatabaseMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CloudMachineType>>;
 
     /**
      * Returns database regions matching the request filters.
@@ -208,7 +209,7 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
      * Returns database machine types matching the request filters.
      * List database machine types
      */
-    async listIntegrationKindDatabaseMachineTypesRaw(requestParameters: ListIntegrationKindDatabaseMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<{ [key: string]: any; }>>> {
+    async listIntegrationKindDatabaseMachineTypesRaw(requestParameters: ListIntegrationKindDatabaseMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<CloudMachineType>>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -265,14 +266,14 @@ export class IntegrationKindsApi extends runtime.BaseAPI implements IntegrationK
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse<any>(response);
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
      * Returns database machine types matching the request filters.
      * List database machine types
      */
-    async listIntegrationKindDatabaseMachineTypes(requestParameters: ListIntegrationKindDatabaseMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<{ [key: string]: any; }>> {
+    async listIntegrationKindDatabaseMachineTypes(requestParameters: ListIntegrationKindDatabaseMachineTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CloudMachineType>> {
         const response = await this.listIntegrationKindDatabaseMachineTypesRaw(requestParameters, initOverrides);
         return await response.value();
     }
