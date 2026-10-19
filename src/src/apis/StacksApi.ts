@@ -22,24 +22,42 @@ import type {
   ImportStacksFromGitInput,
   ManifestFromYAMLInput,
   ManifestValidationResponse,
+  NewStackAnnotationInput,
   NewStackEnvVarInput,
+  NewStackHelmValueInput,
+  NewStackInput,
+  NewStackTokenInput,
   OperationResult,
   ProblemDetails,
   ResourceSharing,
   ResourceSharingInput,
   Stack,
+  StackAnnotation,
   StackEnvVar,
+  StackHelmValue,
   StackOriginSyncChangelog,
   StackRevision,
   StackService,
   StackServiceUpdateChangelog,
   StackSettingsInput,
   StackSyncOptionsInput,
+  StackToken,
   StacksResponse,
   UpdateStackEnvVarInput,
   UpdateStackFromGitRequest,
+  UpdateStackHelmValueInput,
   UpdateStackRequest,
+  UpdateStackTokenInput,
 } from '../models/index';
+
+export interface CreateStackRequest {
+    newStackInput: NewStackInput;
+}
+
+export interface CreateStackAnnotationRequest {
+    id: number;
+    newStackAnnotationInput: NewStackAnnotationInput;
+}
 
 export interface CreateStackEnvVarRequest {
     id: number;
@@ -50,11 +68,37 @@ export interface CreateStackFromManifestRequest {
     manifestFromYAMLInput: ManifestFromYAMLInput;
 }
 
+export interface CreateStackHelmValueRequest {
+    id: number;
+    newStackHelmValueInput: NewStackHelmValueInput;
+}
+
+export interface CreateStackTokenRequest {
+    id: number;
+    newStackTokenInput: NewStackTokenInput;
+}
+
 export interface DeleteStackRequest {
     id: number;
 }
 
+export interface DeleteStackAnnotationRequest {
+    id: number;
+}
+
 export interface DeleteStackEnvVarRequest {
+    id: number;
+}
+
+export interface DeleteStackHelmValueRequest {
+    id: number;
+}
+
+export interface DeleteStackTokenRequest {
+    id: number;
+}
+
+export interface DiscardStackDraftRequest {
     id: number;
 }
 
@@ -98,11 +142,27 @@ export interface ImportStacksRequest {
     importStacksFromGitInput: ImportStacksFromGitInput;
 }
 
+export interface ListInfraStacksRequest {
+    provider: string;
+}
+
+export interface ListStackAnnotationsRequest {
+    id: number;
+}
+
 export interface ListStackEnvVarsRequest {
     id: number;
 }
 
+export interface ListStackHelmValuesRequest {
+    id: number;
+}
+
 export interface ListStackRevisionServicesRequest {
+    id: number;
+}
+
+export interface ListStackTokensRequest {
     id: number;
 }
 
@@ -142,6 +202,11 @@ export interface UpdateStackFromGitOperationRequest {
     updateStackFromGitRequest: UpdateStackFromGitRequest;
 }
 
+export interface UpdateStackHelmValueRequest {
+    id: number;
+    updateStackHelmValueInput: UpdateStackHelmValueInput;
+}
+
 export interface UpdateStackServiceRevisionsRequest {
     id: number;
     scope?: UpdateStackServiceRevisionsScopeEnum;
@@ -157,6 +222,11 @@ export interface UpdateStackSharingRequest {
     resourceSharingInput: ResourceSharingInput;
 }
 
+export interface UpdateStackTokenRequest {
+    id: number;
+    updateStackTokenInput: UpdateStackTokenInput;
+}
+
 export interface ValidateStackManifestRequest {
     manifestFromYAMLInput: ManifestFromYAMLInput;
 }
@@ -168,6 +238,39 @@ export interface ValidateStackManifestRequest {
  * @interface StacksApiInterface
  */
 export interface StacksApiInterface {
+    /**
+     * Creates a stack from catalog services without a manifest. Use POST /stacks/actions/create-from-manifest for a stack.yml.
+     * @summary Create stack
+     * @param {NewStackInput} newStackInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    createStackRaw(requestParameters: CreateStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>>;
+
+    /**
+     * Creates a stack from catalog services without a manifest. Use POST /stacks/actions/create-from-manifest for a stack.yml.
+     * Create stack
+     */
+    createStack(requestParameters: CreateStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
+
+    /**
+     * Adds a stack-level annotation to the stack and creates a new draft revision when needed.
+     * @summary Create stack annotation
+     * @param {number} id 
+     * @param {NewStackAnnotationInput} newStackAnnotationInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    createStackAnnotationRaw(requestParameters: CreateStackAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackAnnotation>>;
+
+    /**
+     * Adds a stack-level annotation to the stack and creates a new draft revision when needed.
+     * Create stack annotation
+     */
+    createStackAnnotation(requestParameters: CreateStackAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackAnnotation>;
+
     /**
      * Creates a stack-wide environment variable.
      * @summary Create stack env var
@@ -202,6 +305,40 @@ export interface StacksApiInterface {
     createStackFromManifest(requestParameters: CreateStackFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
 
     /**
+     * Adds a stack-level Helm value to the stack and creates a new draft revision when needed.
+     * @summary Create stack Helm value
+     * @param {number} id 
+     * @param {NewStackHelmValueInput} newStackHelmValueInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    createStackHelmValueRaw(requestParameters: CreateStackHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackHelmValue>>;
+
+    /**
+     * Adds a stack-level Helm value to the stack and creates a new draft revision when needed.
+     * Create stack Helm value
+     */
+    createStackHelmValue(requestParameters: CreateStackHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackHelmValue>;
+
+    /**
+     * Adds a stack-level token to the stack and creates a new draft revision when needed.
+     * @summary Create stack token
+     * @param {number} id 
+     * @param {NewStackTokenInput} newStackTokenInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    createStackTokenRaw(requestParameters: CreateStackTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackToken>>;
+
+    /**
+     * Adds a stack-level token to the stack and creates a new draft revision when needed.
+     * Create stack token
+     */
+    createStackToken(requestParameters: CreateStackTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackToken>;
+
+    /**
      * Deletes an unused stack and returns the operation result.
      * @summary Delete stack
      * @param {number} id 
@@ -218,6 +355,22 @@ export interface StacksApiInterface {
     deleteStack(requestParameters: DeleteStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
+     * Deletes a stack-level annotation.
+     * @summary Delete stack annotation
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    deleteStackAnnotationRaw(requestParameters: DeleteStackAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes a stack-level annotation.
+     * Delete stack annotation
+     */
+    deleteStackAnnotation(requestParameters: DeleteStackAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
      * Deletes a stack-wide environment variable.
      * @summary Delete stack env var
      * @param {number} id 
@@ -232,6 +385,54 @@ export interface StacksApiInterface {
      * Delete stack env var
      */
     deleteStackEnvVar(requestParameters: DeleteStackEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Deletes a stack-level Helm value.
+     * @summary Delete stack Helm value
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    deleteStackHelmValueRaw(requestParameters: DeleteStackHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes a stack-level Helm value.
+     * Delete stack Helm value
+     */
+    deleteStackHelmValue(requestParameters: DeleteStackHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Deletes a stack-level token.
+     * @summary Delete stack token
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    deleteStackTokenRaw(requestParameters: DeleteStackTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes a stack-level token.
+     * Delete stack token
+     */
+    deleteStackToken(requestParameters: DeleteStackTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Drops the stack\'s unpublished draft revision and returns the stack.
+     * @summary Discard stack draft
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    discardStackDraftRaw(requestParameters: DiscardStackDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>>;
+
+    /**
+     * Drops the stack\'s unpublished draft revision and returns the stack.
+     * Discard stack draft
+     */
+    discardStackDraft(requestParameters: DiscardStackDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack>;
 
     /**
      * Duplicates the stack into the target organization or project.
@@ -382,6 +583,22 @@ export interface StacksApiInterface {
     importStacks(requestParameters: ImportStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
+     * Returns the infrastructure stacks Wodby installs on clusters of a public Kubernetes provider.
+     * @summary List infrastructure stacks
+     * @param {string} provider Provider name, such as aws or digitalocean.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    listInfraStacksRaw(requestParameters: ListInfraStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Stack>>>;
+
+    /**
+     * Returns the infrastructure stacks Wodby installs on clusters of a public Kubernetes provider.
+     * List infrastructure stacks
+     */
+    listInfraStacks(requestParameters: ListInfraStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Stack>>;
+
+    /**
      * Returns public stacks that can be duplicated into an organization or project.
      * @summary List public catalog stacks
      * @param {*} [options] Override http request option.
@@ -395,6 +612,22 @@ export interface StacksApiInterface {
      * List public catalog stacks
      */
     listPublicStacks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Stack>>;
+
+    /**
+     * Returns the stack-level annotations of a stack revision. They apply to every service of the stack.
+     * @summary List stack annotations
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    listStackAnnotationsRaw(requestParameters: ListStackAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackAnnotation>>>;
+
+    /**
+     * Returns the stack-level annotations of a stack revision. They apply to every service of the stack.
+     * List stack annotations
+     */
+    listStackAnnotations(requestParameters: ListStackAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackAnnotation>>;
 
     /**
      * Returns stack-wide environment variables for a stack revision.
@@ -413,6 +646,22 @@ export interface StacksApiInterface {
     listStackEnvVars(requestParameters: ListStackEnvVarsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackEnvVar>>;
 
     /**
+     * Returns the stack-level Helm values of a stack revision. They apply to every service of the stack.
+     * @summary List stack Helm values
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    listStackHelmValuesRaw(requestParameters: ListStackHelmValuesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackHelmValue>>>;
+
+    /**
+     * Returns the stack-level Helm values of a stack revision. They apply to every service of the stack.
+     * List stack Helm values
+     */
+    listStackHelmValues(requestParameters: ListStackHelmValuesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackHelmValue>>;
+
+    /**
      * Returns stack services matching the request filters.
      * @summary List stack services
      * @param {number} id 
@@ -427,6 +676,22 @@ export interface StacksApiInterface {
      * List stack services
      */
     listStackRevisionServices(requestParameters: ListStackRevisionServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackService>>;
+
+    /**
+     * Returns the stack-level tokens of a stack revision. They apply to every service of the stack.
+     * @summary List stack tokens
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    listStackTokensRaw(requestParameters: ListStackTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackToken>>>;
+
+    /**
+     * Returns the stack-level tokens of a stack revision. They apply to every service of the stack.
+     * List stack tokens
+     */
+    listStackTokens(requestParameters: ListStackTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackToken>>;
 
     /**
      * Returns stacks matching the request filters.
@@ -549,6 +814,23 @@ export interface StacksApiInterface {
     updateStackFromGit(requestParameters: UpdateStackFromGitOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
+     * Changes a stack-level Helm value.
+     * @summary Update stack Helm value
+     * @param {number} id 
+     * @param {UpdateStackHelmValueInput} updateStackHelmValueInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    updateStackHelmValueRaw(requestParameters: UpdateStackHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackHelmValue>>;
+
+    /**
+     * Changes a stack-level Helm value.
+     * Update stack Helm value
+     */
+    updateStackHelmValue(requestParameters: UpdateStackHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackHelmValue>;
+
+    /**
      * Starts a task that advances unpinned stack services to their eligible revisions.
      * @summary Update stack service revisions
      * @param {number} id 
@@ -600,6 +882,23 @@ export interface StacksApiInterface {
     updateStackSharing(requestParameters: UpdateStackSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
 
     /**
+     * Changes a stack-level token.
+     * @summary Update stack token
+     * @param {number} id 
+     * @param {UpdateStackTokenInput} updateStackTokenInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    updateStackTokenRaw(requestParameters: UpdateStackTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackToken>>;
+
+    /**
+     * Changes a stack-level token.
+     * Update stack token
+     */
+    updateStackToken(requestParameters: UpdateStackTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackToken>;
+
+    /**
      * Validates a Wodby stack manifest without creating a stack.
      * @summary Validate stack manifest
      * @param {ManifestFromYAMLInput} manifestFromYAMLInput 
@@ -621,6 +920,97 @@ export interface StacksApiInterface {
  * 
  */
 export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
+
+    /**
+     * Creates a stack from catalog services without a manifest. Use POST /stacks/actions/create-from-manifest for a stack.yml.
+     * Create stack
+     */
+    async createStackRaw(requestParameters: CreateStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>> {
+        if (requestParameters['newStackInput'] == null) {
+            throw new runtime.RequiredError(
+                'newStackInput',
+                'Required parameter "newStackInput" was null or undefined when calling createStack().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['newStackInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Creates a stack from catalog services without a manifest. Use POST /stacks/actions/create-from-manifest for a stack.yml.
+     * Create stack
+     */
+    async createStack(requestParameters: CreateStackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
+        const response = await this.createStackRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Adds a stack-level annotation to the stack and creates a new draft revision when needed.
+     * Create stack annotation
+     */
+    async createStackAnnotationRaw(requestParameters: CreateStackAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackAnnotation>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createStackAnnotation().'
+            );
+        }
+
+        if (requestParameters['newStackAnnotationInput'] == null) {
+            throw new runtime.RequiredError(
+                'newStackAnnotationInput',
+                'Required parameter "newStackAnnotationInput" was null or undefined when calling createStackAnnotation().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/{id}/configuration/annotations`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['newStackAnnotationInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Adds a stack-level annotation to the stack and creates a new draft revision when needed.
+     * Create stack annotation
+     */
+    async createStackAnnotation(requestParameters: CreateStackAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackAnnotation> {
+        const response = await this.createStackAnnotationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Creates a stack-wide environment variable.
@@ -714,6 +1104,104 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Adds a stack-level Helm value to the stack and creates a new draft revision when needed.
+     * Create stack Helm value
+     */
+    async createStackHelmValueRaw(requestParameters: CreateStackHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackHelmValue>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createStackHelmValue().'
+            );
+        }
+
+        if (requestParameters['newStackHelmValueInput'] == null) {
+            throw new runtime.RequiredError(
+                'newStackHelmValueInput',
+                'Required parameter "newStackHelmValueInput" was null or undefined when calling createStackHelmValue().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/{id}/configuration/helm-values`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['newStackHelmValueInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Adds a stack-level Helm value to the stack and creates a new draft revision when needed.
+     * Create stack Helm value
+     */
+    async createStackHelmValue(requestParameters: CreateStackHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackHelmValue> {
+        const response = await this.createStackHelmValueRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Adds a stack-level token to the stack and creates a new draft revision when needed.
+     * Create stack token
+     */
+    async createStackTokenRaw(requestParameters: CreateStackTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackToken>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createStackToken().'
+            );
+        }
+
+        if (requestParameters['newStackTokenInput'] == null) {
+            throw new runtime.RequiredError(
+                'newStackTokenInput',
+                'Required parameter "newStackTokenInput" was null or undefined when calling createStackToken().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/{id}/configuration/tokens`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['newStackTokenInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Adds a stack-level token to the stack and creates a new draft revision when needed.
+     * Create stack token
+     */
+    async createStackToken(requestParameters: CreateStackTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackToken> {
+        const response = await this.createStackTokenRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Deletes an unused stack and returns the operation result.
      * Delete stack
      */
@@ -753,6 +1241,45 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Deletes a stack-level annotation.
+     * Delete stack annotation
+     */
+    async deleteStackAnnotationRaw(requestParameters: DeleteStackAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteStackAnnotation().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-annotations/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Deletes a stack-level annotation.
+     * Delete stack annotation
+     */
+    async deleteStackAnnotation(requestParameters: DeleteStackAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteStackAnnotationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Deletes a stack-wide environment variable.
      * Delete stack env var
      */
@@ -788,6 +1315,123 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
      */
     async deleteStackEnvVar(requestParameters: DeleteStackEnvVarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.deleteStackEnvVarRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes a stack-level Helm value.
+     * Delete stack Helm value
+     */
+    async deleteStackHelmValueRaw(requestParameters: DeleteStackHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteStackHelmValue().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-helm-values/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Deletes a stack-level Helm value.
+     * Delete stack Helm value
+     */
+    async deleteStackHelmValue(requestParameters: DeleteStackHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteStackHelmValueRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes a stack-level token.
+     * Delete stack token
+     */
+    async deleteStackTokenRaw(requestParameters: DeleteStackTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteStackToken().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-tokens/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Deletes a stack-level token.
+     * Delete stack token
+     */
+    async deleteStackToken(requestParameters: DeleteStackTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteStackTokenRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Drops the stack\'s unpublished draft revision and returns the stack.
+     * Discard stack draft
+     */
+    async discardStackDraftRaw(requestParameters: DiscardStackDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stack>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling discardStackDraft().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/{id}/actions/discard-draft`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Drops the stack\'s unpublished draft revision and returns the stack.
+     * Discard stack draft
+     */
+    async discardStackDraft(requestParameters: DiscardStackDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stack> {
+        const response = await this.discardStackDraftRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1174,6 +1818,49 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Returns the infrastructure stacks Wodby installs on clusters of a public Kubernetes provider.
+     * List infrastructure stacks
+     */
+    async listInfraStacksRaw(requestParameters: ListInfraStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Stack>>> {
+        if (requestParameters['provider'] == null) {
+            throw new runtime.RequiredError(
+                'provider',
+                'Required parameter "provider" was null or undefined when calling listInfraStacks().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['provider'] != null) {
+            queryParameters['provider'] = requestParameters['provider'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/catalog/infra-stacks`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the infrastructure stacks Wodby installs on clusters of a public Kubernetes provider.
+     * List infrastructure stacks
+     */
+    async listInfraStacks(requestParameters: ListInfraStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Stack>> {
+        const response = await this.listInfraStacksRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns public stacks that can be duplicated into an organization or project.
      * List public catalog stacks
      */
@@ -1202,6 +1889,45 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
      */
     async listPublicStacks(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Stack>> {
         const response = await this.listPublicStacksRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the stack-level annotations of a stack revision. They apply to every service of the stack.
+     * List stack annotations
+     */
+    async listStackAnnotationsRaw(requestParameters: ListStackAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackAnnotation>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listStackAnnotations().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-revisions/{id}/annotations`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the stack-level annotations of a stack revision. They apply to every service of the stack.
+     * List stack annotations
+     */
+    async listStackAnnotations(requestParameters: ListStackAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackAnnotation>> {
+        const response = await this.listStackAnnotationsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1245,6 +1971,45 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Returns the stack-level Helm values of a stack revision. They apply to every service of the stack.
+     * List stack Helm values
+     */
+    async listStackHelmValuesRaw(requestParameters: ListStackHelmValuesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackHelmValue>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listStackHelmValues().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-revisions/{id}/helm-values`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the stack-level Helm values of a stack revision. They apply to every service of the stack.
+     * List stack Helm values
+     */
+    async listStackHelmValues(requestParameters: ListStackHelmValuesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackHelmValue>> {
+        const response = await this.listStackHelmValuesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns stack services matching the request filters.
      * List stack services
      */
@@ -1280,6 +2045,45 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
      */
     async listStackRevisionServices(requestParameters: ListStackRevisionServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackService>> {
         const response = await this.listStackRevisionServicesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the stack-level tokens of a stack revision. They apply to every service of the stack.
+     * List stack tokens
+     */
+    async listStackTokensRaw(requestParameters: ListStackTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<StackToken>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listStackTokens().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-revisions/{id}/tokens`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the stack-level tokens of a stack revision. They apply to every service of the stack.
+     * List stack tokens
+     */
+    async listStackTokens(requestParameters: ListStackTokensRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<StackToken>> {
+        const response = await this.listStackTokensRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1606,6 +2410,55 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Changes a stack-level Helm value.
+     * Update stack Helm value
+     */
+    async updateStackHelmValueRaw(requestParameters: UpdateStackHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackHelmValue>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateStackHelmValue().'
+            );
+        }
+
+        if (requestParameters['updateStackHelmValueInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateStackHelmValueInput',
+                'Required parameter "updateStackHelmValueInput" was null or undefined when calling updateStackHelmValue().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-helm-values/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateStackHelmValueInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Changes a stack-level Helm value.
+     * Update stack Helm value
+     */
+    async updateStackHelmValue(requestParameters: UpdateStackHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackHelmValue> {
+        const response = await this.updateStackHelmValueRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Starts a task that advances unpinned stack services to their eligible revisions.
      * Update stack service revisions
      */
@@ -1743,6 +2596,55 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
      */
     async updateStackSharing(requestParameters: UpdateStackSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing> {
         const response = await this.updateStackSharingRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes a stack-level token.
+     * Update stack token
+     */
+    async updateStackTokenRaw(requestParameters: UpdateStackTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackToken>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateStackToken().'
+            );
+        }
+
+        if (requestParameters['updateStackTokenInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateStackTokenInput',
+                'Required parameter "updateStackTokenInput" was null or undefined when calling updateStackToken().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stack-tokens/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateStackTokenInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Changes a stack-level token.
+     * Update stack token
+     */
+    async updateStackToken(requestParameters: UpdateStackTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackToken> {
+        const response = await this.updateStackTokenRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

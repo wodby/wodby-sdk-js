@@ -15,16 +15,32 @@
 
 import * as runtime from '../runtime';
 import type {
+  InviteOrgMemberInput,
+  OperationResult,
   OrgMembership,
+  OrgMembershipRoleInput,
   ProblemDetails,
 } from '../models/index';
+
+export interface DeleteOrgMembershipRequest {
+    id: number;
+}
 
 export interface GetOrgMembershipRequest {
     id: number;
 }
 
+export interface InviteOrgMemberRequest {
+    inviteOrgMemberInput: InviteOrgMemberInput;
+}
+
 export interface ListOrgMembershipsRequest {
     orgId?: number;
+}
+
+export interface UpdateOrgMembershipRequest {
+    id: number;
+    orgMembershipRoleInput: OrgMembershipRoleInput;
 }
 
 /**
@@ -34,6 +50,22 @@ export interface ListOrgMembershipsRequest {
  * @interface OrgMembershipsApiInterface
  */
 export interface OrgMembershipsApiInterface {
+    /**
+     * Removes a member or a pending invitation from the organization.
+     * @summary Remove organization member
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrgMembershipsApiInterface
+     */
+    deleteOrgMembershipRaw(requestParameters: DeleteOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Removes a member or a pending invitation from the organization.
+     * Remove organization member
+     */
+    deleteOrgMembership(requestParameters: DeleteOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
     /**
      * Returns the org membership identified by the request path.
      * @summary Get org membership
@@ -51,6 +83,22 @@ export interface OrgMembershipsApiInterface {
     getOrgMembership(requestParameters: GetOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgMembership>;
 
     /**
+     * Invites a person by email with an organization role, optionally adding them to teams and projects. The membership has the invited status until they accept.
+     * @summary Invite organization member
+     * @param {InviteOrgMemberInput} inviteOrgMemberInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrgMembershipsApiInterface
+     */
+    inviteOrgMemberRaw(requestParameters: InviteOrgMemberRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgMembership>>;
+
+    /**
+     * Invites a person by email with an organization role, optionally adding them to teams and projects. The membership has the invited status until they accept.
+     * Invite organization member
+     */
+    inviteOrgMember(requestParameters: InviteOrgMemberRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgMembership>;
+
+    /**
      * Returns org memberships matching the request filters.
      * @summary List org memberships
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -66,12 +114,68 @@ export interface OrgMembershipsApiInterface {
      */
     listOrgMemberships(requestParameters: ListOrgMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<OrgMembership>>;
 
+    /**
+     * Changes the organization role of a member and returns the membership.
+     * @summary Update organization member role
+     * @param {number} id 
+     * @param {OrgMembershipRoleInput} orgMembershipRoleInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrgMembershipsApiInterface
+     */
+    updateOrgMembershipRaw(requestParameters: UpdateOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgMembership>>;
+
+    /**
+     * Changes the organization role of a member and returns the membership.
+     * Update organization member role
+     */
+    updateOrgMembership(requestParameters: UpdateOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgMembership>;
+
 }
 
 /**
  * 
  */
 export class OrgMembershipsApi extends runtime.BaseAPI implements OrgMembershipsApiInterface {
+
+    /**
+     * Removes a member or a pending invitation from the organization.
+     * Remove organization member
+     */
+    async deleteOrgMembershipRaw(requestParameters: DeleteOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteOrgMembership().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/org-memberships/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Removes a member or a pending invitation from the organization.
+     * Remove organization member
+     */
+    async deleteOrgMembership(requestParameters: DeleteOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteOrgMembershipRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Returns the org membership identified by the request path.
@@ -113,6 +217,48 @@ export class OrgMembershipsApi extends runtime.BaseAPI implements OrgMemberships
     }
 
     /**
+     * Invites a person by email with an organization role, optionally adding them to teams and projects. The membership has the invited status until they accept.
+     * Invite organization member
+     */
+    async inviteOrgMemberRaw(requestParameters: InviteOrgMemberRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgMembership>> {
+        if (requestParameters['inviteOrgMemberInput'] == null) {
+            throw new runtime.RequiredError(
+                'inviteOrgMemberInput',
+                'Required parameter "inviteOrgMemberInput" was null or undefined when calling inviteOrgMember().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/org-memberships`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['inviteOrgMemberInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Invites a person by email with an organization role, optionally adding them to teams and projects. The membership has the invited status until they accept.
+     * Invite organization member
+     */
+    async inviteOrgMember(requestParameters: InviteOrgMemberRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgMembership> {
+        const response = await this.inviteOrgMemberRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns org memberships matching the request filters.
      * List org memberships
      */
@@ -145,6 +291,55 @@ export class OrgMembershipsApi extends runtime.BaseAPI implements OrgMemberships
      */
     async listOrgMemberships(requestParameters: ListOrgMembershipsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<OrgMembership>> {
         const response = await this.listOrgMembershipsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes the organization role of a member and returns the membership.
+     * Update organization member role
+     */
+    async updateOrgMembershipRaw(requestParameters: UpdateOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgMembership>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateOrgMembership().'
+            );
+        }
+
+        if (requestParameters['orgMembershipRoleInput'] == null) {
+            throw new runtime.RequiredError(
+                'orgMembershipRoleInput',
+                'Required parameter "orgMembershipRoleInput" was null or undefined when calling updateOrgMembership().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/org-memberships/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['orgMembershipRoleInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Changes the organization role of a member and returns the membership.
+     * Update organization member role
+     */
+    async updateOrgMembership(requestParameters: UpdateOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgMembership> {
+        const response = await this.updateOrgMembershipRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

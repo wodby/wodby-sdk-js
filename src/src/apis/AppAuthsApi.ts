@@ -30,6 +30,10 @@ export interface DeleteAppAuthRequest {
     id: number;
 }
 
+export interface GetAppAuthRequest {
+    id: number;
+}
+
 export interface ListAppAuthsRequest {
     appInstanceId: number;
 }
@@ -77,6 +81,22 @@ export interface AppAuthsApiInterface {
      * Delete app auth
      */
     deleteAppAuth(requestParameters: DeleteAppAuthRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Returns one HTTP basic authentication credential without its password.
+     * @summary Get HTTP basic authentication
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppAuthsApiInterface
+     */
+    getAppAuthRaw(requestParameters: GetAppAuthRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAuth>>;
+
+    /**
+     * Returns one HTTP basic authentication credential without its password.
+     * Get HTTP basic authentication
+     */
+    getAppAuth(requestParameters: GetAppAuthRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAuth>;
 
     /**
      * Returns HTTP basic authentication entries for an app environment without exposing passwords or secret identifiers.
@@ -196,6 +216,45 @@ export class AppAuthsApi extends runtime.BaseAPI implements AppAuthsApiInterface
      */
     async deleteAppAuth(requestParameters: DeleteAppAuthRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.deleteAppAuthRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns one HTTP basic authentication credential without its password.
+     * Get HTTP basic authentication
+     */
+    async getAppAuthRaw(requestParameters: GetAppAuthRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAuth>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppAuth().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-auths/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns one HTTP basic authentication credential without its password.
+     * Get HTTP basic authentication
+     */
+    async getAppAuth(requestParameters: GetAppAuthRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAuth> {
+        const response = await this.getAppAuthRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

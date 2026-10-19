@@ -29,6 +29,7 @@ import type {
   AppServiceIntegration,
   AppServiceLink,
   AppServiceLinkInput,
+  AppServicePod,
   AppServiceSetting,
   AppServiceToken,
   AppServiceVolume,
@@ -125,6 +126,10 @@ export interface GetAppServiceCronJobRequest {
     id: number;
 }
 
+export interface GetAppServiceCronScheduleRequest {
+    id: number;
+}
+
 export interface KeepLogStreamAliveRequest {
     id: number;
 }
@@ -172,6 +177,13 @@ export interface ListAppServiceIntegrationsRequest {
 
 export interface ListAppServiceLinksRequest {
     id: number;
+}
+
+export interface ListAppServicePodsRequest {
+    id: number;
+    mode?: string;
+    workload?: string;
+    container?: string;
 }
 
 export interface ListAppServiceSettingsRequest {
@@ -536,6 +548,22 @@ export interface AppServicesApiInterface {
     getAppServiceCronJob(requestParameters: GetAppServiceCronJobRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceCronJob>;
 
     /**
+     * Returns one cron schedule of an app service.
+     * @summary Get app service cron schedule
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    getAppServiceCronScheduleRaw(requestParameters: GetAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceCronSchedule>>;
+
+    /**
+     * Returns one cron schedule of an app service.
+     * Get app service cron schedule
+     */
+    getAppServiceCronSchedule(requestParameters: GetAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceCronSchedule>;
+
+    /**
      * Extends an existing log stream lease.
      * @summary Keep log stream alive
      * @param {number} id 
@@ -715,6 +743,25 @@ export interface AppServicesApiInterface {
      * List app service links
      */
     listAppServiceLinks(requestParameters: ListAppServiceLinksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceLink>>;
+
+    /**
+     * Returns the Kubernetes pods of an app service with their containers, state and resource use.
+     * @summary List app service pods
+     * @param {number} id 
+     * @param {string} [mode] primary for the main workload (default) or all for every workload.
+     * @param {string} [workload] Only pods of this workload.
+     * @param {string} [container] Only pods with this container.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServicePodsRaw(requestParameters: ListAppServicePodsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServicePod>>>;
+
+    /**
+     * Returns the Kubernetes pods of an app service with their containers, state and resource use.
+     * List app service pods
+     */
+    listAppServicePods(requestParameters: ListAppServicePodsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServicePod>>;
 
     /**
      * Returns settings configured for an app service.
@@ -1739,6 +1786,45 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
+     * Returns one cron schedule of an app service.
+     * Get app service cron schedule
+     */
+    async getAppServiceCronScheduleRaw(requestParameters: GetAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppServiceCronSchedule>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppServiceCronSchedule().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-service-cron-schedules/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns one cron schedule of an app service.
+     * Get app service cron schedule
+     */
+    async getAppServiceCronSchedule(requestParameters: GetAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceCronSchedule> {
+        const response = await this.getAppServiceCronScheduleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Extends an existing log stream lease.
      * Keep log stream alive
      */
@@ -2188,6 +2274,57 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
      */
     async listAppServiceLinks(requestParameters: ListAppServiceLinksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceLink>> {
         const response = await this.listAppServiceLinksRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the Kubernetes pods of an app service with their containers, state and resource use.
+     * List app service pods
+     */
+    async listAppServicePodsRaw(requestParameters: ListAppServicePodsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServicePod>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppServicePods().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['mode'] != null) {
+            queryParameters['mode'] = requestParameters['mode'];
+        }
+
+        if (requestParameters['workload'] != null) {
+            queryParameters['workload'] = requestParameters['workload'];
+        }
+
+        if (requestParameters['container'] != null) {
+            queryParameters['container'] = requestParameters['container'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/pods`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the Kubernetes pods of an app service with their containers, state and resource use.
+     * List app service pods
+     */
+    async listAppServicePods(requestParameters: ListAppServicePodsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServicePod>> {
+        const response = await this.listAppServicePodsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

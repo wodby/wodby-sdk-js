@@ -16,20 +16,36 @@
 import * as runtime from '../runtime';
 import type {
   Cluster,
+  ClusterCreationResult,
   ClusterEnvironmentPolicyInput,
   ClusterInfraAppUpgradeChangelog,
   ClusterSettingsInput,
+  K3SInstallCommand,
   KubernetesVersionUpgradePlan,
   NewClusterInput,
+  NewK3SClusterInput,
+  NewWodbyCloudClusterInput,
   OperationResult,
   ProblemDetails,
   ResourceSharing,
   ResourceSharingInput,
+  ScaleClusterInput,
+  UpdateK3SClusterPublicIPInput,
+  UpdateKubernetesVersionInput,
   UpdateTitleRequest,
+  WodbyCloudMachineType,
 } from '../models/index';
 
 export interface CreateClusterRequest {
     newClusterInput: NewClusterInput;
+}
+
+export interface CreateK3SClusterRequest {
+    newK3SClusterInput: NewK3SClusterInput;
+}
+
+export interface CreateWodbyCloudClusterRequest {
+    newWodbyCloudClusterInput: NewWodbyCloudClusterInput;
 }
 
 export interface DeleteClusterRequest {
@@ -55,6 +71,10 @@ export interface GetClusterSharingRequest {
     id: number;
 }
 
+export interface GetK3SClusterInstallCommandRequest {
+    id: number;
+}
+
 export interface GetKubernetesVersionUpgradePlanRequest {
     id: number;
 }
@@ -64,6 +84,15 @@ export interface ListClustersRequest {
     projectIds?: string;
     integrationId?: number;
     environmentId?: number;
+}
+
+export interface RecycleClusterNodesRequest {
+    id: number;
+}
+
+export interface ScaleClusterRequest {
+    id: number;
+    scaleClusterInput: ScaleClusterInput;
 }
 
 export interface UpdateClusterRequest {
@@ -76,6 +105,11 @@ export interface UpdateClusterEnvironmentPolicyRequest {
     clusterEnvironmentPolicyInput: ClusterEnvironmentPolicyInput;
 }
 
+export interface UpdateClusterKubernetesVersionRequest {
+    id: number;
+    updateKubernetesVersionInput: UpdateKubernetesVersionInput;
+}
+
 export interface UpdateClusterSettingsRequest {
     id: number;
     clusterSettingsInput: ClusterSettingsInput;
@@ -84,6 +118,11 @@ export interface UpdateClusterSettingsRequest {
 export interface UpdateClusterSharingRequest {
     id: number;
     resourceSharingInput: ResourceSharingInput;
+}
+
+export interface UpdateK3SClusterPublicIpRequest {
+    id: number;
+    updateK3SClusterPublicIPInput: UpdateK3SClusterPublicIPInput;
 }
 
 export interface UpgradeClusterInfraRequest {
@@ -116,6 +155,38 @@ export interface ClustersApiInterface {
      * Create cluster
      */
     createCluster(requestParameters: CreateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
+
+    /**
+     * Registers a self-hosted k3s cluster. Run the command from GET /clusters/k3s-install-command/{id} on the server to connect it.
+     * @summary Create k3s cluster
+     * @param {NewK3SClusterInput} newK3SClusterInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    createK3SClusterRaw(requestParameters: CreateK3SClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
+
+    /**
+     * Registers a self-hosted k3s cluster. Run the command from GET /clusters/k3s-install-command/{id} on the server to connect it.
+     * Create k3s cluster
+     */
+    createK3SCluster(requestParameters: CreateK3SClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
+
+    /**
+     * Creates a cluster hosted by Wodby and billed to the organization. List machine types with GET /wodby- cloud/machine-types.
+     * @summary Create Wodby Cloud cluster
+     * @param {NewWodbyCloudClusterInput} newWodbyCloudClusterInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    createWodbyCloudClusterRaw(requestParameters: CreateWodbyCloudClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterCreationResult>>;
+
+    /**
+     * Creates a cluster hosted by Wodby and billed to the organization. List machine types with GET /wodby- cloud/machine-types.
+     * Create Wodby Cloud cluster
+     */
+    createWodbyCloudCluster(requestParameters: CreateWodbyCloudClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterCreationResult>;
 
     /**
      * Deletes the cluster and returns the operation result.
@@ -201,6 +272,22 @@ export interface ClustersApiInterface {
     getClusterSharing(requestParameters: GetClusterSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
 
     /**
+     * Returns the shell command that installs Wodby on the k3s server and connects the cluster. The command contains short-lived credentials; treat it as a secret.
+     * @summary Get k3s install command
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    getK3SClusterInstallCommandRaw(requestParameters: GetK3SClusterInstallCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<K3SInstallCommand>>;
+
+    /**
+     * Returns the shell command that installs Wodby on the k3s server and connects the cluster. The command contains short-lived credentials; treat it as a secret.
+     * Get k3s install command
+     */
+    getK3SClusterInstallCommand(requestParameters: GetK3SClusterInstallCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<K3SInstallCommand>;
+
+    /**
      * Returns supported Kubernetes upgrade targets, blockers, and warnings for a cluster.
      * @summary Get Kubernetes version upgrade plan
      * @param {number} id 
@@ -234,6 +321,54 @@ export interface ClustersApiInterface {
      * List clusters
      */
     listClusters(requestParameters: ListClustersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Cluster>>;
+
+    /**
+     * Returns the machine types available for Wodby Cloud clusters with their prices.
+     * @summary List Wodby Cloud machine types
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    listWodbyCloudMachineTypesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<WodbyCloudMachineType>>>;
+
+    /**
+     * Returns the machine types available for Wodby Cloud clusters with their prices.
+     * List Wodby Cloud machine types
+     */
+    listWodbyCloudMachineTypes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<WodbyCloudMachineType>>;
+
+    /**
+     * Replaces the cluster nodes one at a time so they come back with a fresh machine image.
+     * @summary Recycle cluster nodes
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    recycleClusterNodesRaw(requestParameters: RecycleClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Replaces the cluster nodes one at a time so they come back with a fresh machine image.
+     * Recycle cluster nodes
+     */
+    recycleClusterNodes(requestParameters: RecycleClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Changes the minimum and maximum node count of a managed cluster and starts the node pool update.
+     * @summary Scale cluster nodes
+     * @param {number} id 
+     * @param {ScaleClusterInput} scaleClusterInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    scaleClusterRaw(requestParameters: ScaleClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Changes the minimum and maximum node count of a managed cluster and starts the node pool update.
+     * Scale cluster nodes
+     */
+    scaleCluster(requestParameters: ScaleClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Updates the cluster and returns the updated resource.
@@ -270,6 +405,23 @@ export interface ClustersApiInterface {
     updateClusterEnvironmentPolicy(requestParameters: UpdateClusterEnvironmentPolicyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
 
     /**
+     * Starts upgrading the cluster to a Kubernetes version from its upgrade plan. Check GET /cluster-kubernetes- version-upgrade-plans/{id} for the allowed targets first.
+     * @summary Update cluster Kubernetes version
+     * @param {number} id 
+     * @param {UpdateKubernetesVersionInput} updateKubernetesVersionInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    updateClusterKubernetesVersionRaw(requestParameters: UpdateClusterKubernetesVersionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Starts upgrading the cluster to a Kubernetes version from its upgrade plan. Check GET /cluster-kubernetes- version-upgrade-plans/{id} for the allowed targets first.
+     * Update cluster Kubernetes version
+     */
+    updateClusterKubernetesVersion(requestParameters: UpdateClusterKubernetesVersionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
      * Updates cluster settings and returns the updated cluster.
      * @summary Update cluster settings
      * @param {number} id 
@@ -302,6 +454,23 @@ export interface ClustersApiInterface {
      * Update cluster sharing
      */
     updateClusterSharing(requestParameters: UpdateClusterSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
+
+    /**
+     * Changes the public IP address that routes to a self-hosted k3s cluster. Returns the cluster.
+     * @summary Update k3s cluster public IP
+     * @param {number} id 
+     * @param {UpdateK3SClusterPublicIPInput} updateK3SClusterPublicIPInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    updateK3SClusterPublicIpRaw(requestParameters: UpdateK3SClusterPublicIpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
+
+    /**
+     * Changes the public IP address that routes to a self-hosted k3s cluster. Returns the cluster.
+     * Update k3s cluster public IP
+     */
+    updateK3SClusterPublicIp(requestParameters: UpdateK3SClusterPublicIpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
 
     /**
      * Starts a cluster infrastructure upgrade task and returns the task identifier.
@@ -381,6 +550,90 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async createCluster(requestParameters: CreateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
         const response = await this.createClusterRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Registers a self-hosted k3s cluster. Run the command from GET /clusters/k3s-install-command/{id} on the server to connect it.
+     * Create k3s cluster
+     */
+    async createK3SClusterRaw(requestParameters: CreateK3SClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
+        if (requestParameters['newK3SClusterInput'] == null) {
+            throw new runtime.RequiredError(
+                'newK3SClusterInput',
+                'Required parameter "newK3SClusterInput" was null or undefined when calling createK3SCluster().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/actions/create-k3s`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['newK3SClusterInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Registers a self-hosted k3s cluster. Run the command from GET /clusters/k3s-install-command/{id} on the server to connect it.
+     * Create k3s cluster
+     */
+    async createK3SCluster(requestParameters: CreateK3SClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
+        const response = await this.createK3SClusterRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates a cluster hosted by Wodby and billed to the organization. List machine types with GET /wodby- cloud/machine-types.
+     * Create Wodby Cloud cluster
+     */
+    async createWodbyCloudClusterRaw(requestParameters: CreateWodbyCloudClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterCreationResult>> {
+        if (requestParameters['newWodbyCloudClusterInput'] == null) {
+            throw new runtime.RequiredError(
+                'newWodbyCloudClusterInput',
+                'Required parameter "newWodbyCloudClusterInput" was null or undefined when calling createWodbyCloudCluster().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/actions/create-wodby-cloud`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['newWodbyCloudClusterInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Creates a cluster hosted by Wodby and billed to the organization. List machine types with GET /wodby- cloud/machine-types.
+     * Create Wodby Cloud cluster
+     */
+    async createWodbyCloudCluster(requestParameters: CreateWodbyCloudClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterCreationResult> {
+        const response = await this.createWodbyCloudClusterRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -592,6 +845,45 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Returns the shell command that installs Wodby on the k3s server and connects the cluster. The command contains short-lived credentials; treat it as a secret.
+     * Get k3s install command
+     */
+    async getK3SClusterInstallCommandRaw(requestParameters: GetK3SClusterInstallCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<K3SInstallCommand>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getK3SClusterInstallCommand().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/k3s-install-command/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the shell command that installs Wodby on the k3s server and connects the cluster. The command contains short-lived credentials; treat it as a secret.
+     * Get k3s install command
+     */
+    async getK3SClusterInstallCommand(requestParameters: GetK3SClusterInstallCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<K3SInstallCommand> {
+        const response = await this.getK3SClusterInstallCommandRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns supported Kubernetes upgrade targets, blockers, and warnings for a cluster.
      * Get Kubernetes version upgrade plan
      */
@@ -675,6 +967,126 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async listClusters(requestParameters: ListClustersRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Cluster>> {
         const response = await this.listClustersRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the machine types available for Wodby Cloud clusters with their prices.
+     * List Wodby Cloud machine types
+     */
+    async listWodbyCloudMachineTypesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<WodbyCloudMachineType>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/wodby-cloud/machine-types`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the machine types available for Wodby Cloud clusters with their prices.
+     * List Wodby Cloud machine types
+     */
+    async listWodbyCloudMachineTypes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<WodbyCloudMachineType>> {
+        const response = await this.listWodbyCloudMachineTypesRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Replaces the cluster nodes one at a time so they come back with a fresh machine image.
+     * Recycle cluster nodes
+     */
+    async recycleClusterNodesRaw(requestParameters: RecycleClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling recycleClusterNodes().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/{id}/actions/recycle-nodes`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Replaces the cluster nodes one at a time so they come back with a fresh machine image.
+     * Recycle cluster nodes
+     */
+    async recycleClusterNodes(requestParameters: RecycleClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.recycleClusterNodesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes the minimum and maximum node count of a managed cluster and starts the node pool update.
+     * Scale cluster nodes
+     */
+    async scaleClusterRaw(requestParameters: ScaleClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling scaleCluster().'
+            );
+        }
+
+        if (requestParameters['scaleClusterInput'] == null) {
+            throw new runtime.RequiredError(
+                'scaleClusterInput',
+                'Required parameter "scaleClusterInput" was null or undefined when calling scaleCluster().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/{id}/actions/scale`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['scaleClusterInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Changes the minimum and maximum node count of a managed cluster and starts the node pool update.
+     * Scale cluster nodes
+     */
+    async scaleCluster(requestParameters: ScaleClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.scaleClusterRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -777,6 +1189,55 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Starts upgrading the cluster to a Kubernetes version from its upgrade plan. Check GET /cluster-kubernetes- version-upgrade-plans/{id} for the allowed targets first.
+     * Update cluster Kubernetes version
+     */
+    async updateClusterKubernetesVersionRaw(requestParameters: UpdateClusterKubernetesVersionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateClusterKubernetesVersion().'
+            );
+        }
+
+        if (requestParameters['updateKubernetesVersionInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateKubernetesVersionInput',
+                'Required parameter "updateKubernetesVersionInput" was null or undefined when calling updateClusterKubernetesVersion().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/{id}/actions/update-kubernetes-version`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateKubernetesVersionInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Starts upgrading the cluster to a Kubernetes version from its upgrade plan. Check GET /cluster-kubernetes- version-upgrade-plans/{id} for the allowed targets first.
+     * Update cluster Kubernetes version
+     */
+    async updateClusterKubernetesVersion(requestParameters: UpdateClusterKubernetesVersionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.updateClusterKubernetesVersionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Updates cluster settings and returns the updated cluster.
      * Update cluster settings
      */
@@ -871,6 +1332,55 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async updateClusterSharing(requestParameters: UpdateClusterSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing> {
         const response = await this.updateClusterSharingRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes the public IP address that routes to a self-hosted k3s cluster. Returns the cluster.
+     * Update k3s cluster public IP
+     */
+    async updateK3SClusterPublicIpRaw(requestParameters: UpdateK3SClusterPublicIpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateK3SClusterPublicIp().'
+            );
+        }
+
+        if (requestParameters['updateK3SClusterPublicIPInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateK3SClusterPublicIPInput',
+                'Required parameter "updateK3SClusterPublicIPInput" was null or undefined when calling updateK3SClusterPublicIp().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/{id}/actions/update-k3s-public-ip`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateK3SClusterPublicIPInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Changes the public IP address that routes to a self-hosted k3s cluster. Returns the cluster.
+     * Update k3s cluster public IP
+     */
+    async updateK3SClusterPublicIp(requestParameters: UpdateK3SClusterPublicIpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
+        const response = await this.updateK3SClusterPublicIpRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

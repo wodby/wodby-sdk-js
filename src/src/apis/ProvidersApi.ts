@@ -27,6 +27,7 @@ import type {
   ProvidersResponse,
   ResourceSharing,
   ResourceSharingInput,
+  UpdateProviderInput,
   UpdateStackFromGitRequest,
 } from '../models/index';
 
@@ -36,6 +37,10 @@ export interface CreateProviderFromManifestRequest {
 
 export interface CreateVariableProviderRequest {
     newVariableProviderInput: NewVariableProviderInput;
+}
+
+export interface DeleteProviderRequest {
+    id: number;
 }
 
 export interface GetProviderRequest {
@@ -65,6 +70,11 @@ export interface ListProvidersRequest {
     search?: string;
     page?: number;
     pageSize?: number;
+}
+
+export interface UpdateProviderRequest {
+    id: number;
+    updateProviderInput: UpdateProviderInput;
 }
 
 export interface UpdateProviderFromGitRequest {
@@ -125,6 +135,22 @@ export interface ProvidersApiInterface {
      * Create variable provider
      */
     createVariableProvider(requestParameters: CreateVariableProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider>;
+
+    /**
+     * Deletes a custom provider that no integration uses.
+     * @summary Delete provider
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProvidersApiInterface
+     */
+    deleteProviderRaw(requestParameters: DeleteProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes a custom provider that no integration uses.
+     * Delete provider
+     */
+    deleteProvider(requestParameters: DeleteProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Returns the provider identified by the request path.
@@ -226,6 +252,23 @@ export interface ProvidersApiInterface {
      * List providers
      */
     listProviders(requestParameters: ListProvidersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProvidersResponse>;
+
+    /**
+     * Changes the provider title and returns the provider.
+     * @summary Update provider
+     * @param {number} id 
+     * @param {UpdateProviderInput} updateProviderInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProvidersApiInterface
+     */
+    updateProviderRaw(requestParameters: UpdateProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>>;
+
+    /**
+     * Changes the provider title and returns the provider.
+     * Update provider
+     */
+    updateProvider(requestParameters: UpdateProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider>;
 
     /**
      * Starts an update from the selected ref. Changing a shared repository ref updates all repository usages.
@@ -383,6 +426,45 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
      */
     async createVariableProvider(requestParameters: CreateVariableProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider> {
         const response = await this.createVariableProviderRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes a custom provider that no integration uses.
+     * Delete provider
+     */
+    async deleteProviderRaw(requestParameters: DeleteProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteProvider().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/providers/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Deletes a custom provider that no integration uses.
+     * Delete provider
+     */
+    async deleteProvider(requestParameters: DeleteProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteProviderRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -637,6 +719,55 @@ export class ProvidersApi extends runtime.BaseAPI implements ProvidersApiInterfa
      */
     async listProviders(requestParameters: ListProvidersRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProvidersResponse> {
         const response = await this.listProvidersRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes the provider title and returns the provider.
+     * Update provider
+     */
+    async updateProviderRaw(requestParameters: UpdateProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Provider>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateProvider().'
+            );
+        }
+
+        if (requestParameters['updateProviderInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateProviderInput',
+                'Required parameter "updateProviderInput" was null or undefined when calling updateProvider().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/providers/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateProviderInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Changes the provider title and returns the provider.
+     * Update provider
+     */
+    async updateProvider(requestParameters: UpdateProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Provider> {
+        const response = await this.updateProviderRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

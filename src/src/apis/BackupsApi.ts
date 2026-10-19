@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   Backup,
+  BackupDownload,
   BackupPreset,
   BackupsResponse,
   NewBackupInput,
@@ -38,6 +39,10 @@ export interface DeleteBackupPresetRequest {
 }
 
 export interface GetBackupRequest {
+    id: number;
+}
+
+export interface GetBackupDownloadRequest {
     id: number;
 }
 
@@ -149,6 +154,22 @@ export interface BackupsApiInterface {
      * Get backup
      */
     getBackup(requestParameters: GetBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Backup>;
+
+    /**
+     * Returns a short-lived URL for downloading the backup file. It needs write access to the backup.
+     * @summary Get backup download URL
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BackupsApiInterface
+     */
+    getBackupDownloadRaw(requestParameters: GetBackupDownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackupDownload>>;
+
+    /**
+     * Returns a short-lived URL for downloading the backup file. It needs write access to the backup.
+     * Get backup download URL
+     */
+    getBackupDownload(requestParameters: GetBackupDownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackupDownload>;
 
     /**
      * Returns the backup preset identified by the request path.
@@ -426,6 +447,45 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
      */
     async getBackup(requestParameters: GetBackupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Backup> {
         const response = await this.getBackupRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns a short-lived URL for downloading the backup file. It needs write access to the backup.
+     * Get backup download URL
+     */
+    async getBackupDownloadRaw(requestParameters: GetBackupDownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BackupDownload>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getBackupDownload().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/backups/{id}/download`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns a short-lived URL for downloading the backup file. It needs write access to the backup.
+     * Get backup download URL
+     */
+    async getBackupDownload(requestParameters: GetBackupDownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BackupDownload> {
+        const response = await this.getBackupDownloadRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

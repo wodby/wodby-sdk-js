@@ -15,16 +15,65 @@
 
 import * as runtime from '../runtime';
 import type {
+  AppEndpoint,
   AppPort,
+  AppPortSetting,
+  AppPortSettingName,
+  AppPortSettingsInput,
+  OperationResult,
   ProblemDetails,
+  SetStringValueInput,
+  UpdateAppPortInput,
 } from '../models/index';
+
+export interface DeleteAppPortSettingRequest {
+    id: number;
+    name: AppPortSettingName;
+}
+
+export interface GetAppEndpointRequest {
+    id: number;
+}
 
 export interface GetAppPortRequest {
     id: number;
 }
 
+export interface ListAppEndpointsRequest {
+    appEnvironmentId: number;
+}
+
+export interface ListAppPortSettingsRequest {
+    id: number;
+}
+
 export interface ListAppPortsRequest {
     appInstanceId: number;
+}
+
+export interface PublishAppPortRequest {
+    id: number;
+    updateAppPortInput?: UpdateAppPortInput;
+}
+
+export interface ReplaceAppPortSettingsRequest {
+    id: number;
+    appPortSettingsInput: AppPortSettingsInput;
+}
+
+export interface SetAppPortSettingRequest {
+    id: number;
+    name: AppPortSettingName;
+    setStringValueInput: SetStringValueInput;
+}
+
+export interface UnpublishAppPortRequest {
+    id: number;
+}
+
+export interface UpdateAppPortRequest {
+    id: number;
+    updateAppPortInput: UpdateAppPortInput;
 }
 
 /**
@@ -34,6 +83,39 @@ export interface ListAppPortsRequest {
  * @interface AppPortsApiInterface
  */
 export interface AppPortsApiInterface {
+    /**
+     * Removes a named app port setting.
+     * @summary Delete app port setting
+     * @param {number} id 
+     * @param {AppPortSettingName} name 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppPortsApiInterface
+     */
+    deleteAppPortSettingRaw(requestParameters: DeleteAppPortSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Removes a named app port setting.
+     * Delete app port setting
+     */
+    deleteAppPortSetting(requestParameters: DeleteAppPortSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Returns one app endpoint with its route and port IDs.
+     * @summary Get app endpoint
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppPortsApiInterface
+     */
+    getAppEndpointRaw(requestParameters: GetAppEndpointRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppEndpoint>>;
+
+    /**
+     * Returns one app endpoint with its route and port IDs.
+     * Get app endpoint
+     */
+    getAppEndpoint(requestParameters: GetAppEndpointRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEndpoint>;
+
     /**
      * Returns the app port identified by the request path.
      * @summary Get app port
@@ -51,6 +133,38 @@ export interface AppPortsApiInterface {
     getAppPort(requestParameters: GetAppPortRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppPort>;
 
     /**
+     * Returns the endpoints of an app environment. An endpoint groups the routes and ports of one app service endpoint.
+     * @summary List app endpoints
+     * @param {number} appEnvironmentId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppPortsApiInterface
+     */
+    listAppEndpointsRaw(requestParameters: ListAppEndpointsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppEndpoint>>>;
+
+    /**
+     * Returns the endpoints of an app environment. An endpoint groups the routes and ports of one app service endpoint.
+     * List app endpoints
+     */
+    listAppEndpoints(requestParameters: ListAppEndpointsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppEndpoint>>;
+
+    /**
+     * Returns the settings of an app port.
+     * @summary List app port settings
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppPortsApiInterface
+     */
+    listAppPortSettingsRaw(requestParameters: ListAppPortSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppPortSetting>>>;
+
+    /**
+     * Returns the settings of an app port.
+     * List app port settings
+     */
+    listAppPortSettings(requestParameters: ListAppPortSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppPortSetting>>;
+
+    /**
      * Returns app ports matching the request filters.
      * @summary List app ports
      * @param {number} appInstanceId 
@@ -66,12 +180,182 @@ export interface AppPortsApiInterface {
      */
     listAppPorts(requestParameters: ListAppPortsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppPort>>;
 
+    /**
+     * Exposes the app port on the cluster\'s public address. Leave publicPort out to pick a free port. Returns the port.
+     * @summary Publish app port
+     * @param {number} id 
+     * @param {UpdateAppPortInput} [updateAppPortInput] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppPortsApiInterface
+     */
+    publishAppPortRaw(requestParameters: PublishAppPortRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppPort>>;
+
+    /**
+     * Exposes the app port on the cluster\'s public address. Leave publicPort out to pick a free port. Returns the port.
+     * Publish app port
+     */
+    publishAppPort(requestParameters: PublishAppPortRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppPort>;
+
+    /**
+     * Replaces all settings of an app port. A setting left out is removed. Returns the stored settings.
+     * @summary Replace app port settings
+     * @param {number} id 
+     * @param {AppPortSettingsInput} appPortSettingsInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppPortsApiInterface
+     */
+    replaceAppPortSettingsRaw(requestParameters: ReplaceAppPortSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppPortSetting>>>;
+
+    /**
+     * Replaces all settings of an app port. A setting left out is removed. Returns the stored settings.
+     * Replace app port settings
+     */
+    replaceAppPortSettings(requestParameters: ReplaceAppPortSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppPortSetting>>;
+
+    /**
+     * Creates or updates a named app port setting.
+     * @summary Set app port setting
+     * @param {number} id 
+     * @param {AppPortSettingName} name 
+     * @param {SetStringValueInput} setStringValueInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppPortsApiInterface
+     */
+    setAppPortSettingRaw(requestParameters: SetAppPortSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppPortSetting>>;
+
+    /**
+     * Creates or updates a named app port setting.
+     * Set app port setting
+     */
+    setAppPortSetting(requestParameters: SetAppPortSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppPortSetting>;
+
+    /**
+     * Stops exposing the app port on the cluster\'s public address and returns the port.
+     * @summary Unpublish app port
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppPortsApiInterface
+     */
+    unpublishAppPortRaw(requestParameters: UnpublishAppPortRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppPort>>;
+
+    /**
+     * Stops exposing the app port on the cluster\'s public address and returns the port.
+     * Unpublish app port
+     */
+    unpublishAppPort(requestParameters: UnpublishAppPortRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppPort>;
+
+    /**
+     * Changes the public port of an app port and returns it.
+     * @summary Update app port
+     * @param {number} id 
+     * @param {UpdateAppPortInput} updateAppPortInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppPortsApiInterface
+     */
+    updateAppPortRaw(requestParameters: UpdateAppPortRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppPort>>;
+
+    /**
+     * Changes the public port of an app port and returns it.
+     * Update app port
+     */
+    updateAppPort(requestParameters: UpdateAppPortRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppPort>;
+
 }
 
 /**
  * 
  */
 export class AppPortsApi extends runtime.BaseAPI implements AppPortsApiInterface {
+
+    /**
+     * Removes a named app port setting.
+     * Delete app port setting
+     */
+    async deleteAppPortSettingRaw(requestParameters: DeleteAppPortSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteAppPortSetting().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteAppPortSetting().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-ports/{id}/settings/{name}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))).replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Removes a named app port setting.
+     * Delete app port setting
+     */
+    async deleteAppPortSetting(requestParameters: DeleteAppPortSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteAppPortSettingRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns one app endpoint with its route and port IDs.
+     * Get app endpoint
+     */
+    async getAppEndpointRaw(requestParameters: GetAppEndpointRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppEndpoint>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppEndpoint().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-endpoints/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns one app endpoint with its route and port IDs.
+     * Get app endpoint
+     */
+    async getAppEndpoint(requestParameters: GetAppEndpointRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEndpoint> {
+        const response = await this.getAppEndpointRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Returns the app port identified by the request path.
@@ -109,6 +393,88 @@ export class AppPortsApi extends runtime.BaseAPI implements AppPortsApiInterface
      */
     async getAppPort(requestParameters: GetAppPortRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppPort> {
         const response = await this.getAppPortRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the endpoints of an app environment. An endpoint groups the routes and ports of one app service endpoint.
+     * List app endpoints
+     */
+    async listAppEndpointsRaw(requestParameters: ListAppEndpointsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppEndpoint>>> {
+        if (requestParameters['appEnvironmentId'] == null) {
+            throw new runtime.RequiredError(
+                'appEnvironmentId',
+                'Required parameter "appEnvironmentId" was null or undefined when calling listAppEndpoints().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['appEnvironmentId'] != null) {
+            queryParameters['appEnvironmentId'] = requestParameters['appEnvironmentId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-endpoints`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the endpoints of an app environment. An endpoint groups the routes and ports of one app service endpoint.
+     * List app endpoints
+     */
+    async listAppEndpoints(requestParameters: ListAppEndpointsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppEndpoint>> {
+        const response = await this.listAppEndpointsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the settings of an app port.
+     * List app port settings
+     */
+    async listAppPortSettingsRaw(requestParameters: ListAppPortSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppPortSetting>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppPortSettings().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-ports/{id}/settings`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the settings of an app port.
+     * List app port settings
+     */
+    async listAppPortSettings(requestParameters: ListAppPortSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppPortSetting>> {
+        const response = await this.listAppPortSettingsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -152,6 +518,241 @@ export class AppPortsApi extends runtime.BaseAPI implements AppPortsApiInterface
      */
     async listAppPorts(requestParameters: ListAppPortsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppPort>> {
         const response = await this.listAppPortsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Exposes the app port on the cluster\'s public address. Leave publicPort out to pick a free port. Returns the port.
+     * Publish app port
+     */
+    async publishAppPortRaw(requestParameters: PublishAppPortRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppPort>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling publishAppPort().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-ports/{id}/actions/publish`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateAppPortInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Exposes the app port on the cluster\'s public address. Leave publicPort out to pick a free port. Returns the port.
+     * Publish app port
+     */
+    async publishAppPort(requestParameters: PublishAppPortRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppPort> {
+        const response = await this.publishAppPortRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Replaces all settings of an app port. A setting left out is removed. Returns the stored settings.
+     * Replace app port settings
+     */
+    async replaceAppPortSettingsRaw(requestParameters: ReplaceAppPortSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppPortSetting>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling replaceAppPortSettings().'
+            );
+        }
+
+        if (requestParameters['appPortSettingsInput'] == null) {
+            throw new runtime.RequiredError(
+                'appPortSettingsInput',
+                'Required parameter "appPortSettingsInput" was null or undefined when calling replaceAppPortSettings().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-ports/{id}/settings`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['appPortSettingsInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Replaces all settings of an app port. A setting left out is removed. Returns the stored settings.
+     * Replace app port settings
+     */
+    async replaceAppPortSettings(requestParameters: ReplaceAppPortSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppPortSetting>> {
+        const response = await this.replaceAppPortSettingsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates or updates a named app port setting.
+     * Set app port setting
+     */
+    async setAppPortSettingRaw(requestParameters: SetAppPortSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppPortSetting>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling setAppPortSetting().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling setAppPortSetting().'
+            );
+        }
+
+        if (requestParameters['setStringValueInput'] == null) {
+            throw new runtime.RequiredError(
+                'setStringValueInput',
+                'Required parameter "setStringValueInput" was null or undefined when calling setAppPortSetting().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-ports/{id}/settings/{name}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))).replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['setStringValueInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Creates or updates a named app port setting.
+     * Set app port setting
+     */
+    async setAppPortSetting(requestParameters: SetAppPortSettingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppPortSetting> {
+        const response = await this.setAppPortSettingRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Stops exposing the app port on the cluster\'s public address and returns the port.
+     * Unpublish app port
+     */
+    async unpublishAppPortRaw(requestParameters: UnpublishAppPortRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppPort>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling unpublishAppPort().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-ports/{id}/actions/unpublish`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Stops exposing the app port on the cluster\'s public address and returns the port.
+     * Unpublish app port
+     */
+    async unpublishAppPort(requestParameters: UnpublishAppPortRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppPort> {
+        const response = await this.unpublishAppPortRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes the public port of an app port and returns it.
+     * Update app port
+     */
+    async updateAppPortRaw(requestParameters: UpdateAppPortRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppPort>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateAppPort().'
+            );
+        }
+
+        if (requestParameters['updateAppPortInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateAppPortInput',
+                'Required parameter "updateAppPortInput" was null or undefined when calling updateAppPort().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-ports/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateAppPortInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Changes the public port of an app port and returns it.
+     * Update app port
+     */
+    async updateAppPort(requestParameters: UpdateAppPortRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppPort> {
+        const response = await this.updateAppPortRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

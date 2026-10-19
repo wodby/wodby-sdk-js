@@ -18,6 +18,7 @@ import type {
   AppAccess,
   AppAccessCleanup,
   AppAccessOperationResult,
+  AppAnnotation,
   AppEnvironment,
   AppEnvironmentCICDSettings,
   AppEnvironmentCICDSettingsInput,
@@ -30,12 +31,14 @@ import type {
   AppEnvironmentStackUpgradeChangelog,
   AppEnvironmentStackUpgradeInput,
   NewAppAccessInput,
+  NewAppAnnotationInput,
   NewAppEnvironmentAccessInput,
   NewAppEnvironmentInput,
   OperationResult,
   ProblemDetails,
   Task,
   UpdateAppAccessInput,
+  UpdateAppAnnotationInput,
   UpdateTitleRequest,
   ValidationResult,
   WorkspaceConnection,
@@ -55,6 +58,10 @@ export interface CreateAppAccessRequest {
     newAppAccessInput: NewAppAccessInput;
 }
 
+export interface CreateAppAnnotationRequest {
+    newAppAnnotationInput: NewAppAnnotationInput;
+}
+
 export interface CreateAppEnvironmentRequest {
     newAppEnvironmentInput: NewAppEnvironmentInput;
 }
@@ -63,9 +70,21 @@ export interface DeleteAppAccessRequest {
     id: number;
 }
 
+export interface DeleteAppAnnotationRequest {
+    id: number;
+}
+
 export interface DeleteAppEnvironmentRequest {
     id: number;
     force?: boolean;
+}
+
+export interface GetAppAccessRequest {
+    id: number;
+}
+
+export interface GetAppAnnotationRequest {
+    id: number;
 }
 
 export interface GetAppEnvironmentRequest {
@@ -111,6 +130,11 @@ export interface GetWorkspaceGitStatusRequest {
 export interface ListAppAccessCleanupsRequest {
     appInstanceId?: number;
     integrationId?: number;
+}
+
+export interface ListAppAnnotationsRequest {
+    appEnvironmentId: number;
+    types?: string;
 }
 
 export interface ListAppEnvironmentMigrationsRequest {
@@ -171,6 +195,11 @@ export interface RollbackAppEnvironmentMigrationRequest {
 export interface UpdateAppAccessRequest {
     id: number;
     updateAppAccessInput: UpdateAppAccessInput;
+}
+
+export interface UpdateAppAnnotationRequest {
+    id: number;
+    updateAppAnnotationInput: UpdateAppAnnotationInput;
 }
 
 export interface UpdateAppEnvironmentRequest {
@@ -243,6 +272,22 @@ export interface AppEnvironmentsApiInterface {
     createAppAccess(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult>;
 
     /**
+     * Adds an ingress annotation to the app environment, or to one of its services or routes.
+     * @summary Create app annotation
+     * @param {NewAppAnnotationInput} newAppAnnotationInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    createAppAnnotationRaw(requestParameters: CreateAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAnnotation>>;
+
+    /**
+     * Adds an ingress annotation to the app environment, or to one of its services or routes.
+     * Create app annotation
+     */
+    createAppAnnotation(requestParameters: CreateAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAnnotation>;
+
+    /**
      * Creates an app environment and returns the created resource.
      * @summary Create app environment
      * @param {NewAppEnvironmentInput} newAppEnvironmentInput 
@@ -275,6 +320,22 @@ export interface AppEnvironmentsApiInterface {
     deleteAppAccess(requestParameters: DeleteAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
+     * Deletes an app annotation.
+     * @summary Delete app annotation
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    deleteAppAnnotationRaw(requestParameters: DeleteAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes an app annotation.
+     * Delete app annotation
+     */
+    deleteAppAnnotation(requestParameters: DeleteAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
      * Deletes the app environment and returns the operation result.
      * @summary Delete app environment
      * @param {number} id 
@@ -290,6 +351,38 @@ export interface AppEnvironmentsApiInterface {
      * Delete app environment
      */
     deleteAppEnvironment(requestParameters: DeleteAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Returns one app access configuration.
+     * @summary Get app access
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    getAppAccessRaw(requestParameters: GetAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccess>>;
+
+    /**
+     * Returns one app access configuration.
+     * Get app access
+     */
+    getAppAccess(requestParameters: GetAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccess>;
+
+    /**
+     * Returns one app annotation.
+     * @summary Get app annotation
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    getAppAnnotationRaw(requestParameters: GetAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAnnotation>>;
+
+    /**
+     * Returns one app annotation.
+     * Get app annotation
+     */
+    getAppAnnotation(requestParameters: GetAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAnnotation>;
 
     /**
      * Returns the app environment identified by the request path.
@@ -455,6 +548,23 @@ export interface AppEnvironmentsApiInterface {
      * List app-access cleanups
      */
     listAppAccessCleanups(requestParameters: ListAppAccessCleanupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppAccessCleanup>>;
+
+    /**
+     * Returns the ingress annotations of an app environment, its services and routes.
+     * @summary List app annotations
+     * @param {number} appEnvironmentId 
+     * @param {string} [types] Comma-separated annotation types, such as ingress.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    listAppAnnotationsRaw(requestParameters: ListAppAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppAnnotation>>>;
+
+    /**
+     * Returns the ingress annotations of an app environment, its services and routes.
+     * List app annotations
+     */
+    listAppAnnotations(requestParameters: ListAppAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppAnnotation>>;
 
     /**
      * Returns the cluster migrations of one app environment.
@@ -673,6 +783,23 @@ export interface AppEnvironmentsApiInterface {
     updateAppAccess(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult>;
 
     /**
+     * Changes an app annotation and returns it.
+     * @summary Update app annotation
+     * @param {number} id 
+     * @param {UpdateAppAnnotationInput} updateAppAnnotationInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    updateAppAnnotationRaw(requestParameters: UpdateAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAnnotation>>;
+
+    /**
+     * Changes an app annotation and returns it.
+     * Update app annotation
+     */
+    updateAppAnnotation(requestParameters: UpdateAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAnnotation>;
+
+    /**
      * Updates the app environment and returns the updated resource.
      * @summary Update app environment
      * @param {number} id 
@@ -869,6 +996,48 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
+     * Adds an ingress annotation to the app environment, or to one of its services or routes.
+     * Create app annotation
+     */
+    async createAppAnnotationRaw(requestParameters: CreateAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAnnotation>> {
+        if (requestParameters['newAppAnnotationInput'] == null) {
+            throw new runtime.RequiredError(
+                'newAppAnnotationInput',
+                'Required parameter "newAppAnnotationInput" was null or undefined when calling createAppAnnotation().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-annotations`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['newAppAnnotationInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Adds an ingress annotation to the app environment, or to one of its services or routes.
+     * Create app annotation
+     */
+    async createAppAnnotation(requestParameters: CreateAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAnnotation> {
+        const response = await this.createAppAnnotationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates an app environment and returns the created resource.
      * Create app environment
      */
@@ -950,6 +1119,45 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
+     * Deletes an app annotation.
+     * Delete app annotation
+     */
+    async deleteAppAnnotationRaw(requestParameters: DeleteAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteAppAnnotation().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-annotations/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Deletes an app annotation.
+     * Delete app annotation
+     */
+    async deleteAppAnnotation(requestParameters: DeleteAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteAppAnnotationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Deletes the app environment and returns the operation result.
      * Delete app environment
      */
@@ -989,6 +1197,84 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
      */
     async deleteAppEnvironment(requestParameters: DeleteAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.deleteAppEnvironmentRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns one app access configuration.
+     * Get app access
+     */
+    async getAppAccessRaw(requestParameters: GetAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccess>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppAccess().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-accesses/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns one app access configuration.
+     * Get app access
+     */
+    async getAppAccess(requestParameters: GetAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccess> {
+        const response = await this.getAppAccessRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns one app annotation.
+     * Get app annotation
+     */
+    async getAppAnnotationRaw(requestParameters: GetAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAnnotation>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getAppAnnotation().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-annotations/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns one app annotation.
+     * Get app annotation
+     */
+    async getAppAnnotation(requestParameters: GetAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAnnotation> {
+        const response = await this.getAppAnnotationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1406,6 +1692,53 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
      */
     async listAppAccessCleanups(requestParameters: ListAppAccessCleanupsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppAccessCleanup>> {
         const response = await this.listAppAccessCleanupsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the ingress annotations of an app environment, its services and routes.
+     * List app annotations
+     */
+    async listAppAnnotationsRaw(requestParameters: ListAppAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppAnnotation>>> {
+        if (requestParameters['appEnvironmentId'] == null) {
+            throw new runtime.RequiredError(
+                'appEnvironmentId',
+                'Required parameter "appEnvironmentId" was null or undefined when calling listAppAnnotations().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['appEnvironmentId'] != null) {
+            queryParameters['appEnvironmentId'] = requestParameters['appEnvironmentId'];
+        }
+
+        if (requestParameters['types'] != null) {
+            queryParameters['types'] = requestParameters['types'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-annotations`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the ingress annotations of an app environment, its services and routes.
+     * List app annotations
+     */
+    async listAppAnnotations(requestParameters: ListAppAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppAnnotation>> {
+        const response = await this.listAppAnnotationsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1966,6 +2299,55 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
      */
     async updateAppAccess(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult> {
         const response = await this.updateAppAccessRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes an app annotation and returns it.
+     * Update app annotation
+     */
+    async updateAppAnnotationRaw(requestParameters: UpdateAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAnnotation>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateAppAnnotation().'
+            );
+        }
+
+        if (requestParameters['updateAppAnnotationInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateAppAnnotationInput',
+                'Required parameter "updateAppAnnotationInput" was null or undefined when calling updateAppAnnotation().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-annotations/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateAppAnnotationInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Changes an app annotation and returns it.
+     * Update app annotation
+     */
+    async updateAppAnnotation(requestParameters: UpdateAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAnnotation> {
+        const response = await this.updateAppAnnotationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

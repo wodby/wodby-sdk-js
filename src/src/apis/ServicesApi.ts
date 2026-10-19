@@ -22,6 +22,7 @@ import type {
   ManifestValidationResponse,
   OperationResult,
   ProblemDetails,
+  ResolvedServiceConfig,
   ResourceSharing,
   ResourceSharingInput,
   Service,
@@ -29,10 +30,15 @@ import type {
   ServiceRevision,
   ServiceSettingsInput,
   ServicesResponse,
+  UpdateStackFromGitRequest,
 } from '../models/index';
 
 export interface CreateServiceFromManifestRequest {
     manifestFromYAMLInput: ManifestFromYAMLInput;
+}
+
+export interface DeleteServiceRequest {
+    id: number;
 }
 
 export interface GetServiceRequest {
@@ -56,6 +62,16 @@ export interface ImportServicesRequest {
     importServicesFromGitInput: ImportServicesFromGitInput;
 }
 
+export interface ListInheritingServicesRequest {
+    name: string;
+}
+
+export interface ListResolvedServiceConfigsRequest {
+    id: number;
+    optionVersion: string;
+    platform?: string;
+}
+
 export interface ListServiceLinkCandidatesRequest {
     name: string;
 }
@@ -70,6 +86,11 @@ export interface ListServicesRequest {
 
 export interface ScaffoldServiceFromHelmChartRequest {
     helmChartServiceScaffoldInput: HelmChartServiceScaffoldInput;
+}
+
+export interface UpdateServiceFromGitRequest {
+    id: number;
+    updateStackFromGitRequest: UpdateStackFromGitRequest;
 }
 
 export interface UpdateServiceFromManifestRequest {
@@ -113,6 +134,22 @@ export interface ServicesApiInterface {
      * Create service from manifest
      */
     createServiceFromManifest(requestParameters: CreateServiceFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service>;
+
+    /**
+     * Deletes a service that no stack uses.
+     * @summary Delete service
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServicesApiInterface
+     */
+    deleteServiceRaw(requestParameters: DeleteServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes a service that no stack uses.
+     * Delete service
+     */
+    deleteService(requestParameters: DeleteServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Returns the service identified by the request path.
@@ -196,6 +233,40 @@ export interface ServicesApiInterface {
     importServices(requestParameters: ImportServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
+     * Returns the services whose manifests inherit from the named service with from.
+     * @summary List inheriting services
+     * @param {string} name 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServicesApiInterface
+     */
+    listInheritingServicesRaw(requestParameters: ListInheritingServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Service>>>;
+
+    /**
+     * Returns the services whose manifests inherit from the named service with from.
+     * List inheriting services
+     */
+    listInheritingServices(requestParameters: ListInheritingServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Service>>;
+
+    /**
+     * Returns the configuration files of a service revision with the default content Wodby resolved for one option version and platform.
+     * @summary List resolved service configs
+     * @param {number} id 
+     * @param {string} optionVersion Service option version.
+     * @param {string} [platform] Image platform. Defaults to linux/amd64.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServicesApiInterface
+     */
+    listResolvedServiceConfigsRaw(requestParameters: ListResolvedServiceConfigsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ResolvedServiceConfig>>>;
+
+    /**
+     * Returns the configuration files of a service revision with the default content Wodby resolved for one option version and platform.
+     * List resolved service configs
+     */
+    listResolvedServiceConfigs(requestParameters: ListResolvedServiceConfigsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ResolvedServiceConfig>>;
+
+    /**
      * Returns service link candidates matching the request filters.
      * @summary List service link candidates
      * @param {string} name 
@@ -246,6 +317,23 @@ export interface ServicesApiInterface {
      * Scaffold service from Helm chart
      */
     scaffoldServiceFromHelmChart(requestParameters: ScaffoldServiceFromHelmChartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HelmChartServiceScaffoldResponse>;
+
+    /**
+     * Starts a task that moves a Git-sourced service to another ref.
+     * @summary Update service from Git
+     * @param {number} id 
+     * @param {UpdateStackFromGitRequest} updateStackFromGitRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServicesApiInterface
+     */
+    updateServiceFromGitRaw(requestParameters: UpdateServiceFromGitRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Starts a task that moves a Git-sourced service to another ref.
+     * Update service from Git
+     */
+    updateServiceFromGit(requestParameters: UpdateServiceFromGitRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Updates an existing non-Git Wodby service from a service manifest and starts a service update task.
@@ -360,6 +448,45 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
      */
     async createServiceFromManifest(requestParameters: CreateServiceFromManifestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service> {
         const response = await this.createServiceFromManifestRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes a service that no stack uses.
+     * Delete service
+     */
+    async deleteServiceRaw(requestParameters: DeleteServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteService().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/services/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Deletes a service that no stack uses.
+     * Delete service
+     */
+    async deleteService(requestParameters: DeleteServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteServiceRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -566,6 +693,99 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
     }
 
     /**
+     * Returns the services whose manifests inherit from the named service with from.
+     * List inheriting services
+     */
+    async listInheritingServicesRaw(requestParameters: ListInheritingServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Service>>> {
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling listInheritingServices().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/services/by-name/{name}/inheriting-services`.replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the services whose manifests inherit from the named service with from.
+     * List inheriting services
+     */
+    async listInheritingServices(requestParameters: ListInheritingServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Service>> {
+        const response = await this.listInheritingServicesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the configuration files of a service revision with the default content Wodby resolved for one option version and platform.
+     * List resolved service configs
+     */
+    async listResolvedServiceConfigsRaw(requestParameters: ListResolvedServiceConfigsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ResolvedServiceConfig>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listResolvedServiceConfigs().'
+            );
+        }
+
+        if (requestParameters['optionVersion'] == null) {
+            throw new runtime.RequiredError(
+                'optionVersion',
+                'Required parameter "optionVersion" was null or undefined when calling listResolvedServiceConfigs().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['optionVersion'] != null) {
+            queryParameters['optionVersion'] = requestParameters['optionVersion'];
+        }
+
+        if (requestParameters['platform'] != null) {
+            queryParameters['platform'] = requestParameters['platform'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/service-revisions/{id}/configs`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the configuration files of a service revision with the default content Wodby resolved for one option version and platform.
+     * List resolved service configs
+     */
+    async listResolvedServiceConfigs(requestParameters: ListResolvedServiceConfigsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ResolvedServiceConfig>> {
+        const response = await this.listResolvedServiceConfigsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns service link candidates matching the request filters.
      * List service link candidates
      */
@@ -695,6 +915,55 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
      */
     async scaffoldServiceFromHelmChart(requestParameters: ScaffoldServiceFromHelmChartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HelmChartServiceScaffoldResponse> {
         const response = await this.scaffoldServiceFromHelmChartRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Starts a task that moves a Git-sourced service to another ref.
+     * Update service from Git
+     */
+    async updateServiceFromGitRaw(requestParameters: UpdateServiceFromGitRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateServiceFromGit().'
+            );
+        }
+
+        if (requestParameters['updateStackFromGitRequest'] == null) {
+            throw new runtime.RequiredError(
+                'updateStackFromGitRequest',
+                'Required parameter "updateStackFromGitRequest" was null or undefined when calling updateServiceFromGit().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/services/{id}/actions/update-from-git`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateStackFromGitRequest'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Starts a task that moves a Git-sourced service to another ref.
+     * Update service from Git
+     */
+    async updateServiceFromGit(requestParameters: UpdateServiceFromGitRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.updateServiceFromGitRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

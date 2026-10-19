@@ -618,6 +618,77 @@ export interface AppAccessSettingInput {
 /**
  * 
  * @export
+ * @interface AppAnnotation
+ */
+export interface AppAnnotation {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAnnotation
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAnnotation
+     */
+    appEnvironmentId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAnnotation
+     */
+    appServiceId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppAnnotation
+     */
+    appRouteId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAnnotation
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAnnotation
+     */
+    value: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAnnotation
+     */
+    type: AppAnnotationTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAnnotation
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppAnnotation
+     */
+    updatedAt: string;
+}
+
+
+/**
+ * @export
+ */
+export const AppAnnotationTypeEnum = {
+    Ingress: 'ingress'
+} as const;
+export type AppAnnotationTypeEnum = typeof AppAnnotationTypeEnum[keyof typeof AppAnnotationTypeEnum];
+
+/**
+ * 
+ * @export
  * @interface AppAuth
  */
 export interface AppAuth {
@@ -1151,6 +1222,67 @@ export interface AppDeploymentsResponse {
      * @memberof AppDeploymentsResponse
      */
     nextPage?: number | null;
+}
+/**
+ * 
+ * @export
+ * @interface AppEndpoint
+ */
+export interface AppEndpoint {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEndpoint
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEndpoint
+     */
+    name: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEndpoint
+     */
+    appServiceId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEndpoint
+     */
+    appEnvironmentId: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEndpoint
+     */
+    primary: boolean;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof AppEndpoint
+     */
+    routeIds: Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof AppEndpoint
+     */
+    portIds: Array<number>;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEndpoint
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEndpoint
+     */
+    updatedAt: string;
 }
 /**
  * 
@@ -2262,6 +2394,91 @@ export interface AppPort {
      * @memberof AppPort
      */
     updatedAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface AppPortSetting
+ */
+export interface AppPortSetting {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppPortSetting
+     */
+    id: number;
+    /**
+     * 
+     * @type {AppPortSettingName}
+     * @memberof AppPortSetting
+     */
+    name: AppPortSettingName;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppPortSetting
+     */
+    value: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppPortSetting
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppPortSetting
+     */
+    updatedAt: string;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface AppPortSettingInput
+ */
+export interface AppPortSettingInput {
+    /**
+     * 
+     * @type {AppPortSettingName}
+     * @memberof AppPortSettingInput
+     */
+    name: AppPortSettingName;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppPortSettingInput
+     */
+    value: string;
+}
+
+
+
+/**
+ * 
+ * @export
+ */
+export const AppPortSettingName = {
+    IdleTimeout: 'IDLE_TIMEOUT',
+    ConnectionLimit: 'CONNECTION_LIMIT',
+    TcpKeepalive: 'TCP_KEEPALIVE'
+} as const;
+export type AppPortSettingName = typeof AppPortSettingName[keyof typeof AppPortSettingName];
+
+/**
+ * 
+ * @export
+ * @interface AppPortSettingsInput
+ */
+export interface AppPortSettingsInput {
+    /**
+     * The complete list of settings. A setting left out is removed.
+     * @type {Array<AppPortSettingInput>}
+     * @memberof AppPortSettingsInput
+     */
+    settings: Array<AppPortSettingInput>;
 }
 /**
  * 
@@ -3869,6 +4086,230 @@ export interface AppServiceLinkInput {
 /**
  * 
  * @export
+ * @interface AppServicePod
+ */
+export interface AppServicePod {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePod
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePod
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePod
+     */
+    workload: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePod
+     */
+    kubeWorkloadName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePod
+     */
+    node?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePod
+     */
+    phase: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppServicePod
+     */
+    ready: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppServicePod
+     */
+    terminating: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePod
+     */
+    reason?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePod
+     */
+    message?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePod
+     */
+    createdAt: string;
+    /**
+     * CPU cores in use.
+     * @type {number}
+     * @memberof AppServicePod
+     */
+    cpuUsage?: number | null;
+    /**
+     * Memory in use in bytes.
+     * @type {number}
+     * @memberof AppServicePod
+     */
+    memoryUsage?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServicePod
+     */
+    cpuRequest?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServicePod
+     */
+    memoryRequest?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServicePod
+     */
+    cpuLimit?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServicePod
+     */
+    memoryLimit?: number | null;
+    /**
+     * 
+     * @type {Array<AppServicePodContainer>}
+     * @memberof AppServicePod
+     */
+    containers: Array<AppServicePodContainer>;
+}
+/**
+ * 
+ * @export
+ * @interface AppServicePodContainer
+ */
+export interface AppServicePodContainer {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePodContainer
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePodContainer
+     */
+    name: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppServicePodContainer
+     */
+    primary: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppServicePodContainer
+     */
+    ready: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServicePodContainer
+     */
+    restarts: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePodContainer
+     */
+    state: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePodContainer
+     */
+    reason?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePodContainer
+     */
+    message?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServicePodContainer
+     */
+    exitCode?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePodContainer
+     */
+    startedAt?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePodContainer
+     */
+    finishedAt?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServicePodContainer
+     */
+    cpuUsage?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServicePodContainer
+     */
+    memoryUsage?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServicePodContainer
+     */
+    cpuRequest?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServicePodContainer
+     */
+    memoryRequest?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServicePodContainer
+     */
+    cpuLimit?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServicePodContainer
+     */
+    memoryLimit?: number | null;
+}
+/**
+ * 
+ * @export
  * @interface AppServiceScalability
  */
 export interface AppServiceScalability {
@@ -4425,6 +4866,25 @@ export const BackupBlobStorageRegionEnum = {
 } as const;
 export type BackupBlobStorageRegionEnum = typeof BackupBlobStorageRegionEnum[keyof typeof BackupBlobStorageRegionEnum];
 
+/**
+ * 
+ * @export
+ * @interface BackupDownload
+ */
+export interface BackupDownload {
+    /**
+     * 
+     * @type {string}
+     * @memberof BackupDownload
+     */
+    url: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BackupDownload
+     */
+    expiresAt: string;
+}
 /**
  * 
  * @export
@@ -5508,6 +5968,25 @@ export interface ClusterCapabilityPolicy {
      * @memberof ClusterCapabilityPolicy
      */
     stackRevisionIds: Set<number>;
+}
+/**
+ * 
+ * @export
+ * @interface ClusterCreationResult
+ */
+export interface ClusterCreationResult {
+    /**
+     * 
+     * @type {Cluster}
+     * @memberof ClusterCreationResult
+     */
+    cluster: Cluster;
+    /**
+     * Task that provisions the cluster.
+     * @type {number}
+     * @memberof ClusterCreationResult
+     */
+    taskId?: number | null;
 }
 /**
  * Use envType and allowedEnvTypes. Legacy ID fields remain accepted but cannot be mixed with their type equivalents.
@@ -7981,6 +8460,68 @@ export interface IntegrationVariableRequirementInput {
 /**
  * 
  * @export
+ * @interface InviteOrgMemberInput
+ */
+export interface InviteOrgMemberInput {
+    /**
+     * Optional for API-key requests; defaults to the API key's organization.
+     * @type {number}
+     * @memberof InviteOrgMemberInput
+     */
+    orgId?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof InviteOrgMemberInput
+     */
+    email: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InviteOrgMemberInput
+     */
+    role: InviteOrgMemberInputRoleEnum;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof InviteOrgMemberInput
+     */
+    teamIds?: Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof InviteOrgMemberInput
+     */
+    projectIds?: Array<number>;
+}
+
+
+/**
+ * @export
+ */
+export const InviteOrgMemberInputRoleEnum = {
+    Member: 'member',
+    Admin: 'admin',
+    Owner: 'owner'
+} as const;
+export type InviteOrgMemberInputRoleEnum = typeof InviteOrgMemberInputRoleEnum[keyof typeof InviteOrgMemberInputRoleEnum];
+
+/**
+ * 
+ * @export
+ * @interface K3SInstallCommand
+ */
+export interface K3SInstallCommand {
+    /**
+     * 
+     * @type {string}
+     * @memberof K3SInstallCommand
+     */
+    command: string;
+}
+/**
+ * 
+ * @export
  * @interface KubeVersion
  */
 export interface KubeVersion {
@@ -8306,6 +8847,59 @@ export const NewAppAccessInputScopeEnum = {
     SelectedEndpoints: 'SELECTED_ENDPOINTS'
 } as const;
 export type NewAppAccessInputScopeEnum = typeof NewAppAccessInputScopeEnum[keyof typeof NewAppAccessInputScopeEnum];
+
+/**
+ * 
+ * @export
+ * @interface NewAppAnnotationInput
+ */
+export interface NewAppAnnotationInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof NewAppAnnotationInput
+     */
+    appEnvironmentId: number;
+    /**
+     * Limit the annotation to one service's ingress.
+     * @type {number}
+     * @memberof NewAppAnnotationInput
+     */
+    appServiceId?: number | null;
+    /**
+     * Limit the annotation to one route's ingress.
+     * @type {number}
+     * @memberof NewAppAnnotationInput
+     */
+    appRouteId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppAnnotationInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppAnnotationInput
+     */
+    value: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewAppAnnotationInput
+     */
+    type: NewAppAnnotationInputTypeEnum;
+}
+
+
+/**
+ * @export
+ */
+export const NewAppAnnotationInputTypeEnum = {
+    Ingress: 'ingress'
+} as const;
+export type NewAppAnnotationInputTypeEnum = typeof NewAppAnnotationInputTypeEnum[keyof typeof NewAppAnnotationInputTypeEnum];
 
 /**
  * 
@@ -9797,6 +10391,61 @@ export interface NewIntegrationInput {
 /**
  * 
  * @export
+ * @interface NewK3SClusterInput
+ */
+export interface NewK3SClusterInput {
+    /**
+     * Optional for API-key requests; defaults to the API key's organization.
+     * @type {number}
+     * @memberof NewK3SClusterInput
+     */
+    orgId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewK3SClusterInput
+     */
+    projectId?: number | null;
+    /**
+     * Lets every project in the organization use the new resource without a project share. Only an organization-owned resource, created without projectId, can be available to all projects.
+     * @type {boolean}
+     * @memberof NewK3SClusterInput
+     */
+    availableToAllProjects?: boolean | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewK3SClusterInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewK3SClusterInput
+     */
+    title: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewK3SClusterInput
+     */
+    disableMonitoring: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewK3SClusterInput
+     */
+    autoInfrastructureUpgrade?: boolean | null;
+    /**
+     * 
+     * @type {ClusterEnvironmentPolicyInput}
+     * @memberof NewK3SClusterInput
+     */
+    environmentPolicy?: ClusterEnvironmentPolicyInput;
+}
+/**
+ * 
+ * @export
  * @interface NewProjectInput
  */
 export interface NewProjectInput {
@@ -9840,6 +10489,88 @@ export interface NewProjectInput {
 /**
  * 
  * @export
+ * @interface NewProjectMembershipsInput
+ */
+export interface NewProjectMembershipsInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof NewProjectMembershipsInput
+     */
+    projectId: number;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof NewProjectMembershipsInput
+     */
+    orgMembershipIds?: Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof NewProjectMembershipsInput
+     */
+    teamIds?: Array<number>;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewProjectMembershipsInput
+     */
+    role: NewProjectMembershipsInputRoleEnum;
+}
+
+
+/**
+ * @export
+ */
+export const NewProjectMembershipsInputRoleEnum = {
+    Read: 'read',
+    Write: 'write',
+    Admin: 'admin'
+} as const;
+export type NewProjectMembershipsInputRoleEnum = typeof NewProjectMembershipsInputRoleEnum[keyof typeof NewProjectMembershipsInputRoleEnum];
+
+/**
+ * 
+ * @export
+ * @interface NewStackAnnotationInput
+ */
+export interface NewStackAnnotationInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof NewStackAnnotationInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewStackAnnotationInput
+     */
+    value: string;
+    /**
+     * Limit the value to app environments of this type.
+     * @type {string}
+     * @memberof NewStackAnnotationInput
+     */
+    envType?: NewStackAnnotationInputEnvTypeEnum | null;
+}
+
+
+/**
+ * @export
+ */
+export const NewStackAnnotationInputEnvTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type NewStackAnnotationInputEnvTypeEnum = typeof NewStackAnnotationInputEnvTypeEnum[keyof typeof NewStackAnnotationInputEnvTypeEnum];
+
+/**
+ * 
+ * @export
  * @interface NewStackEnvVarInput
  */
 export interface NewStackEnvVarInput {
@@ -9867,6 +10598,100 @@ export interface NewStackEnvVarInput {
      * @memberof NewStackEnvVarInput
      */
     envType?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface NewStackHelmValueInput
+ */
+export interface NewStackHelmValueInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof NewStackHelmValueInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewStackHelmValueInput
+     */
+    value: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewStackHelmValueInput
+     */
+    secret: boolean;
+    /**
+     * Limit the value to app environments of this type.
+     * @type {string}
+     * @memberof NewStackHelmValueInput
+     */
+    envType?: NewStackHelmValueInputEnvTypeEnum | null;
+}
+
+
+/**
+ * @export
+ */
+export const NewStackHelmValueInputEnvTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type NewStackHelmValueInputEnvTypeEnum = typeof NewStackHelmValueInputEnvTypeEnum[keyof typeof NewStackHelmValueInputEnvTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface NewStackInput
+ */
+export interface NewStackInput {
+    /**
+     * Optional for API-key requests; defaults to the API key's organization.
+     * @type {number}
+     * @memberof NewStackInput
+     */
+    orgId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewStackInput
+     */
+    projectId?: number | null;
+    /**
+     * Lets every project in the organization use the new resource without a project share. Only an organization-owned resource, created without projectId, can be available to all projects.
+     * @type {boolean}
+     * @memberof NewStackInput
+     */
+    availableToAllProjects?: boolean | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewStackInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewStackInput
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewStackInput
+     */
+    icon?: string | null;
+    /**
+     * 
+     * @type {Array<NewStackServiceDefinitionInput>}
+     * @memberof NewStackInput
+     */
+    services: Array<NewStackServiceDefinitionInput>;
 }
 /**
  * 
@@ -9941,6 +10766,55 @@ export interface NewStackServiceCronScheduleInput {
      * @memberof NewStackServiceCronScheduleInput
      */
     envType?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface NewStackServiceDefinitionInput
+ */
+export interface NewStackServiceDefinitionInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof NewStackServiceDefinitionInput
+     */
+    serviceId: number;
+    /**
+     * Stack-local service name.
+     * @type {string}
+     * @memberof NewStackServiceDefinitionInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewStackServiceDefinitionInput
+     */
+    title: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewStackServiceDefinitionInput
+     */
+    required?: boolean | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewStackServiceDefinitionInput
+     */
+    replicas: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewStackServiceDefinitionInput
+     */
+    main?: boolean | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewStackServiceDefinitionInput
+     */
+    serviceRevPinned?: boolean | null;
 }
 /**
  * 
@@ -10105,6 +10979,57 @@ export interface NewStackServiceTokenInput {
 /**
  * 
  * @export
+ * @interface NewStackTokenInput
+ */
+export interface NewStackTokenInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof NewStackTokenInput
+     */
+    name: string;
+    /**
+     * Leave it out to generate a value from regex.
+     * @type {string}
+     * @memberof NewStackTokenInput
+     */
+    value?: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewStackTokenInput
+     */
+    secret: boolean;
+    /**
+     * Pattern used to generate the value for each app environment.
+     * @type {string}
+     * @memberof NewStackTokenInput
+     */
+    regex?: string | null;
+    /**
+     * Limit the value to app environments of this type.
+     * @type {string}
+     * @memberof NewStackTokenInput
+     */
+    envType?: NewStackTokenInputEnvTypeEnum | null;
+}
+
+
+/**
+ * @export
+ */
+export const NewStackTokenInputEnvTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type NewStackTokenInputEnvTypeEnum = typeof NewStackTokenInputEnvTypeEnum[keyof typeof NewStackTokenInputEnvTypeEnum];
+
+/**
+ * 
+ * @export
  * @interface NewVariableProviderFieldInput
  */
 export interface NewVariableProviderFieldInput {
@@ -10175,6 +11100,73 @@ export interface NewVariableProviderInput {
      * @memberof NewVariableProviderInput
      */
     fields: Array<NewVariableProviderFieldInput>;
+}
+/**
+ * 
+ * @export
+ * @interface NewWodbyCloudClusterInput
+ */
+export interface NewWodbyCloudClusterInput {
+    /**
+     * Optional for API-key requests; defaults to the API key's organization.
+     * @type {number}
+     * @memberof NewWodbyCloudClusterInput
+     */
+    orgId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewWodbyCloudClusterInput
+     */
+    projectId?: number | null;
+    /**
+     * Lets every project in the organization use the new resource without a project share. Only an organization-owned resource, created without projectId, can be available to all projects.
+     * @type {boolean}
+     * @memberof NewWodbyCloudClusterInput
+     */
+    availableToAllProjects?: boolean | null;
+    /**
+     * Create a free demo cluster with limited resources.
+     * @type {boolean}
+     * @memberof NewWodbyCloudClusterInput
+     */
+    demo: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NewWodbyCloudClusterInput
+     */
+    singleNode?: boolean | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof NewWodbyCloudClusterInput
+     */
+    region?: string | null;
+    /**
+     * Machine type name from GET /wodby-cloud/machine-types.
+     * @type {string}
+     * @memberof NewWodbyCloudClusterInput
+     */
+    machineType?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewWodbyCloudClusterInput
+     */
+    minNodeCount?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof NewWodbyCloudClusterInput
+     */
+    maxNodeCount?: number | null;
+    /**
+     * 
+     * @type {ClusterEnvironmentPolicyInput}
+     * @memberof NewWodbyCloudClusterInput
+     */
+    environmentPolicy?: ClusterEnvironmentPolicyInput;
 }
 /**
  * 
@@ -10454,6 +11446,274 @@ export interface OrgMembership {
 /**
  * 
  * @export
+ * @interface OrgMembershipRoleInput
+ */
+export interface OrgMembershipRoleInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgMembershipRoleInput
+     */
+    role: OrgMembershipRoleInputRoleEnum;
+}
+
+
+/**
+ * @export
+ */
+export const OrgMembershipRoleInputRoleEnum = {
+    Member: 'member',
+    Admin: 'admin',
+    Owner: 'owner'
+} as const;
+export type OrgMembershipRoleInputRoleEnum = typeof OrgMembershipRoleInputRoleEnum[keyof typeof OrgMembershipRoleInputRoleEnum];
+
+/**
+ * 
+ * @export
+ * @interface OrgSSODomain
+ */
+export interface OrgSSODomain {
+    /**
+     * 
+     * @type {number}
+     * @memberof OrgSSODomain
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSODomain
+     */
+    domain: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OrgSSODomain
+     */
+    verified: boolean;
+    /**
+     * DNS record name to create for verification.
+     * @type {string}
+     * @memberof OrgSSODomain
+     */
+    verificationRecordName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSODomain
+     */
+    verificationRecordType: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSODomain
+     */
+    verificationRecordValue: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSODomain
+     */
+    verifiedAt?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSODomain
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSODomain
+     */
+    updatedAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface OrgSSOProvider
+ */
+export interface OrgSSOProvider {
+    /**
+     * 
+     * @type {number}
+     * @memberof OrgSSOProvider
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof OrgSSOProvider
+     */
+    orgId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSOProvider
+     */
+    name: string;
+    /**
+     * Provider kind, such as oidc, github or saml.
+     * @type {string}
+     * @memberof OrgSSOProvider
+     */
+    kind: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSOProvider
+     */
+    issuerUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSOProvider
+     */
+    clientId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSOProvider
+     */
+    githubOrg?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSOProvider
+     */
+    samlIdpMetadataUrl?: string | null;
+    /**
+     * Entity ID to configure in the SAML identity provider.
+     * @type {string}
+     * @memberof OrgSSOProvider
+     */
+    samlSpEntityId?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSOProvider
+     */
+    samlSpMetadataUrl?: string | null;
+    /**
+     * Assertion consumer service URL to configure in the SAML identity provider.
+     * @type {string}
+     * @memberof OrgSSOProvider
+     */
+    samlAcsUrl?: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OrgSSOProvider
+     */
+    enabled: boolean;
+    /**
+     * Create a membership on first sign-in for people from a verified domain.
+     * @type {boolean}
+     * @memberof OrgSSOProvider
+     */
+    jitEnabled: boolean;
+    /**
+     * 
+     * @type {Array<OrgSSODomain>}
+     * @memberof OrgSSOProvider
+     */
+    domains: Array<OrgSSODomain>;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSOProvider
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSOProvider
+     */
+    updatedAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface OrgSSOProviderInput
+ */
+export interface OrgSSOProviderInput {
+    /**
+     * Used when creating a provider. Optional for API-key requests; defaults to the API key's organization.
+     * @type {number}
+     * @memberof OrgSSOProviderInput
+     */
+    orgId?: number;
+    /**
+     * Provider kind when creating, such as oidc, github or saml. It cannot be changed.
+     * @type {string}
+     * @memberof OrgSSOProviderInput
+     */
+    kind?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSOProviderInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSOProviderInput
+     */
+    issuerUrl?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSOProviderInput
+     */
+    clientId?: string | null;
+    /**
+     * OIDC or GitHub client secret. Leave it out on update to keep the stored secret.
+     * @type {string}
+     * @memberof OrgSSOProviderInput
+     */
+    clientSecret?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSOProviderInput
+     */
+    githubOrg?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSOProviderInput
+     */
+    samlIdpMetadataUrl?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgSSOProviderInput
+     */
+    samlIdpMetadataXml?: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OrgSSOProviderInput
+     */
+    enabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof OrgSSOProviderInput
+     */
+    jitEnabled: boolean;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof OrgSSOProviderInput
+     */
+    domains: Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface OrgSettings
  */
 export interface OrgSettings {
@@ -10710,6 +11970,92 @@ export interface Project {
      */
     updatedAt: string;
 }
+/**
+ * 
+ * @export
+ * @interface ProjectMembership
+ */
+export interface ProjectMembership {
+    /**
+     * 
+     * @type {number}
+     * @memberof ProjectMembership
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ProjectMembership
+     */
+    projectId: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ProjectMembership
+     */
+    orgMembershipId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof ProjectMembership
+     */
+    teamId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectMembership
+     */
+    role: ProjectMembershipRoleEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectMembership
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectMembership
+     */
+    updatedAt: string;
+}
+
+
+/**
+ * @export
+ */
+export const ProjectMembershipRoleEnum = {
+    Read: 'read',
+    Write: 'write',
+    Admin: 'admin'
+} as const;
+export type ProjectMembershipRoleEnum = typeof ProjectMembershipRoleEnum[keyof typeof ProjectMembershipRoleEnum];
+
+/**
+ * 
+ * @export
+ * @interface ProjectMembershipRoleInput
+ */
+export interface ProjectMembershipRoleInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectMembershipRoleInput
+     */
+    role: ProjectMembershipRoleInputRoleEnum;
+}
+
+
+/**
+ * @export
+ */
+export const ProjectMembershipRoleInputRoleEnum = {
+    Read: 'read',
+    Write: 'write',
+    Admin: 'admin'
+} as const;
+export type ProjectMembershipRoleInputRoleEnum = typeof ProjectMembershipRoleInputRoleEnum[keyof typeof ProjectMembershipRoleInputRoleEnum];
+
 /**
  * 
  * @export
@@ -11034,6 +12380,119 @@ export interface ResolveIntegrationResult {
 /**
  * 
  * @export
+ * @interface ResolvedServiceConfig
+ */
+export interface ResolvedServiceConfig {
+    /**
+     * 
+     * @type {string}
+     * @memberof ResolvedServiceConfig
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResolvedServiceConfig
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResolvedServiceConfig
+     */
+    filepath: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResolvedServiceConfig
+     */
+    manifestVersion?: string | null;
+    /**
+     * Whether the default content comes from the service image or its repository.
+     * @type {string}
+     * @memberof ResolvedServiceConfig
+     */
+    defaultSource: ResolvedServiceConfigDefaultSourceEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResolvedServiceConfig
+     */
+    defaultConfig?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResolvedServiceConfig
+     */
+    status: ResolvedServiceConfigStatusEnum;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ResolvedServiceConfig
+     */
+    legacyFallback: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResolvedServiceConfig
+     */
+    image?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResolvedServiceConfig
+     */
+    imageDigest?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResolvedServiceConfig
+     */
+    sourcePath?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResolvedServiceConfig
+     */
+    platform: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResolvedServiceConfig
+     */
+    error?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResolvedServiceConfig
+     */
+    fetchedAt?: string | null;
+}
+
+
+/**
+ * @export
+ */
+export const ResolvedServiceConfigDefaultSourceEnum = {
+    Image: 'image',
+    Repository: 'repository'
+} as const;
+export type ResolvedServiceConfigDefaultSourceEnum = typeof ResolvedServiceConfigDefaultSourceEnum[keyof typeof ResolvedServiceConfigDefaultSourceEnum];
+
+/**
+ * @export
+ */
+export const ResolvedServiceConfigStatusEnum = {
+    Pending: 'pending',
+    Ready: 'ready',
+    Failed: 'failed',
+    DigestDrift: 'digest_drift'
+} as const;
+export type ResolvedServiceConfigStatusEnum = typeof ResolvedServiceConfigStatusEnum[keyof typeof ResolvedServiceConfigStatusEnum];
+
+/**
+ * 
+ * @export
  * @interface ResourceProjectShare
  */
 export interface ResourceProjectShare {
@@ -11219,6 +12678,25 @@ export interface ScalabilityInput {
      * @memberof ScalabilityInput
      */
     maxReplicas: number;
+}
+/**
+ * 
+ * @export
+ * @interface ScaleClusterInput
+ */
+export interface ScaleClusterInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof ScaleClusterInput
+     */
+    minNodeCount: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ScaleClusterInput
+     */
+    maxNodeCount: number;
 }
 /**
  * 
@@ -12299,6 +13777,57 @@ export type StackOwnershipScopeEnum = typeof StackOwnershipScopeEnum[keyof typeo
 /**
  * 
  * @export
+ * @interface StackAnnotation
+ */
+export interface StackAnnotation {
+    /**
+     * 
+     * @type {number}
+     * @memberof StackAnnotation
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackAnnotation
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackAnnotation
+     */
+    value?: string | null;
+    /**
+     * Limit the value to app environments of this type.
+     * @type {string}
+     * @memberof StackAnnotation
+     */
+    envType?: StackAnnotationEnvTypeEnum | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackAnnotation
+     */
+    createdAt: string;
+}
+
+
+/**
+ * @export
+ */
+export const StackAnnotationEnvTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type StackAnnotationEnvTypeEnum = typeof StackAnnotationEnvTypeEnum[keyof typeof StackAnnotationEnvTypeEnum];
+
+/**
+ * 
+ * @export
  * @interface StackAutoOriginUpdateSettings
  */
 export interface StackAutoOriginUpdateSettings {
@@ -12589,6 +14118,63 @@ export interface StackEnvVar {
      */
     createdAt: string;
 }
+/**
+ * 
+ * @export
+ * @interface StackHelmValue
+ */
+export interface StackHelmValue {
+    /**
+     * 
+     * @type {number}
+     * @memberof StackHelmValue
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackHelmValue
+     */
+    name: string;
+    /**
+     * Omitted for secret values.
+     * @type {string}
+     * @memberof StackHelmValue
+     */
+    value?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof StackHelmValue
+     */
+    valueSecretId?: number | null;
+    /**
+     * Limit the value to app environments of this type.
+     * @type {string}
+     * @memberof StackHelmValue
+     */
+    envType?: StackHelmValueEnvTypeEnum | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackHelmValue
+     */
+    createdAt: string;
+}
+
+
+/**
+ * @export
+ */
+export const StackHelmValueEnvTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type StackHelmValueEnvTypeEnum = typeof StackHelmValueEnvTypeEnum[keyof typeof StackHelmValueEnvTypeEnum];
+
 /**
  * 
  * @export
@@ -13784,6 +15370,69 @@ export interface StackSyncOptionsInput {
 /**
  * 
  * @export
+ * @interface StackToken
+ */
+export interface StackToken {
+    /**
+     * 
+     * @type {number}
+     * @memberof StackToken
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackToken
+     */
+    name: string;
+    /**
+     * Omitted for secret values.
+     * @type {string}
+     * @memberof StackToken
+     */
+    value?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof StackToken
+     */
+    valueSecretId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackToken
+     */
+    regex?: string | null;
+    /**
+     * Limit the value to app environments of this type.
+     * @type {string}
+     * @memberof StackToken
+     */
+    envType?: StackTokenEnvTypeEnum | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackToken
+     */
+    createdAt: string;
+}
+
+
+/**
+ * @export
+ */
+export const StackTokenEnvTypeEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type StackTokenEnvTypeEnum = typeof StackTokenEnvTypeEnum[keyof typeof StackTokenEnvTypeEnum];
+
+/**
+ * 
+ * @export
  * @interface StacksResponse
  */
 export interface StacksResponse {
@@ -14392,6 +16041,152 @@ export interface TasksResponse {
 /**
  * 
  * @export
+ * @interface Team
+ */
+export interface Team {
+    /**
+     * 
+     * @type {number}
+     * @memberof Team
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Team
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Team
+     */
+    title: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Team
+     */
+    orgId: number;
+    /**
+     * 
+     * @type {Array<TeamMember>}
+     * @memberof Team
+     */
+    members: Array<TeamMember>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Team
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Team
+     */
+    updatedAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface TeamInput
+ */
+export interface TeamInput {
+    /**
+     * Used when creating a team. Optional for API-key requests; defaults to the API key's organization.
+     * @type {number}
+     * @memberof TeamInput
+     */
+    orgId?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamInput
+     */
+    title: string;
+    /**
+     * The complete member list.
+     * @type {Array<TeamMemberInput>}
+     * @memberof TeamInput
+     */
+    members: Array<TeamMemberInput>;
+}
+/**
+ * 
+ * @export
+ * @interface TeamMember
+ */
+export interface TeamMember {
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamMember
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamMember
+     */
+    orgMembershipId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamMember
+     */
+    role: TeamMemberRoleEnum;
+}
+
+
+/**
+ * @export
+ */
+export const TeamMemberRoleEnum = {
+    Member: 'member',
+    Leader: 'leader'
+} as const;
+export type TeamMemberRoleEnum = typeof TeamMemberRoleEnum[keyof typeof TeamMemberRoleEnum];
+
+/**
+ * 
+ * @export
+ * @interface TeamMemberInput
+ */
+export interface TeamMemberInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof TeamMemberInput
+     */
+    orgMembershipId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TeamMemberInput
+     */
+    role: TeamMemberInputRoleEnum;
+}
+
+
+/**
+ * @export
+ */
+export const TeamMemberInputRoleEnum = {
+    Member: 'member',
+    Leader: 'leader'
+} as const;
+export type TeamMemberInputRoleEnum = typeof TeamMemberInputRoleEnum[keyof typeof TeamMemberInputRoleEnum];
+
+/**
+ * 
+ * @export
  * @interface URLResponse
  */
 export interface URLResponse {
@@ -14441,6 +16236,37 @@ export type UpdateAppAccessInputScopeEnum = typeof UpdateAppAccessInputScopeEnum
 /**
  * 
  * @export
+ * @interface UpdateAppAnnotationInput
+ */
+export interface UpdateAppAnnotationInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateAppAnnotationInput
+     */
+    appServiceId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateAppAnnotationInput
+     */
+    appRouteId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateAppAnnotationInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateAppAnnotationInput
+     */
+    value: string;
+}
+/**
+ * 
+ * @export
  * @interface UpdateAppAuthInput
  */
 export interface UpdateAppAuthInput {
@@ -14481,6 +16307,19 @@ export interface UpdateAppAuthInput {
      * @memberof UpdateAppAuthInput
      */
     realm: string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateAppPortInput
+ */
+export interface UpdateAppPortInput {
+    /**
+     * Public port on the cluster's address.
+     * @type {number}
+     * @memberof UpdateAppPortInput
+     */
+    publicPort?: number | null;
 }
 /**
  * 
@@ -14853,6 +16692,32 @@ export interface UpdateIntegrationInput {
 /**
  * 
  * @export
+ * @interface UpdateK3SClusterPublicIPInput
+ */
+export interface UpdateK3SClusterPublicIPInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateK3SClusterPublicIPInput
+     */
+    publicIp: string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateKubernetesVersionInput
+ */
+export interface UpdateKubernetesVersionInput {
+    /**
+     * Target Kubernetes version from the cluster's upgrade plan.
+     * @type {string}
+     * @memberof UpdateKubernetesVersionInput
+     */
+    version: string;
+}
+/**
+ * 
+ * @export
  * @interface UpdateOrgRequest
  */
 export interface UpdateOrgRequest {
@@ -14891,6 +16756,19 @@ export interface UpdateProjectInput {
      * 
      * @type {string}
      * @memberof UpdateProjectInput
+     */
+    title: string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateProviderInput
+ */
+export interface UpdateProviderInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProviderInput
      */
     title: string;
 }
@@ -14950,6 +16828,25 @@ export interface UpdateStackFromGitRequest {
      * @memberof UpdateStackFromGitRequest
      */
     gitRefType: string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateStackHelmValueInput
+ */
+export interface UpdateStackHelmValueInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateStackHelmValueInput
+     */
+    value: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateStackHelmValueInput
+     */
+    secret: boolean;
 }
 /**
  * 
@@ -15060,6 +16957,31 @@ export interface UpdateStackServiceTokenInput {
 /**
  * 
  * @export
+ * @interface UpdateStackTokenInput
+ */
+export interface UpdateStackTokenInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateStackTokenInput
+     */
+    value?: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateStackTokenInput
+     */
+    secret: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateStackTokenInput
+     */
+    regex?: string | null;
+}
+/**
+ * 
+ * @export
  * @interface UpdateTitleRequest
  */
 export interface UpdateTitleRequest {
@@ -15137,6 +17059,19 @@ export interface ValidationResult {
 /**
  * 
  * @export
+ * @interface VerifyOrgSSODomainInput
+ */
+export interface VerifyOrgSSODomainInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof VerifyOrgSSODomainInput
+     */
+    domain: string;
+}
+/**
+ * 
+ * @export
  * @interface VolumeSizeInput
  */
 export interface VolumeSizeInput {
@@ -15158,6 +17093,49 @@ export interface VolumeSizeInput {
      * @memberof VolumeSizeInput
      */
     storageClassName?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface WodbyCloudMachineType
+ */
+export interface WodbyCloudMachineType {
+    /**
+     * 
+     * @type {string}
+     * @memberof WodbyCloudMachineType
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof WodbyCloudMachineType
+     */
+    title: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof WodbyCloudMachineType
+     */
+    sharedCpu: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof WodbyCloudMachineType
+     */
+    priceHourly: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof WodbyCloudMachineType
+     */
+    priceMonthly: number;
+    /**
+     * Node disk size in GB.
+     * @type {number}
+     * @memberof WodbyCloudMachineType
+     */
+    disk: number;
 }
 /**
  * 
