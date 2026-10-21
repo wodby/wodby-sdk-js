@@ -13479,6 +13479,49 @@ export const ServiceDeploymentStrategy = {
 export type ServiceDeploymentStrategy = typeof ServiceDeploymentStrategy[keyof typeof ServiceDeploymentStrategy];
 
 /**
+ * Set for an inherited service revision whose base service has a newer version than its fromVersionConstraint, or its exact fromVersion, allows. Raising the constraint in the inherited service's manifest lets it use that version.
+ * @export
+ * @interface ServiceExcludedBaseVersion
+ */
+export interface ServiceExcludedBaseVersion {
+    /**
+     * 
+     * @type {number}
+     * @memberof ServiceExcludedBaseVersion
+     */
+    baseServiceRevisionId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceExcludedBaseVersion
+     */
+    baseServiceName: string;
+    /**
+     * The base service's newest version, which the inherited revision does not allow.
+     * @type {string}
+     * @memberof ServiceExcludedBaseVersion
+     */
+    baseServiceVersion: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ServiceExcludedBaseVersion
+     */
+    baseServiceRevNumber: number;
+    /**
+     * The base service version this revision was built from.
+     * @type {string}
+     * @memberof ServiceExcludedBaseVersion
+     */
+    currentVersion: string;
+    /**
+     * The inherited manifest's fromVersionConstraint. Absent when the manifest pins an exact fromVersion.
+     * @type {string}
+     * @memberof ServiceExcludedBaseVersion
+     */
+    fromVersionConstraint?: string | null;
+}
+/**
  * 
  * @export
  * @interface ServiceIntegrationRequirement
@@ -13713,6 +13756,12 @@ export interface ServiceRevision {
      * @memberof ServiceRevision
      */
     createdAt: string;
+    /**
+     * 
+     * @type {ServiceExcludedBaseVersion}
+     * @memberof ServiceRevision
+     */
+    excludedBaseVersion?: ServiceExcludedBaseVersion;
 }
 /**
  * 

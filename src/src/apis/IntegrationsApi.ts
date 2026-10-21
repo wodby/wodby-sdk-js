@@ -263,7 +263,7 @@ export interface IntegrationsApiInterface {
     getIntegration(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
 
     /**
-     * Returns the Kubernetes settings identified by the request path.
+     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool) and gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0).
      * @summary Get Kubernetes settings
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -273,7 +273,7 @@ export interface IntegrationsApiInterface {
     getIntegrationKubeSettingsRaw(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>>;
 
     /**
-     * Returns the Kubernetes settings identified by the request path.
+     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool) and gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0).
      * Get Kubernetes settings
      */
     getIntegrationKubeSettings(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }>;
@@ -880,7 +880,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
-     * Returns the Kubernetes settings identified by the request path.
+     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool) and gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0).
      * Get Kubernetes settings
      */
     async getIntegrationKubeSettingsRaw(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>> {
@@ -910,7 +910,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
-     * Returns the Kubernetes settings identified by the request path.
+     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool) and gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0).
      * Get Kubernetes settings
      */
     async getIntegrationKubeSettings(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }> {
