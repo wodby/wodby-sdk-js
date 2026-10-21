@@ -28,6 +28,296 @@ export interface AddAppServiceVolumeInput {
 /**
  * 
  * @export
+ * @interface AgentChat
+ */
+export interface AgentChat {
+    /**
+     * 
+     * @type {number}
+     * @memberof AgentChat
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AgentChat
+     */
+    orgId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AgentChat
+     */
+    title: string;
+    /**
+     * idle takes a message; running is the agent working; waiting is a call that waits for approval or an answer.
+     * @type {string}
+     * @memberof AgentChat
+     */
+    status: AgentChatStatusEnum;
+    /**
+     * Why the last run stopped without an answer, or empty.
+     * @type {string}
+     * @memberof AgentChat
+     */
+    error: string;
+    /**
+     * 
+     * @type {AgentChatApprovalMode}
+     * @memberof AgentChat
+     */
+    approvalMode: AgentChatApprovalMode;
+    /**
+     * Tokens in the chat's context after the newest reply.
+     * @type {number}
+     * @memberof AgentChat
+     */
+    contextTokens: number;
+    /**
+     * Context size at which the agent summarizes the chat to continue it.
+     * @type {number}
+     * @memberof AgentChat
+     */
+    contextLimit: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AgentChat
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AgentChat
+     */
+    updatedAt: string;
+}
+
+
+/**
+ * @export
+ */
+export const AgentChatStatusEnum = {
+    Idle: 'idle',
+    Running: 'running',
+    Waiting: 'waiting'
+} as const;
+export type AgentChatStatusEnum = typeof AgentChatStatusEnum[keyof typeof AgentChatStatusEnum];
+
+/**
+ * 
+ * @export
+ * @interface AgentChatAnswerRequest
+ */
+export interface AgentChatAnswerRequest {
+    /**
+     * The ask_user message that waits for an answer.
+     * @type {number}
+     * @memberof AgentChatAnswerRequest
+     */
+    messageId: number;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof AgentChatAnswerRequest
+     */
+    answers: Array<string>;
+}
+
+/**
+ * Whether the chat's tool calls that change something wait for approval. ask, the default, waits for every change. never_ask runs every change at once, including destructive ones and container commands. A question the agent asks always waits for an answer.
+ * @export
+ */
+export const AgentChatApprovalMode = {
+    Ask: 'ask',
+    NeverAsk: 'never_ask'
+} as const;
+export type AgentChatApprovalMode = typeof AgentChatApprovalMode[keyof typeof AgentChatApprovalMode];
+
+/**
+ * 
+ * @export
+ * @interface AgentChatApprovalModeRequest
+ */
+export interface AgentChatApprovalModeRequest {
+    /**
+     * 
+     * @type {AgentChatApprovalMode}
+     * @memberof AgentChatApprovalModeRequest
+     */
+    approvalMode: AgentChatApprovalMode;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface AgentChatApprovalRequest
+ */
+export interface AgentChatApprovalRequest {
+    /**
+     * The tool message that waits for approval.
+     * @type {number}
+     * @memberof AgentChatApprovalRequest
+     */
+    messageId: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AgentChatApprovalRequest
+     */
+    approve: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface AgentChatDetail
+ */
+export interface AgentChatDetail {
+    /**
+     * 
+     * @type {AgentChat}
+     * @memberof AgentChatDetail
+     */
+    chat: AgentChat;
+    /**
+     * 
+     * @type {Array<AgentChatMessage>}
+     * @memberof AgentChatDetail
+     */
+    messages: Array<AgentChatMessage>;
+}
+/**
+ * 
+ * @export
+ * @interface AgentChatMessage
+ */
+export interface AgentChatMessage {
+    /**
+     * 
+     * @type {number}
+     * @memberof AgentChatMessage
+     */
+    id: number;
+    /**
+     * A tool message is a call's result, or a call that waits; a summary replaced earlier messages for the model.
+     * @type {string}
+     * @memberof AgentChatMessage
+     */
+    role: AgentChatMessageRoleEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof AgentChatMessage
+     */
+    content: string;
+    /**
+     * For a tool message, the Wodby tool the call is for. ask_user is a question from the agent.
+     * @type {string}
+     * @memberof AgentChatMessage
+     */
+    tool?: string;
+    /**
+     * For a tool message, the call's arguments. For ask_user, the question, its options (label, description, recommended) and whether several may be chosen. The recommended options come first and their labels end with (Recommended).
+     * @type {{ [key: string]: any; }}
+     * @memberof AgentChatMessage
+     */
+    toolArguments?: { [key: string]: any; };
+    /**
+     * Set on a call that changes something or asks a question.
+     * @type {string}
+     * @memberof AgentChatMessage
+     */
+    approval: AgentChatMessageApprovalEnum | null;
+    /**
+     * True for a call that deletes, overwrites, upgrades or interrupts something, or runs a command in a container.
+     * @type {boolean}
+     * @memberof AgentChatMessage
+     */
+    toolDestructive: boolean;
+    /**
+     * For a call that waits for approval, what its ID arguments refer to, as far as the user may see them, each with the argument it names.
+     * @type {Array<AgentChatToolTarget>}
+     * @memberof AgentChatMessage
+     */
+    toolTargets: Array<AgentChatToolTarget>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AgentChatMessage
+     */
+    isError: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AgentChatMessage
+     */
+    createdAt: string;
+}
+
+
+/**
+ * @export
+ */
+export const AgentChatMessageRoleEnum = {
+    User: 'user',
+    Assistant: 'assistant',
+    Tool: 'tool',
+    Summary: 'summary'
+} as const;
+export type AgentChatMessageRoleEnum = typeof AgentChatMessageRoleEnum[keyof typeof AgentChatMessageRoleEnum];
+
+/**
+ * @export
+ */
+export const AgentChatMessageApprovalEnum = {
+    Pending: 'pending',
+    Approved: 'approved',
+    Rejected: 'rejected'
+} as const;
+export type AgentChatMessageApprovalEnum = typeof AgentChatMessageApprovalEnum[keyof typeof AgentChatMessageApprovalEnum];
+
+/**
+ * 
+ * @export
+ * @interface AgentChatMessageRequest
+ */
+export interface AgentChatMessageRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof AgentChatMessageRequest
+     */
+    message: string;
+}
+/**
+ * 
+ * @export
+ * @interface AgentChatToolTarget
+ */
+export interface AgentChatToolTarget {
+    /**
+     * What the argument refers to, such as Environment, Project or CI integration.
+     * @type {string}
+     * @memberof AgentChatToolTarget
+     */
+    kind: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AgentChatToolTarget
+     */
+    name: string;
+    /**
+     * The call's argument this names, such as project_id.
+     * @type {string}
+     * @memberof AgentChatToolTarget
+     */
+    argument: string;
+}
+/**
+ * 
+ * @export
  * @interface App
  */
 export interface App {
@@ -5592,6 +5882,12 @@ export interface Cluster {
     maxNodeCount?: number | null;
     /**
      * 
+     * @type {ClusterNodePool}
+     * @memberof Cluster
+     */
+    gpuNodePool?: ClusterNodePool | null;
+    /**
+     * 
      * @type {number}
      * @memberof Cluster
      */
@@ -6116,6 +6412,68 @@ export interface ClusterInfraAppUpgradeChangelog {
      * @memberof ClusterInfraAppUpgradeChangelog
      */
     serviceChanges: Array<ServiceRevisionChange>;
+}
+/**
+ * An optional node pool of the cluster, such as the GPU node pool.
+ * @export
+ * @interface ClusterNodePool
+ */
+export interface ClusterNodePool {
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterNodePool
+     */
+    machineType: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClusterNodePool
+     */
+    minNodeCount: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClusterNodePool
+     */
+    maxNodeCount: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClusterNodePool
+     */
+    nodeDiskSize?: number | null;
+}
+/**
+ * An optional GPU node pool. Only machine types that report GPUs are accepted, and the provider must support GPU node pools.
+ * @export
+ * @interface ClusterNodePoolInput
+ */
+export interface ClusterNodePoolInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterNodePoolInput
+     */
+    machineType: string;
+    /**
+     * Zero lets the pool scale down to no nodes where the provider supports it.
+     * @type {number}
+     * @memberof ClusterNodePoolInput
+     */
+    minNodeCount: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClusterNodePoolInput
+     */
+    maxNodeCount: number;
+    /**
+     * Node disk size in GB. Required when the provider's node disk size is configurable.
+     * @type {number}
+     * @memberof ClusterNodePoolInput
+     */
+    nodeDiskSize?: number | null;
 }
 /**
  * 
@@ -10061,6 +10419,12 @@ export interface NewClusterInput {
      * @memberof NewClusterInput
      */
     nodeDiskSize?: number | null;
+    /**
+     * 
+     * @type {ClusterNodePoolInput}
+     * @memberof NewClusterInput
+     */
+    gpuNodePool?: ClusterNodePoolInput | null;
     /**
      * 
      * @type {string}
@@ -15458,6 +15822,33 @@ export interface StacksResponse {
 /**
  * 
  * @export
+ * @interface StartAgentChatRequest
+ */
+export interface StartAgentChatRequest {
+    /**
+     * Optional for API-key requests; defaults to the API key's organization.
+     * @type {number}
+     * @memberof StartAgentChatRequest
+     */
+    orgId?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StartAgentChatRequest
+     */
+    message: string;
+    /**
+     * Optional; without it, the chat asks before every change.
+     * @type {AgentChatApprovalMode}
+     * @memberof StartAgentChatRequest
+     */
+    approvalMode?: AgentChatApprovalMode;
+}
+
+
+/**
+ * 
+ * @export
  * @interface StorageClass
  */
 export interface StorageClass {
@@ -16635,6 +17026,19 @@ export type UpdateBackupPresetInputBlobStorageRegionEnum = typeof UpdateBackupPr
 /**
  * 
  * @export
+ * @interface UpdateClusterGPUNodePoolInput
+ */
+export interface UpdateClusterGPUNodePoolInput {
+    /**
+     * 
+     * @type {ClusterNodePoolInput}
+     * @memberof UpdateClusterGPUNodePoolInput
+     */
+    gpuNodePool: ClusterNodePoolInput | null;
+}
+/**
+ * 
+ * @export
  * @interface UpdateCurrentUserRequest
  */
 export interface UpdateCurrentUserRequest {
@@ -16928,6 +17332,19 @@ export interface UpdateStackServiceEnvVarInput {
      * @memberof UpdateStackServiceEnvVarInput
      */
     secret: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateStackServiceRevisionsInput
+ */
+export interface UpdateStackServiceRevisionsInput {
+    /**
+     * Root stack services to advance, by their IDs in the published revision or the draft. Their derivatives advance with them. Omit or leave empty to advance every outdated service.
+     * @type {Array<number>}
+     * @memberof UpdateStackServiceRevisionsInput
+     */
+    stackServiceIds?: Array<number>;
 }
 /**
  * 

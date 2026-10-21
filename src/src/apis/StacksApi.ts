@@ -47,6 +47,7 @@ import type {
   UpdateStackFromGitRequest,
   UpdateStackHelmValueInput,
   UpdateStackRequest,
+  UpdateStackServiceRevisionsInput,
   UpdateStackTokenInput,
 } from '../models/index';
 
@@ -210,6 +211,7 @@ export interface UpdateStackHelmValueRequest {
 export interface UpdateStackServiceRevisionsRequest {
     id: number;
     scope?: UpdateStackServiceRevisionsScopeEnum;
+    updateStackServiceRevisionsInput?: UpdateStackServiceRevisionsInput;
 }
 
 export interface UpdateStackSettingsRequest {
@@ -831,10 +833,11 @@ export interface StacksApiInterface {
     updateStackHelmValue(requestParameters: UpdateStackHelmValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackHelmValue>;
 
     /**
-     * Starts a task that advances unpinned stack services to their eligible revisions.
+     * Starts a task that advances unpinned stack services to their eligible revisions. Send stackServiceIds to advance only those stack services.
      * @summary Update stack service revisions
      * @param {number} id 
      * @param {'all' | 'stateless_only'} [scope] Limits the update to all services or stateless services. Defaults to all.
+     * @param {UpdateStackServiceRevisionsInput} [updateStackServiceRevisionsInput] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof StacksApiInterface
@@ -842,7 +845,7 @@ export interface StacksApiInterface {
     updateStackServiceRevisionsRaw(requestParameters: UpdateStackServiceRevisionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
-     * Starts a task that advances unpinned stack services to their eligible revisions.
+     * Starts a task that advances unpinned stack services to their eligible revisions. Send stackServiceIds to advance only those stack services.
      * Update stack service revisions
      */
     updateStackServiceRevisions(requestParameters: UpdateStackServiceRevisionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
@@ -2459,7 +2462,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
-     * Starts a task that advances unpinned stack services to their eligible revisions.
+     * Starts a task that advances unpinned stack services to their eligible revisions. Send stackServiceIds to advance only those stack services.
      * Update stack service revisions
      */
     async updateStackServiceRevisionsRaw(requestParameters: UpdateStackServiceRevisionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -2478,6 +2481,8 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        headerParameters['Content-Type'] = 'application/json';
+
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
         }
@@ -2487,13 +2492,14 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: requestParameters['updateStackServiceRevisionsInput'],
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);
     }
 
     /**
-     * Starts a task that advances unpinned stack services to their eligible revisions.
+     * Starts a task that advances unpinned stack services to their eligible revisions. Send stackServiceIds to advance only those stack services.
      * Update stack service revisions
      */
     async updateStackServiceRevisions(requestParameters: UpdateStackServiceRevisionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {

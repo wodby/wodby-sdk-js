@@ -30,6 +30,7 @@ import type {
   ResourceSharing,
   ResourceSharingInput,
   ScaleClusterInput,
+  UpdateClusterGPUNodePoolInput,
   UpdateK3SClusterPublicIPInput,
   UpdateKubernetesVersionInput,
   UpdateTitleRequest,
@@ -103,6 +104,11 @@ export interface UpdateClusterRequest {
 export interface UpdateClusterEnvironmentPolicyRequest {
     id: number;
     clusterEnvironmentPolicyInput: ClusterEnvironmentPolicyInput;
+}
+
+export interface UpdateClusterGPUNodePoolRequest {
+    id: number;
+    updateClusterGPUNodePoolInput: UpdateClusterGPUNodePoolInput;
 }
 
 export interface UpdateClusterKubernetesVersionRequest {
@@ -403,6 +409,23 @@ export interface ClustersApiInterface {
      * Update cluster environment policy
      */
     updateClusterEnvironmentPolicy(requestParameters: UpdateClusterEnvironmentPolicyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
+
+    /**
+     * Adds, resizes, replaces or removes the cluster\'s optional GPU node pool. Pods that request GPUs are scheduled onto this pool. Set gpuNodePool to null to remove the pool; removal is refused while pods on the cluster request GPUs. Changing the machine type creates the new pool before the old one is deleted.
+     * @summary Update the GPU node pool
+     * @param {number} id 
+     * @param {UpdateClusterGPUNodePoolInput} updateClusterGPUNodePoolInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    updateClusterGPUNodePoolRaw(requestParameters: UpdateClusterGPUNodePoolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Adds, resizes, replaces or removes the cluster\'s optional GPU node pool. Pods that request GPUs are scheduled onto this pool. Set gpuNodePool to null to remove the pool; removal is refused while pods on the cluster request GPUs. Changing the machine type creates the new pool before the old one is deleted.
+     * Update the GPU node pool
+     */
+    updateClusterGPUNodePool(requestParameters: UpdateClusterGPUNodePoolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Starts upgrading the cluster to a Kubernetes version from its upgrade plan. Check GET /cluster-kubernetes- version-upgrade-plans/{id} for the allowed targets first.
@@ -1185,6 +1208,55 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async updateClusterEnvironmentPolicy(requestParameters: UpdateClusterEnvironmentPolicyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
         const response = await this.updateClusterEnvironmentPolicyRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Adds, resizes, replaces or removes the cluster\'s optional GPU node pool. Pods that request GPUs are scheduled onto this pool. Set gpuNodePool to null to remove the pool; removal is refused while pods on the cluster request GPUs. Changing the machine type creates the new pool before the old one is deleted.
+     * Update the GPU node pool
+     */
+    async updateClusterGPUNodePoolRaw(requestParameters: UpdateClusterGPUNodePoolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateClusterGPUNodePool().'
+            );
+        }
+
+        if (requestParameters['updateClusterGPUNodePoolInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateClusterGPUNodePoolInput',
+                'Required parameter "updateClusterGPUNodePoolInput" was null or undefined when calling updateClusterGPUNodePool().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/{id}/actions/gpu-node-pool`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateClusterGPUNodePoolInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Adds, resizes, replaces or removes the cluster\'s optional GPU node pool. Pods that request GPUs are scheduled onto this pool. Set gpuNodePool to null to remove the pool; removal is refused while pods on the cluster request GPUs. Changing the machine type creates the new pool before the old one is deleted.
+     * Update the GPU node pool
+     */
+    async updateClusterGPUNodePool(requestParameters: UpdateClusterGPUNodePoolRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.updateClusterGPUNodePoolRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
