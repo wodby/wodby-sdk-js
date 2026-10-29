@@ -16,7 +16,10 @@
 import * as runtime from '../runtime';
 import type {
   App,
+  AppPreviewPullRequestList,
+  AppSettingsInput,
   NewAppInput,
+  NewAppPreviewEnvironmentRequest,
   OperationResult,
   ProblemDetails,
   ResourceSharing,
@@ -26,6 +29,11 @@ import type {
 
 export interface CreateAppRequest {
     newAppInput: NewAppInput;
+}
+
+export interface CreateAppPreviewEnvironmentRequest {
+    id: number;
+    newAppPreviewEnvironmentRequest: NewAppPreviewEnvironmentRequest;
 }
 
 export interface DeleteAppRequest {
@@ -45,6 +53,10 @@ export interface GetAppSharingRequest {
     id: number;
 }
 
+export interface ListAppPreviewPullRequestsRequest {
+    id: number;
+}
+
 export interface ListAppsRequest {
     orgId?: number;
     projectIds?: string;
@@ -54,6 +66,11 @@ export interface ListAppsRequest {
 export interface UpdateAppRequest {
     id: number;
     updateTitleRequest: UpdateTitleRequest;
+}
+
+export interface UpdateAppSettingsRequest {
+    id: number;
+    appSettingsInput: AppSettingsInput;
 }
 
 export interface UpdateAppSharingRequest {
@@ -83,6 +100,23 @@ export interface AppsApiInterface {
      * Create app
      */
     createApp(requestParameters: CreateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
+
+    /**
+     * Creates a preview environment for one open pull request of the app and returns the task that creates it in the background. Draft pull requests are accepted even when draft previews are off. Pull requests from forks, pull requests that already have a preview environment, a base environment that is not in OK status, and a full concurrency limit are refused.
+     * @summary Create a pull request preview environment
+     * @param {number} id 
+     * @param {NewAppPreviewEnvironmentRequest} newAppPreviewEnvironmentRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppsApiInterface
+     */
+    createAppPreviewEnvironmentRaw(requestParameters: CreateAppPreviewEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Creates a preview environment for one open pull request of the app and returns the task that creates it in the background. Draft pull requests are accepted even when draft previews are off. Pull requests from forks, pull requests that already have a preview environment, a base environment that is not in OK status, and a full concurrency limit are refused.
+     * Create a pull request preview environment
+     */
+    createAppPreviewEnvironment(requestParameters: CreateAppPreviewEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Deletes the app and returns the operation result.
@@ -150,6 +184,22 @@ export interface AppsApiInterface {
     getAppSharing(requestParameters: GetAppSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
 
     /**
+     * Lists the app\'s open pull requests into the branch the preview base environment tracks, most recently updated first, with the preview environment each one has and why a preview environment cannot be created for it now. When preview environments are not configured for the app, `configured` is false and the list is empty.
+     * @summary List pull requests for preview environments
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppsApiInterface
+     */
+    listAppPreviewPullRequestsRaw(requestParameters: ListAppPreviewPullRequestsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppPreviewPullRequestList>>;
+
+    /**
+     * Lists the app\'s open pull requests into the branch the preview base environment tracks, most recently updated first, with the preview environment each one has and why a preview environment cannot be created for it now. When preview environments are not configured for the app, `configured` is false and the list is empty.
+     * List pull requests for preview environments
+     */
+    listAppPreviewPullRequests(requestParameters: ListAppPreviewPullRequestsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppPreviewPullRequestList>;
+
+    /**
      * Returns apps matching the request filters.
      * @summary List apps
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -183,6 +233,23 @@ export interface AppsApiInterface {
      * Update app
      */
     updateApp(requestParameters: UpdateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
+
+    /**
+     * Updates application-wide settings such as pull request preview environments and returns the updated app.
+     * @summary Update app settings
+     * @param {number} id 
+     * @param {AppSettingsInput} appSettingsInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppsApiInterface
+     */
+    updateAppSettingsRaw(requestParameters: UpdateAppSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
+
+    /**
+     * Updates application-wide settings such as pull request preview environments and returns the updated app.
+     * Update app settings
+     */
+    updateAppSettings(requestParameters: UpdateAppSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
 
     /**
      * Changes the app owner and replaces the projects it is shared with. Returns the resulting sharing.
@@ -247,6 +314,55 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
      */
     async createApp(requestParameters: CreateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
         const response = await this.createAppRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates a preview environment for one open pull request of the app and returns the task that creates it in the background. Draft pull requests are accepted even when draft previews are off. Pull requests from forks, pull requests that already have a preview environment, a base environment that is not in OK status, and a full concurrency limit are refused.
+     * Create a pull request preview environment
+     */
+    async createAppPreviewEnvironmentRaw(requestParameters: CreateAppPreviewEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createAppPreviewEnvironment().'
+            );
+        }
+
+        if (requestParameters['newAppPreviewEnvironmentRequest'] == null) {
+            throw new runtime.RequiredError(
+                'newAppPreviewEnvironmentRequest',
+                'Required parameter "newAppPreviewEnvironmentRequest" was null or undefined when calling createAppPreviewEnvironment().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/apps/preview-environments/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['newAppPreviewEnvironmentRequest'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Creates a preview environment for one open pull request of the app and returns the task that creates it in the background. Draft pull requests are accepted even when draft previews are off. Pull requests from forks, pull requests that already have a preview environment, a base environment that is not in OK status, and a full concurrency limit are refused.
+     * Create a pull request preview environment
+     */
+    async createAppPreviewEnvironment(requestParameters: CreateAppPreviewEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.createAppPreviewEnvironmentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -411,6 +527,45 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
+     * Lists the app\'s open pull requests into the branch the preview base environment tracks, most recently updated first, with the preview environment each one has and why a preview environment cannot be created for it now. When preview environments are not configured for the app, `configured` is false and the list is empty.
+     * List pull requests for preview environments
+     */
+    async listAppPreviewPullRequestsRaw(requestParameters: ListAppPreviewPullRequestsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppPreviewPullRequestList>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppPreviewPullRequests().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/apps/preview-pull-requests/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Lists the app\'s open pull requests into the branch the preview base environment tracks, most recently updated first, with the preview environment each one has and why a preview environment cannot be created for it now. When preview environments are not configured for the app, `configured` is false and the list is empty.
+     * List pull requests for preview environments
+     */
+    async listAppPreviewPullRequests(requestParameters: ListAppPreviewPullRequestsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppPreviewPullRequestList> {
+        const response = await this.listAppPreviewPullRequestsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns apps matching the request filters.
      * List apps
      */
@@ -500,6 +655,55 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
      */
     async updateApp(requestParameters: UpdateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
         const response = await this.updateAppRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates application-wide settings such as pull request preview environments and returns the updated app.
+     * Update app settings
+     */
+    async updateAppSettingsRaw(requestParameters: UpdateAppSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateAppSettings().'
+            );
+        }
+
+        if (requestParameters['appSettingsInput'] == null) {
+            throw new runtime.RequiredError(
+                'appSettingsInput',
+                'Required parameter "appSettingsInput" was null or undefined when calling updateAppSettings().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/apps/settings/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['appSettingsInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Updates application-wide settings such as pull request preview environments and returns the updated app.
+     * Update app settings
+     */
+    async updateAppSettings(requestParameters: UpdateAppSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
+        const response = await this.updateAppSettingsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

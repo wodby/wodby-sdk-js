@@ -371,6 +371,12 @@ export interface App {
     ownerProjectId?: number | null;
     /**
      * 
+     * @type {AppSettings}
+     * @memberof App
+     */
+    settings?: AppSettings;
+    /**
+     * 
      * @type {string}
      * @memberof App
      */
@@ -1744,6 +1750,12 @@ export interface AppEnvironment {
     settings?: AppEnvironmentSettings;
     /**
      * 
+     * @type {AppEnvironmentPreview}
+     * @memberof AppEnvironment
+     */
+    preview?: AppEnvironmentPreview | null;
+    /**
+     * 
      * @type {AppEnvironmentHealth}
      * @memberof AppEnvironment
      */
@@ -2214,6 +2226,85 @@ export interface AppEnvironmentMigrationVolumeInput {
      * @memberof AppEnvironmentMigrationVolumeInput
      */
     storageClassName?: string | null;
+}
+/**
+ * Pull request metadata of an automatic preview environment.
+ * @export
+ * @interface AppEnvironmentPreview
+ */
+export interface AppEnvironmentPreview {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentPreview
+     */
+    number: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentPreview
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentPreview
+     */
+    url: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentPreview
+     */
+    headRef: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentPreview
+     */
+    headSha: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentPreview
+     */
+    baseRef: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentPreview
+     */
+    author: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentPreview
+     */
+    draft: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentPreview
+     */
+    baseAppEnvironmentId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentPreview
+     */
+    lastActivityAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentPreview
+     */
+    closedAt?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppEnvironmentPreview
+     */
+    createdAt: string;
 }
 /**
  * 
@@ -2769,6 +2860,277 @@ export interface AppPortSettingsInput {
      * @memberof AppPortSettingsInput
      */
     settings: Array<AppPortSettingInput>;
+}
+/**
+ * Automatic preview environments for pull requests opened against the branch tracked by the base environment.
+ * @export
+ * @interface AppPreviewEnvironmentsSettings
+ */
+export interface AppPreviewEnvironmentsSettings {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppPreviewEnvironmentsSettings
+     */
+    enabled: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppPreviewEnvironmentsSettings
+     */
+    baseAppEnvironmentId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppPreviewEnvironmentsSettings
+     */
+    environmentType: AppPreviewEnvironmentsSettingsEnvironmentTypeEnum;
+    /**
+     * 
+     * @type {Array<AppPreviewImport>}
+     * @memberof AppPreviewEnvironmentsSettings
+     */
+    imports: Array<AppPreviewImport>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppPreviewEnvironmentsSettings
+     */
+    buildDrafts: boolean;
+    /**
+     * Run the base environment's cron jobs in every preview. When false, the default, cron jobs are copied disabled. Previews never copy backup presets and run every service with one replica.
+     * @type {boolean}
+     * @memberof AppPreviewEnvironmentsSettings
+     */
+    runCronJobs: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppPreviewEnvironmentsSettings
+     */
+    maxConcurrent: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppPreviewEnvironmentsSettings
+     */
+    idleTtlDays: number;
+}
+
+
+/**
+ * @export
+ */
+export const AppPreviewEnvironmentsSettingsEnvironmentTypeEnum = {
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type AppPreviewEnvironmentsSettingsEnvironmentTypeEnum = typeof AppPreviewEnvironmentsSettingsEnvironmentTypeEnum[keyof typeof AppPreviewEnvironmentsSettingsEnvironmentTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface AppPreviewEnvironmentsSettingsInput
+ */
+export interface AppPreviewEnvironmentsSettingsInput {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppPreviewEnvironmentsSettingsInput
+     */
+    enabled: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppPreviewEnvironmentsSettingsInput
+     */
+    baseAppEnvironmentId?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppPreviewEnvironmentsSettingsInput
+     */
+    environmentType?: AppPreviewEnvironmentsSettingsInputEnvironmentTypeEnum;
+    /**
+     * 
+     * @type {Array<AppPreviewImport>}
+     * @memberof AppPreviewEnvironmentsSettingsInput
+     */
+    imports?: Array<AppPreviewImport>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppPreviewEnvironmentsSettingsInput
+     */
+    buildDrafts?: boolean;
+    /**
+     * Omitted keeps the stored value; apps that never set it do not run cron jobs in previews.
+     * @type {boolean}
+     * @memberof AppPreviewEnvironmentsSettingsInput
+     */
+    runCronJobs?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppPreviewEnvironmentsSettingsInput
+     */
+    maxConcurrent?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppPreviewEnvironmentsSettingsInput
+     */
+    idleTtlDays?: number;
+}
+
+
+/**
+ * @export
+ */
+export const AppPreviewEnvironmentsSettingsInputEnvironmentTypeEnum = {
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type AppPreviewEnvironmentsSettingsInputEnvironmentTypeEnum = typeof AppPreviewEnvironmentsSettingsInputEnvironmentTypeEnum[keyof typeof AppPreviewEnvironmentsSettingsInputEnvironmentTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface AppPreviewImport
+ */
+export interface AppPreviewImport {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppPreviewImport
+     */
+    appServiceName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppPreviewImport
+     */
+    importName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppPreviewImport
+     */
+    backupName: string;
+}
+/**
+ * An open pull request into the branch the preview base environment tracks.
+ * @export
+ * @interface AppPreviewPullRequest
+ */
+export interface AppPreviewPullRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppPreviewPullRequest
+     */
+    number: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppPreviewPullRequest
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppPreviewPullRequest
+     */
+    url: string;
+    /**
+     * Remote repository of the pull request. Pass it when creating the preview environment.
+     * @type {string}
+     * @memberof AppPreviewPullRequest
+     */
+    remoteGitRepoId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppPreviewPullRequest
+     */
+    repositoryUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppPreviewPullRequest
+     */
+    headRef: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppPreviewPullRequest
+     */
+    baseRef: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppPreviewPullRequest
+     */
+    author: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppPreviewPullRequest
+     */
+    draft: boolean;
+    /**
+     * The head branch lives in another repository. Pull requests from forks never get preview environments.
+     * @type {boolean}
+     * @memberof AppPreviewPullRequest
+     */
+    fromFork: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppPreviewPullRequest
+     */
+    updatedAt?: string | null;
+    /**
+     * The pull request already has a preview environment, possibly one being deleted.
+     * @type {boolean}
+     * @memberof AppPreviewPullRequest
+     */
+    hasPreview: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppPreviewPullRequest
+     */
+    previewAppEnvironmentId?: number | null;
+    /**
+     * Why a preview environment cannot be created for this pull request now. Null when it can.
+     * @type {string}
+     * @memberof AppPreviewPullRequest
+     */
+    skipReason?: string | null;
+}
+/**
+ * Open pull requests a preview environment can be created for by hand.
+ * @export
+ * @interface AppPreviewPullRequestList
+ */
+export interface AppPreviewPullRequestList {
+    /**
+     * True when preview environments are enabled and the base environment exists.
+     * @type {boolean}
+     * @memberof AppPreviewPullRequestList
+     */
+    configured: boolean;
+    /**
+     * 
+     * @type {Array<AppPreviewPullRequest>}
+     * @memberof AppPreviewPullRequestList
+     */
+    pullRequests: Array<AppPreviewPullRequest>;
 }
 /**
  * 
@@ -4917,6 +5279,32 @@ export interface AppServiceVolumeStorageClassState {
      * @memberof AppServiceVolumeStorageClassState
      */
     status: string;
+}
+/**
+ * 
+ * @export
+ * @interface AppSettings
+ */
+export interface AppSettings {
+    /**
+     * 
+     * @type {AppPreviewEnvironmentsSettings}
+     * @memberof AppSettings
+     */
+    previewEnvironments: AppPreviewEnvironmentsSettings;
+}
+/**
+ * 
+ * @export
+ * @interface AppSettingsInput
+ */
+export interface AppSettingsInput {
+    /**
+     * 
+     * @type {AppPreviewEnvironmentsSettingsInput}
+     * @memberof AppSettingsInput
+     */
+    previewEnvironments?: AppPreviewEnvironmentsSettingsInput;
 }
 /**
  * 
@@ -9667,6 +10055,25 @@ export const NewAppInputEnvironmentTypeEnum = {
 } as const;
 export type NewAppInputEnvironmentTypeEnum = typeof NewAppInputEnvironmentTypeEnum[keyof typeof NewAppInputEnvironmentTypeEnum];
 
+/**
+ * 
+ * @export
+ * @interface NewAppPreviewEnvironmentRequest
+ */
+export interface NewAppPreviewEnvironmentRequest {
+    /**
+     * Pull request number.
+     * @type {number}
+     * @memberof NewAppPreviewEnvironmentRequest
+     */
+    number: number;
+    /**
+     * Remote repository of the pull request. Required when the base environment tracks several repositories.
+     * @type {string}
+     * @memberof NewAppPreviewEnvironmentRequest
+     */
+    remoteGitRepoId?: string | null;
+}
 /**
  * 
  * @export
