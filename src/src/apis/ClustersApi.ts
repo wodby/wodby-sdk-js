@@ -16,6 +16,8 @@
 import * as runtime from '../runtime';
 import type {
   Cluster,
+  ClusterComponent,
+  ClusterComponentUpdate,
   ClusterCreationResult,
   ClusterEnvironmentPolicyInput,
   ClusterInfraAppUpgradeChangelog,
@@ -30,6 +32,7 @@ import type {
   ResourceSharing,
   ResourceSharingInput,
   ScaleClusterInput,
+  UpdateClusterComponentRequest,
   UpdateClusterGPUNodePoolInput,
   UpdateK3SClusterPublicIPInput,
   UpdateKubernetesVersionInput,
@@ -61,6 +64,14 @@ export interface GetClusterRequest {
 export interface GetClusterByNameRequest {
     name: string;
     orgId?: number;
+}
+
+export interface GetClusterComponentUpdatesRequest {
+    id: number;
+}
+
+export interface GetClusterComponentsRequest {
+    id: number;
 }
 
 export interface GetClusterInfraAppUpgradeChangelogRequest {
@@ -99,6 +110,11 @@ export interface ScaleClusterRequest {
 export interface UpdateClusterRequest {
     id: number;
     updateTitleRequest: UpdateTitleRequest;
+}
+
+export interface UpdateClusterComponentOperationRequest {
+    id: number;
+    updateClusterComponentRequest: UpdateClusterComponentRequest;
 }
 
 export interface UpdateClusterEnvironmentPolicyRequest {
@@ -245,6 +261,38 @@ export interface ClustersApiInterface {
     getClusterByName(requestParameters: GetClusterByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
 
     /**
+     * Returns the updates Wodby can apply to single components of a healthy cluster, without a Kubernetes or infrastructure upgrade. The ID is the cluster\'s. Most components cannot be updated this way, because their provider or K3S release owns them, so the list is often empty.
+     * @summary List cluster component updates
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    getClusterComponentUpdatesRaw(requestParameters: GetClusterComponentUpdatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterComponentUpdate>>>;
+
+    /**
+     * Returns the updates Wodby can apply to single components of a healthy cluster, without a Kubernetes or infrastructure upgrade. The ID is the cluster\'s. Most components cannot be updated this way, because their provider or K3S release owns them, so the list is often empty.
+     * List cluster component updates
+     */
+    getClusterComponentUpdates(requestParameters: GetClusterComponentUpdatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterComponentUpdate>>;
+
+    /**
+     * Returns the infrastructure software last observed running on a cluster: system pods, infrastructure apps and node software such as the kubelet, container runtime, operating system and kernel. Customer application namespaces are not included. The ID is the cluster\'s. The list is empty until the first observation, and each item\'s observedAt shows how recent it is.
+     * @summary List cluster components
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    getClusterComponentsRaw(requestParameters: GetClusterComponentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterComponent>>>;
+
+    /**
+     * Returns the infrastructure software last observed running on a cluster: system pods, infrastructure apps and node software such as the kubelet, container runtime, operating system and kernel. Customer application namespaces are not included. The ID is the cluster\'s. The list is empty until the first observation, and each item\'s observedAt shows how recent it is.
+     * List cluster components
+     */
+    getClusterComponents(requestParameters: GetClusterComponentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterComponent>>;
+
+    /**
      * Returns stack and service revision changes for infrastructure apps on the cluster.
      * @summary Preview cluster infrastructure app upgrades
      * @param {number} id 
@@ -344,7 +392,7 @@ export interface ClustersApiInterface {
     listWodbyCloudMachineTypes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<WodbyCloudMachineType>>;
 
     /**
-     * Replaces the cluster nodes one at a time so they come back with a fresh machine image.
+     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for Wodby Cloud, serverless and single-node clusters, and while application operations are active. New deployments wait until it ends.
      * @summary Recycle cluster nodes
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -354,7 +402,7 @@ export interface ClustersApiInterface {
     recycleClusterNodesRaw(requestParameters: RecycleClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
-     * Replaces the cluster nodes one at a time so they come back with a fresh machine image.
+     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for Wodby Cloud, serverless and single-node clusters, and while application operations are active. New deployments wait until it ends.
      * Recycle cluster nodes
      */
     recycleClusterNodes(requestParameters: RecycleClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
@@ -392,6 +440,23 @@ export interface ClustersApiInterface {
      * Update cluster
      */
     updateCluster(requestParameters: UpdateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
+
+    /**
+     * Starts a task that applies one of the updates listed for the cluster, and returns the task result.
+     * @summary Update a cluster component
+     * @param {number} id 
+     * @param {UpdateClusterComponentRequest} updateClusterComponentRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    updateClusterComponentRaw(requestParameters: UpdateClusterComponentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Starts a task that applies one of the updates listed for the cluster, and returns the task result.
+     * Update a cluster component
+     */
+    updateClusterComponent(requestParameters: UpdateClusterComponentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Updates the cluster\'s environment type and allowed environment-type scope. Scope reductions that conflict with existing non-infrastructure app environments are rejected.
@@ -786,6 +851,84 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Returns the updates Wodby can apply to single components of a healthy cluster, without a Kubernetes or infrastructure upgrade. The ID is the cluster\'s. Most components cannot be updated this way, because their provider or K3S release owns them, so the list is often empty.
+     * List cluster component updates
+     */
+    async getClusterComponentUpdatesRaw(requestParameters: GetClusterComponentUpdatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterComponentUpdate>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getClusterComponentUpdates().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/cluster-component-updates/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the updates Wodby can apply to single components of a healthy cluster, without a Kubernetes or infrastructure upgrade. The ID is the cluster\'s. Most components cannot be updated this way, because their provider or K3S release owns them, so the list is often empty.
+     * List cluster component updates
+     */
+    async getClusterComponentUpdates(requestParameters: GetClusterComponentUpdatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterComponentUpdate>> {
+        const response = await this.getClusterComponentUpdatesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the infrastructure software last observed running on a cluster: system pods, infrastructure apps and node software such as the kubelet, container runtime, operating system and kernel. Customer application namespaces are not included. The ID is the cluster\'s. The list is empty until the first observation, and each item\'s observedAt shows how recent it is.
+     * List cluster components
+     */
+    async getClusterComponentsRaw(requestParameters: GetClusterComponentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterComponent>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getClusterComponents().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/cluster-components/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the infrastructure software last observed running on a cluster: system pods, infrastructure apps and node software such as the kubelet, container runtime, operating system and kernel. Customer application namespaces are not included. The ID is the cluster\'s. The list is empty until the first observation, and each item\'s observedAt shows how recent it is.
+     * List cluster components
+     */
+    async getClusterComponents(requestParameters: GetClusterComponentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterComponent>> {
+        const response = await this.getClusterComponentsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns stack and service revision changes for infrastructure apps on the cluster.
      * Preview cluster infrastructure app upgrades
      */
@@ -1026,7 +1169,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Replaces the cluster nodes one at a time so they come back with a fresh machine image.
+     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for Wodby Cloud, serverless and single-node clusters, and while application operations are active. New deployments wait until it ends.
      * Recycle cluster nodes
      */
     async recycleClusterNodesRaw(requestParameters: RecycleClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -1056,7 +1199,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Replaces the cluster nodes one at a time so they come back with a fresh machine image.
+     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for Wodby Cloud, serverless and single-node clusters, and while application operations are active. New deployments wait until it ends.
      * Recycle cluster nodes
      */
     async recycleClusterNodes(requestParameters: RecycleClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -1159,6 +1302,55 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async updateCluster(requestParameters: UpdateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
         const response = await this.updateClusterRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Starts a task that applies one of the updates listed for the cluster, and returns the task result.
+     * Update a cluster component
+     */
+    async updateClusterComponentRaw(requestParameters: UpdateClusterComponentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateClusterComponent().'
+            );
+        }
+
+        if (requestParameters['updateClusterComponentRequest'] == null) {
+            throw new runtime.RequiredError(
+                'updateClusterComponentRequest',
+                'Required parameter "updateClusterComponentRequest" was null or undefined when calling updateClusterComponent().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/{id}/actions/update-component`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateClusterComponentRequest'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Starts a task that applies one of the updates listed for the cluster, and returns the task result.
+     * Update a cluster component
+     */
+    async updateClusterComponent(requestParameters: UpdateClusterComponentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.updateClusterComponentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

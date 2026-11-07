@@ -23,6 +23,7 @@ export * from './OrgMembershipsApi';
 export * from './OrgSsoApi';
 export * from './OrgsApi';
 export * from './ProjectMembershipsApi';
+export * from './ProjectRolesApi';
 export * from './ProjectsApi';
 export * from './ProvidersApi';
 export * from './ServicesApi';

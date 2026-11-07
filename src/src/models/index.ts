@@ -1026,7 +1026,7 @@ export interface AppAuth {
      */
     appRouteId?: number | null;
     /**
-     * 
+     * Empty for exemptions.
      * @type {string}
      * @memberof AppAuth
      */
@@ -1037,6 +1037,24 @@ export interface AppAuth {
      * @memberof AppAuth
      */
     realm: string;
+    /**
+     * 
+     * @type {AppAuthSource}
+     * @memberof AppAuth
+     */
+    source: AppAuthSource;
+    /**
+     * True while the password is one Wodby generated. Setting a password by hand clears it.
+     * @type {boolean}
+     * @memberof AppAuth
+     */
+    generated: boolean;
+    /**
+     * Exemptions switch basic auth off for their services or route even when a wider entry covers them. They have no login or password.
+     * @type {boolean}
+     * @memberof AppAuth
+     */
+    exempt: boolean;
     /**
      * 
      * @type {string}
@@ -1063,6 +1081,18 @@ export const AppAuthScope = {
     Route: 'ROUTE'
 } as const;
 export type AppAuthScope = typeof AppAuthScope[keyof typeof AppAuthScope];
+
+
+/**
+ * What created a basic auth entry. SERVICE_DEFAULT entries come with app services their service or stack protects by default; PREVIEW entries protect pull request preview environments.
+ * @export
+ */
+export const AppAuthSource = {
+    User: 'USER',
+    ServiceDefault: 'SERVICE_DEFAULT',
+    Preview: 'PREVIEW'
+} as const;
+export type AppAuthSource = typeof AppAuthSource[keyof typeof AppAuthSource];
 
 /**
  * 
@@ -1220,6 +1250,12 @@ export interface AppBuild {
      * @memberof AppBuild
      */
     endedAt?: string | null;
+    /**
+     * Vulnerability scan summary of the build's currently deployed images. Omitted when none of its images is currently deployed or scanning is unavailable for the organization.
+     * @type {AppBuildVulnerabilityScan}
+     * @memberof AppBuild
+     */
+    vulnerabilityScan?: AppBuildVulnerabilityScan | null;
 }
 
 
@@ -1258,6 +1294,33 @@ export interface AppBuildConfig {
      */
     services: Array<AppServiceBuildConfig>;
 }
+/**
+ * 
+ * @export
+ * @interface AppBuildVulnerabilityScan
+ */
+export interface AppBuildVulnerabilityScan {
+    /**
+     * 
+     * @type {VulnerabilityScanStatus}
+     * @memberof AppBuildVulnerabilityScan
+     */
+    status: VulnerabilityScanStatus;
+    /**
+     * Counts from the last successful scans. Omitted until at least one deployed image was scanned successfully.
+     * @type {VulnerabilityCounts}
+     * @memberof AppBuildVulnerabilityScan
+     */
+    counts?: VulnerabilityCounts | null;
+    /**
+     * Oldest last successful scan among the deployed images.
+     * @type {string}
+     * @memberof AppBuildVulnerabilityScan
+     */
+    scannedAt?: string | null;
+}
+
+
 /**
  * 
  * @export
@@ -2152,6 +2215,12 @@ export interface AppEnvironmentMigrationComponent {
      */
     backupStatus?: string | null;
     /**
+     * True when the component restores a backup chosen at the start instead of a final backup.
+     * @type {boolean}
+     * @memberof AppEnvironmentMigrationComponent
+     */
+    existingBackup: boolean;
+    /**
      * 
      * @type {number}
      * @memberof AppEnvironmentMigrationComponent
@@ -2182,6 +2251,12 @@ export interface AppEnvironmentMigrationInput {
      * @memberof AppEnvironmentMigrationInput
      */
     volumes?: Array<AppEnvironmentMigrationVolumeInput>;
+    /**
+     * Completed backups of this environment to restore instead of creating final backups. Data written after a backup was taken does not reach the target. Components without a backup listed here get a final backup.
+     * @type {Array<number>}
+     * @memberof AppEnvironmentMigrationInput
+     */
+    existingBackupIds?: Array<number>;
 }
 /**
  * 
@@ -2915,6 +2990,18 @@ export interface AppPreviewEnvironmentsSettings {
      * @memberof AppPreviewEnvironmentsSettings
      */
     idleTtlDays: number;
+    /**
+     * Every preview is protected with basic auth using one generated password shared by all previews of the app.
+     * @type {boolean}
+     * @memberof AppPreviewEnvironmentsSettings
+     */
+    basicAuth: boolean;
+    /**
+     * Username of the shared preview basic auth. Members reveal the password in the dashboard.
+     * @type {string}
+     * @memberof AppPreviewEnvironmentsSettings
+     */
+    basicAuthUsername: string;
 }
 
 
@@ -2983,6 +3070,12 @@ export interface AppPreviewEnvironmentsSettingsInput {
      * @memberof AppPreviewEnvironmentsSettingsInput
      */
     idleTtlDays?: number;
+    /**
+     * Protect every preview with basic auth and one shared generated password. Defaults to true.
+     * @type {boolean}
+     * @memberof AppPreviewEnvironmentsSettingsInput
+     */
+    basicAuth?: boolean;
 }
 
 
@@ -3795,6 +3888,12 @@ export interface AppServiceBuild {
      */
     currentBuildNumber?: number | null;
     /**
+     * Latest vulnerability scan of this image. Images are scanned only while they are currently deployed. Omitted when the image was never scanned and is not deployed, when scanning is unavailable for the organization, and for builds nested in deployments.
+     * @type {AppServiceBuildVulnerabilityScan}
+     * @memberof AppServiceBuild
+     */
+    vulnerabilityScan?: AppServiceBuildVulnerabilityScan | null;
+    /**
      * 
      * @type {string}
      * @memberof AppServiceBuild
@@ -3893,6 +3992,75 @@ export interface AppServiceBuildConfig {
      */
     args?: Array<AppServiceBuildArg> | null;
 }
+/**
+ * 
+ * @export
+ * @interface AppServiceBuildVulnerabilityScan
+ */
+export interface AppServiceBuildVulnerabilityScan {
+    /**
+     * 
+     * @type {VulnerabilityScanStatus}
+     * @memberof AppServiceBuildVulnerabilityScan
+     */
+    status: VulnerabilityScanStatus;
+    /**
+     * Counts from the last successful scan. A failed rescan keeps them.
+     * @type {VulnerabilityCounts}
+     * @memberof AppServiceBuildVulnerabilityScan
+     */
+    counts?: VulnerabilityCounts | null;
+    /**
+     * Time of the last successful scan.
+     * @type {string}
+     * @memberof AppServiceBuildVulnerabilityScan
+     */
+    scannedAt?: string | null;
+    /**
+     * Time of the latest scan attempt.
+     * @type {string}
+     * @memberof AppServiceBuildVulnerabilityScan
+     */
+    attemptedAt?: string | null;
+    /**
+     * Why the latest scan attempt failed.
+     * @type {string}
+     * @memberof AppServiceBuildVulnerabilityScan
+     */
+    error?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceBuildVulnerabilityScan
+     */
+    imageDigest?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceBuildVulnerabilityScan
+     */
+    platform?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceBuildVulnerabilityScan
+     */
+    scannerVersion?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceBuildVulnerabilityScan
+     */
+    databaseBuiltAt?: string | null;
+    /**
+     * Number of findings in the last successful scan.
+     * @type {number}
+     * @memberof AppServiceBuildVulnerabilityScan
+     */
+    findingsTotal: number;
+}
+
+
 /**
  * 
  * @export
@@ -4254,6 +4422,94 @@ export interface AppServiceCronSchedule {
      * @memberof AppServiceCronSchedule
      */
     updatedAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface AppServiceCustomLink
+ */
+export interface AppServiceCustomLink {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceCustomLink
+     */
+    appServiceId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceCustomLink
+     */
+    name: string;
+    /**
+     * The values the link declares, in its order.
+     * @type {Array<AppServiceCustomLinkValue>}
+     * @memberof AppServiceCustomLink
+     */
+    values: Array<AppServiceCustomLinkValue>;
+}
+/**
+ * 
+ * @export
+ * @interface AppServiceCustomLinkInput
+ */
+export interface AppServiceCustomLinkInput {
+    /**
+     * 
+     * @type {Array<AppServiceCustomLinkInputValuesInner>}
+     * @memberof AppServiceCustomLinkInput
+     */
+    values: Array<AppServiceCustomLinkInputValuesInner>;
+}
+/**
+ * 
+ * @export
+ * @interface AppServiceCustomLinkInputValuesInner
+ */
+export interface AppServiceCustomLinkInputValuesInner {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceCustomLinkInputValuesInner
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceCustomLinkInputValuesInner
+     */
+    value: string;
+}
+/**
+ * 
+ * @export
+ * @interface AppServiceCustomLinkValue
+ */
+export interface AppServiceCustomLinkValue {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceCustomLinkValue
+     */
+    name: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppServiceCustomLinkValue
+     */
+    secret: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppServiceCustomLinkValue
+     */
+    hasValue: boolean;
+    /**
+     * The value; null for a secret value.
+     * @type {string}
+     * @memberof AppServiceCustomLinkValue
+     */
+    value: string | null;
 }
 /**
  * 
@@ -4721,6 +4977,103 @@ export interface AppServiceLink {
      * @memberof AppServiceLink
      */
     name: string;
+    /**
+     * The linked app service is in another app environment, of the same app or another one.
+     * @type {boolean}
+     * @memberof AppServiceLink
+     */
+    crossApp: boolean;
+    /**
+     * The app environment of a linked app service in another environment; null otherwise.
+     * @type {number}
+     * @memberof AppServiceLink
+     */
+    targetAppInstanceId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceLink
+     */
+    targetAppInstanceName?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceLink
+     */
+    targetAppInstanceTitle?: string | null;
+    /**
+     * The app of a linked app service in another environment; null otherwise.
+     * @type {number}
+     * @memberof AppServiceLink
+     */
+    targetAppId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceLink
+     */
+    targetAppName?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceLink
+     */
+    targetAppTitle?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface AppServiceLinkCandidate
+ */
+export interface AppServiceLinkCandidate {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceLinkCandidate
+     */
+    appServiceId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceLinkCandidate
+     */
+    appServiceName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceLinkCandidate
+     */
+    appServiceTitle: string;
+    /**
+     * The candidate is in another app environment.
+     * @type {boolean}
+     * @memberof AppServiceLinkCandidate
+     */
+    crossApp: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceLinkCandidate
+     */
+    appId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceLinkCandidate
+     */
+    appTitle: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppServiceLinkCandidate
+     */
+    appInstanceId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceLinkCandidate
+     */
+    appInstanceTitle: string;
 }
 /**
  * 
@@ -5966,7 +6319,7 @@ export interface Cert {
      */
     custom: boolean;
     /**
-     * Issuer label: a certificate authority name for uploaded or temporary AWS certificates, otherwise the managed issuer identifier.
+     * Human-readable certificate authority name parsed from uploaded certificates, or the managed issuer identifier.
      * @type {string}
      * @memberof Cert
      */
@@ -6653,6 +7006,207 @@ export interface ClusterCapabilityPolicy {
      */
     stackRevisionIds: Set<number>;
 }
+/**
+ * 
+ * @export
+ * @interface ClusterComponent
+ */
+export interface ClusterComponent {
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterComponent
+     */
+    name: string;
+    /**
+     * The image tag or reported version as published; empty for an image referenced only by digest.
+     * @type {string}
+     * @memberof ClusterComponent
+     */
+    version: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterComponent
+     */
+    source: ClusterComponentSourceEnum;
+    /**
+     * Who can update the component. wodby is installed by Wodby outside an app, such as Cilium on K3S; infra_app runs in an infrastructure app; k3s comes with the K3S release; provider is run by the managed Kubernetes provider; host is the operating system of a server you run; and other was installed outside Wodby or is not recognized.
+     * @type {string}
+     * @memberof ClusterComponent
+     */
+    manager: ClusterComponentManagerEnum;
+    /**
+     * Empty for node components, as are workloadKind, workload, container, image and imageDigest.
+     * @type {string}
+     * @memberof ClusterComponent
+     */
+    namespace: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterComponent
+     */
+    workloadKind: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterComponent
+     */
+    workload: string;
+    /**
+     * Container names, separated by commas when a workload runs several from one image.
+     * @type {string}
+     * @memberof ClusterComponent
+     */
+    container: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterComponent
+     */
+    image: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterComponent
+     */
+    imageDigest: string;
+    /**
+     * Running pods, or nodes for a node component.
+     * @type {number}
+     * @memberof ClusterComponent
+     */
+    count: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterComponent
+     */
+    observedAt: string;
+    /**
+     * Whether the component needs anything. update_available means Wodby can apply a newer version, and latestVersion and updatePath say which version and how. bundled follows the cluster's Kubernetes version, infra_app is reported by its infrastructure app, and unknown means the check could not run or Wodby has nothing to offer.
+     * @type {string}
+     * @memberof ClusterComponent
+     */
+    status: ClusterComponentStatusEnum;
+    /**
+     * The version an available update would apply.
+     * @type {string}
+     * @memberof ClusterComponent
+     */
+    latestVersion?: string;
+    /**
+     * The operation that updates the component.
+     * @type {string}
+     * @memberof ClusterComponent
+     */
+    updatePath?: ClusterComponentUpdatePathEnum;
+}
+
+
+/**
+ * @export
+ */
+export const ClusterComponentSourceEnum = {
+    Pod: 'pod',
+    Node: 'node'
+} as const;
+export type ClusterComponentSourceEnum = typeof ClusterComponentSourceEnum[keyof typeof ClusterComponentSourceEnum];
+
+/**
+ * @export
+ */
+export const ClusterComponentManagerEnum = {
+    Wodby: 'wodby',
+    InfraApp: 'infra_app',
+    K3s: 'k3s',
+    Provider: 'provider',
+    Host: 'host',
+    Other: 'other'
+} as const;
+export type ClusterComponentManagerEnum = typeof ClusterComponentManagerEnum[keyof typeof ClusterComponentManagerEnum];
+
+/**
+ * @export
+ */
+export const ClusterComponentStatusEnum = {
+    UpToDate: 'up_to_date',
+    UpdateAvailable: 'update_available',
+    Bundled: 'bundled',
+    ProviderManaged: 'provider_managed',
+    InfraApp: 'infra_app',
+    CustomerManaged: 'customer_managed',
+    Unknown: 'unknown'
+} as const;
+export type ClusterComponentStatusEnum = typeof ClusterComponentStatusEnum[keyof typeof ClusterComponentStatusEnum];
+
+/**
+ * @export
+ */
+export const ClusterComponentUpdatePathEnum = {
+    KubernetesVersion: 'kubernetes_version',
+    InfrastructureVersion: 'infrastructure_version',
+    InfraApps: 'infra_apps',
+    ComponentUpdate: 'component_update',
+    RecycleNodes: 'recycle_nodes'
+} as const;
+export type ClusterComponentUpdatePathEnum = typeof ClusterComponentUpdatePathEnum[keyof typeof ClusterComponentUpdatePathEnum];
+
+/**
+ * 
+ * @export
+ * @interface ClusterComponentUpdate
+ */
+export interface ClusterComponentUpdate {
+    /**
+     * cilium upgrades the Cilium release on a K3S cluster; provider_addon asks the provider to update an add-on.
+     * @type {string}
+     * @memberof ClusterComponentUpdate
+     */
+    kind: ClusterComponentUpdateKindEnum;
+    /**
+     * Identifies the update within its cluster.
+     * @type {string}
+     * @memberof ClusterComponentUpdate
+     */
+    name: string;
+    /**
+     * Absent when the update replaces a copy the provider does not manage yet.
+     * @type {string}
+     * @memberof ClusterComponentUpdate
+     */
+    currentVersion?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterComponentUpdate
+     */
+    targetVersion: string;
+    /**
+     * The names of the cluster components this update changes.
+     * @type {Array<string>}
+     * @memberof ClusterComponentUpdate
+     */
+    components: Array<string>;
+    /**
+     * What to expect while the update runs.
+     * @type {string}
+     * @memberof ClusterComponentUpdate
+     */
+    note?: string;
+}
+
+
+/**
+ * @export
+ */
+export const ClusterComponentUpdateKindEnum = {
+    Cilium: 'cilium',
+    ProviderAddon: 'provider_addon'
+} as const;
+export type ClusterComponentUpdateKindEnum = typeof ClusterComponentUpdateKindEnum[keyof typeof ClusterComponentUpdateKindEnum];
+
 /**
  * 
  * @export
@@ -9227,18 +9781,6 @@ export interface InviteOrgMemberInput {
      * @memberof InviteOrgMemberInput
      */
     role: InviteOrgMemberInputRoleEnum;
-    /**
-     * 
-     * @type {Array<number>}
-     * @memberof InviteOrgMemberInput
-     */
-    teamIds?: Array<number>;
-    /**
-     * 
-     * @type {Array<number>}
-     * @memberof InviteOrgMemberInput
-     */
-    projectIds?: Array<number>;
 }
 
 
@@ -9679,23 +10221,29 @@ export interface NewAppAuthInput {
      */
     appRouteId?: number | null;
     /**
-     * 
+     * Defaults to wodby. Ignored for exemptions.
      * @type {string}
      * @memberof NewAppAuthInput
      */
-    login: string;
+    login?: string;
+    /**
+     * Omit to let Wodby generate a password, which you reveal in the dashboard. Ignored for exemptions.
+     * @type {string}
+     * @memberof NewAppAuthInput
+     */
+    password?: string;
     /**
      * 
      * @type {string}
      * @memberof NewAppAuthInput
      */
-    password: string;
+    realm?: string;
     /**
-     * 
-     * @type {string}
+     * Switch basic auth off for the given app services or route even when a wider entry covers them. Requires appServiceIds or appRouteId.
+     * @type {boolean}
      * @memberof NewAppAuthInput
      */
-    realm: string;
+    exempt?: boolean;
 }
 /**
  * 
@@ -9887,6 +10435,24 @@ export interface NewAppEnvironmentInput {
      * @memberof NewAppEnvironmentInput
      */
     access?: NewAppEnvironmentAccessInput;
+    /**
+     * Protect the whole new environment with basic auth, by default with the username wodby and a generated password revealed in Wodby. Cannot be combined with access (Private App Access).
+     * @type {boolean}
+     * @memberof NewAppEnvironmentInput
+     */
+    basicAuth?: boolean;
+    /**
+     * Username of the environment's basic auth. Requires basicAuth. Defaults to wodby.
+     * @type {string}
+     * @memberof NewAppEnvironmentInput
+     */
+    basicAuthUsername?: string;
+    /**
+     * Password of the environment's basic auth. Requires basicAuth. Omit to let Wodby generate one.
+     * @type {string}
+     * @memberof NewAppEnvironmentInput
+     */
+    basicAuthPassword?: string;
 }
 
 
@@ -10031,6 +10597,24 @@ export interface NewAppInput {
      * @memberof NewAppInput
      */
     access?: NewAppEnvironmentAccessInput;
+    /**
+     * Protect the whole new environment with basic auth, by default with the username wodby and a generated password revealed in Wodby. Cannot be combined with access (Private App Access).
+     * @type {boolean}
+     * @memberof NewAppInput
+     */
+    basicAuth?: boolean;
+    /**
+     * Username of the environment's basic auth. Requires basicAuth. Defaults to wodby.
+     * @type {string}
+     * @memberof NewAppInput
+     */
+    basicAuthUsername?: string;
+    /**
+     * Password of the environment's basic auth. Requires basicAuth. Omit to let Wodby generate one.
+     * @type {string}
+     * @memberof NewAppInput
+     */
+    basicAuthPassword?: string;
 }
 
 
@@ -10362,6 +10946,12 @@ export interface NewAppServiceInput {
      * @memberof NewAppServiceInput
      */
     scalability?: ScalabilityInput;
+    /**
+     * Protect the service's public HTTP endpoints with their own basic auth and a generated password, or not. Omit to follow the stack service's basicAuthDefault.
+     * @type {boolean}
+     * @memberof NewAppServiceInput
+     */
+    basicAuth?: boolean;
 }
 /**
  * 
@@ -10430,6 +11020,12 @@ export interface NewAppServiceOverrideInput {
      * @memberof NewAppServiceOverrideInput
      */
     database?: AppServiceDatabaseInput;
+    /**
+     * Protect the service's public HTTP endpoints with their own basic auth and a generated password, or not. Omit to follow the stack service's basicAuthDefault.
+     * @type {boolean}
+     * @memberof NewAppServiceOverrideInput
+     */
+    basicAuth?: boolean;
 }
 /**
  * 
@@ -11287,6 +11883,12 @@ export interface NewProjectMembershipsInput {
      * @memberof NewProjectMembershipsInput
      */
     role: NewProjectMembershipsInputRoleEnum;
+    /**
+     * Required when role is custom; a custom role of the project's organization.
+     * @type {number}
+     * @memberof NewProjectMembershipsInput
+     */
+    customRoleId?: number;
 }
 
 
@@ -11296,7 +11898,10 @@ export interface NewProjectMembershipsInput {
 export const NewProjectMembershipsInputRoleEnum = {
     Read: 'read',
     Write: 'write',
-    Admin: 'admin'
+    Admin: 'admin',
+    Developer: 'developer',
+    DeveloperNonProduction: 'developer_non_production',
+    Custom: 'custom'
 } as const;
 export type NewProjectMembershipsInputRoleEnum = typeof NewProjectMembershipsInputRoleEnum[keyof typeof NewProjectMembershipsInputRoleEnum];
 
@@ -12146,6 +12751,18 @@ export interface OrgCapabilities {
      * @memberof OrgCapabilities
      */
     wodbyCloud: boolean;
+    /**
+     * Whether the organization's plan includes vulnerability scanning of deployed builds.
+     * @type {boolean}
+     * @memberof OrgCapabilities
+     */
+    vulnerabilityScanning: boolean;
+    /**
+     * Whether the organization's plan includes pull request preview environments.
+     * @type {boolean}
+     * @memberof OrgCapabilities
+     */
+    previewEnvironments: boolean;
 }
 /**
  * 
@@ -12238,6 +12855,49 @@ export const OrgMembershipRoleInputRoleEnum = {
     Owner: 'owner'
 } as const;
 export type OrgMembershipRoleInputRoleEnum = typeof OrgMembershipRoleInputRoleEnum[keyof typeof OrgMembershipRoleInputRoleEnum];
+
+/**
+ * 
+ * @export
+ * @interface OrgMembershipTeamsInput
+ */
+export interface OrgMembershipTeamsInput {
+    /**
+     * The complete team list of the member.
+     * @type {Array<OrgMembershipTeamsInputTeamsInner>}
+     * @memberof OrgMembershipTeamsInput
+     */
+    teams: Array<OrgMembershipTeamsInputTeamsInner>;
+}
+/**
+ * 
+ * @export
+ * @interface OrgMembershipTeamsInputTeamsInner
+ */
+export interface OrgMembershipTeamsInputTeamsInner {
+    /**
+     * 
+     * @type {number}
+     * @memberof OrgMembershipTeamsInputTeamsInner
+     */
+    teamId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgMembershipTeamsInputTeamsInner
+     */
+    role: OrgMembershipTeamsInputTeamsInnerRoleEnum;
+}
+
+
+/**
+ * @export
+ */
+export const OrgMembershipTeamsInputTeamsInnerRoleEnum = {
+    Member: 'member',
+    Leader: 'leader'
+} as const;
+export type OrgMembershipTeamsInputTeamsInnerRoleEnum = typeof OrgMembershipTeamsInputTeamsInnerRoleEnum[keyof typeof OrgMembershipTeamsInputTeamsInnerRoleEnum];
 
 /**
  * 
@@ -12621,6 +13281,169 @@ export interface OrgSubscriptionPlanDetails {
 /**
  * 
  * @export
+ * @interface OrgUsageItem
+ */
+export interface OrgUsageItem {
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgUsageItem
+     */
+    item: OrgUsageItemItemEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgUsageItem
+     */
+    title: string;
+    /**
+     * Usage in unit over the period.
+     * @type {number}
+     * @memberof OrgUsageItem
+     */
+    quantity: number;
+    /**
+     * service-hour, minute, GB-hour, or USD for Wodby Cloud usage.
+     * @type {string}
+     * @memberof OrgUsageItem
+     */
+    unit: string;
+    /**
+     * Quantity at the public list price in USD, before included usage and discounts.
+     * @type {number}
+     * @memberof OrgUsageItem
+     */
+    amount: number;
+    /**
+     * This entry's share of what the invoices charged for the item's usage in the period, in USD before tax: the invoiced amount after included usage, discounts, and prorations, split between projects in proportion to amount. An item invoiced without recorded usage is shared to the organization row. Null while the invoiced amount is unknown.
+     * @type {number}
+     * @memberof OrgUsageItem
+     */
+    invoiceShare: number | null;
+}
+
+
+/**
+ * @export
+ */
+export const OrgUsageItemItemEnum = {
+    AppServices: 'app_services',
+    CiMinutes: 'ci_minutes',
+    RegistryStorage: 'registry_storage',
+    BlobStorage: 'blob_storage',
+    WodbyCloud: 'wodby_cloud',
+    Other: 'other'
+} as const;
+export type OrgUsageItemItemEnum = typeof OrgUsageItemItemEnum[keyof typeof OrgUsageItemItemEnum];
+
+/**
+ * 
+ * @export
+ * @interface OrgUsagePeriod
+ */
+export interface OrgUsagePeriod {
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgUsagePeriod
+     */
+    start: string;
+    /**
+     * Where the period ends. A past period ends where the next one starts; a plan change starts a new period early.
+     * @type {string}
+     * @memberof OrgUsagePeriod
+     */
+    end: string;
+    /**
+     * The subscription's current period, whose usage is still growing.
+     * @type {boolean}
+     * @memberof OrgUsagePeriod
+     */
+    current: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface OrgUsageProject
+ */
+export interface OrgUsageProject {
+    /**
+     * Null for usage of organization-owned resources and usage without a project.
+     * @type {number}
+     * @memberof OrgUsageProject
+     */
+    projectId: number | null;
+    /**
+     * The project name, empty for the organization row and deleted projects.
+     * @type {string}
+     * @memberof OrgUsageProject
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgUsageProject
+     */
+    title: string;
+    /**
+     * The project no longer exists. Its recorded usage stays in the report.
+     * @type {boolean}
+     * @memberof OrgUsageProject
+     */
+    deleted: boolean;
+    /**
+     * Total of the items at the public list price in USD.
+     * @type {number}
+     * @memberof OrgUsageProject
+     */
+    amount: number;
+    /**
+     * Total of the items' invoice shares in USD before tax, null while the invoiced amount is unknown.
+     * @type {number}
+     * @memberof OrgUsageProject
+     */
+    invoiceShare: number | null;
+    /**
+     * 
+     * @type {Array<OrgUsageItem>}
+     * @memberof OrgUsageProject
+     */
+    items: Array<OrgUsageItem>;
+}
+/**
+ * 
+ * @export
+ * @interface OrgUsageReport
+ */
+export interface OrgUsageReport {
+    /**
+     * 
+     * @type {OrgUsagePeriod}
+     * @memberof OrgUsageReport
+     */
+    period: OrgUsagePeriod;
+    /**
+     * Total of all projects at the public list price in USD.
+     * @type {number}
+     * @memberof OrgUsageReport
+     */
+    amount: number;
+    /**
+     * What the invoices charged for the report's items in the period, in USD before tax. Null while it is unknown: for the current period, a period that was not invoiced, or while an invoice is a draft.
+     * @type {number}
+     * @memberof OrgUsageReport
+     */
+    invoiceAmount: number | null;
+    /**
+     * Projects ordered by title, with the organization row last.
+     * @type {Array<OrgUsageProject>}
+     * @memberof OrgUsageReport
+     */
+    projects: Array<OrgUsageProject>;
+}
+/**
+ * 
+ * @export
  * @interface ProblemDetails
  */
 export interface ProblemDetails {
@@ -12778,6 +13601,12 @@ export interface ProjectMembership {
      */
     role: ProjectMembershipRoleEnum;
     /**
+     * The custom role when role is custom.
+     * @type {number}
+     * @memberof ProjectMembership
+     */
+    customRoleId?: number | null;
+    /**
      * 
      * @type {string}
      * @memberof ProjectMembership
@@ -12798,7 +13627,10 @@ export interface ProjectMembership {
 export const ProjectMembershipRoleEnum = {
     Read: 'read',
     Write: 'write',
-    Admin: 'admin'
+    Admin: 'admin',
+    Developer: 'developer',
+    DeveloperNonProduction: 'developer_non_production',
+    Custom: 'custom'
 } as const;
 export type ProjectMembershipRoleEnum = typeof ProjectMembershipRoleEnum[keyof typeof ProjectMembershipRoleEnum];
 
@@ -12814,6 +13646,12 @@ export interface ProjectMembershipRoleInput {
      * @memberof ProjectMembershipRoleInput
      */
     role: ProjectMembershipRoleInputRoleEnum;
+    /**
+     * Required when role is custom; a custom role of the project's organization.
+     * @type {number}
+     * @memberof ProjectMembershipRoleInput
+     */
+    customRoleId?: number;
 }
 
 
@@ -12823,10 +13661,204 @@ export interface ProjectMembershipRoleInput {
 export const ProjectMembershipRoleInputRoleEnum = {
     Read: 'read',
     Write: 'write',
-    Admin: 'admin'
+    Admin: 'admin',
+    Developer: 'developer',
+    DeveloperNonProduction: 'developer_non_production',
+    Custom: 'custom'
 } as const;
 export type ProjectMembershipRoleInputRoleEnum = typeof ProjectMembershipRoleInputRoleEnum[keyof typeof ProjectMembershipRoleInputRoleEnum];
 
+/**
+ * 
+ * @export
+ * @interface ProjectPermission
+ */
+export interface ProjectPermission {
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectPermission
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectPermission
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectPermission
+     */
+    description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectPermission
+     */
+    scope: ProjectPermissionScopeEnum;
+    /**
+     * Every project role grants it, so it cannot be removed from a custom role.
+     * @type {boolean}
+     * @memberof ProjectPermission
+     */
+    alwaysGranted: boolean;
+}
+
+
+/**
+ * @export
+ */
+export const ProjectPermissionScopeEnum = {
+    Project: 'project',
+    Environment: 'environment'
+} as const;
+export type ProjectPermissionScopeEnum = typeof ProjectPermissionScopeEnum[keyof typeof ProjectPermissionScopeEnum];
+
+/**
+ * 
+ * @export
+ * @interface ProjectRole
+ */
+export interface ProjectRole {
+    /**
+     * Custom role ID; absent for system roles.
+     * @type {number}
+     * @memberof ProjectRole
+     */
+    id?: number | null;
+    /**
+     * The system role, or custom.
+     * @type {string}
+     * @memberof ProjectRole
+     */
+    role: ProjectRoleRoleEnum;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ProjectRole
+     */
+    system: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectRole
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectRole
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectRole
+     */
+    description: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ProjectRole
+     */
+    projectPermissions: Array<string>;
+    /**
+     * Environment permissions by environment type (prod, staging, test, dev, feature).
+     * @type {{ [key: string]: Array<string>; }}
+     * @memberof ProjectRole
+     */
+    envPermissions: { [key: string]: Array<string>; };
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ProjectRole
+     */
+    assignableToTeams: boolean;
+    /**
+     * Whether memberships with this system role can turn on runtime secret reveal.
+     * @type {boolean}
+     * @memberof ProjectRole
+     */
+    supportsRuntimeSecretReveal: boolean;
+    /**
+     * Project memberships holding a custom role. Visible to organization owners, admins and support.
+     * @type {number}
+     * @memberof ProjectRole
+     */
+    membershipCount: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectRole
+     */
+    createdAt?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectRole
+     */
+    updatedAt?: string | null;
+}
+
+
+/**
+ * @export
+ */
+export const ProjectRoleRoleEnum = {
+    Read: 'read',
+    Write: 'write',
+    Admin: 'admin',
+    Developer: 'developer',
+    DeveloperNonProduction: 'developer_non_production',
+    Custom: 'custom'
+} as const;
+export type ProjectRoleRoleEnum = typeof ProjectRoleRoleEnum[keyof typeof ProjectRoleRoleEnum];
+
+/**
+ * 
+ * @export
+ * @interface ProjectRoleInput
+ */
+export interface ProjectRoleInput {
+    /**
+     * Used when creating a role. Optional for API-key requests; defaults to the API key's organization.
+     * @type {number}
+     * @memberof ProjectRoleInput
+     */
+    orgId?: number;
+    /**
+     * Lowercase letters, digits, dashes or underscores; unique in the organization.
+     * @type {string}
+     * @memberof ProjectRoleInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectRoleInput
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProjectRoleInput
+     */
+    description?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ProjectRoleInput
+     */
+    projectPermissions: Array<string>;
+    /**
+     * Environment permissions by environment type (prod, staging, test, dev, feature).
+     * @type {{ [key: string]: Array<string>; }}
+     * @memberof ProjectRoleInput
+     */
+    envPermissions: { [key: string]: Array<string>; };
+}
 /**
  * 
  * @export
@@ -13264,6 +14296,110 @@ export type ResolvedServiceConfigStatusEnum = typeof ResolvedServiceConfigStatus
 /**
  * 
  * @export
+ * @interface ResourcePreset
+ */
+export interface ResourcePreset {
+    /**
+     * Set only for an organization's custom presets.
+     * @type {number}
+     * @memberof ResourcePreset
+     */
+    id?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResourcePreset
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResourcePreset
+     */
+    title: string;
+    /**
+     * Requested CPU in millicores.
+     * @type {number}
+     * @memberof ResourcePreset
+     */
+    requestCPU?: number | null;
+    /**
+     * Requested memory in MiB.
+     * @type {number}
+     * @memberof ResourcePreset
+     */
+    requestMem?: number | null;
+    /**
+     * CPU limit in millicores.
+     * @type {number}
+     * @memberof ResourcePreset
+     */
+    limitCPU?: number | null;
+    /**
+     * Memory limit in MiB.
+     * @type {number}
+     * @memberof ResourcePreset
+     */
+    limitMem?: number | null;
+    /**
+     * Wodby's own presets, whose values never change.
+     * @type {boolean}
+     * @memberof ResourcePreset
+     */
+    system: boolean;
+}
+/**
+ * Set at least one value. CPU is in millicores (multiples of 10), memory in MiB (multiples of 16).
+ * @export
+ * @interface ResourcePresetInput
+ */
+export interface ResourcePresetInput {
+    /**
+     * Used when creating a preset. Optional for API-key requests; defaults to the API key's organization.
+     * @type {number}
+     * @memberof ResourcePresetInput
+     */
+    orgId?: number;
+    /**
+     * Lowercase letters, digits and dashes; unique in the organization and not the name of a Wodby preset.
+     * @type {string}
+     * @memberof ResourcePresetInput
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResourcePresetInput
+     */
+    title: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ResourcePresetInput
+     */
+    requestCPU?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof ResourcePresetInput
+     */
+    requestMem?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof ResourcePresetInput
+     */
+    limitCPU?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof ResourcePresetInput
+     */
+    limitMem?: number | null;
+}
+/**
+ * 
+ * @export
  * @interface ResourceProjectShare
  */
 export interface ResourceProjectShare {
@@ -13353,7 +14489,7 @@ export interface ResourceSharingInput {
      */
     ownerProjectId?: number | null;
     /**
-     * The complete list of project shares. A project left out loses its share. The owning project always keeps write access. You need write access to every project whose share you add or remove.
+     * The complete list of project shares. A project left out loses its share. The owning project always keeps write access. You need Admin access to every project whose share you add or remove.
      * @type {Array<ProjectShareInput>}
      * @memberof ResourceSharingInput
      */
@@ -13400,6 +14536,12 @@ export interface ResourcesInput {
      * @memberof ResourcesInput
      */
     container?: string | null;
+    /**
+     * Name of a Wodby preset or of a custom preset of the organization, from listResourcePresets. Its values fill the CPU and memory fields this input leaves out; the values are stored, not the preset.
+     * @type {string}
+     * @memberof ResourcesInput
+     */
+    preset?: string | null;
     /**
      * 
      * @type {number}
@@ -14022,6 +15164,12 @@ export interface ServiceManifest {
      * @memberof ServiceManifest
      */
     scalable: boolean;
+    /**
+     * Whether the service asks for its public HTTP endpoints to be protected with basic auth by default.
+     * @type {boolean}
+     * @memberof ServiceManifest
+     */
+    basicAuth?: boolean;
     /**
      * 
      * @type {Array<ServiceIntegrationRequirement>}
@@ -15203,6 +16351,18 @@ export interface StackService {
      */
     required: boolean;
     /**
+     * Whether the stack overrides the service's basic auth default.
+     * @type {string}
+     * @memberof StackService
+     */
+    basicAuthOverride: StackServiceBasicAuthOverrideEnum;
+    /**
+     * Whether new app services of this stack service get their own basic auth entry by default. Always false without a public HTTP endpoint.
+     * @type {boolean}
+     * @memberof StackService
+     */
+    basicAuthDefault: boolean;
+    /**
      * 
      * @type {number}
      * @memberof StackService
@@ -15293,6 +16453,18 @@ export interface StackService {
      */
     updatedAt: string;
 }
+
+
+/**
+ * @export
+ */
+export const StackServiceBasicAuthOverrideEnum = {
+    Inherit: 'inherit',
+    Enabled: 'enabled',
+    Disabled: 'disabled'
+} as const;
+export type StackServiceBasicAuthOverrideEnum = typeof StackServiceBasicAuthOverrideEnum[keyof typeof StackServiceBasicAuthOverrideEnum];
+
 /**
  * 
  * @export
@@ -15649,6 +16821,12 @@ export interface StackServiceInput {
      */
     required?: boolean | null;
     /**
+     * Follow the service's basic auth default, or protect new app services with basic auth or not.
+     * @type {string}
+     * @memberof StackServiceInput
+     */
+    basicAuthOverride?: StackServiceInputBasicAuthOverrideEnum | null;
+    /**
      * 
      * @type {boolean}
      * @memberof StackServiceInput
@@ -15685,6 +16863,18 @@ export interface StackServiceInput {
      */
     deployment?: ServiceDeploymentConfigurationInput;
 }
+
+
+/**
+ * @export
+ */
+export const StackServiceInputBasicAuthOverrideEnum = {
+    Inherit: 'inherit',
+    Enabled: 'enabled',
+    Disabled: 'disabled'
+} as const;
+export type StackServiceInputBasicAuthOverrideEnum = typeof StackServiceInputBasicAuthOverrideEnum[keyof typeof StackServiceInputBasicAuthOverrideEnum];
+
 /**
  * 
  * @export
@@ -17137,11 +18327,11 @@ export interface UpdateAppAuthInput {
      */
     appRouteId?: number | null;
     /**
-     * 
+     * Omit to keep the current login.
      * @type {string}
      * @memberof UpdateAppAuthInput
      */
-    login: string;
+    login?: string;
     /**
      * Replaces the existing secret when supplied; omit to keep the current password.
      * @type {string}
@@ -17149,11 +18339,17 @@ export interface UpdateAppAuthInput {
      */
     password?: string | null;
     /**
-     * 
+     * Replace the password with a newly generated one. Ignored when password is given.
+     * @type {boolean}
+     * @memberof UpdateAppAuthInput
+     */
+    generatePassword?: boolean;
+    /**
+     * Omit to keep the current realm.
      * @type {string}
      * @memberof UpdateAppAuthInput
      */
-    realm: string;
+    realm?: string;
 }
 /**
  * 
@@ -17479,6 +18675,19 @@ export const UpdateBackupPresetInputBlobStorageRegionEnum = {
 } as const;
 export type UpdateBackupPresetInputBlobStorageRegionEnum = typeof UpdateBackupPresetInputBlobStorageRegionEnum[keyof typeof UpdateBackupPresetInputBlobStorageRegionEnum];
 
+/**
+ * 
+ * @export
+ * @interface UpdateClusterComponentRequest
+ */
+export interface UpdateClusterComponentRequest {
+    /**
+     * The update's name, as listed for the cluster.
+     * @type {string}
+     * @memberof UpdateClusterComponentRequest
+     */
+    name: string;
+}
 /**
  * 
  * @export
@@ -17967,6 +19176,73 @@ export interface VolumeSizeInput {
      */
     storageClassName?: string | null;
 }
+/**
+ * 
+ * @export
+ * @interface VulnerabilityCounts
+ */
+export interface VulnerabilityCounts {
+    /**
+     * 
+     * @type {number}
+     * @memberof VulnerabilityCounts
+     */
+    critical: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VulnerabilityCounts
+     */
+    high: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VulnerabilityCounts
+     */
+    medium: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VulnerabilityCounts
+     */
+    low: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VulnerabilityCounts
+     */
+    negligible: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VulnerabilityCounts
+     */
+    unknown: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof VulnerabilityCounts
+     */
+    total: number;
+    /**
+     * Findings with a released fix.
+     * @type {number}
+     * @memberof VulnerabilityCounts
+     */
+    fixable: number;
+}
+
+/**
+ * completed or failed describe the latest scan attempt; pending means a deployed image was not scanned yet.
+ * @export
+ */
+export const VulnerabilityScanStatus = {
+    Pending: 'pending',
+    Completed: 'completed',
+    Failed: 'failed'
+} as const;
+export type VulnerabilityScanStatus = typeof VulnerabilityScanStatus[keyof typeof VulnerabilityScanStatus];
+
 /**
  * 
  * @export

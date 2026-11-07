@@ -255,8 +255,8 @@ export interface AppEnvironmentsApiInterface {
     cleanupAppEnvironmentMigration(requestParameters: CleanupAppEnvironmentMigrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironmentMigrationOperationResult>;
 
     /**
-     * Creates external access for the app environment identified by the path. An active paid subscription is required.
-     * @summary Create app environment access
+     * Creates Private App Access for the app environment identified by the path. An active paid subscription is required.
+     * @summary Create Private App Access
      * @param {number} id 
      * @param {NewAppAccessInput} newAppAccessInput 
      * @param {*} [options] Override http request option.
@@ -266,8 +266,8 @@ export interface AppEnvironmentsApiInterface {
     createAppAccessRaw(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessOperationResult>>;
 
     /**
-     * Creates external access for the app environment identified by the path. An active paid subscription is required.
-     * Create app environment access
+     * Creates Private App Access for the app environment identified by the path. An active paid subscription is required.
+     * Create Private App Access
      */
     createAppAccess(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult>;
 
@@ -304,8 +304,8 @@ export interface AppEnvironmentsApiInterface {
     createAppEnvironment(requestParameters: CreateAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironment>;
 
     /**
-     * Removes app access and returns the cleanup task identifier.
-     * @summary Delete app access
+     * Removes Private App Access and returns the cleanup task identifier.
+     * @summary Delete Private App Access
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -314,8 +314,8 @@ export interface AppEnvironmentsApiInterface {
     deleteAppAccessRaw(requestParameters: DeleteAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
-     * Removes app access and returns the cleanup task identifier.
-     * Delete app access
+     * Removes Private App Access and returns the cleanup task identifier.
+     * Delete Private App Access
      */
     deleteAppAccess(requestParameters: DeleteAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
@@ -353,8 +353,8 @@ export interface AppEnvironmentsApiInterface {
     deleteAppEnvironment(requestParameters: DeleteAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * Returns one app access configuration.
-     * @summary Get app access
+     * Returns one Private App Access configuration.
+     * @summary Get Private App Access
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -363,8 +363,8 @@ export interface AppEnvironmentsApiInterface {
     getAppAccessRaw(requestParameters: GetAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccess>>;
 
     /**
-     * Returns one app access configuration.
-     * Get app access
+     * Returns one Private App Access configuration.
+     * Get Private App Access
      */
     getAppAccess(requestParameters: GetAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccess>;
 
@@ -401,8 +401,8 @@ export interface AppEnvironmentsApiInterface {
     getAppEnvironment(requestParameters: GetAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironment>;
 
     /**
-     * Returns the external access configuration for the app environment identified by the path.
-     * @summary Get app environment access
+     * Returns the Private App Access configuration of the app environment identified by the path.
+     * @summary Get app environment Private App Access
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -411,8 +411,8 @@ export interface AppEnvironmentsApiInterface {
     getAppEnvironmentAccessRaw(requestParameters: GetAppEnvironmentAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccess>>;
 
     /**
-     * Returns the external access configuration for the app environment identified by the path.
-     * Get app environment access
+     * Returns the Private App Access configuration of the app environment identified by the path.
+     * Get app environment Private App Access
      */
     getAppEnvironmentAccess(requestParameters: GetAppEnvironmentAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccess>;
 
@@ -534,7 +534,7 @@ export interface AppEnvironmentsApiInterface {
 
     /**
      * Returns cleanup records for exactly one app environment or integration.
-     * @summary List app-access cleanups
+     * @summary List Private App Access cleanups
      * @param {number} [appInstanceId] 
      * @param {number} [integrationId] 
      * @param {*} [options] Override http request option.
@@ -545,7 +545,7 @@ export interface AppEnvironmentsApiInterface {
 
     /**
      * Returns cleanup records for exactly one app environment or integration.
-     * List app-access cleanups
+     * List Private App Access cleanups
      */
     listAppAccessCleanups(requestParameters: ListAppAccessCleanupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppAccessCleanup>>;
 
@@ -636,8 +636,8 @@ export interface AppEnvironmentsApiInterface {
     pauseWorkspace(requestParameters: PauseWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task>;
 
     /**
-     * Validates a proposed app-access configuration before an app environment or access resource is created. An active paid subscription is required.
-     * @summary Preflight app environment access
+     * Validates a proposed Private App Access configuration before an app environment or access resource is created. An active paid subscription is required.
+     * @summary Preflight Private App Access
      * @param {NewAppEnvironmentAccessInput} newAppEnvironmentAccessInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -646,8 +646,8 @@ export interface AppEnvironmentsApiInterface {
     preflightAppAccessRaw(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ValidationResult>>;
 
     /**
-     * Validates a proposed app-access configuration before an app environment or access resource is created. An active paid subscription is required.
-     * Preflight app environment access
+     * Validates a proposed Private App Access configuration before an app environment or access resource is created. An active paid subscription is required.
+     * Preflight Private App Access
      */
     preflightAppAccess(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidationResult>;
 
@@ -734,8 +734,8 @@ export interface AppEnvironmentsApiInterface {
     resumeWorkspace(requestParameters: ResumeWorkspaceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Task>;
 
     /**
-     * Retries a failed app-access cleanup and returns its task identifier.
-     * @summary Retry app-access cleanup
+     * Retries a failed Private App Access cleanup and returns its task identifier.
+     * @summary Retry Private App Access cleanup
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -744,8 +744,8 @@ export interface AppEnvironmentsApiInterface {
     retryAppAccessCleanupRaw(requestParameters: RetryAppAccessCleanupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
-     * Retries a failed app-access cleanup and returns its task identifier.
-     * Retry app-access cleanup
+     * Retries a failed Private App Access cleanup and returns its task identifier.
+     * Retry Private App Access cleanup
      */
     retryAppAccessCleanup(requestParameters: RetryAppAccessCleanupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
@@ -766,8 +766,8 @@ export interface AppEnvironmentsApiInterface {
     rollbackAppEnvironmentMigration(requestParameters: RollbackAppEnvironmentMigrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironmentMigrationOperationResult>;
 
     /**
-     * Updates an existing app-access configuration and starts its reconciliation task. An active paid subscription is required.
-     * @summary Update app access
+     * Updates an existing Private App Access configuration and starts its reconciliation task. An active paid subscription is required.
+     * @summary Update Private App Access
      * @param {number} id 
      * @param {UpdateAppAccessInput} updateAppAccessInput 
      * @param {*} [options] Override http request option.
@@ -777,8 +777,8 @@ export interface AppEnvironmentsApiInterface {
     updateAppAccessRaw(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessOperationResult>>;
 
     /**
-     * Updates an existing app-access configuration and starts its reconciliation task. An active paid subscription is required.
-     * Update app access
+     * Updates an existing Private App Access configuration and starts its reconciliation task. An active paid subscription is required.
+     * Update Private App Access
      */
     updateAppAccess(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult>;
 
@@ -947,8 +947,8 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Creates external access for the app environment identified by the path. An active paid subscription is required.
-     * Create app environment access
+     * Creates Private App Access for the app environment identified by the path. An active paid subscription is required.
+     * Create Private App Access
      */
     async createAppAccessRaw(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessOperationResult>> {
         if (requestParameters['id'] == null) {
@@ -987,8 +987,8 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Creates external access for the app environment identified by the path. An active paid subscription is required.
-     * Create app environment access
+     * Creates Private App Access for the app environment identified by the path. An active paid subscription is required.
+     * Create Private App Access
      */
     async createAppAccess(requestParameters: CreateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult> {
         const response = await this.createAppAccessRaw(requestParameters, initOverrides);
@@ -1080,8 +1080,8 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Removes app access and returns the cleanup task identifier.
-     * Delete app access
+     * Removes Private App Access and returns the cleanup task identifier.
+     * Delete Private App Access
      */
     async deleteAppAccessRaw(requestParameters: DeleteAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
         if (requestParameters['id'] == null) {
@@ -1110,8 +1110,8 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Removes app access and returns the cleanup task identifier.
-     * Delete app access
+     * Removes Private App Access and returns the cleanup task identifier.
+     * Delete Private App Access
      */
     async deleteAppAccess(requestParameters: DeleteAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.deleteAppAccessRaw(requestParameters, initOverrides);
@@ -1201,8 +1201,8 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Returns one app access configuration.
-     * Get app access
+     * Returns one Private App Access configuration.
+     * Get Private App Access
      */
     async getAppAccessRaw(requestParameters: GetAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccess>> {
         if (requestParameters['id'] == null) {
@@ -1231,8 +1231,8 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Returns one app access configuration.
-     * Get app access
+     * Returns one Private App Access configuration.
+     * Get Private App Access
      */
     async getAppAccess(requestParameters: GetAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccess> {
         const response = await this.getAppAccessRaw(requestParameters, initOverrides);
@@ -1318,8 +1318,8 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Returns the external access configuration for the app environment identified by the path.
-     * Get app environment access
+     * Returns the Private App Access configuration of the app environment identified by the path.
+     * Get app environment Private App Access
      */
     async getAppEnvironmentAccessRaw(requestParameters: GetAppEnvironmentAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccess>> {
         if (requestParameters['id'] == null) {
@@ -1348,8 +1348,8 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Returns the external access configuration for the app environment identified by the path.
-     * Get app environment access
+     * Returns the Private App Access configuration of the app environment identified by the path.
+     * Get app environment Private App Access
      */
     async getAppEnvironmentAccess(requestParameters: GetAppEnvironmentAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccess> {
         const response = await this.getAppEnvironmentAccessRaw(requestParameters, initOverrides);
@@ -1657,7 +1657,7 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
 
     /**
      * Returns cleanup records for exactly one app environment or integration.
-     * List app-access cleanups
+     * List Private App Access cleanups
      */
     async listAppAccessCleanupsRaw(requestParameters: ListAppAccessCleanupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppAccessCleanup>>> {
         const queryParameters: any = {};
@@ -1688,7 +1688,7 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
 
     /**
      * Returns cleanup records for exactly one app environment or integration.
-     * List app-access cleanups
+     * List Private App Access cleanups
      */
     async listAppAccessCleanups(requestParameters: ListAppAccessCleanupsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppAccessCleanup>> {
         const response = await this.listAppAccessCleanupsRaw(requestParameters, initOverrides);
@@ -1926,8 +1926,8 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Validates a proposed app-access configuration before an app environment or access resource is created. An active paid subscription is required.
-     * Preflight app environment access
+     * Validates a proposed Private App Access configuration before an app environment or access resource is created. An active paid subscription is required.
+     * Preflight Private App Access
      */
     async preflightAppAccessRaw(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ValidationResult>> {
         if (requestParameters['newAppEnvironmentAccessInput'] == null) {
@@ -1959,8 +1959,8 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Validates a proposed app-access configuration before an app environment or access resource is created. An active paid subscription is required.
-     * Preflight app environment access
+     * Validates a proposed Private App Access configuration before an app environment or access resource is created. An active paid subscription is required.
+     * Preflight Private App Access
      */
     async preflightAppAccess(requestParameters: PreflightAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidationResult> {
         const response = await this.preflightAppAccessRaw(requestParameters, initOverrides);
@@ -2176,8 +2176,8 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Retries a failed app-access cleanup and returns its task identifier.
-     * Retry app-access cleanup
+     * Retries a failed Private App Access cleanup and returns its task identifier.
+     * Retry Private App Access cleanup
      */
     async retryAppAccessCleanupRaw(requestParameters: RetryAppAccessCleanupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
         if (requestParameters['id'] == null) {
@@ -2206,8 +2206,8 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Retries a failed app-access cleanup and returns its task identifier.
-     * Retry app-access cleanup
+     * Retries a failed Private App Access cleanup and returns its task identifier.
+     * Retry Private App Access cleanup
      */
     async retryAppAccessCleanup(requestParameters: RetryAppAccessCleanupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.retryAppAccessCleanupRaw(requestParameters, initOverrides);
@@ -2254,8 +2254,8 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Updates an existing app-access configuration and starts its reconciliation task. An active paid subscription is required.
-     * Update app access
+     * Updates an existing Private App Access configuration and starts its reconciliation task. An active paid subscription is required.
+     * Update Private App Access
      */
     async updateAppAccessRaw(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessOperationResult>> {
         if (requestParameters['id'] == null) {
@@ -2294,8 +2294,8 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Updates an existing app-access configuration and starts its reconciliation task. An active paid subscription is required.
-     * Update app access
+     * Updates an existing Private App Access configuration and starts its reconciliation task. An active paid subscription is required.
+     * Update Private App Access
      */
     async updateAppAccess(requestParameters: UpdateAppAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessOperationResult> {
         const response = await this.updateAppAccessRaw(requestParameters, initOverrides);

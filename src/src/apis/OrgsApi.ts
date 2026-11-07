@@ -20,15 +20,31 @@ import type {
   Org,
   OrgSettingsInput,
   OrgSubscriptionDetails,
+  OrgUsagePeriod,
+  OrgUsageReport,
   ProblemDetails,
   UpdateOrgRequest,
 } from '../models/index';
+
+export interface ExportOrgUsageCSVRequest {
+    id: number;
+    periodStart?: string;
+}
 
 export interface GetOrgRequest {
     id: number;
 }
 
 export interface GetOrgSubscriptionRequest {
+    id: number;
+}
+
+export interface GetOrgUsageRequest {
+    id: number;
+    periodStart?: string;
+}
+
+export interface ListOrgUsagePeriodsRequest {
     id: number;
 }
 
@@ -54,6 +70,23 @@ export interface UpdateOrgSettingsRequest {
  * @interface OrgsApiInterface
  */
 export interface OrgsApiInterface {
+    /**
+     * Returns the usage report as CSV with one row per project and billing item and the columns period_start, period_end, project_id, project_name, project_title, item, quantity, unit, amount_usd, and invoice_share_usd, which is empty while the invoiced amount is unknown. Requires billing-view access to the organization.
+     * @summary Export org usage by project as CSV
+     * @param {number} id 
+     * @param {string} [periodStart] Start of the billing period as listed by listOrgUsagePeriods. Defaults to the current period.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrgsApiInterface
+     */
+    exportOrgUsageCSVRaw(requestParameters: ExportOrgUsageCSVRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
+
+    /**
+     * Returns the usage report as CSV with one row per project and billing item and the columns period_start, period_end, project_id, project_name, project_title, item, quantity, unit, amount_usd, and invoice_share_usd, which is empty while the invoiced amount is unknown. Requires billing-view access to the organization.
+     * Export org usage by project as CSV
+     */
+    exportOrgUsageCSV(requestParameters: ExportOrgUsageCSVRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
+
     /**
      * Returns the org identified by the request path.
      * @summary Get org
@@ -85,6 +118,39 @@ export interface OrgsApiInterface {
      * Get org subscription
      */
     getOrgSubscription(requestParameters: GetOrgSubscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgSubscriptionDetails>;
+
+    /**
+     * Returns the organization\'s usage per project and billing item in one billing period, for internal chargeback. Amounts are public list prices in USD before included usage and discounts, so they show each project\'s share of usage. For a past period whose invoices are final, invoiceShare splits what the invoices charged per item between projects in proportion to their amounts. Usage of organization-owned resources and usage without a project is reported in one row without a project ID. Requires billing-view access to the organization.
+     * @summary Get org usage by project
+     * @param {number} id 
+     * @param {string} [periodStart] Start of the billing period as listed by listOrgUsagePeriods. Defaults to the current period.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrgsApiInterface
+     */
+    getOrgUsageRaw(requestParameters: GetOrgUsageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgUsageReport>>;
+
+    /**
+     * Returns the organization\'s usage per project and billing item in one billing period, for internal chargeback. Amounts are public list prices in USD before included usage and discounts, so they show each project\'s share of usage. For a past period whose invoices are final, invoiceShare splits what the invoices charged per item between projects in proportion to their amounts. Usage of organization-owned resources and usage without a project is reported in one row without a project ID. Requires billing-view access to the organization.
+     * Get org usage by project
+     */
+    getOrgUsage(requestParameters: GetOrgUsageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgUsageReport>;
+
+    /**
+     * Returns the billing periods available in the usage report, newest first, including the current period. Requires billing-view access to the organization.
+     * @summary List org usage periods
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrgsApiInterface
+     */
+    listOrgUsagePeriodsRaw(requestParameters: ListOrgUsagePeriodsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<OrgUsagePeriod>>>;
+
+    /**
+     * Returns the billing periods available in the usage report, newest first, including the current period. Requires billing-view access to the organization.
+     * List org usage periods
+     */
+    listOrgUsagePeriods(requestParameters: ListOrgUsagePeriodsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<OrgUsagePeriod>>;
 
     /**
      * Returns orgs matching the request filters.
@@ -158,6 +224,53 @@ export interface OrgsApiInterface {
  * 
  */
 export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
+
+    /**
+     * Returns the usage report as CSV with one row per project and billing item and the columns period_start, period_end, project_id, project_name, project_title, item, quantity, unit, amount_usd, and invoice_share_usd, which is empty while the invoiced amount is unknown. Requires billing-view access to the organization.
+     * Export org usage by project as CSV
+     */
+    async exportOrgUsageCSVRaw(requestParameters: ExportOrgUsageCSVRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling exportOrgUsageCSV().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['periodStart'] != null) {
+            queryParameters['periodStart'] = requestParameters['periodStart'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/orgs/{id}/usage/csv`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<string>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
+    }
+
+    /**
+     * Returns the usage report as CSV with one row per project and billing item and the columns period_start, period_end, project_id, project_name, project_title, item, quantity, unit, amount_usd, and invoice_share_usd, which is empty while the invoiced amount is unknown. Requires billing-view access to the organization.
+     * Export org usage by project as CSV
+     */
+    async exportOrgUsageCSV(requestParameters: ExportOrgUsageCSVRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.exportOrgUsageCSVRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Returns the org identified by the request path.
@@ -234,6 +347,88 @@ export class OrgsApi extends runtime.BaseAPI implements OrgsApiInterface {
      */
     async getOrgSubscription(requestParameters: GetOrgSubscriptionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgSubscriptionDetails> {
         const response = await this.getOrgSubscriptionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the organization\'s usage per project and billing item in one billing period, for internal chargeback. Amounts are public list prices in USD before included usage and discounts, so they show each project\'s share of usage. For a past period whose invoices are final, invoiceShare splits what the invoices charged per item between projects in proportion to their amounts. Usage of organization-owned resources and usage without a project is reported in one row without a project ID. Requires billing-view access to the organization.
+     * Get org usage by project
+     */
+    async getOrgUsageRaw(requestParameters: GetOrgUsageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgUsageReport>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getOrgUsage().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['periodStart'] != null) {
+            queryParameters['periodStart'] = requestParameters['periodStart'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/orgs/{id}/usage`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the organization\'s usage per project and billing item in one billing period, for internal chargeback. Amounts are public list prices in USD before included usage and discounts, so they show each project\'s share of usage. For a past period whose invoices are final, invoiceShare splits what the invoices charged per item between projects in proportion to their amounts. Usage of organization-owned resources and usage without a project is reported in one row without a project ID. Requires billing-view access to the organization.
+     * Get org usage by project
+     */
+    async getOrgUsage(requestParameters: GetOrgUsageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgUsageReport> {
+        const response = await this.getOrgUsageRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the billing periods available in the usage report, newest first, including the current period. Requires billing-view access to the organization.
+     * List org usage periods
+     */
+    async listOrgUsagePeriodsRaw(requestParameters: ListOrgUsagePeriodsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<OrgUsagePeriod>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listOrgUsagePeriods().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/orgs/{id}/usage/periods`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the billing periods available in the usage report, newest first, including the current period. Requires billing-view access to the organization.
+     * List org usage periods
+     */
+    async listOrgUsagePeriods(requestParameters: ListOrgUsagePeriodsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<OrgUsagePeriod>> {
+        const response = await this.listOrgUsagePeriodsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -134,7 +134,7 @@ export interface AgentChatsApiInterface {
     deleteAgentChat(requestParameters: DeleteAgentChatRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * Returns a chat with its messages. A tool message with approval pending is a change that waits for approval, or, for the tool ask_user, a question that waits for an answer.
+     * Returns a chat with its messages. A tool message with approval pending is a change that waits for approval, or, for the tool ask_user, a question that waits for an answer. Support members can read any chat in the organization; other members can read only their own.
      * @summary Get agent chat
      * @param {number} id 
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -145,13 +145,13 @@ export interface AgentChatsApiInterface {
     getAgentChatRaw(requestParameters: GetAgentChatRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AgentChatDetail>>;
 
     /**
-     * Returns a chat with its messages. A tool message with approval pending is a change that waits for approval, or, for the tool ask_user, a question that waits for an answer.
+     * Returns a chat with its messages. A tool message with approval pending is a change that waits for approval, or, for the tool ask_user, a question that waits for an answer. Support members can read any chat in the organization; other members can read only their own.
      * Get agent chat
      */
     getAgentChat(requestParameters: GetAgentChatRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AgentChatDetail>;
 
     /**
-     * Returns the API key user\'s chats with Wodby Agent in the organization, the most recently active first.
+     * Returns the API key user\'s chats with Wodby Agent in the organization, the most recently active first. Support members receive all members\' chats in the organization.
      * @summary List agent chats
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {*} [options] Override http request option.
@@ -161,7 +161,7 @@ export interface AgentChatsApiInterface {
     listAgentChatsRaw(requestParameters: ListAgentChatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AgentChat>>>;
 
     /**
-     * Returns the API key user\'s chats with Wodby Agent in the organization, the most recently active first.
+     * Returns the API key user\'s chats with Wodby Agent in the organization, the most recently active first. Support members receive all members\' chats in the organization.
      * List agent chats
      */
     listAgentChats(requestParameters: ListAgentChatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AgentChat>>;
@@ -392,7 +392,7 @@ export class AgentChatsApi extends runtime.BaseAPI implements AgentChatsApiInter
     }
 
     /**
-     * Returns a chat with its messages. A tool message with approval pending is a change that waits for approval, or, for the tool ask_user, a question that waits for an answer.
+     * Returns a chat with its messages. A tool message with approval pending is a change that waits for approval, or, for the tool ask_user, a question that waits for an answer. Support members can read any chat in the organization; other members can read only their own.
      * Get agent chat
      */
     async getAgentChatRaw(requestParameters: GetAgentChatRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AgentChatDetail>> {
@@ -426,7 +426,7 @@ export class AgentChatsApi extends runtime.BaseAPI implements AgentChatsApiInter
     }
 
     /**
-     * Returns a chat with its messages. A tool message with approval pending is a change that waits for approval, or, for the tool ask_user, a question that waits for an answer.
+     * Returns a chat with its messages. A tool message with approval pending is a change that waits for approval, or, for the tool ask_user, a question that waits for an answer. Support members can read any chat in the organization; other members can read only their own.
      * Get agent chat
      */
     async getAgentChat(requestParameters: GetAgentChatRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AgentChatDetail> {
@@ -435,7 +435,7 @@ export class AgentChatsApi extends runtime.BaseAPI implements AgentChatsApiInter
     }
 
     /**
-     * Returns the API key user\'s chats with Wodby Agent in the organization, the most recently active first.
+     * Returns the API key user\'s chats with Wodby Agent in the organization, the most recently active first. Support members receive all members\' chats in the organization.
      * List agent chats
      */
     async listAgentChatsRaw(requestParameters: ListAgentChatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AgentChat>>> {
@@ -462,7 +462,7 @@ export class AgentChatsApi extends runtime.BaseAPI implements AgentChatsApiInter
     }
 
     /**
-     * Returns the API key user\'s chats with Wodby Agent in the organization, the most recently active first.
+     * Returns the API key user\'s chats with Wodby Agent in the organization, the most recently active first. Support members receive all members\' chats in the organization.
      * List agent chats
      */
     async listAgentChats(requestParameters: ListAgentChatsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AgentChat>> {

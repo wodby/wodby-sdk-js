@@ -19,6 +19,7 @@ import type {
   OperationResult,
   OrgMembership,
   OrgMembershipRoleInput,
+  OrgMembershipTeamsInput,
   ProblemDetails,
 } from '../models/index';
 
@@ -41,6 +42,11 @@ export interface ListOrgMembershipsRequest {
 export interface UpdateOrgMembershipRequest {
     id: number;
     orgMembershipRoleInput: OrgMembershipRoleInput;
+}
+
+export interface UpdateOrgMembershipTeamsRequest {
+    id: number;
+    orgMembershipTeamsInput: OrgMembershipTeamsInput;
 }
 
 /**
@@ -83,7 +89,7 @@ export interface OrgMembershipsApiInterface {
     getOrgMembership(requestParameters: GetOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgMembership>;
 
     /**
-     * Invites a person by email with an organization role, optionally adding them to teams and projects. The membership has the invited status until they accept.
+     * Invites a person by email with an organization role. The membership has the invited status until they accept. Add the member to teams and projects separately.
      * @summary Invite organization member
      * @param {InviteOrgMemberInput} inviteOrgMemberInput 
      * @param {*} [options] Override http request option.
@@ -93,7 +99,7 @@ export interface OrgMembershipsApiInterface {
     inviteOrgMemberRaw(requestParameters: InviteOrgMemberRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgMembership>>;
 
     /**
-     * Invites a person by email with an organization role, optionally adding them to teams and projects. The membership has the invited status until they accept.
+     * Invites a person by email with an organization role. The membership has the invited status until they accept. Add the member to teams and projects separately.
      * Invite organization member
      */
     inviteOrgMember(requestParameters: InviteOrgMemberRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgMembership>;
@@ -130,6 +136,23 @@ export interface OrgMembershipsApiInterface {
      * Update organization member role
      */
     updateOrgMembership(requestParameters: UpdateOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgMembership>;
+
+    /**
+     * Replaces the teams an organization member belongs to, with a role in each team. Teams that are not listed lose the member. Organization owners and admins only.
+     * @summary Set organization member teams
+     * @param {number} id 
+     * @param {OrgMembershipTeamsInput} orgMembershipTeamsInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof OrgMembershipsApiInterface
+     */
+    updateOrgMembershipTeamsRaw(requestParameters: UpdateOrgMembershipTeamsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgMembership>>;
+
+    /**
+     * Replaces the teams an organization member belongs to, with a role in each team. Teams that are not listed lose the member. Organization owners and admins only.
+     * Set organization member teams
+     */
+    updateOrgMembershipTeams(requestParameters: UpdateOrgMembershipTeamsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgMembership>;
 
 }
 
@@ -217,7 +240,7 @@ export class OrgMembershipsApi extends runtime.BaseAPI implements OrgMemberships
     }
 
     /**
-     * Invites a person by email with an organization role, optionally adding them to teams and projects. The membership has the invited status until they accept.
+     * Invites a person by email with an organization role. The membership has the invited status until they accept. Add the member to teams and projects separately.
      * Invite organization member
      */
     async inviteOrgMemberRaw(requestParameters: InviteOrgMemberRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgMembership>> {
@@ -250,7 +273,7 @@ export class OrgMembershipsApi extends runtime.BaseAPI implements OrgMemberships
     }
 
     /**
-     * Invites a person by email with an organization role, optionally adding them to teams and projects. The membership has the invited status until they accept.
+     * Invites a person by email with an organization role. The membership has the invited status until they accept. Add the member to teams and projects separately.
      * Invite organization member
      */
     async inviteOrgMember(requestParameters: InviteOrgMemberRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgMembership> {
@@ -340,6 +363,55 @@ export class OrgMembershipsApi extends runtime.BaseAPI implements OrgMemberships
      */
     async updateOrgMembership(requestParameters: UpdateOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgMembership> {
         const response = await this.updateOrgMembershipRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Replaces the teams an organization member belongs to, with a role in each team. Teams that are not listed lose the member. Organization owners and admins only.
+     * Set organization member teams
+     */
+    async updateOrgMembershipTeamsRaw(requestParameters: UpdateOrgMembershipTeamsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgMembership>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateOrgMembershipTeams().'
+            );
+        }
+
+        if (requestParameters['orgMembershipTeamsInput'] == null) {
+            throw new runtime.RequiredError(
+                'orgMembershipTeamsInput',
+                'Required parameter "orgMembershipTeamsInput" was null or undefined when calling updateOrgMembershipTeams().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/org-memberships/{id}/teams`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['orgMembershipTeamsInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Replaces the teams an organization member belongs to, with a role in each team. Teams that are not listed lose the member. Organization owners and admins only.
+     * Set organization member teams
+     */
+    async updateOrgMembershipTeams(requestParameters: UpdateOrgMembershipTeamsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgMembership> {
+        const response = await this.updateOrgMembershipTeamsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -231,8 +231,8 @@ export interface IntegrationsApiInterface {
     deleteIntegration(requestParameters: DeleteIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * Returns supported app-access modes, scopes, fields, and hostname behavior for the integration.
-     * @summary Get app-access provider options
+     * Returns supported Private App Access modes, scopes, fields, and hostname behavior for the integration.
+     * @summary Get Private App Access provider options
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -241,8 +241,8 @@ export interface IntegrationsApiInterface {
     getAppAccessProviderOptionsRaw(requestParameters: GetAppAccessProviderOptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessProviderOptions>>;
 
     /**
-     * Returns supported app-access modes, scopes, fields, and hostname behavior for the integration.
-     * Get app-access provider options
+     * Returns supported Private App Access modes, scopes, fields, and hostname behavior for the integration.
+     * Get Private App Access provider options
      */
     getAppAccessProviderOptions(requestParameters: GetAppAccessProviderOptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessProviderOptions>;
 
@@ -263,7 +263,7 @@ export interface IntegrationsApiInterface {
     getIntegration(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
 
     /**
-     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool) and gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0).
+     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool), gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0) and nodeRecycling (whether a running cluster\'s worker nodes can be recycled).
      * @summary Get Kubernetes settings
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -273,7 +273,7 @@ export interface IntegrationsApiInterface {
     getIntegrationKubeSettingsRaw(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>>;
 
     /**
-     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool) and gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0).
+     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool), gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0) and nodeRecycling (whether a running cluster\'s worker nodes can be recycled).
      * Get Kubernetes settings
      */
     getIntegrationKubeSettings(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }>;
@@ -648,8 +648,8 @@ export interface IntegrationsApiInterface {
     upgradeIntegrationProviderRevision(requestParameters: UpgradeIntegrationProviderRevisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * Validates an app-access hostname against the provider settings of the integration.
-     * @summary Validate an app-access hostname
+     * Validates a Private App Access hostname against the provider settings of the integration.
+     * @summary Validate a Private App Access hostname
      * @param {number} id 
      * @param {ValidateAppAccessHostnameInput} validateAppAccessHostnameInput 
      * @param {*} [options] Override http request option.
@@ -659,8 +659,8 @@ export interface IntegrationsApiInterface {
     validateAppAccessHostnameRaw(requestParameters: ValidateAppAccessHostnameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ValidationResult>>;
 
     /**
-     * Validates an app-access hostname against the provider settings of the integration.
-     * Validate an app-access hostname
+     * Validates a Private App Access hostname against the provider settings of the integration.
+     * Validate a Private App Access hostname
      */
     validateAppAccessHostname(requestParameters: ValidateAppAccessHostnameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidationResult>;
 
@@ -802,8 +802,8 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
-     * Returns supported app-access modes, scopes, fields, and hostname behavior for the integration.
-     * Get app-access provider options
+     * Returns supported Private App Access modes, scopes, fields, and hostname behavior for the integration.
+     * Get Private App Access provider options
      */
     async getAppAccessProviderOptionsRaw(requestParameters: GetAppAccessProviderOptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppAccessProviderOptions>> {
         if (requestParameters['id'] == null) {
@@ -832,8 +832,8 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
-     * Returns supported app-access modes, scopes, fields, and hostname behavior for the integration.
-     * Get app-access provider options
+     * Returns supported Private App Access modes, scopes, fields, and hostname behavior for the integration.
+     * Get Private App Access provider options
      */
     async getAppAccessProviderOptions(requestParameters: GetAppAccessProviderOptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccessProviderOptions> {
         const response = await this.getAppAccessProviderOptionsRaw(requestParameters, initOverrides);
@@ -880,7 +880,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
-     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool) and gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0).
+     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool), gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0) and nodeRecycling (whether a running cluster\'s worker nodes can be recycled).
      * Get Kubernetes settings
      */
     async getIntegrationKubeSettingsRaw(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>> {
@@ -910,7 +910,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
-     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool) and gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0).
+     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool), gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0) and nodeRecycling (whether a running cluster\'s worker nodes can be recycled).
      * Get Kubernetes settings
      */
     async getIntegrationKubeSettings(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }> {
@@ -1921,8 +1921,8 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
-     * Validates an app-access hostname against the provider settings of the integration.
-     * Validate an app-access hostname
+     * Validates a Private App Access hostname against the provider settings of the integration.
+     * Validate a Private App Access hostname
      */
     async validateAppAccessHostnameRaw(requestParameters: ValidateAppAccessHostnameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ValidationResult>> {
         if (requestParameters['id'] == null) {
@@ -1961,8 +1961,8 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
-     * Validates an app-access hostname against the provider settings of the integration.
-     * Validate an app-access hostname
+     * Validates a Private App Access hostname against the provider settings of the integration.
+     * Validate a Private App Access hostname
      */
     async validateAppAccessHostname(requestParameters: ValidateAppAccessHostnameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ValidationResult> {
         const response = await this.validateAppAccessHostnameRaw(requestParameters, initOverrides);

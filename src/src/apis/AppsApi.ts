@@ -63,6 +63,10 @@ export interface ListAppsRequest {
     clusterApp?: boolean;
 }
 
+export interface RegenerateAppPreviewPasswordRequest {
+    id: number;
+}
+
 export interface UpdateAppRequest {
     id: number;
     updateTitleRequest: UpdateTitleRequest;
@@ -102,7 +106,7 @@ export interface AppsApiInterface {
     createApp(requestParameters: CreateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
 
     /**
-     * Creates a preview environment for one open pull request of the app and returns the task that creates it in the background. Draft pull requests are accepted even when draft previews are off. Pull requests from forks, pull requests that already have a preview environment, a base environment that is not in OK status, and a full concurrency limit are refused.
+     * Creates a preview environment for one open pull request of the app and returns the task that creates it in the background. An active paid subscription is required. Draft pull requests are accepted even when draft previews are off. Pull requests from forks, pull requests that already have a preview environment, a base environment that is not in OK status, and a full concurrency limit are refused.
      * @summary Create a pull request preview environment
      * @param {number} id 
      * @param {NewAppPreviewEnvironmentRequest} newAppPreviewEnvironmentRequest 
@@ -113,7 +117,7 @@ export interface AppsApiInterface {
     createAppPreviewEnvironmentRaw(requestParameters: CreateAppPreviewEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
-     * Creates a preview environment for one open pull request of the app and returns the task that creates it in the background. Draft pull requests are accepted even when draft previews are off. Pull requests from forks, pull requests that already have a preview environment, a base environment that is not in OK status, and a full concurrency limit are refused.
+     * Creates a preview environment for one open pull request of the app and returns the task that creates it in the background. An active paid subscription is required. Draft pull requests are accepted even when draft previews are off. Pull requests from forks, pull requests that already have a preview environment, a base environment that is not in OK status, and a full concurrency limit are refused.
      * Create a pull request preview environment
      */
     createAppPreviewEnvironment(requestParameters: CreateAppPreviewEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
@@ -218,6 +222,22 @@ export interface AppsApiInterface {
     listApps(requestParameters: ListAppsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<App>>;
 
     /**
+     * Replaces the basic auth password shared by the app\'s pull request preview environments. Every preview switches to the new password, which members reveal in the dashboard. Requires basic auth to be on in the app\'s preview settings.
+     * @summary Regenerate the preview password
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppsApiInterface
+     */
+    regenerateAppPreviewPasswordRaw(requestParameters: RegenerateAppPreviewPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
+
+    /**
+     * Replaces the basic auth password shared by the app\'s pull request preview environments. Every preview switches to the new password, which members reveal in the dashboard. Requires basic auth to be on in the app\'s preview settings.
+     * Regenerate the preview password
+     */
+    regenerateAppPreviewPassword(requestParameters: RegenerateAppPreviewPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
+
+    /**
      * Updates the app and returns the updated resource.
      * @summary Update app
      * @param {number} id 
@@ -235,7 +255,7 @@ export interface AppsApiInterface {
     updateApp(requestParameters: UpdateAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
 
     /**
-     * Updates application-wide settings such as pull request preview environments and returns the updated app.
+     * Updates application-wide settings such as pull request preview environments and returns the updated app. Enabling preview environments requires an active paid subscription.
      * @summary Update app settings
      * @param {number} id 
      * @param {AppSettingsInput} appSettingsInput 
@@ -246,7 +266,7 @@ export interface AppsApiInterface {
     updateAppSettingsRaw(requestParameters: UpdateAppSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
 
     /**
-     * Updates application-wide settings such as pull request preview environments and returns the updated app.
+     * Updates application-wide settings such as pull request preview environments and returns the updated app. Enabling preview environments requires an active paid subscription.
      * Update app settings
      */
     updateAppSettings(requestParameters: UpdateAppSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
@@ -318,7 +338,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
-     * Creates a preview environment for one open pull request of the app and returns the task that creates it in the background. Draft pull requests are accepted even when draft previews are off. Pull requests from forks, pull requests that already have a preview environment, a base environment that is not in OK status, and a full concurrency limit are refused.
+     * Creates a preview environment for one open pull request of the app and returns the task that creates it in the background. An active paid subscription is required. Draft pull requests are accepted even when draft previews are off. Pull requests from forks, pull requests that already have a preview environment, a base environment that is not in OK status, and a full concurrency limit are refused.
      * Create a pull request preview environment
      */
     async createAppPreviewEnvironmentRaw(requestParameters: CreateAppPreviewEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -358,7 +378,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
-     * Creates a preview environment for one open pull request of the app and returns the task that creates it in the background. Draft pull requests are accepted even when draft previews are off. Pull requests from forks, pull requests that already have a preview environment, a base environment that is not in OK status, and a full concurrency limit are refused.
+     * Creates a preview environment for one open pull request of the app and returns the task that creates it in the background. An active paid subscription is required. Draft pull requests are accepted even when draft previews are off. Pull requests from forks, pull requests that already have a preview environment, a base environment that is not in OK status, and a full concurrency limit are refused.
      * Create a pull request preview environment
      */
     async createAppPreviewEnvironment(requestParameters: CreateAppPreviewEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -610,6 +630,45 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
+     * Replaces the basic auth password shared by the app\'s pull request preview environments. Every preview switches to the new password, which members reveal in the dashboard. Requires basic auth to be on in the app\'s preview settings.
+     * Regenerate the preview password
+     */
+    async regenerateAppPreviewPasswordRaw(requestParameters: RegenerateAppPreviewPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling regenerateAppPreviewPassword().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/apps/preview-password/regenerate/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Replaces the basic auth password shared by the app\'s pull request preview environments. Every preview switches to the new password, which members reveal in the dashboard. Requires basic auth to be on in the app\'s preview settings.
+     * Regenerate the preview password
+     */
+    async regenerateAppPreviewPassword(requestParameters: RegenerateAppPreviewPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
+        const response = await this.regenerateAppPreviewPasswordRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Updates the app and returns the updated resource.
      * Update app
      */
@@ -659,7 +718,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
-     * Updates application-wide settings such as pull request preview environments and returns the updated app.
+     * Updates application-wide settings such as pull request preview environments and returns the updated app. Enabling preview environments requires an active paid subscription.
      * Update app settings
      */
     async updateAppSettingsRaw(requestParameters: UpdateAppSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
@@ -699,7 +758,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
-     * Updates application-wide settings such as pull request preview environments and returns the updated app.
+     * Updates application-wide settings such as pull request preview environments and returns the updated app. Enabling preview environments requires an active paid subscription.
      * Update app settings
      */
     async updateAppSettings(requestParameters: UpdateAppSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {

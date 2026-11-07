@@ -23,11 +23,14 @@ import type {
   AppServiceCronJob,
   AppServiceCronJobsResponse,
   AppServiceCronSchedule,
+  AppServiceCustomLink,
+  AppServiceCustomLinkInput,
   AppServiceEnvVar,
   AppServiceHelmValue,
   AppServiceInput,
   AppServiceIntegration,
   AppServiceLink,
+  AppServiceLinkCandidate,
   AppServiceLinkInput,
   AppServicePod,
   AppServiceSetting,
@@ -45,6 +48,8 @@ import type {
   NewAppServiceLogStreamInput,
   OperationResult,
   ProblemDetails,
+  ResourcePreset,
+  ResourcePresetInput,
   ResourcesInput,
   SetStringValueInput,
   Task,
@@ -94,12 +99,21 @@ export interface CreateAppServiceTokenRequest {
     namedSecretValueInput: NamedSecretValueInput;
 }
 
+export interface CreateResourcePresetRequest {
+    resourcePresetInput: ResourcePresetInput;
+}
+
 export interface DeleteAppServiceAnnotationRequest {
     id: number;
 }
 
 export interface DeleteAppServiceCronScheduleRequest {
     id: number;
+}
+
+export interface DeleteAppServiceCustomLinkRequest {
+    id: number;
+    name: string;
 }
 
 export interface DeleteAppServiceEnvVarRequest {
@@ -115,6 +129,10 @@ export interface DeleteAppServiceIntegrationRequest {
 }
 
 export interface DeleteAppServiceTokenRequest {
+    id: number;
+}
+
+export interface DeleteResourcePresetRequest {
     id: number;
 }
 
@@ -163,6 +181,10 @@ export interface ListAppServiceCronSchedulesRequest {
     id: number;
 }
 
+export interface ListAppServiceCustomLinksRequest {
+    id: number;
+}
+
 export interface ListAppServiceEnvVarsRequest {
     id: number;
 }
@@ -173,6 +195,11 @@ export interface ListAppServiceHelmValuesRequest {
 
 export interface ListAppServiceIntegrationsRequest {
     id: number;
+}
+
+export interface ListAppServiceLinkCandidatesRequest {
+    id: number;
+    name: string;
 }
 
 export interface ListAppServiceLinksRequest {
@@ -206,6 +233,10 @@ export interface ListAppServicesRequest {
     appInstanceId: number;
 }
 
+export interface ListResourcePresetsRequest {
+    orgId?: number;
+}
+
 export interface RunAppServiceActionRequest {
     id: number;
     name: string;
@@ -219,6 +250,12 @@ export interface SetAppServiceConfigRequest {
     id: number;
     name: string;
     configOverrideInput: ConfigOverrideInput;
+}
+
+export interface SetAppServiceCustomLinkRequest {
+    id: number;
+    name: string;
+    appServiceCustomLinkInput: AppServiceCustomLinkInput;
 }
 
 export interface SetAppServiceLinkRequest {
@@ -274,6 +311,11 @@ export interface UpdateAppServiceHelmValueRequest {
 export interface UpdateAppServiceTokenRequest {
     id: number;
     updateSecretValueInput: UpdateSecretValueInput;
+}
+
+export interface UpdateResourcePresetRequest {
+    id: number;
+    resourcePresetInput: ResourcePresetInput;
 }
 
 /**
@@ -420,6 +462,22 @@ export interface AppServicesApiInterface {
     createAppServiceToken(requestParameters: CreateAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceToken>;
 
     /**
+     * Adds a custom resource preset to an organization. Organization owners and admins only.
+     * @summary Create custom resource preset
+     * @param {ResourcePresetInput} resourcePresetInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    createResourcePresetRaw(requestParameters: CreateResourcePresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourcePreset>>;
+
+    /**
+     * Adds a custom resource preset to an organization. Organization owners and admins only.
+     * Create custom resource preset
+     */
+    createResourcePreset(requestParameters: CreateResourcePresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourcePreset>;
+
+    /**
      * Deletes an app service annotation.
      * @summary Delete app service annotation
      * @param {number} id 
@@ -450,6 +508,23 @@ export interface AppServicesApiInterface {
      * Delete app service cron schedule
      */
     deleteAppServiceCronSchedule(requestParameters: DeleteAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Removes the custom target of a link. A required link cannot be removed.
+     * @summary Delete app service custom link
+     * @param {number} id 
+     * @param {string} name 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    deleteAppServiceCustomLinkRaw(requestParameters: DeleteAppServiceCustomLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Removes the custom target of a link. A required link cannot be removed.
+     * Delete app service custom link
+     */
+    deleteAppServiceCustomLink(requestParameters: DeleteAppServiceCustomLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Deletes an app service environment variable.
@@ -514,6 +589,22 @@ export interface AppServicesApiInterface {
      * Delete app service token
      */
     deleteAppServiceToken(requestParameters: DeleteAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Deletes a custom resource preset. Resources already set from it keep their values. Organization owners and admins only.
+     * @summary Delete custom resource preset
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    deleteResourcePresetRaw(requestParameters: DeleteResourcePresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Deletes a custom resource preset. Resources already set from it keep their values. Organization owners and admins only.
+     * Delete custom resource preset
+     */
+    deleteResourcePreset(requestParameters: DeleteResourcePresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Returns the app service identified by the request path.
@@ -681,6 +772,22 @@ export interface AppServicesApiInterface {
     listAppServiceCronSchedules(requestParameters: ListAppServiceCronSchedulesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceCronSchedule>>;
 
     /**
+     * Returns the links of an app service that have a custom target: values entered by hand instead of another app service. A link name is either here or in the app service\'s links, never both. Secret values are never returned.
+     * @summary List app service custom links
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServiceCustomLinksRaw(requestParameters: ListAppServiceCustomLinksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceCustomLink>>>;
+
+    /**
+     * Returns the links of an app service that have a custom target: values entered by hand instead of another app service. A link name is either here or in the app service\'s links, never both. Secret values are never returned.
+     * List app service custom links
+     */
+    listAppServiceCustomLinks(requestParameters: ListAppServiceCustomLinksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceCustomLink>>;
+
+    /**
      * Returns environment variables configured for an app service.
      * @summary List app service env vars
      * @param {number} id 
@@ -727,6 +834,23 @@ export interface AppServicesApiInterface {
      * List app service integrations
      */
     listAppServiceIntegrations(requestParameters: ListAppServiceIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceIntegration>>;
+
+    /**
+     * Returns the app services a named link of an app service may point at: services of its own environment that satisfy the link\'s selectors and, for a link that accepts targets in other app environments, services of the organization\'s other environments that accept such links, satisfy the selectors, and that the caller may use (revealing their environment\'s runtime secrets) and this app\'s owner may use.
+     * @summary List app service link candidates
+     * @param {number} id 
+     * @param {string} name 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listAppServiceLinkCandidatesRaw(requestParameters: ListAppServiceLinkCandidatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceLinkCandidate>>>;
+
+    /**
+     * Returns the app services a named link of an app service may point at: services of its own environment that satisfy the link\'s selectors and, for a link that accepts targets in other app environments, services of the organization\'s other environments that accept such links, satisfy the selectors, and that the caller may use (revealing their environment\'s runtime secrets) and this app\'s owner may use.
+     * List app service link candidates
+     */
+    listAppServiceLinkCandidates(requestParameters: ListAppServiceLinkCandidatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceLinkCandidate>>;
 
     /**
      * Returns service links configured for an app service.
@@ -844,6 +968,22 @@ export interface AppServicesApiInterface {
     listAppServices(requestParameters: ListAppServicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppService>>;
 
     /**
+     * Returns Wodby\'s CPU and memory presets, smallest first, then the organization\'s custom presets when orgId is given. Resources inputs can name any of them; service and stack manifests can name only Wodby\'s presets. Choosing a preset copies its values.
+     * @summary List resource presets
+     * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    listResourcePresetsRaw(requestParameters: ListResourcePresetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ResourcePreset>>>;
+
+    /**
+     * Returns Wodby\'s CPU and memory presets, smallest first, then the organization\'s custom presets when orgId is given. Resources inputs can name any of them; service and stack manifests can name only Wodby\'s presets. Choosing a preset copies its values.
+     * List resource presets
+     */
+    listResourcePresets(requestParameters: ListResourcePresetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ResourcePreset>>;
+
+    /**
      * Runs the named action for an app service.
      * @summary Run app service action
      * @param {number} id 
@@ -895,7 +1035,25 @@ export interface AppServicesApiInterface {
     setAppServiceConfig(requestParameters: SetAppServiceConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * Links or unlinks another app service for a named link slot.
+     * Gives a link that accepts a custom target the values it hands to the service, replacing another app service it pointed at. The values are the complete set: give every value that is not optional each time, secret ones included. An optional value left out is cleared.
+     * @summary Set app service custom link
+     * @param {number} id 
+     * @param {string} name 
+     * @param {AppServiceCustomLinkInput} appServiceCustomLinkInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    setAppServiceCustomLinkRaw(requestParameters: SetAppServiceCustomLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Gives a link that accepts a custom target the values it hands to the service, replacing another app service it pointed at. The values are the complete set: give every value that is not optional each time, secret ones included. An optional value left out is cleared.
+     * Set app service custom link
+     */
+    setAppServiceCustomLink(requestParameters: SetAppServiceCustomLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Links or unlinks another app service for a named link slot. The app service may be in another app environment, of the same app or another one, when the link accepts that (crossApp) and the target\'s service accepts links from other environments. Linking across environments needs permission to reveal the runtime secrets of the target environment, and the target\'s app must belong to the same organization and be usable by this app\'s owner. Unlinking also removes a target in another environment or a custom target.
      * @summary Set app service link
      * @param {number} id 
      * @param {string} name 
@@ -907,7 +1065,7 @@ export interface AppServicesApiInterface {
     setAppServiceLinkRaw(requestParameters: SetAppServiceLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
-     * Links or unlinks another app service for a named link slot.
+     * Links or unlinks another app service for a named link slot. The app service may be in another app environment, of the same app or another one, when the link accepts that (crossApp) and the target\'s service accepts links from other environments. Linking across environments needs permission to reveal the runtime secrets of the target environment, and the target\'s app must belong to the same organization and be usable by this app\'s owner. Unlinking also removes a target in another environment or a custom target.
      * Set app service link
      */
     setAppServiceLink(requestParameters: SetAppServiceLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
@@ -1080,6 +1238,23 @@ export interface AppServicesApiInterface {
      * Update app service token
      */
     updateAppServiceToken(requestParameters: UpdateAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceToken>;
+
+    /**
+     * Replaces a custom preset\'s name, title and values. Resources already set from the preset keep their values. Organization owners and admins only.
+     * @summary Update custom resource preset
+     * @param {number} id 
+     * @param {ResourcePresetInput} resourcePresetInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppServicesApiInterface
+     */
+    updateResourcePresetRaw(requestParameters: UpdateResourcePresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourcePreset>>;
+
+    /**
+     * Replaces a custom preset\'s name, title and values. Resources already set from the preset keep their values. Organization owners and admins only.
+     * Update custom resource preset
+     */
+    updateResourcePreset(requestParameters: UpdateResourcePresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourcePreset>;
 
 }
 
@@ -1474,6 +1649,48 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
+     * Adds a custom resource preset to an organization. Organization owners and admins only.
+     * Create custom resource preset
+     */
+    async createResourcePresetRaw(requestParameters: CreateResourcePresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourcePreset>> {
+        if (requestParameters['resourcePresetInput'] == null) {
+            throw new runtime.RequiredError(
+                'resourcePresetInput',
+                'Required parameter "resourcePresetInput" was null or undefined when calling createResourcePreset().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/resource-presets`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['resourcePresetInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Adds a custom resource preset to an organization. Organization owners and admins only.
+     * Create custom resource preset
+     */
+    async createResourcePreset(requestParameters: CreateResourcePresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourcePreset> {
+        const response = await this.createResourcePresetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Deletes an app service annotation.
      * Delete app service annotation
      */
@@ -1548,6 +1765,52 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
      */
     async deleteAppServiceCronSchedule(requestParameters: DeleteAppServiceCronScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.deleteAppServiceCronScheduleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Removes the custom target of a link. A required link cannot be removed.
+     * Delete app service custom link
+     */
+    async deleteAppServiceCustomLinkRaw(requestParameters: DeleteAppServiceCustomLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteAppServiceCustomLink().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling deleteAppServiceCustomLink().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/custom-links/{name}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))).replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Removes the custom target of a link. A required link cannot be removed.
+     * Delete app service custom link
+     */
+    async deleteAppServiceCustomLink(requestParameters: DeleteAppServiceCustomLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteAppServiceCustomLinkRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1704,6 +1967,45 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
      */
     async deleteAppServiceToken(requestParameters: DeleteAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.deleteAppServiceTokenRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Deletes a custom resource preset. Resources already set from it keep their values. Organization owners and admins only.
+     * Delete custom resource preset
+     */
+    async deleteResourcePresetRaw(requestParameters: DeleteResourcePresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteResourcePreset().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/resource-presets/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Deletes a custom resource preset. Resources already set from it keep their values. Organization owners and admins only.
+     * Delete custom resource preset
+     */
+    async deleteResourcePreset(requestParameters: DeleteResourcePresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteResourcePresetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -2122,6 +2424,45 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
+     * Returns the links of an app service that have a custom target: values entered by hand instead of another app service. A link name is either here or in the app service\'s links, never both. Secret values are never returned.
+     * List app service custom links
+     */
+    async listAppServiceCustomLinksRaw(requestParameters: ListAppServiceCustomLinksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceCustomLink>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppServiceCustomLinks().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/custom-links`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the links of an app service that have a custom target: values entered by hand instead of another app service. A link name is either here or in the app service\'s links, never both. Secret values are never returned.
+     * List app service custom links
+     */
+    async listAppServiceCustomLinks(requestParameters: ListAppServiceCustomLinksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceCustomLink>> {
+        const response = await this.listAppServiceCustomLinksRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns environment variables configured for an app service.
      * List app service env vars
      */
@@ -2235,6 +2576,52 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
      */
     async listAppServiceIntegrations(requestParameters: ListAppServiceIntegrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceIntegration>> {
         const response = await this.listAppServiceIntegrationsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the app services a named link of an app service may point at: services of its own environment that satisfy the link\'s selectors and, for a link that accepts targets in other app environments, services of the organization\'s other environments that accept such links, satisfy the selectors, and that the caller may use (revealing their environment\'s runtime secrets) and this app\'s owner may use.
+     * List app service link candidates
+     */
+    async listAppServiceLinkCandidatesRaw(requestParameters: ListAppServiceLinkCandidatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceLinkCandidate>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppServiceLinkCandidates().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling listAppServiceLinkCandidates().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/links/{name}/candidates`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))).replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the app services a named link of an app service may point at: services of its own environment that satisfy the link\'s selectors and, for a link that accepts targets in other app environments, services of the organization\'s other environments that accept such links, satisfy the selectors, and that the caller may use (revealing their environment\'s runtime secrets) and this app\'s owner may use.
+     * List app service link candidates
+     */
+    async listAppServiceLinkCandidates(requestParameters: ListAppServiceLinkCandidatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceLinkCandidate>> {
+        const response = await this.listAppServiceLinkCandidatesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -2528,6 +2915,42 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
+     * Returns Wodby\'s CPU and memory presets, smallest first, then the organization\'s custom presets when orgId is given. Resources inputs can name any of them; service and stack manifests can name only Wodby\'s presets. Choosing a preset copies its values.
+     * List resource presets
+     */
+    async listResourcePresetsRaw(requestParameters: ListResourcePresetsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ResourcePreset>>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['orgId'] != null) {
+            queryParameters['orgId'] = requestParameters['orgId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/resource-presets`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns Wodby\'s CPU and memory presets, smallest first, then the organization\'s custom presets when orgId is given. Resources inputs can name any of them; service and stack manifests can name only Wodby\'s presets. Choosing a preset copies its values.
+     * List resource presets
+     */
+    async listResourcePresets(requestParameters: ListResourcePresetsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ResourcePreset>> {
+        const response = await this.listResourcePresetsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Runs the named action for an app service.
      * Run app service action
      */
@@ -2669,7 +3092,63 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
-     * Links or unlinks another app service for a named link slot.
+     * Gives a link that accepts a custom target the values it hands to the service, replacing another app service it pointed at. The values are the complete set: give every value that is not optional each time, secret ones included. An optional value left out is cleared.
+     * Set app service custom link
+     */
+    async setAppServiceCustomLinkRaw(requestParameters: SetAppServiceCustomLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling setAppServiceCustomLink().'
+            );
+        }
+
+        if (requestParameters['name'] == null) {
+            throw new runtime.RequiredError(
+                'name',
+                'Required parameter "name" was null or undefined when calling setAppServiceCustomLink().'
+            );
+        }
+
+        if (requestParameters['appServiceCustomLinkInput'] == null) {
+            throw new runtime.RequiredError(
+                'appServiceCustomLinkInput',
+                'Required parameter "appServiceCustomLinkInput" was null or undefined when calling setAppServiceCustomLink().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-services/{id}/custom-links/{name}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))).replace(`{${"name"}}`, encodeURIComponent(String(requestParameters['name']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['appServiceCustomLinkInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Gives a link that accepts a custom target the values it hands to the service, replacing another app service it pointed at. The values are the complete set: give every value that is not optional each time, secret ones included. An optional value left out is cleared.
+     * Set app service custom link
+     */
+    async setAppServiceCustomLink(requestParameters: SetAppServiceCustomLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.setAppServiceCustomLinkRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Links or unlinks another app service for a named link slot. The app service may be in another app environment, of the same app or another one, when the link accepts that (crossApp) and the target\'s service accepts links from other environments. Linking across environments needs permission to reveal the runtime secrets of the target environment, and the target\'s app must belong to the same organization and be usable by this app\'s owner. Unlinking also removes a target in another environment or a custom target.
      * Set app service link
      */
     async setAppServiceLinkRaw(requestParameters: SetAppServiceLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -2716,7 +3195,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
-     * Links or unlinks another app service for a named link slot.
+     * Links or unlinks another app service for a named link slot. The app service may be in another app environment, of the same app or another one, when the link accepts that (crossApp) and the target\'s service accepts links from other environments. Linking across environments needs permission to reveal the runtime secrets of the target environment, and the target\'s app must belong to the same organization and be usable by this app\'s owner. Unlinking also removes a target in another environment or a custom target.
      * Set app service link
      */
     async setAppServiceLink(requestParameters: SetAppServiceLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -3198,6 +3677,55 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
      */
     async updateAppServiceToken(requestParameters: UpdateAppServiceTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppServiceToken> {
         const response = await this.updateAppServiceTokenRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Replaces a custom preset\'s name, title and values. Resources already set from the preset keep their values. Organization owners and admins only.
+     * Update custom resource preset
+     */
+    async updateResourcePresetRaw(requestParameters: UpdateResourcePresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResourcePreset>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateResourcePreset().'
+            );
+        }
+
+        if (requestParameters['resourcePresetInput'] == null) {
+            throw new runtime.RequiredError(
+                'resourcePresetInput',
+                'Required parameter "resourcePresetInput" was null or undefined when calling updateResourcePreset().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/resource-presets/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['resourcePresetInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Replaces a custom preset\'s name, title and values. Resources already set from the preset keep their values. Organization owners and admins only.
+     * Update custom resource preset
+     */
+    async updateResourcePreset(requestParameters: UpdateResourcePresetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourcePreset> {
+        const response = await this.updateResourcePresetRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
