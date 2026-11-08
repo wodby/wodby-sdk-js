@@ -139,7 +139,7 @@ export interface AppsApiInterface {
     deleteApp(requestParameters: DeleteAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * Returns the app identified by the request path.
+     * Returns the app identified by the request path, with the environment types the caller can create and whether pull request previews can work for it.
      * @summary Get app
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -149,13 +149,13 @@ export interface AppsApiInterface {
     getAppRaw(requestParameters: GetAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
 
     /**
-     * Returns the app identified by the request path.
+     * Returns the app identified by the request path, with the environment types the caller can create and whether pull request previews can work for it.
      * Get app
      */
     getApp(requestParameters: GetAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
 
     /**
-     * Returns the app identified by name.
+     * Returns the app identified by name, with the environment types the caller can create and whether pull request previews can work for it.
      * @summary Get app by name
      * @param {string} name 
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
@@ -166,7 +166,7 @@ export interface AppsApiInterface {
     getAppByNameRaw(requestParameters: GetAppByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>>;
 
     /**
-     * Returns the app identified by name.
+     * Returns the app identified by name, with the environment types the caller can create and whether pull request previews can work for it.
      * Get app by name
      */
     getAppByName(requestParameters: GetAppByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App>;
@@ -426,7 +426,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
-     * Returns the app identified by the request path.
+     * Returns the app identified by the request path, with the environment types the caller can create and whether pull request previews can work for it.
      * Get app
      */
     async getAppRaw(requestParameters: GetAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
@@ -456,7 +456,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
-     * Returns the app identified by the request path.
+     * Returns the app identified by the request path, with the environment types the caller can create and whether pull request previews can work for it.
      * Get app
      */
     async getApp(requestParameters: GetAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {
@@ -465,7 +465,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
-     * Returns the app identified by name.
+     * Returns the app identified by name, with the environment types the caller can create and whether pull request previews can work for it.
      * Get app by name
      */
     async getAppByNameRaw(requestParameters: GetAppByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<App>> {
@@ -499,7 +499,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
-     * Returns the app identified by name.
+     * Returns the app identified by name, with the environment types the caller can create and whether pull request previews can work for it.
      * Get app by name
      */
     async getAppByName(requestParameters: GetAppByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<App> {

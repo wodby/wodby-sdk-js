@@ -36,6 +36,7 @@ import type {
   StackEnvVar,
   StackHelmValue,
   StackOriginSyncChangelog,
+  StackOriginSyncPreview,
   StackRevision,
   StackService,
   StackServiceUpdateChangelog,
@@ -43,6 +44,7 @@ import type {
   StackSyncOptionsInput,
   StackToken,
   StacksResponse,
+  SyncStackWithOriginInput,
   UpdateStackEnvVarInput,
   UpdateStackFromGitRequest,
   UpdateStackHelmValueInput,
@@ -175,6 +177,11 @@ export interface ListStacksRequest {
     pageSize?: number;
 }
 
+export interface PreviewStackSyncWithOriginRequest {
+    id: number;
+    stackSyncOptionsInput?: StackSyncOptionsInput;
+}
+
 export interface PublishStackDraftRequest {
     id: number;
 }
@@ -185,7 +192,7 @@ export interface ScaffoldStackFromHelmChartRequest {
 
 export interface SyncStackWithOriginRequest {
     id: number;
-    stackSyncOptionsInput?: StackSyncOptionsInput;
+    syncStackWithOriginInput?: SyncStackWithOriginInput;
 }
 
 export interface UpdateStackOperationRequest {
@@ -716,6 +723,23 @@ export interface StacksApiInterface {
     listStacks(requestParameters: ListStacksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StacksResponse>;
 
     /**
+     * Returns what syncing the stack with its origin with these options would do, without changing the stack: the stack services the sync has to update to the service version the origin uses, the error the sync would fail with, and the changes its task log would list. Returns null when the stack already follows the origin\'s latest revision.
+     * @summary Preview stack sync with origin
+     * @param {number} id 
+     * @param {StackSyncOptionsInput} [stackSyncOptionsInput] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StacksApiInterface
+     */
+    previewStackSyncWithOriginRaw(requestParameters: PreviewStackSyncWithOriginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackOriginSyncPreview>>;
+
+    /**
+     * Returns what syncing the stack with its origin with these options would do, without changing the stack: the stack services the sync has to update to the service version the origin uses, the error the sync would fail with, and the changes its task log would list. Returns null when the stack already follows the origin\'s latest revision.
+     * Preview stack sync with origin
+     */
+    previewStackSyncWithOrigin(requestParameters: PreviewStackSyncWithOriginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackOriginSyncPreview>;
+
+    /**
      * Publishes the current stack draft as the active stack revision.
      * @summary Publish stack draft
      * @param {number} id 
@@ -751,7 +775,7 @@ export interface StacksApiInterface {
      * Syncs the stack with its origin stack revision.
      * @summary Sync stack with origin
      * @param {number} id 
-     * @param {StackSyncOptionsInput} [stackSyncOptionsInput] 
+     * @param {SyncStackWithOriginInput} [syncStackWithOriginInput] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof StacksApiInterface
@@ -2143,6 +2167,48 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
     }
 
     /**
+     * Returns what syncing the stack with its origin with these options would do, without changing the stack: the stack services the sync has to update to the service version the origin uses, the error the sync would fail with, and the changes its task log would list. Returns null when the stack already follows the origin\'s latest revision.
+     * Preview stack sync with origin
+     */
+    async previewStackSyncWithOriginRaw(requestParameters: PreviewStackSyncWithOriginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StackOriginSyncPreview>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling previewStackSyncWithOrigin().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/stacks/{id}/actions/preview-sync-origin`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['stackSyncOptionsInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns what syncing the stack with its origin with these options would do, without changing the stack: the stack services the sync has to update to the service version the origin uses, the error the sync would fail with, and the changes its task log would list. Returns null when the stack already follows the origin\'s latest revision.
+     * Preview stack sync with origin
+     */
+    async previewStackSyncWithOrigin(requestParameters: PreviewStackSyncWithOriginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StackOriginSyncPreview> {
+        const response = await this.previewStackSyncWithOriginRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Publishes the current stack draft as the active stack revision.
      * Publish stack draft
      */
@@ -2250,7 +2316,7 @@ export class StacksApi extends runtime.BaseAPI implements StacksApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['stackSyncOptionsInput'],
+            body: requestParameters['syncStackWithOriginInput'],
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response);

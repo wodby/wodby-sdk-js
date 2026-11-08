@@ -385,7 +385,7 @@ export interface AppEnvironmentsApiInterface {
     getAppAnnotation(requestParameters: GetAppAnnotationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAnnotation>;
 
     /**
-     * Returns the app environment identified by the request path.
+     * Returns the app environment identified by the request path, with the caller\'s permissions in it.
      * @summary Get app environment
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -395,7 +395,7 @@ export interface AppEnvironmentsApiInterface {
     getAppEnvironmentRaw(requestParameters: GetAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppEnvironment>>;
 
     /**
-     * Returns the app environment identified by the request path.
+     * Returns the app environment identified by the request path, with the caller\'s permissions in it.
      * Get app environment
      */
     getAppEnvironment(requestParameters: GetAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironment>;
@@ -417,7 +417,7 @@ export interface AppEnvironmentsApiInterface {
     getAppEnvironmentAccess(requestParameters: GetAppEnvironmentAccessRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppAccess>;
 
     /**
-     * Returns the app environment identified by app and environment name.
+     * Returns the app environment identified by app and environment name, with the caller\'s permissions in it.
      * @summary Get app environment by name
      * @param {string} appName 
      * @param {string} environmentName 
@@ -429,7 +429,7 @@ export interface AppEnvironmentsApiInterface {
     getAppEnvironmentByNameRaw(requestParameters: GetAppEnvironmentByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppEnvironment>>;
 
     /**
-     * Returns the app environment identified by app and environment name.
+     * Returns the app environment identified by app and environment name, with the caller\'s permissions in it.
      * Get app environment by name
      */
     getAppEnvironmentByName(requestParameters: GetAppEnvironmentByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironment>;
@@ -1279,7 +1279,7 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Returns the app environment identified by the request path.
+     * Returns the app environment identified by the request path, with the caller\'s permissions in it.
      * Get app environment
      */
     async getAppEnvironmentRaw(requestParameters: GetAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppEnvironment>> {
@@ -1309,7 +1309,7 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Returns the app environment identified by the request path.
+     * Returns the app environment identified by the request path, with the caller\'s permissions in it.
      * Get app environment
      */
     async getAppEnvironment(requestParameters: GetAppEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironment> {
@@ -1357,7 +1357,7 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Returns the app environment identified by app and environment name.
+     * Returns the app environment identified by app and environment name, with the caller\'s permissions in it.
      * Get app environment by name
      */
     async getAppEnvironmentByNameRaw(requestParameters: GetAppEnvironmentByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppEnvironment>> {
@@ -1398,7 +1398,7 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
     }
 
     /**
-     * Returns the app environment identified by app and environment name.
+     * Returns the app environment identified by app and environment name, with the caller\'s permissions in it.
      * Get app environment by name
      */
     async getAppEnvironmentByName(requestParameters: GetAppEnvironmentByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppEnvironment> {

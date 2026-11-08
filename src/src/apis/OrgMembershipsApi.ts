@@ -73,7 +73,7 @@ export interface OrgMembershipsApiInterface {
     deleteOrgMembership(requestParameters: DeleteOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * Returns the org membership identified by the request path.
+     * Returns the org membership identified by the request path. Organization owners, admins and support members also get the member\'s project and team memberships.
      * @summary Get org membership
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -83,7 +83,7 @@ export interface OrgMembershipsApiInterface {
     getOrgMembershipRaw(requestParameters: GetOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgMembership>>;
 
     /**
-     * Returns the org membership identified by the request path.
+     * Returns the org membership identified by the request path. Organization owners, admins and support members also get the member\'s project and team memberships.
      * Get org membership
      */
     getOrgMembership(requestParameters: GetOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgMembership>;
@@ -121,7 +121,7 @@ export interface OrgMembershipsApiInterface {
     listOrgMemberships(requestParameters: ListOrgMembershipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<OrgMembership>>;
 
     /**
-     * Changes the organization role of a member and returns the membership.
+     * Changes the organization role of a member and returns the membership with its project and team memberships.
      * @summary Update organization member role
      * @param {number} id 
      * @param {OrgMembershipRoleInput} orgMembershipRoleInput 
@@ -132,7 +132,7 @@ export interface OrgMembershipsApiInterface {
     updateOrgMembershipRaw(requestParameters: UpdateOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgMembership>>;
 
     /**
-     * Changes the organization role of a member and returns the membership.
+     * Changes the organization role of a member and returns the membership with its project and team memberships.
      * Update organization member role
      */
     updateOrgMembership(requestParameters: UpdateOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgMembership>;
@@ -201,7 +201,7 @@ export class OrgMembershipsApi extends runtime.BaseAPI implements OrgMemberships
     }
 
     /**
-     * Returns the org membership identified by the request path.
+     * Returns the org membership identified by the request path. Organization owners, admins and support members also get the member\'s project and team memberships.
      * Get org membership
      */
     async getOrgMembershipRaw(requestParameters: GetOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgMembership>> {
@@ -231,7 +231,7 @@ export class OrgMembershipsApi extends runtime.BaseAPI implements OrgMemberships
     }
 
     /**
-     * Returns the org membership identified by the request path.
+     * Returns the org membership identified by the request path. Organization owners, admins and support members also get the member\'s project and team memberships.
      * Get org membership
      */
     async getOrgMembership(requestParameters: GetOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgMembership> {
@@ -318,7 +318,7 @@ export class OrgMembershipsApi extends runtime.BaseAPI implements OrgMemberships
     }
 
     /**
-     * Changes the organization role of a member and returns the membership.
+     * Changes the organization role of a member and returns the membership with its project and team memberships.
      * Update organization member role
      */
     async updateOrgMembershipRaw(requestParameters: UpdateOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrgMembership>> {
@@ -358,7 +358,7 @@ export class OrgMembershipsApi extends runtime.BaseAPI implements OrgMemberships
     }
 
     /**
-     * Changes the organization role of a member and returns the membership.
+     * Changes the organization role of a member and returns the membership with its project and team memberships.
      * Update organization member role
      */
     async updateOrgMembership(requestParameters: UpdateOrgMembershipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrgMembership> {

@@ -376,6 +376,18 @@ export interface App {
      */
     settings?: AppSettings;
     /**
+     * Environment types the caller can create app environments of. Returned by getApp and getAppByName only.
+     * @type {Array<string>}
+     * @memberof App
+     */
+    creatableEnvironmentTypes?: Array<AppCreatableEnvironmentTypesEnum>;
+    /**
+     * Whether pull request preview environments can work for this app: one of its environments has an enabled service connected to a branch of its own Git repository. Returned by getApp and getAppByName only.
+     * @type {boolean}
+     * @memberof App
+     */
+    previewsAvailable?: boolean;
+    /**
      * 
      * @type {string}
      * @memberof App
@@ -398,6 +410,18 @@ export const AppOwnershipScopeEnum = {
     Project: 'project'
 } as const;
 export type AppOwnershipScopeEnum = typeof AppOwnershipScopeEnum[keyof typeof AppOwnershipScopeEnum];
+
+/**
+ * @export
+ */
+export const AppCreatableEnvironmentTypesEnum = {
+    Prod: 'prod',
+    Test: 'test',
+    Staging: 'staging',
+    Dev: 'dev',
+    Feature: 'feature'
+} as const;
+export type AppCreatableEnvironmentTypesEnum = typeof AppCreatableEnvironmentTypesEnum[keyof typeof AppCreatableEnvironmentTypesEnum];
 
 /**
  * 
@@ -1704,6 +1728,12 @@ export interface AppEnvironment {
      */
     mainDomain?: string | null;
     /**
+     * Whether basic auth protects the environment's main domain.
+     * @type {boolean}
+     * @memberof AppEnvironment
+     */
+    mainDomainBasicAuth: boolean;
+    /**
      * 
      * @type {AppEnvironmentMainRouteCert}
      * @memberof AppEnvironment
@@ -1817,6 +1847,12 @@ export interface AppEnvironment {
      * @memberof AppEnvironment
      */
     preview?: AppEnvironmentPreview | null;
+    /**
+     * 
+     * @type {AppEnvironmentPermissions}
+     * @memberof AppEnvironment
+     */
+    permissions?: AppEnvironmentPermissions;
     /**
      * 
      * @type {AppEnvironmentHealth}
@@ -2301,6 +2337,61 @@ export interface AppEnvironmentMigrationVolumeInput {
      * @memberof AppEnvironmentMigrationVolumeInput
      */
     storageClassName?: string | null;
+}
+/**
+ * What the caller can do in the app environment, from their organization role and project role. Returned by getAppEnvironment and getAppEnvironmentByName only.
+ * @export
+ * @interface AppEnvironmentPermissions
+ */
+export interface AppEnvironmentPermissions {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentPermissions
+     */
+    deploy: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentPermissions
+     */
+    operate: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentPermissions
+     */
+    configure: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentPermissions
+     */
+    upgrade: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentPermissions
+     */
+    shell: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentPermissions
+     */
+    backup: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentPermissions
+     */
+    restore: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppEnvironmentPermissions
+     */
+    _delete: boolean;
 }
 /**
  * Pull request metadata of an automatic preview environment.
@@ -6603,6 +6694,18 @@ export interface Cluster {
      * @memberof Cluster
      */
     version?: string | null;
+    /**
+     * Whether the cluster's Kubernetes version has reached its end of life. Always false for Wodby Cloud and serverless clusters and for versions Wodby has no lifecycle data for.
+     * @type {boolean}
+     * @memberof Cluster
+     */
+    kubernetesVersionEol: boolean;
+    /**
+     * When the cluster's Kubernetes version reaches or reached its end of life, when known.
+     * @type {string}
+     * @memberof Cluster
+     */
+    kubernetesVersionEolDate?: string | null;
     /**
      * 
      * @type {string}
@@ -12819,6 +12922,18 @@ export interface OrgMembership {
      */
     joinedAt?: string | null;
     /**
+     * The member's project access: their direct project memberships, then the memberships of every team they belong to (those have teamId set). Returned for a single membership to organization owners, admins and support members; omitted otherwise.
+     * @type {Array<ProjectMembership>}
+     * @memberof OrgMembership
+     */
+    projectMemberships?: Array<ProjectMembership>;
+    /**
+     * The teams the member belongs to. Returned for a single membership to organization owners, admins and support members; omitted otherwise.
+     * @type {Array<OrgMembershipTeamMembership>}
+     * @memberof OrgMembership
+     */
+    teamMemberships?: Array<OrgMembershipTeamMembership>;
+    /**
      * 
      * @type {string}
      * @memberof OrgMembership
@@ -12855,6 +12970,42 @@ export const OrgMembershipRoleInputRoleEnum = {
     Owner: 'owner'
 } as const;
 export type OrgMembershipRoleInputRoleEnum = typeof OrgMembershipRoleInputRoleEnum[keyof typeof OrgMembershipRoleInputRoleEnum];
+
+/**
+ * 
+ * @export
+ * @interface OrgMembershipTeamMembership
+ */
+export interface OrgMembershipTeamMembership {
+    /**
+     * 
+     * @type {number}
+     * @memberof OrgMembershipTeamMembership
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof OrgMembershipTeamMembership
+     */
+    teamId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrgMembershipTeamMembership
+     */
+    role: OrgMembershipTeamMembershipRoleEnum;
+}
+
+
+/**
+ * @export
+ */
+export const OrgMembershipTeamMembershipRoleEnum = {
+    Member: 'member',
+    Leader: 'leader'
+} as const;
+export type OrgMembershipTeamMembershipRoleEnum = typeof OrgMembershipTeamMembershipRoleEnum[keyof typeof OrgMembershipTeamMembershipRoleEnum];
 
 /**
  * 
@@ -15146,7 +15297,7 @@ export const ServiceIntegrationRequirementTypeEnum = {
 export type ServiceIntegrationRequirementTypeEnum = typeof ServiceIntegrationRequirementTypeEnum[keyof typeof ServiceIntegrationRequirementTypeEnum];
 
 /**
- * 
+ * Typed fields of a service revision's manifest. raw holds the complete manifest as JSON, including the sections that have no typed field here.
  * @export
  * @interface ServiceManifest
  */
@@ -15169,13 +15320,43 @@ export interface ServiceManifest {
      * @type {boolean}
      * @memberof ServiceManifest
      */
-    basicAuth?: boolean;
+    basicAuth: boolean;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ServiceManifest
+     */
+    labels?: Array<string>;
+    /**
+     * Whether links of services in other app environments, of the same app or another one, may point at this service.
+     * @type {boolean}
+     * @memberof ServiceManifest
+     */
+    crossApp: boolean;
+    /**
+     * Values the services linking to this one read as {{link.exports.<name>}}.
+     * @type {Array<ServiceManifestExport>}
+     * @memberof ServiceManifest
+     */
+    exports: Array<ServiceManifestExport>;
     /**
      * 
      * @type {Array<ServiceIntegrationRequirement>}
      * @memberof ServiceManifest
      */
     integrations?: Array<ServiceIntegrationRequirement>;
+    /**
+     * 
+     * @type {Array<ServiceManifestLink>}
+     * @memberof ServiceManifest
+     */
+    links?: Array<ServiceManifestLink>;
+    /**
+     * Links that are alternatives to one another. An enabled app service needs at least min of them configured.
+     * @type {Array<ServiceManifestLinkGroup>}
+     * @memberof ServiceManifest
+     */
+    linkGroups?: Array<ServiceManifestLinkGroup>;
 }
 /**
  * 
@@ -15219,6 +15400,161 @@ export interface ServiceManifestEnvVar {
      * @memberof ServiceManifestEnvVar
      */
     build: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ServiceManifestExport
+ */
+export interface ServiceManifestExport {
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceManifestExport
+     */
+    name: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ServiceManifestExport
+     */
+    secret: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ServiceManifestLink
+ */
+export interface ServiceManifestLink {
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceManifestLink
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceManifestLink
+     */
+    title: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ServiceManifestLink
+     */
+    required: boolean;
+    /**
+     * The services the link may point at. A target must match one selector.
+     * @type {Array<ServiceManifestLinkSelector>}
+     * @memberof ServiceManifestLink
+     */
+    selectors?: Array<ServiceManifestLinkSelector>;
+    /**
+     * Whether the link accepts a custom target, whose values a user enters instead of choosing a target service.
+     * @type {boolean}
+     * @memberof ServiceManifestLink
+     */
+    custom: boolean;
+    /**
+     * Whether the link may point at a service of another app environment that accepts it. Across environments the link reads only the target's exports.
+     * @type {boolean}
+     * @memberof ServiceManifestLink
+     */
+    crossApp: boolean;
+    /**
+     * The values the link hands to the service, whatever it points at.
+     * @type {Array<ServiceManifestLinkValue>}
+     * @memberof ServiceManifestLink
+     */
+    values: Array<ServiceManifestLinkValue>;
+}
+/**
+ * 
+ * @export
+ * @interface ServiceManifestLinkGroup
+ */
+export interface ServiceManifestLinkGroup {
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceManifestLinkGroup
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceManifestLinkGroup
+     */
+    title?: string | null;
+    /**
+     * Names of the links in the group.
+     * @type {Array<string>}
+     * @memberof ServiceManifestLinkGroup
+     */
+    links: Array<string>;
+    /**
+     * 
+     * @type {number}
+     * @memberof ServiceManifestLinkGroup
+     */
+    min: number;
+}
+/**
+ * 
+ * @export
+ * @interface ServiceManifestLinkSelector
+ */
+export interface ServiceManifestLinkSelector {
+    /**
+     * The service type a target must have, in upper case, such as DB or DATASTORE.
+     * @type {string}
+     * @memberof ServiceManifestLinkSelector
+     */
+    type: string;
+    /**
+     * The service version a target must run, when the selector asks for one.
+     * @type {string}
+     * @memberof ServiceManifestLinkSelector
+     */
+    option?: string;
+    /**
+     * Labels a target service must all have.
+     * @type {Array<string>}
+     * @memberof ServiceManifestLinkSelector
+     */
+    labels?: Array<string>;
+}
+/**
+ * A value a service link hands to the service. A custom target of the link needs it unless it is optional.
+ * @export
+ * @interface ServiceManifestLinkValue
+ */
+export interface ServiceManifestLinkValue {
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceManifestLinkValue
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ServiceManifestLinkValue
+     */
+    title?: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ServiceManifestLinkValue
+     */
+    secret: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ServiceManifestLinkValue
+     */
+    optional: boolean;
 }
 /**
  * 
@@ -16167,6 +16503,98 @@ export interface StackOriginSyncChangelog {
      * @memberof StackOriginSyncChangelog
      */
     entries: Array<StackServiceUpdateChangelogEntry>;
+}
+/**
+ * 
+ * @export
+ * @interface StackOriginSyncPreview
+ */
+export interface StackOriginSyncPreview {
+    /**
+     * 
+     * @type {string}
+     * @memberof StackOriginSyncPreview
+     */
+    previousVersion: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackOriginSyncPreview
+     */
+    version: string;
+    /**
+     * Stack services the sync has to update to the service version the origin uses. The sync needs updateStackServices to update them.
+     * @type {Array<StackOriginSyncServiceUpdate>}
+     * @memberof StackOriginSyncPreview
+     */
+    serviceUpdates: Array<StackOriginSyncServiceUpdate>;
+    /**
+     * Why the sync would fail. Null when it would go through once the listed stack services may be updated.
+     * @type {string}
+     * @memberof StackOriginSyncPreview
+     */
+    error: string | null;
+    /**
+     * What the sync would change, as its task log will list it. Empty when it would fail.
+     * @type {Array<LogLine>}
+     * @memberof StackOriginSyncPreview
+     */
+    changes: Array<LogLine>;
+}
+/**
+ * 
+ * @export
+ * @interface StackOriginSyncServiceUpdate
+ */
+export interface StackOriginSyncServiceUpdate {
+    /**
+     * 
+     * @type {number}
+     * @memberof StackOriginSyncServiceUpdate
+     */
+    stackServiceId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackOriginSyncServiceUpdate
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackOriginSyncServiceUpdate
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackOriginSyncServiceUpdate
+     */
+    serviceTitle: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackOriginSyncServiceUpdate
+     */
+    previousVersion: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackOriginSyncServiceUpdate
+     */
+    version: string;
+    /**
+     * The origin's configuration that needs the newer version, such as option 3.
+     * @type {string}
+     * @memberof StackOriginSyncServiceUpdate
+     */
+    reason: string;
+    /**
+     * Why the sync can't update this stack service, such as a pin. Null when it can.
+     * @type {string}
+     * @memberof StackOriginSyncServiceUpdate
+     */
+    refusal: string | null;
 }
 /**
  * 
@@ -17546,6 +17974,55 @@ export interface StorageClass {
      * @memberof StorageClass
      */
     selectable: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface SyncStackWithOriginInput
+ */
+export interface SyncStackWithOriginInput {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SyncStackWithOriginInput
+     */
+    deleteStackHelmValues?: boolean | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SyncStackWithOriginInput
+     */
+    deleteStackEnvVars?: boolean | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SyncStackWithOriginInput
+     */
+    deleteStackTokens?: boolean | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SyncStackWithOriginInput
+     */
+    deleteStackAnnotations?: boolean | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SyncStackWithOriginInput
+     */
+    deleteStackServices?: boolean | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SyncStackWithOriginInput
+     */
+    deleteStackServicesConfiguration?: boolean | null;
+    /**
+     * Let the sync update existing stack services to the service version the origin uses when the origin's changes need it. Without it, such a sync fails with an error that lists those stack services.
+     * @type {boolean}
+     * @memberof SyncStackWithOriginInput
+     */
+    updateStackServices?: boolean | null;
 }
 /**
  * 
