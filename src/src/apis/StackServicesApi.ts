@@ -659,7 +659,7 @@ export interface StackServicesApiInterface {
     setStackServiceOptions(requestParameters: SetStackServiceOptionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * Sets CPU and memory requests or limits for a stack service container.
+     * Sets CPU and memory requests or limits for a stack service container. Each value replaces only the service\'s default for that value: an omitted value keeps the default, and 0 means none.
      * @summary Set stack service resources
      * @param {number} id 
      * @param {ResourcesInput} resourcesInput 
@@ -670,7 +670,7 @@ export interface StackServicesApiInterface {
     setStackServiceResourcesRaw(requestParameters: SetStackServiceResourcesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
-     * Sets CPU and memory requests or limits for a stack service container.
+     * Sets CPU and memory requests or limits for a stack service container. Each value replaces only the service\'s default for that value: an omitted value keeps the default, and 0 means none.
      * Set stack service resources
      */
     setStackServiceResources(requestParameters: SetStackServiceResourcesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
@@ -1968,7 +1968,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
     }
 
     /**
-     * Sets CPU and memory requests or limits for a stack service container.
+     * Sets CPU and memory requests or limits for a stack service container. Each value replaces only the service\'s default for that value: an omitted value keeps the default, and 0 means none.
      * Set stack service resources
      */
     async setStackServiceResourcesRaw(requestParameters: SetStackServiceResourcesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -2008,7 +2008,7 @@ export class StackServicesApi extends runtime.BaseAPI implements StackServicesAp
     }
 
     /**
-     * Sets CPU and memory requests or limits for a stack service container.
+     * Sets CPU and memory requests or limits for a stack service container. Each value replaces only the service\'s default for that value: an omitted value keeps the default, and 0 means none.
      * Set stack service resources
      */
     async setStackServiceResources(requestParameters: SetStackServiceResourcesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {

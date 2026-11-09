@@ -2625,6 +2625,12 @@ export interface AppEnvironmentStackUpgradeChangelog {
      * @memberof AppEnvironmentStackUpgradeChangelog
      */
     serviceChanges: Array<ServiceRevisionChange>;
+    /**
+     * Volumes the upgrade deletes with their data. The upgrade refuses unless volume changes are enabled.
+     * @type {Array<StackUpgradeVolumeDeletion>}
+     * @memberof AppEnvironmentStackUpgradeChangelog
+     */
+    volumeDeletions: Array<StackUpgradeVolumeDeletion>;
 }
 /**
  * 
@@ -17868,6 +17874,37 @@ export const StackTokenEnvTypeEnum = {
 } as const;
 export type StackTokenEnvTypeEnum = typeof StackTokenEnvTypeEnum[keyof typeof StackTokenEnvTypeEnum];
 
+/**
+ * 
+ * @export
+ * @interface StackUpgradeVolumeDeletion
+ */
+export interface StackUpgradeVolumeDeletion {
+    /**
+     * 
+     * @type {string}
+     * @memberof StackUpgradeVolumeDeletion
+     */
+    appServiceName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackUpgradeVolumeDeletion
+     */
+    appServiceTitle: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackUpgradeVolumeDeletion
+     */
+    volume: string;
+    /**
+     * True when the target stack revision no longer has the app service's stack service, so the upgrade deletes the whole app service. False when the service no longer uses the volume.
+     * @type {boolean}
+     * @memberof StackUpgradeVolumeDeletion
+     */
+    serviceRemoved: boolean;
+}
 /**
  * 
  * @export
