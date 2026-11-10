@@ -7016,6 +7016,80 @@ export interface ClusterAutoInfrastructureUpgradeSettingsInput {
     apps?: ClusterAutoInfrastructureComponentSettingsInput;
 }
 /**
+ * Automatic Kubernetes version upgrades. Kubernetes versions are 1.MINOR.PATCH, so there is no major upgrade. A newer provider build of the same version, such as 1.36.5-do.1 to 1.36.5-do.2, counts as a patch. Always disabled for Wodby Cloud and serverless clusters.
+ * @export
+ * @interface ClusterAutoKubernetesUpgradeSettings
+ */
+export interface ClusterAutoKubernetesUpgradeSettings {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ClusterAutoKubernetesUpgradeSettings
+     */
+    enabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ClusterAutoKubernetesUpgradeSettings
+     */
+    allowPatch: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ClusterAutoKubernetesUpgradeSettings
+     */
+    allowMinor: boolean;
+    /**
+     * Holds an allowed minor upgrade until the current minor reaches upstream end of life.
+     * @type {boolean}
+     * @memberof ClusterAutoKubernetesUpgradeSettings
+     */
+    minorOnlyAfterEndOfLife: boolean;
+    /**
+     * When an upgrade may start. Absent means any time.
+     * @type {AutomationTimeWindow}
+     * @memberof ClusterAutoKubernetesUpgradeSettings
+     */
+    timeWindow?: AutomationTimeWindow;
+}
+/**
+ * Omitted fields keep their current values.
+ * @export
+ * @interface ClusterAutoKubernetesUpgradeSettingsInput
+ */
+export interface ClusterAutoKubernetesUpgradeSettingsInput {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ClusterAutoKubernetesUpgradeSettingsInput
+     */
+    enabled?: boolean | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ClusterAutoKubernetesUpgradeSettingsInput
+     */
+    allowPatch?: boolean | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ClusterAutoKubernetesUpgradeSettingsInput
+     */
+    allowMinor?: boolean | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ClusterAutoKubernetesUpgradeSettingsInput
+     */
+    minorOnlyAfterEndOfLife?: boolean | null;
+    /**
+     * A window with enabled false lets upgrades start at any time.
+     * @type {AutomationTimeWindowInput}
+     * @memberof ClusterAutoKubernetesUpgradeSettingsInput
+     */
+    timeWindow?: AutomationTimeWindowInput;
+}
+/**
  * 
  * @export
  * @interface ClusterAutoUpgradeVersionPolicy
@@ -7412,6 +7486,73 @@ export type ClusterEnvironmentPolicyInputAllowedEnvTypesEnum = typeof ClusterEnv
 /**
  * 
  * @export
+ * @interface ClusterHostCheck
+ */
+export interface ClusterHostCheck {
+    /**
+     * Identifies the check, such as ipv4_options_filter or mptcp_disabled. More checks may be added.
+     * @type {string}
+     * @memberof ClusterHostCheck
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterHostCheck
+     */
+    title: string;
+    /**
+     * The node that reported the check; empty when no node has reported.
+     * @type {string}
+     * @memberof ClusterHostCheck
+     */
+    node: string;
+    /**
+     * Whether the protection is in place. unknown means the server hasn't reported the check, or its last report is more than two days old.
+     * @type {string}
+     * @memberof ClusterHostCheck
+     */
+    state: ClusterHostCheckStateEnum;
+    /**
+     * What the state means and what to do about it.
+     * @type {string}
+     * @memberof ClusterHostCheck
+     */
+    message: string;
+    /**
+     * The kernel release the server ran at the check; empty when it hasn't reported.
+     * @type {string}
+     * @memberof ClusterHostCheck
+     */
+    kernel: string;
+    /**
+     * When the server ran the check. Absent when it hasn't reported.
+     * @type {string}
+     * @memberof ClusterHostCheck
+     */
+    checkedAt?: string;
+    /**
+     * When Wodby read the report. Absent when the server hasn't reported.
+     * @type {string}
+     * @memberof ClusterHostCheck
+     */
+    observedAt?: string;
+}
+
+
+/**
+ * @export
+ */
+export const ClusterHostCheckStateEnum = {
+    Protected: 'protected',
+    NotProtected: 'not_protected',
+    Unknown: 'unknown'
+} as const;
+export type ClusterHostCheckStateEnum = typeof ClusterHostCheckStateEnum[keyof typeof ClusterHostCheckStateEnum];
+
+/**
+ * 
+ * @export
  * @interface ClusterInfraAppUpgradeChangelog
  */
 export interface ClusterInfraAppUpgradeChangelog {
@@ -7540,6 +7681,12 @@ export interface ClusterSettings {
     autoInfrastructureUpgrade?: ClusterAutoInfrastructureUpgradeSettings;
     /**
      * 
+     * @type {ClusterAutoKubernetesUpgradeSettings}
+     * @memberof ClusterSettings
+     */
+    autoKubernetesUpgrade?: ClusterAutoKubernetesUpgradeSettings;
+    /**
+     * 
      * @type {ClusterCapabilityPolicy}
      * @memberof ClusterSettings
      */
@@ -7557,6 +7704,12 @@ export interface ClusterSettingsInput {
      * @memberof ClusterSettingsInput
      */
     autoInfrastructureUpgrade?: ClusterAutoInfrastructureUpgradeSettingsInput;
+    /**
+     * 
+     * @type {ClusterAutoKubernetesUpgradeSettingsInput}
+     * @memberof ClusterSettingsInput
+     */
+    autoKubernetesUpgrade?: ClusterAutoKubernetesUpgradeSettingsInput;
     /**
      * 
      * @type {ClusterCapabilityPolicy}
@@ -17699,6 +17852,12 @@ export interface StackSettings {
      * @memberof StackSettings
      */
     autoOriginStackUpdate?: StackAutoOriginUpdateSettings;
+    /**
+     * What an update from Git does with existing stack services whose stack.yml reference has no version: latest moves them to the service's latest version, auto_update_settings moves them only as far as the stack's service auto update settings allow, and keep keeps their version. Versioned references, pinned stack services and new ones resolve the same way in every mode, and a stack service whose stack.yml configures something only a newer version has always moves to it.
+     * @type {string}
+     * @memberof StackSettings
+     */
+    gitServiceUpdates?: string;
 }
 /**
  * 
@@ -17724,6 +17883,12 @@ export interface StackSettingsInput {
      * @memberof StackSettingsInput
      */
     autoOriginStackUpdate?: StackAutoOriginUpdateSettingsInput;
+    /**
+     * What an update from Git does with existing stack services' versions; see StackSettings.
+     * @type {string}
+     * @memberof StackSettingsInput
+     */
+    gitServiceUpdates?: string | null;
 }
 /**
  * 
@@ -19394,7 +19559,7 @@ export interface UpdateStackEnvVarInput {
     secret: boolean;
 }
 /**
- * 
+ * The Git ref to update from. Stack, service, provider and Git repository updates from Git share this body.
  * @export
  * @interface UpdateStackFromGitRequest
  */
@@ -19411,6 +19576,12 @@ export interface UpdateStackFromGitRequest {
      * @memberof UpdateStackFromGitRequest
      */
     gitRefType: string;
+    /**
+     * Stack updates only; other updates ignore it. What this update does with existing stack services whose stack.yml reference has no version, instead of the stack's gitServiceUpdates setting: latest, auto_update_settings or keep.
+     * @type {string}
+     * @memberof UpdateStackFromGitRequest
+     */
+    serviceUpdates?: string | null;
 }
 /**
  * 

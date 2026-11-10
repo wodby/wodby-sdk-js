@@ -720,7 +720,7 @@ export interface AppServicesApiInterface {
     listAppServiceConfigs(requestParameters: ListAppServiceConfigsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceConfig>>;
 
     /**
-     * Returns the CPU and memory settings the app service stores for each container of its service. A container with no id stores nothing and runs with the defaults in the service revision manifest, under workloads[].containers[].resources. Each value a stored container sets replaces only that default; a value it leaves empty keeps the default, and 0 means none. Every container requests at least 10m CPU and 16 MiB of memory, never more than its limit.
+     * Returns the CPU and memory settings the app service stores for each container of its service. A container with no id stores nothing and runs with the defaults in the service revision manifest, under workloads[].containers[].resources. When the app service runs one of the service\'s derivatives, that derivative\'s resources replace the primary container\'s defaults one value at a time. Each value a stored container sets replaces only that default; a value it leaves empty keeps the default, and 0 means none. Every container requests at least 10m CPU and 16 MiB of memory, never more than its limit.
      * @summary List app service containers
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -730,7 +730,7 @@ export interface AppServicesApiInterface {
     listAppServiceContainersRaw(requestParameters: ListAppServiceContainersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceContainer>>>;
 
     /**
-     * Returns the CPU and memory settings the app service stores for each container of its service. A container with no id stores nothing and runs with the defaults in the service revision manifest, under workloads[].containers[].resources. Each value a stored container sets replaces only that default; a value it leaves empty keeps the default, and 0 means none. Every container requests at least 10m CPU and 16 MiB of memory, never more than its limit.
+     * Returns the CPU and memory settings the app service stores for each container of its service. A container with no id stores nothing and runs with the defaults in the service revision manifest, under workloads[].containers[].resources. When the app service runs one of the service\'s derivatives, that derivative\'s resources replace the primary container\'s defaults one value at a time. Each value a stored container sets replaces only that default; a value it leaves empty keeps the default, and 0 means none. Every container requests at least 10m CPU and 16 MiB of memory, never more than its limit.
      * List app service containers
      */
     listAppServiceContainers(requestParameters: ListAppServiceContainersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceContainer>>;
@@ -2294,7 +2294,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
-     * Returns the CPU and memory settings the app service stores for each container of its service. A container with no id stores nothing and runs with the defaults in the service revision manifest, under workloads[].containers[].resources. Each value a stored container sets replaces only that default; a value it leaves empty keeps the default, and 0 means none. Every container requests at least 10m CPU and 16 MiB of memory, never more than its limit.
+     * Returns the CPU and memory settings the app service stores for each container of its service. A container with no id stores nothing and runs with the defaults in the service revision manifest, under workloads[].containers[].resources. When the app service runs one of the service\'s derivatives, that derivative\'s resources replace the primary container\'s defaults one value at a time. Each value a stored container sets replaces only that default; a value it leaves empty keeps the default, and 0 means none. Every container requests at least 10m CPU and 16 MiB of memory, never more than its limit.
      * List app service containers
      */
     async listAppServiceContainersRaw(requestParameters: ListAppServiceContainersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceContainer>>> {
@@ -2324,7 +2324,7 @@ export class AppServicesApi extends runtime.BaseAPI implements AppServicesApiInt
     }
 
     /**
-     * Returns the CPU and memory settings the app service stores for each container of its service. A container with no id stores nothing and runs with the defaults in the service revision manifest, under workloads[].containers[].resources. Each value a stored container sets replaces only that default; a value it leaves empty keeps the default, and 0 means none. Every container requests at least 10m CPU and 16 MiB of memory, never more than its limit.
+     * Returns the CPU and memory settings the app service stores for each container of its service. A container with no id stores nothing and runs with the defaults in the service revision manifest, under workloads[].containers[].resources. When the app service runs one of the service\'s derivatives, that derivative\'s resources replace the primary container\'s defaults one value at a time. Each value a stored container sets replaces only that default; a value it leaves empty keeps the default, and 0 means none. Every container requests at least 10m CPU and 16 MiB of memory, never more than its limit.
      * List app service containers
      */
     async listAppServiceContainers(requestParameters: ListAppServiceContainersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceContainer>> {

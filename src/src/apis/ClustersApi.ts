@@ -20,6 +20,7 @@ import type {
   ClusterComponentUpdate,
   ClusterCreationResult,
   ClusterEnvironmentPolicyInput,
+  ClusterHostCheck,
   ClusterInfraAppUpgradeChangelog,
   ClusterSettingsInput,
   K3SInstallCommand,
@@ -71,6 +72,10 @@ export interface GetClusterComponentUpdatesRequest {
 }
 
 export interface GetClusterComponentsRequest {
+    id: number;
+}
+
+export interface GetClusterHostChecksRequest {
     id: number;
 }
 
@@ -291,6 +296,22 @@ export interface ClustersApiInterface {
      * List cluster components
      */
     getClusterComponents(requestParameters: GetClusterComponentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterComponent>>;
+
+    /**
+     * Returns what a K3S cluster\'s server last reported about its protections against the Linux kernel bug CVE-2026-98432. The server checks after each boot and once a day, puts back a protection that is missing, and reports the result. The ID is the cluster\'s. Every known check is listed, as unknown when the server hasn\'t reported it or its last report is more than two days old. Managed clusters return an empty list.
+     * @summary List cluster host checks
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    getClusterHostChecksRaw(requestParameters: GetClusterHostChecksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterHostCheck>>>;
+
+    /**
+     * Returns what a K3S cluster\'s server last reported about its protections against the Linux kernel bug CVE-2026-98432. The server checks after each boot and once a day, puts back a protection that is missing, and reports the result. The ID is the cluster\'s. Every known check is listed, as unknown when the server hasn\'t reported it or its last report is more than two days old. Managed clusters return an empty list.
+     * List cluster host checks
+     */
+    getClusterHostChecks(requestParameters: GetClusterHostChecksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterHostCheck>>;
 
     /**
      * Returns stack and service revision changes for infrastructure apps on the cluster.
@@ -925,6 +946,45 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async getClusterComponents(requestParameters: GetClusterComponentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterComponent>> {
         const response = await this.getClusterComponentsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns what a K3S cluster\'s server last reported about its protections against the Linux kernel bug CVE-2026-98432. The server checks after each boot and once a day, puts back a protection that is missing, and reports the result. The ID is the cluster\'s. Every known check is listed, as unknown when the server hasn\'t reported it or its last report is more than two days old. Managed clusters return an empty list.
+     * List cluster host checks
+     */
+    async getClusterHostChecksRaw(requestParameters: GetClusterHostChecksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterHostCheck>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getClusterHostChecks().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/cluster-host-checks/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns what a K3S cluster\'s server last reported about its protections against the Linux kernel bug CVE-2026-98432. The server checks after each boot and once a day, puts back a protection that is missing, and reports the result. The ID is the cluster\'s. Every known check is listed, as unknown when the server hasn\'t reported it or its last report is more than two days old. Managed clusters return an empty list.
+     * List cluster host checks
+     */
+    async getClusterHostChecks(requestParameters: GetClusterHostChecksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterHostCheck>> {
+        const response = await this.getClusterHostChecksRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
