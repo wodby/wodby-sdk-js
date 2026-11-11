@@ -22,6 +22,7 @@ import type {
   ClusterEnvironmentPolicyInput,
   ClusterHostCheck,
   ClusterInfraAppUpgradeChangelog,
+  ClusterSecurityAdvisory,
   ClusterSettingsInput,
   K3SInstallCommand,
   KubernetesVersionUpgradePlan,
@@ -82,6 +83,10 @@ export interface GetClusterHostChecksRequest {
 export interface GetClusterInfraAppUpgradeChangelogRequest {
     id: number;
     appInstanceId?: number;
+}
+
+export interface GetClusterSecurityAdvisoriesRequest {
+    id: number;
 }
 
 export interface GetClusterSharingRequest {
@@ -329,6 +334,22 @@ export interface ClustersApiInterface {
      * Preview cluster infrastructure app upgrades
      */
     getClusterInfraAppUpgradeChangelog(requestParameters: GetClusterInfraAppUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterInfraAppUpgradeChangelog>>;
+
+    /**
+     * Returns where the cluster stands on each security advisory Wodby tracks, such as CVE-2026-98432. The ID is the cluster\'s. A K3S cluster is mitigated or not by the protections Wodby keeps on its server. A managed cluster is fixed or not by the node images its provider ships. An advisory is left out when Wodby can\'t tell, for example when the provider hasn\'t said which node images carry the fix. Wodby Cloud and serverless clusters return an empty list.
+     * @summary List cluster security advisories
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    getClusterSecurityAdvisoriesRaw(requestParameters: GetClusterSecurityAdvisoriesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterSecurityAdvisory>>>;
+
+    /**
+     * Returns where the cluster stands on each security advisory Wodby tracks, such as CVE-2026-98432. The ID is the cluster\'s. A K3S cluster is mitigated or not by the protections Wodby keeps on its server. A managed cluster is fixed or not by the node images its provider ships. An advisory is left out when Wodby can\'t tell, for example when the provider hasn\'t said which node images carry the fix. Wodby Cloud and serverless clusters return an empty list.
+     * List cluster security advisories
+     */
+    getClusterSecurityAdvisories(requestParameters: GetClusterSecurityAdvisoriesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterSecurityAdvisory>>;
 
     /**
      * Returns who owns the cluster and which projects can use it.
@@ -1028,6 +1049,45 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async getClusterInfraAppUpgradeChangelog(requestParameters: GetClusterInfraAppUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterInfraAppUpgradeChangelog>> {
         const response = await this.getClusterInfraAppUpgradeChangelogRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns where the cluster stands on each security advisory Wodby tracks, such as CVE-2026-98432. The ID is the cluster\'s. A K3S cluster is mitigated or not by the protections Wodby keeps on its server. A managed cluster is fixed or not by the node images its provider ships. An advisory is left out when Wodby can\'t tell, for example when the provider hasn\'t said which node images carry the fix. Wodby Cloud and serverless clusters return an empty list.
+     * List cluster security advisories
+     */
+    async getClusterSecurityAdvisoriesRaw(requestParameters: GetClusterSecurityAdvisoriesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterSecurityAdvisory>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getClusterSecurityAdvisories().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/cluster-security-advisories/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns where the cluster stands on each security advisory Wodby tracks, such as CVE-2026-98432. The ID is the cluster\'s. A K3S cluster is mitigated or not by the protections Wodby keeps on its server. A managed cluster is fixed or not by the node images its provider ships. An advisory is left out when Wodby can\'t tell, for example when the provider hasn\'t said which node images carry the fix. Wodby Cloud and serverless clusters return an empty list.
+     * List cluster security advisories
+     */
+    async getClusterSecurityAdvisories(requestParameters: GetClusterSecurityAdvisoriesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterSecurityAdvisory>> {
+        const response = await this.getClusterSecurityAdvisoriesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

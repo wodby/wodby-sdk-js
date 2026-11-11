@@ -7016,7 +7016,7 @@ export interface ClusterAutoInfrastructureUpgradeSettingsInput {
     apps?: ClusterAutoInfrastructureComponentSettingsInput;
 }
 /**
- * Automatic Kubernetes version upgrades. Kubernetes versions are 1.MINOR.PATCH, so there is no major upgrade. A newer provider build of the same version, such as 1.36.5-do.1 to 1.36.5-do.2, counts as a patch. Always disabled for Wodby Cloud and serverless clusters.
+ * Automatic Kubernetes version upgrades. Kubernetes versions are 1.MINOR.PATCH, so there is no major upgrade. A newer provider build of the same version, such as 1.36.5-do.1 to 1.36.5-do.2, counts as a patch. When there is no version upgrade to start, the same policy and window apply the cluster's component updates, such as Cilium on k3s and EKS add-ons, unless includeComponentUpdates is off; an update within the component's minor counts as a patch. Always disabled for Wodby Cloud and serverless clusters.
  * @export
  * @interface ClusterAutoKubernetesUpgradeSettings
  */
@@ -7051,6 +7051,12 @@ export interface ClusterAutoKubernetesUpgradeSettings {
      * @memberof ClusterAutoKubernetesUpgradeSettings
      */
     timeWindow?: AutomationTimeWindow;
+    /**
+     * Also applies the cluster's component updates when there is no version upgrade to start, under the same policy and window. On by default.
+     * @type {boolean}
+     * @memberof ClusterAutoKubernetesUpgradeSettings
+     */
+    includeComponentUpdates: boolean;
 }
 /**
  * Omitted fields keep their current values.
@@ -7082,6 +7088,12 @@ export interface ClusterAutoKubernetesUpgradeSettingsInput {
      * @memberof ClusterAutoKubernetesUpgradeSettingsInput
      */
     minorOnlyAfterEndOfLife?: boolean | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ClusterAutoKubernetesUpgradeSettingsInput
+     */
+    includeComponentUpdates?: boolean | null;
     /**
      * A window with enabled false lets upgrades start at any time.
      * @type {AutomationTimeWindowInput}
@@ -7502,6 +7514,18 @@ export interface ClusterHostCheck {
      */
     title: string;
     /**
+     * The security advisory the check protects against, such as CVE-2026-98432. Group checks by this field.
+     * @type {string}
+     * @memberof ClusterHostCheck
+     */
+    advisory: string;
+    /**
+     * Describes the advisory, such as Linux kernel TCP bug.
+     * @type {string}
+     * @memberof ClusterHostCheck
+     */
+    advisoryTitle: string;
+    /**
      * The node that reported the check; empty when no node has reported.
      * @type {string}
      * @memberof ClusterHostCheck
@@ -7667,6 +7691,66 @@ export interface ClusterNodePoolInput {
      */
     nodeDiskSize?: number | null;
 }
+/**
+ * 
+ * @export
+ * @interface ClusterSecurityAdvisory
+ */
+export interface ClusterSecurityAdvisory {
+    /**
+     * The advisory, such as CVE-2026-98432.
+     * @type {string}
+     * @memberof ClusterSecurityAdvisory
+     */
+    advisory: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterSecurityAdvisory
+     */
+    title: string;
+    /**
+     * mitigated or not_mitigated for a K3S cluster, by the protections Wodby keeps on its server. fixed or not_fixed for a managed cluster, by the node images its provider ships.
+     * @type {string}
+     * @memberof ClusterSecurityAdvisory
+     */
+    state: ClusterSecurityAdvisoryStateEnum;
+    /**
+     * The operation that fixes or mitigates the advisory. Absent when nothing is needed, or when the provider has no fixed node image yet.
+     * @type {string}
+     * @memberof ClusterSecurityAdvisory
+     */
+    action?: ClusterSecurityAdvisoryActionEnum;
+    /**
+     * Why the cluster is in this state and what to do about it.
+     * @type {string}
+     * @memberof ClusterSecurityAdvisory
+     */
+    message: string;
+}
+
+
+/**
+ * @export
+ */
+export const ClusterSecurityAdvisoryStateEnum = {
+    Mitigated: 'mitigated',
+    NotMitigated: 'not_mitigated',
+    Fixed: 'fixed',
+    NotFixed: 'not_fixed'
+} as const;
+export type ClusterSecurityAdvisoryStateEnum = typeof ClusterSecurityAdvisoryStateEnum[keyof typeof ClusterSecurityAdvisoryStateEnum];
+
+/**
+ * @export
+ */
+export const ClusterSecurityAdvisoryActionEnum = {
+    UpgradeInfrastructure: 'upgrade_infrastructure',
+    RecycleNodes: 'recycle_nodes',
+    UpdateKubernetes: 'update_kubernetes'
+} as const;
+export type ClusterSecurityAdvisoryActionEnum = typeof ClusterSecurityAdvisoryActionEnum[keyof typeof ClusterSecurityAdvisoryActionEnum];
+
 /**
  * 
  * @export
@@ -11721,6 +11805,12 @@ export interface NewClusterInput {
      */
     autoInfrastructureUpgrade?: boolean | null;
     /**
+     * Turns automatic Kubernetes version and component upgrades on or off. On by default.
+     * @type {boolean}
+     * @memberof NewClusterInput
+     */
+    autoKubernetesUpgrade?: boolean | null;
+    /**
      * 
      * @type {ClusterEnvironmentPolicyInput}
      * @memberof NewClusterInput
@@ -12065,6 +12155,12 @@ export interface NewK3SClusterInput {
      * @memberof NewK3SClusterInput
      */
     autoInfrastructureUpgrade?: boolean | null;
+    /**
+     * Turns automatic Kubernetes version and component upgrades on or off. On by default.
+     * @type {boolean}
+     * @memberof NewK3SClusterInput
+     */
+    autoKubernetesUpgrade?: boolean | null;
     /**
      * 
      * @type {ClusterEnvironmentPolicyInput}
@@ -17853,7 +17949,7 @@ export interface StackSettings {
      */
     autoOriginStackUpdate?: StackAutoOriginUpdateSettings;
     /**
-     * What an update from Git does with existing stack services whose stack.yml reference has no version: latest moves them to the service's latest version, auto_update_settings moves them only as far as the stack's service auto update settings allow, and keep keeps their version. Versioned references, pinned stack services and new ones resolve the same way in every mode, and a stack service whose stack.yml configures something only a newer version has always moves to it.
+     * What an automatic update from Git, started by a push, does with existing stack services whose stack.yml reference has no version: latest moves them to the service's latest version, auto_update_settings (the default) moves them only as far as the stack's service auto update settings allow, and keep keeps their version. Manual updates move them to the latest version unless the update's serviceUpdates says otherwise. Versioned references, pinned stack services and new ones resolve the same way in every mode, and a stack service whose stack.yml configures something only a newer version has always moves to it.
      * @type {string}
      * @memberof StackSettings
      */
@@ -17884,7 +17980,7 @@ export interface StackSettingsInput {
      */
     autoOriginStackUpdate?: StackAutoOriginUpdateSettingsInput;
     /**
-     * What an update from Git does with existing stack services' versions; see StackSettings.
+     * What an automatic update from Git does with existing stack services' versions; see StackSettings.
      * @type {string}
      * @memberof StackSettingsInput
      */
@@ -19577,7 +19673,7 @@ export interface UpdateStackFromGitRequest {
      */
     gitRefType: string;
     /**
-     * Stack updates only; other updates ignore it. What this update does with existing stack services whose stack.yml reference has no version, instead of the stack's gitServiceUpdates setting: latest, auto_update_settings or keep.
+     * Stack updates only; other updates ignore it. What this update does with existing stack services whose stack.yml reference has no version: latest (the default), auto_update_settings or keep.
      * @type {string}
      * @memberof UpdateStackFromGitRequest
      */
