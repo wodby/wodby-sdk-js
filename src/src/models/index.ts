@@ -16280,6 +16280,36 @@ export interface Stack {
      */
     originStackRevCreatedAt?: string | null;
     /**
+     * Main stack this stack is a variant of, such as Drupal for a high-availability Drupal stack. Absent when the stack is not a variant, or the main stack does not exist or is not visible to you.
+     * @type {number}
+     * @memberof Stack
+     */
+    variantOfStackId?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Stack
+     */
+    variantOfStackName?: string | null;
+    /**
+     * Short label that tells this variant apart, such as High availability.
+     * @type {string}
+     * @memberof Stack
+     */
+    variantTitle?: string | null;
+    /**
+     * When to choose this stack over the other stacks of its variant family, such as building the app from your own repository to customize it. A main stack can have one too.
+     * @type {string}
+     * @memberof Stack
+     */
+    variantDescription?: string | null;
+    /**
+     * Variants of this stack that you can see, ordered by title. Empty for a stack that is a variant itself.
+     * @type {Array<number>}
+     * @memberof Stack
+     */
+    variantStackIds: Array<number>;
+    /**
      * 
      * @type {number}
      * @memberof Stack
