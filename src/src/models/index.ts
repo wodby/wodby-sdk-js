@@ -1734,6 +1734,12 @@ export interface AppEnvironment {
      */
     mainDomainBasicAuth: boolean;
     /**
+     * Hostname to point custom domains at: a CNAME for subdomains, an ALIAS or flattened CNAME for root domains. Wodby keeps it pointed at wherever the environment runs. Null until it is published.
+     * @type {string}
+     * @memberof AppEnvironment
+     */
+    dnsTarget?: string | null;
+    /**
      * 
      * @type {AppEnvironmentMainRouteCert}
      * @memberof AppEnvironment
@@ -6093,6 +6099,12 @@ export interface BackupPreset {
      */
     backupCategory: BackupPresetBackupCategoryEnum;
     /**
+     * Organization-wide presets only. Projects whose apps and databases the preset backs up; empty means every project.
+     * @type {Array<number>}
+     * @memberof BackupPreset
+     */
+    projectIds: Array<number>;
+    /**
      * 
      * @type {string}
      * @memberof BackupPreset
@@ -7016,7 +7028,7 @@ export interface ClusterAutoInfrastructureUpgradeSettingsInput {
     apps?: ClusterAutoInfrastructureComponentSettingsInput;
 }
 /**
- * Automatic Kubernetes version upgrades. Kubernetes versions are 1.MINOR.PATCH, so there is no major upgrade. A newer provider build of the same version, such as 1.36.5-do.1 to 1.36.5-do.2, counts as a patch. When there is no version upgrade to start, the same policy and window apply the cluster's component updates, such as Cilium on k3s and EKS add-ons, unless includeComponentUpdates is off; an update within the component's minor counts as a patch. Always disabled for Wodby Cloud and serverless clusters.
+ * Automatic Kubernetes version upgrades. Kubernetes versions are 1.MINOR.PATCH, so there is no major upgrade. A newer provider build of the same version, such as 1.36.5-do.1 to 1.36.5-do.2, counts as a patch. When there is no version upgrade to start, the same policy and window apply the cluster's component updates, such as Cilium on k3s and EKS add-ons, unless includeComponentUpdates is off; an update within the component's minor counts as a patch. On by default for k3s clusters, which are upgraded in place. Off by default for managed clusters, because each upgrade replaces their nodes and restarts every pod. Always disabled for Wodby Cloud and serverless clusters. Turning it on is refused for a single-node managed cluster with custom domains, because each upgrade changes its public IP; a policy that was already on starts nothing while the cluster has them.
  * @export
  * @interface ClusterAutoKubernetesUpgradeSettings
  */
@@ -7526,7 +7538,7 @@ export interface ClusterHostCheck {
      */
     advisoryTitle: string;
     /**
-     * The node that reported the check; empty when no node has reported.
+     * The node the check is for. Each node of the cluster is listed; empty when the nodes have not been observed yet.
      * @type {string}
      * @memberof ClusterHostCheck
      */
@@ -10143,6 +10155,78 @@ export type InviteOrgMemberInputRoleEnum = typeof InviteOrgMemberInputRoleEnum[k
 /**
  * 
  * @export
+ * @interface K3SClusterNode
+ */
+export interface K3SClusterNode {
+    /**
+     * 
+     * @type {string}
+     * @memberof K3SClusterNode
+     */
+    name: string;
+    /**
+     * server runs the k3s control plane; agent is a worker node joined with the join command.
+     * @type {string}
+     * @memberof K3SClusterNode
+     */
+    role: K3SClusterNodeRoleEnum;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof K3SClusterNode
+     */
+    ready: boolean;
+    /**
+     * Whether the node accepts new pods. A node being removed or upgraded doesn't.
+     * @type {boolean}
+     * @memberof K3SClusterNode
+     */
+    schedulable: boolean;
+    /**
+     * The node's k3s release, such as v1.36.6+k3s1.
+     * @type {string}
+     * @memberof K3SClusterNode
+     */
+    version: string;
+    /**
+     * The private address the node uses for cluster traffic.
+     * @type {string}
+     * @memberof K3SClusterNode
+     */
+    internalIp?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof K3SClusterNode
+     */
+    externalIp?: string;
+    /**
+     * Persistent volumes stored on the node, as namespace/name of their claims. Their data stays on that server, so removing the node loses it.
+     * @type {Array<string>}
+     * @memberof K3SClusterNode
+     */
+    localVolumes: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof K3SClusterNode
+     */
+    createdAt: string;
+}
+
+
+/**
+ * @export
+ */
+export const K3SClusterNodeRoleEnum = {
+    Server: 'server',
+    Agent: 'agent'
+} as const;
+export type K3SClusterNodeRoleEnum = typeof K3SClusterNodeRoleEnum[keyof typeof K3SClusterNodeRoleEnum];
+
+/**
+ * 
+ * @export
  * @interface K3SInstallCommand
  */
 export interface K3SInstallCommand {
@@ -10150,6 +10234,19 @@ export interface K3SInstallCommand {
      * 
      * @type {string}
      * @memberof K3SInstallCommand
+     */
+    command: string;
+}
+/**
+ * 
+ * @export
+ * @interface K3SJoinCommand
+ */
+export interface K3SJoinCommand {
+    /**
+     * 
+     * @type {string}
+     * @memberof K3SJoinCommand
      */
     command: string;
 }
@@ -11500,6 +11597,12 @@ export interface NewBackupPresetInput {
      */
     backupCategory?: NewBackupPresetInputBackupCategoryEnum | null;
     /**
+     * Organization-wide presets only. Limits the preset to apps and databases in these projects of the organization; omit or leave empty for every project.
+     * @type {Array<number>}
+     * @memberof NewBackupPresetInput
+     */
+    projectIds?: Array<number> | null;
+    /**
      * 
      * @type {string}
      * @memberof NewBackupPresetInput
@@ -11805,7 +11908,7 @@ export interface NewClusterInput {
      */
     autoInfrastructureUpgrade?: boolean | null;
     /**
-     * Turns automatic Kubernetes version and component upgrades on or off. On by default.
+     * Turns automatic Kubernetes version and component upgrades on or off. Off by default, because each Kubernetes upgrade of a managed cluster replaces its nodes and restarts every pod. Serverless clusters are always off.
      * @type {boolean}
      * @memberof NewClusterInput
      */
@@ -14553,6 +14656,25 @@ export interface RemoteGitRepoFilePresence {
      * @memberof RemoteGitRepoFilePresence
      */
     _exists: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface RemoveK3SClusterNodeInput
+ */
+export interface RemoveK3SClusterNodeInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof RemoveK3SClusterNodeInput
+     */
+    nodeName: string;
+    /**
+     * Remove the node even though it stores persistent volumes, which loses their data.
+     * @type {boolean}
+     * @memberof RemoveK3SClusterNodeInput
+     */
+    force?: boolean;
 }
 /**
  * 
@@ -19380,6 +19502,12 @@ export interface UpdateBackupPresetInput {
      * @memberof UpdateBackupPresetInput
      */
     backupCategory?: UpdateBackupPresetInputBackupCategoryEnum | null;
+    /**
+     * Organization-wide presets only. Omit to preserve the current project selection; use an empty array to apply the preset to every project.
+     * @type {Array<number>}
+     * @memberof UpdateBackupPresetInput
+     */
+    projectIds?: Array<number> | null;
     /**
      * Use 0 for Wodby Blob Storage. Enabling the preset requires a paid subscription.
      * @type {number}

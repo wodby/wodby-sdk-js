@@ -24,13 +24,16 @@ import type {
   ClusterInfraAppUpgradeChangelog,
   ClusterSecurityAdvisory,
   ClusterSettingsInput,
+  K3SClusterNode,
   K3SInstallCommand,
+  K3SJoinCommand,
   KubernetesVersionUpgradePlan,
   NewClusterInput,
   NewK3SClusterInput,
   NewWodbyCloudClusterInput,
   OperationResult,
   ProblemDetails,
+  RemoveK3SClusterNodeInput,
   ResourceSharing,
   ResourceSharingInput,
   ScaleClusterInput,
@@ -97,6 +100,10 @@ export interface GetK3SClusterInstallCommandRequest {
     id: number;
 }
 
+export interface GetK3SClusterJoinCommandRequest {
+    id: number;
+}
+
 export interface GetKubernetesVersionUpgradePlanRequest {
     id: number;
 }
@@ -108,8 +115,17 @@ export interface ListClustersRequest {
     environmentId?: number;
 }
 
+export interface ListK3SClusterNodesRequest {
+    id: number;
+}
+
 export interface RecycleClusterNodesRequest {
     id: number;
+}
+
+export interface RemoveK3SClusterNodeRequest {
+    id: number;
+    removeK3SClusterNodeInput: RemoveK3SClusterNodeInput;
 }
 
 export interface ScaleClusterRequest {
@@ -384,6 +400,22 @@ export interface ClustersApiInterface {
     getK3SClusterInstallCommand(requestParameters: GetK3SClusterInstallCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<K3SInstallCommand>;
 
     /**
+     * Returns a one-time shell command that joins another server to a k3s cluster as a worker node. Run it as root on that server within 15 minutes. Both servers must share a private network, and the cluster must be in OK status on current infrastructure. The command contains short-lived credentials; treat it as a secret.
+     * @summary Get k3s join command
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    getK3SClusterJoinCommandRaw(requestParameters: GetK3SClusterJoinCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<K3SJoinCommand>>;
+
+    /**
+     * Returns a one-time shell command that joins another server to a k3s cluster as a worker node. Run it as root on that server within 15 minutes. Both servers must share a private network, and the cluster must be in OK status on current infrastructure. The command contains short-lived credentials; treat it as a secret.
+     * Get k3s join command
+     */
+    getK3SClusterJoinCommand(requestParameters: GetK3SClusterJoinCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<K3SJoinCommand>;
+
+    /**
      * Returns supported Kubernetes upgrade targets, blockers, and warnings for a cluster.
      * @summary Get Kubernetes version upgrade plan
      * @param {number} id 
@@ -419,6 +451,22 @@ export interface ClustersApiInterface {
     listClusters(requestParameters: ListClustersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Cluster>>;
 
     /**
+     * Returns the nodes of a k3s cluster, read live from the cluster, the server first. The ID is the cluster\'s.
+     * @summary List k3s cluster nodes
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    listK3SClusterNodesRaw(requestParameters: ListK3SClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<K3SClusterNode>>>;
+
+    /**
+     * Returns the nodes of a k3s cluster, read live from the cluster, the server first. The ID is the cluster\'s.
+     * List k3s cluster nodes
+     */
+    listK3SClusterNodes(requestParameters: ListK3SClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<K3SClusterNode>>;
+
+    /**
      * Returns the machine types available for Wodby Cloud clusters with their prices.
      * @summary List Wodby Cloud machine types
      * @param {*} [options] Override http request option.
@@ -434,7 +482,7 @@ export interface ClustersApiInterface {
     listWodbyCloudMachineTypes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<WodbyCloudMachineType>>;
 
     /**
-     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for Wodby Cloud, serverless and single-node clusters, and while application operations are active. New deployments wait until it ends.
+     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. A single-node DigitalOcean cluster gets a temporary second node first, and its public IP changes: Wodby updates the technical domains, but custom domains with an A record to the old IP must be updated. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for K3S, Wodby Cloud and serverless clusters, and while application operations are active. New deployments wait until it ends.
      * @summary Recycle cluster nodes
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -444,10 +492,27 @@ export interface ClustersApiInterface {
     recycleClusterNodesRaw(requestParameters: RecycleClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
-     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for Wodby Cloud, serverless and single-node clusters, and while application operations are active. New deployments wait until it ends.
+     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. A single-node DigitalOcean cluster gets a temporary second node first, and its public IP changes: Wodby updates the technical domains, but custom domains with an A record to the old IP must be updated. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for K3S, Wodby Cloud and serverless clusters, and while application operations are active. New deployments wait until it ends.
      * Recycle cluster nodes
      */
     recycleClusterNodes(requestParameters: RecycleClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Takes a worker node out of a k3s cluster: moves its pods to other nodes, stops k3s on it and deletes the node. Refuses the server, and without force a node that stores persistent volumes, whose data would be lost. Run sudo /usr/local/bin/wodby-k3s-uninstall on that server afterwards to remove k3s from it.
+     * @summary Remove k3s cluster node
+     * @param {number} id 
+     * @param {RemoveK3SClusterNodeInput} removeK3SClusterNodeInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    removeK3SClusterNodeRaw(requestParameters: RemoveK3SClusterNodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Takes a worker node out of a k3s cluster: moves its pods to other nodes, stops k3s on it and deletes the node. Refuses the server, and without force a node that stores persistent volumes, whose data would be lost. Run sudo /usr/local/bin/wodby-k3s-uninstall on that server afterwards to remove k3s from it.
+     * Remove k3s cluster node
+     */
+    removeK3SClusterNode(requestParameters: RemoveK3SClusterNodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Changes the minimum and maximum node count of a managed cluster and starts the node pool update.
@@ -1170,6 +1235,45 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Returns a one-time shell command that joins another server to a k3s cluster as a worker node. Run it as root on that server within 15 minutes. Both servers must share a private network, and the cluster must be in OK status on current infrastructure. The command contains short-lived credentials; treat it as a secret.
+     * Get k3s join command
+     */
+    async getK3SClusterJoinCommandRaw(requestParameters: GetK3SClusterJoinCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<K3SJoinCommand>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getK3SClusterJoinCommand().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/k3s-join-command/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns a one-time shell command that joins another server to a k3s cluster as a worker node. Run it as root on that server within 15 minutes. Both servers must share a private network, and the cluster must be in OK status on current infrastructure. The command contains short-lived credentials; treat it as a secret.
+     * Get k3s join command
+     */
+    async getK3SClusterJoinCommand(requestParameters: GetK3SClusterJoinCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<K3SJoinCommand> {
+        const response = await this.getK3SClusterJoinCommandRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns supported Kubernetes upgrade targets, blockers, and warnings for a cluster.
      * Get Kubernetes version upgrade plan
      */
@@ -1257,6 +1361,45 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Returns the nodes of a k3s cluster, read live from the cluster, the server first. The ID is the cluster\'s.
+     * List k3s cluster nodes
+     */
+    async listK3SClusterNodesRaw(requestParameters: ListK3SClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<K3SClusterNode>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listK3SClusterNodes().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/cluster-k3s-nodes/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the nodes of a k3s cluster, read live from the cluster, the server first. The ID is the cluster\'s.
+     * List k3s cluster nodes
+     */
+    async listK3SClusterNodes(requestParameters: ListK3SClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<K3SClusterNode>> {
+        const response = await this.listK3SClusterNodesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns the machine types available for Wodby Cloud clusters with their prices.
      * List Wodby Cloud machine types
      */
@@ -1289,7 +1432,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for Wodby Cloud, serverless and single-node clusters, and while application operations are active. New deployments wait until it ends.
+     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. A single-node DigitalOcean cluster gets a temporary second node first, and its public IP changes: Wodby updates the technical domains, but custom domains with an A record to the old IP must be updated. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for K3S, Wodby Cloud and serverless clusters, and while application operations are active. New deployments wait until it ends.
      * Recycle cluster nodes
      */
     async recycleClusterNodesRaw(requestParameters: RecycleClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -1319,11 +1462,60 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for Wodby Cloud, serverless and single-node clusters, and while application operations are active. New deployments wait until it ends.
+     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. A single-node DigitalOcean cluster gets a temporary second node first, and its public IP changes: Wodby updates the technical domains, but custom domains with an A record to the old IP must be updated. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for K3S, Wodby Cloud and serverless clusters, and while application operations are active. New deployments wait until it ends.
      * Recycle cluster nodes
      */
     async recycleClusterNodes(requestParameters: RecycleClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.recycleClusterNodesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Takes a worker node out of a k3s cluster: moves its pods to other nodes, stops k3s on it and deletes the node. Refuses the server, and without force a node that stores persistent volumes, whose data would be lost. Run sudo /usr/local/bin/wodby-k3s-uninstall on that server afterwards to remove k3s from it.
+     * Remove k3s cluster node
+     */
+    async removeK3SClusterNodeRaw(requestParameters: RemoveK3SClusterNodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling removeK3SClusterNode().'
+            );
+        }
+
+        if (requestParameters['removeK3SClusterNodeInput'] == null) {
+            throw new runtime.RequiredError(
+                'removeK3SClusterNodeInput',
+                'Required parameter "removeK3SClusterNodeInput" was null or undefined when calling removeK3SClusterNode().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/{id}/actions/remove-k3s-node`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['removeK3SClusterNodeInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Takes a worker node out of a k3s cluster: moves its pods to other nodes, stops k3s on it and deletes the node. Refuses the server, and without force a node that stores persistent volumes, whose data would be lost. Run sudo /usr/local/bin/wodby-k3s-uninstall on that server afterwards to remove k3s from it.
+     * Remove k3s cluster node
+     */
+    async removeK3SClusterNode(requestParameters: RemoveK3SClusterNodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.removeK3SClusterNodeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

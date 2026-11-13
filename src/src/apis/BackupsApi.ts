@@ -65,6 +65,8 @@ export interface ListBackupPresetsRequest {
     backupName?: string;
     applicableEnvId?: number;
     applicableBackupCategory?: ListBackupPresetsApplicableBackupCategoryEnum;
+    applicableAppInstanceId?: number;
+    applicableDatabaseId?: number;
 }
 
 export interface ListBackupsRequest {
@@ -216,6 +218,8 @@ export interface BackupsApiInterface {
      * @param {string} [backupName] 
      * @param {number} [applicableEnvId] Return only presets that apply to this environment.
      * @param {'files' | 'database'} [applicableBackupCategory] Return only presets that apply to this backup category.
+     * @param {number} [applicableAppInstanceId] Return only presets that apply to this app environment, by its environment and the projects its app is in.
+     * @param {number} [applicableDatabaseId] Return only presets that apply to this database, by its environment and the projects it is in.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BackupsApiInterface
@@ -612,6 +616,14 @@ export class BackupsApi extends runtime.BaseAPI implements BackupsApiInterface {
 
         if (requestParameters['applicableBackupCategory'] != null) {
             queryParameters['applicableBackupCategory'] = requestParameters['applicableBackupCategory'];
+        }
+
+        if (requestParameters['applicableAppInstanceId'] != null) {
+            queryParameters['applicableAppInstanceId'] = requestParameters['applicableAppInstanceId'];
+        }
+
+        if (requestParameters['applicableDatabaseId'] != null) {
+            queryParameters['applicableDatabaseId'] = requestParameters['applicableDatabaseId'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
