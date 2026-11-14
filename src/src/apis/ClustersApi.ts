@@ -22,6 +22,8 @@ import type {
   ClusterEnvironmentPolicyInput,
   ClusterHostCheck,
   ClusterInfraAppUpgradeChangelog,
+  ClusterKubernetesVulnerabilities,
+  ClusterNode,
   ClusterSecurityAdvisory,
   ClusterSettingsInput,
   K3SClusterNode,
@@ -41,6 +43,7 @@ import type {
   SwitchK3SServerAddressInput,
   UpdateClusterComponentRequest,
   UpdateClusterGPUNodePoolInput,
+  UpdateK3SClusterMaxPodsInput,
   UpdateK3SClusterPublicIPInput,
   UpdateKubernetesVersionInput,
   UpdateTitleRequest,
@@ -90,6 +93,10 @@ export interface GetClusterInfraAppUpgradeChangelogRequest {
     appInstanceId?: number;
 }
 
+export interface GetClusterKubernetesVulnerabilitiesRequest {
+    id: number;
+}
+
 export interface GetClusterSecurityAdvisoriesRequest {
     id: number;
 }
@@ -107,6 +114,10 @@ export interface GetK3SClusterJoinCommandRequest {
 }
 
 export interface GetKubernetesVersionUpgradePlanRequest {
+    id: number;
+}
+
+export interface ListClusterNodesRequest {
     id: number;
 }
 
@@ -179,6 +190,11 @@ export interface UpdateClusterSharingRequest {
     resourceSharingInput: ResourceSharingInput;
 }
 
+export interface UpdateK3SClusterMaxPodsRequest {
+    id: number;
+    updateK3SClusterMaxPodsInput: UpdateK3SClusterMaxPodsInput;
+}
+
 export interface UpdateK3SClusterPublicIpRequest {
     id: number;
     updateK3SClusterPublicIPInput: UpdateK3SClusterPublicIPInput;
@@ -216,8 +232,8 @@ export interface ClustersApiInterface {
     createCluster(requestParameters: CreateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
 
     /**
-     * Registers a self-hosted k3s cluster. Run the command from GET /clusters/k3s-install-command/{id} on the server to connect it.
-     * @summary Create k3s cluster
+     * Registers a self-hosted K3s cluster. Run the command from GET /clusters/k3s-install-command/{id} on the server to connect it.
+     * @summary Create K3s cluster
      * @param {NewK3SClusterInput} newK3SClusterInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -226,8 +242,8 @@ export interface ClustersApiInterface {
     createK3SClusterRaw(requestParameters: CreateK3SClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
 
     /**
-     * Registers a self-hosted k3s cluster. Run the command from GET /clusters/k3s-install-command/{id} on the server to connect it.
-     * Create k3s cluster
+     * Registers a self-hosted K3s cluster. Run the command from GET /clusters/k3s-install-command/{id} on the server to connect it.
+     * Create K3s cluster
      */
     createK3SCluster(requestParameters: CreateK3SClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
 
@@ -298,7 +314,7 @@ export interface ClustersApiInterface {
     getClusterByName(requestParameters: GetClusterByNameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
 
     /**
-     * Returns the updates Wodby can apply to single components of a healthy cluster, without a Kubernetes or infrastructure upgrade. The ID is the cluster\'s. Most components cannot be updated this way, because their provider or K3S release owns them, so the list is often empty.
+     * Returns the updates Wodby can apply to single components of a healthy cluster, without a Kubernetes or infrastructure upgrade. The ID is the cluster\'s. Most components cannot be updated this way, because their provider or K3s release owns them, so the list is often empty.
      * @summary List cluster component updates
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -308,7 +324,7 @@ export interface ClustersApiInterface {
     getClusterComponentUpdatesRaw(requestParameters: GetClusterComponentUpdatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterComponentUpdate>>>;
 
     /**
-     * Returns the updates Wodby can apply to single components of a healthy cluster, without a Kubernetes or infrastructure upgrade. The ID is the cluster\'s. Most components cannot be updated this way, because their provider or K3S release owns them, so the list is often empty.
+     * Returns the updates Wodby can apply to single components of a healthy cluster, without a Kubernetes or infrastructure upgrade. The ID is the cluster\'s. Most components cannot be updated this way, because their provider or K3s release owns them, so the list is often empty.
      * List cluster component updates
      */
     getClusterComponentUpdates(requestParameters: GetClusterComponentUpdatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterComponentUpdate>>;
@@ -330,7 +346,7 @@ export interface ClustersApiInterface {
     getClusterComponents(requestParameters: GetClusterComponentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterComponent>>;
 
     /**
-     * Returns what a K3S cluster\'s server last reported about its protections against the Linux kernel bug CVE-2026-98432. The server checks after each boot and once a day, puts back a protection that is missing, and reports the result. The ID is the cluster\'s. Every known check is listed, as unknown when the server hasn\'t reported it or its last report is more than two days old. Managed clusters return an empty list.
+     * Returns what a K3s cluster\'s server last reported about its protections against the Linux kernel bug CVE-2026-98432. The server checks after each boot and once a day, puts back a protection that is missing, and reports the result. The ID is the cluster\'s. Every known check is listed, as unknown when the server hasn\'t reported it or its last report is more than two days old. Managed clusters return an empty list.
      * @summary List cluster host checks
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -340,7 +356,7 @@ export interface ClustersApiInterface {
     getClusterHostChecksRaw(requestParameters: GetClusterHostChecksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterHostCheck>>>;
 
     /**
-     * Returns what a K3S cluster\'s server last reported about its protections against the Linux kernel bug CVE-2026-98432. The server checks after each boot and once a day, puts back a protection that is missing, and reports the result. The ID is the cluster\'s. Every known check is listed, as unknown when the server hasn\'t reported it or its last report is more than two days old. Managed clusters return an empty list.
+     * Returns what a K3s cluster\'s server last reported about its protections against the Linux kernel bug CVE-2026-98432. The server checks after each boot and once a day, puts back a protection that is missing, and reports the result. The ID is the cluster\'s. Every known check is listed, as unknown when the server hasn\'t reported it or its last report is more than two days old. Managed clusters return an empty list.
      * List cluster host checks
      */
     getClusterHostChecks(requestParameters: GetClusterHostChecksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterHostCheck>>;
@@ -363,7 +379,23 @@ export interface ClustersApiInterface {
     getClusterInfraAppUpgradeChangelog(requestParameters: GetClusterInfraAppUpgradeChangelogRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterInfraAppUpgradeChangelog>>;
 
     /**
-     * Returns where the cluster stands on each security advisory Wodby tracks, such as CVE-2026-98432. The ID is the cluster\'s. A K3S cluster is mitigated or not by the protections Wodby keeps on its server. A managed cluster is fixed or not by the node images its provider ships. An advisory is left out when Wodby can\'t tell, for example when the provider hasn\'t said which node images carry the fix. Wodby Cloud and serverless clusters return an empty list.
+     * Returns the known upstream vulnerabilities of the Kubernetes version the cluster last reported. The ID is the cluster\'s. The vulnerabilities describe the upstream patch level of the version; K3s and managed Kubernetes builds can carry fixes that are newer than that patch. Returns null while they are unknown: for Wodby Cloud and serverless clusters, before the cluster reports its version, or while they can\'t be loaded.
+     * @summary List Kubernetes version vulnerabilities
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    getClusterKubernetesVulnerabilitiesRaw(requestParameters: GetClusterKubernetesVulnerabilitiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterKubernetesVulnerabilities>>;
+
+    /**
+     * Returns the known upstream vulnerabilities of the Kubernetes version the cluster last reported. The ID is the cluster\'s. The vulnerabilities describe the upstream patch level of the version; K3s and managed Kubernetes builds can carry fixes that are newer than that patch. Returns null while they are unknown: for Wodby Cloud and serverless clusters, before the cluster reports its version, or while they can\'t be loaded.
+     * List Kubernetes version vulnerabilities
+     */
+    getClusterKubernetesVulnerabilities(requestParameters: GetClusterKubernetesVulnerabilitiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterKubernetesVulnerabilities>;
+
+    /**
+     * Returns where the cluster stands on each security advisory Wodby tracks, such as CVE-2026-98432. The ID is the cluster\'s. A K3s cluster is mitigated or not by the protections Wodby keeps on its server. A managed cluster is fixed or not by the node images its provider ships, as Wodby last checked them: once a day, and when a task that replaces nodes finishes. A managed cluster returns an empty list until its first check, within minutes of its creation. An advisory is left out when Wodby can\'t tell, for example when the provider hasn\'t said which node images carry the fix. Wodby Cloud and serverless clusters return an empty list.
      * @summary List cluster security advisories
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -373,7 +405,7 @@ export interface ClustersApiInterface {
     getClusterSecurityAdvisoriesRaw(requestParameters: GetClusterSecurityAdvisoriesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterSecurityAdvisory>>>;
 
     /**
-     * Returns where the cluster stands on each security advisory Wodby tracks, such as CVE-2026-98432. The ID is the cluster\'s. A K3S cluster is mitigated or not by the protections Wodby keeps on its server. A managed cluster is fixed or not by the node images its provider ships. An advisory is left out when Wodby can\'t tell, for example when the provider hasn\'t said which node images carry the fix. Wodby Cloud and serverless clusters return an empty list.
+     * Returns where the cluster stands on each security advisory Wodby tracks, such as CVE-2026-98432. The ID is the cluster\'s. A K3s cluster is mitigated or not by the protections Wodby keeps on its server. A managed cluster is fixed or not by the node images its provider ships, as Wodby last checked them: once a day, and when a task that replaces nodes finishes. A managed cluster returns an empty list until its first check, within minutes of its creation. An advisory is left out when Wodby can\'t tell, for example when the provider hasn\'t said which node images carry the fix. Wodby Cloud and serverless clusters return an empty list.
      * List cluster security advisories
      */
     getClusterSecurityAdvisories(requestParameters: GetClusterSecurityAdvisoriesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterSecurityAdvisory>>;
@@ -395,8 +427,8 @@ export interface ClustersApiInterface {
     getClusterSharing(requestParameters: GetClusterSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
 
     /**
-     * Returns the shell command that installs Wodby on the k3s server and connects the cluster. The command contains short-lived credentials; treat it as a secret.
-     * @summary Get k3s install command
+     * Returns the shell command that installs Wodby on the K3s server and connects the cluster. The command contains short-lived credentials; treat it as a secret.
+     * @summary Get K3s install command
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -405,14 +437,14 @@ export interface ClustersApiInterface {
     getK3SClusterInstallCommandRaw(requestParameters: GetK3SClusterInstallCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<K3SInstallCommand>>;
 
     /**
-     * Returns the shell command that installs Wodby on the k3s server and connects the cluster. The command contains short-lived credentials; treat it as a secret.
-     * Get k3s install command
+     * Returns the shell command that installs Wodby on the K3s server and connects the cluster. The command contains short-lived credentials; treat it as a secret.
+     * Get K3s install command
      */
     getK3SClusterInstallCommand(requestParameters: GetK3SClusterInstallCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<K3SInstallCommand>;
 
     /**
-     * Returns a one-time shell command that joins another server to a k3s cluster as a worker node. Run it as root on that server within 15 minutes. Both servers must share a private network, and the cluster must be in OK status on current infrastructure. The command contains short-lived credentials; treat it as a secret.
-     * @summary Get k3s join command
+     * Returns a one-time shell command that joins another server to a K3s cluster as a worker node. Run it as root on that server within 15 minutes. Both servers must share a private network, and the cluster must be in OK status on current infrastructure. The command contains short-lived credentials; treat it as a secret.
+     * @summary Get K3s join command
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -421,8 +453,8 @@ export interface ClustersApiInterface {
     getK3SClusterJoinCommandRaw(requestParameters: GetK3SClusterJoinCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<K3SJoinCommand>>;
 
     /**
-     * Returns a one-time shell command that joins another server to a k3s cluster as a worker node. Run it as root on that server within 15 minutes. Both servers must share a private network, and the cluster must be in OK status on current infrastructure. The command contains short-lived credentials; treat it as a secret.
-     * Get k3s join command
+     * Returns a one-time shell command that joins another server to a K3s cluster as a worker node. Run it as root on that server within 15 minutes. Both servers must share a private network, and the cluster must be in OK status on current infrastructure. The command contains short-lived credentials; treat it as a secret.
+     * Get K3s join command
      */
     getK3SClusterJoinCommand(requestParameters: GetK3SClusterJoinCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<K3SJoinCommand>;
 
@@ -441,6 +473,22 @@ export interface ClustersApiInterface {
      * Get Kubernetes version upgrade plan
      */
     getKubernetesVersionUpgradePlan(requestParameters: GetKubernetesVersionUpgradePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<KubernetesVersionUpgradePlan>;
+
+    /**
+     * Returns the nodes of a cluster, read live from the cluster: the general nodes first, then the GPU node pool. Wodby Cloud and serverless clusters don\'t list nodes. The ID is the cluster\'s.
+     * @summary List cluster nodes
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    listClusterNodesRaw(requestParameters: ListClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterNode>>>;
+
+    /**
+     * Returns the nodes of a cluster, read live from the cluster: the general nodes first, then the GPU node pool. Wodby Cloud and serverless clusters don\'t list nodes. The ID is the cluster\'s.
+     * List cluster nodes
+     */
+    listClusterNodes(requestParameters: ListClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterNode>>;
 
     /**
      * Returns clusters matching the request filters.
@@ -462,8 +510,8 @@ export interface ClustersApiInterface {
     listClusters(requestParameters: ListClustersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Cluster>>;
 
     /**
-     * Returns the nodes of a k3s cluster, read live from the cluster, the server first. The ID is the cluster\'s.
-     * @summary List k3s cluster nodes
+     * Returns the nodes of a K3s cluster, read live from the cluster, the server first. The ID is the cluster\'s.
+     * @summary List K3s cluster nodes
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -472,14 +520,14 @@ export interface ClustersApiInterface {
     listK3SClusterNodesRaw(requestParameters: ListK3SClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<K3SClusterNode>>>;
 
     /**
-     * Returns the nodes of a k3s cluster, read live from the cluster, the server first. The ID is the cluster\'s.
-     * List k3s cluster nodes
+     * Returns the nodes of a K3s cluster, read live from the cluster, the server first. The ID is the cluster\'s.
+     * List K3s cluster nodes
      */
     listK3SClusterNodes(requestParameters: ListK3SClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<K3SClusterNode>>;
 
     /**
-     * Returns the private addresses the server of a k3s cluster could switch to, read from the server itself. Only for a server that uses its public address for cluster traffic, which keeps worker nodes out. Runs a short check on the server and needs permission to modify the cluster. The ID is the cluster\'s.
-     * @summary List k3s server private addresses
+     * Returns the private addresses the server of a K3s cluster could switch to, read from the server itself. Only for a server that uses its public address for cluster traffic, which keeps worker nodes out. Runs a short check on the server and needs permission to modify the cluster. The ID is the cluster\'s.
+     * @summary List K3s server private addresses
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -488,8 +536,8 @@ export interface ClustersApiInterface {
     listK3SServerPrivateAddressesRaw(requestParameters: ListK3SServerPrivateAddressesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<K3SPrivateAddress>>>;
 
     /**
-     * Returns the private addresses the server of a k3s cluster could switch to, read from the server itself. Only for a server that uses its public address for cluster traffic, which keeps worker nodes out. Runs a short check on the server and needs permission to modify the cluster. The ID is the cluster\'s.
-     * List k3s server private addresses
+     * Returns the private addresses the server of a K3s cluster could switch to, read from the server itself. Only for a server that uses its public address for cluster traffic, which keeps worker nodes out. Runs a short check on the server and needs permission to modify the cluster. The ID is the cluster\'s.
+     * List K3s server private addresses
      */
     listK3SServerPrivateAddresses(requestParameters: ListK3SServerPrivateAddressesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<K3SPrivateAddress>>;
 
@@ -509,7 +557,7 @@ export interface ClustersApiInterface {
     listWodbyCloudMachineTypes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<WodbyCloudMachineType>>;
 
     /**
-     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. A single-node DigitalOcean cluster gets a temporary second node first, and its public IP changes: Wodby updates the technical domains, but custom domains with an A record to the old IP must be updated. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for K3S, Wodby Cloud and serverless clusters, and while application operations are active. New deployments wait until it ends.
+     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. A single-node DigitalOcean cluster gets a temporary second node first, and its public IP changes: Wodby updates the technical domains, but custom domains with an A record to the old IP must be updated. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for K3s, Wodby Cloud and serverless clusters, and while application operations are active. New deployments wait until it ends.
      * @summary Recycle cluster nodes
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -519,14 +567,14 @@ export interface ClustersApiInterface {
     recycleClusterNodesRaw(requestParameters: RecycleClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
-     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. A single-node DigitalOcean cluster gets a temporary second node first, and its public IP changes: Wodby updates the technical domains, but custom domains with an A record to the old IP must be updated. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for K3S, Wodby Cloud and serverless clusters, and while application operations are active. New deployments wait until it ends.
+     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. A single-node DigitalOcean cluster gets a temporary second node first, and its public IP changes: Wodby updates the technical domains, but custom domains with an A record to the old IP must be updated. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for K3s, Wodby Cloud and serverless clusters, and while application operations are active. New deployments wait until it ends.
      * Recycle cluster nodes
      */
     recycleClusterNodes(requestParameters: RecycleClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * Takes a worker node out of a k3s cluster: moves its pods to other nodes, stops k3s on it and deletes the node. Refuses the server, and without force a node that stores persistent volumes, whose data would be lost. Run sudo /usr/local/bin/wodby-k3s-uninstall on that server afterwards to remove k3s from it.
-     * @summary Remove k3s cluster node
+     * Takes a worker node out of a K3s cluster: moves its pods to other nodes, stops K3s on it and deletes the node. Refuses the server, and without force a node that stores persistent volumes, whose data would be lost. Run sudo /usr/local/bin/wodby-k3s-uninstall on that server afterwards to remove K3s from it.
+     * @summary Remove K3s cluster node
      * @param {number} id 
      * @param {RemoveK3SClusterNodeInput} removeK3SClusterNodeInput 
      * @param {*} [options] Override http request option.
@@ -536,8 +584,8 @@ export interface ClustersApiInterface {
     removeK3SClusterNodeRaw(requestParameters: RemoveK3SClusterNodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
-     * Takes a worker node out of a k3s cluster: moves its pods to other nodes, stops k3s on it and deletes the node. Refuses the server, and without force a node that stores persistent volumes, whose data would be lost. Run sudo /usr/local/bin/wodby-k3s-uninstall on that server afterwards to remove k3s from it.
-     * Remove k3s cluster node
+     * Takes a worker node out of a K3s cluster: moves its pods to other nodes, stops K3s on it and deletes the node. Refuses the server, and without force a node that stores persistent volumes, whose data would be lost. Run sudo /usr/local/bin/wodby-k3s-uninstall on that server afterwards to remove K3s from it.
+     * Remove K3s cluster node
      */
     removeK3SClusterNode(requestParameters: RemoveK3SClusterNodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
@@ -559,8 +607,8 @@ export interface ClustersApiInterface {
     scaleCluster(requestParameters: ScaleClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * Switches the server of a k3s cluster from its public address to a private one from GET /cluster-k3s-private-addresses/{id} for cluster traffic, so worker nodes can join, and keeps the public address for public traffic. k3s restarts once: the Kubernetes API pauses for about a minute while apps keep running, and new deployments wait until the switch ends. Refused while application operations are active. If k3s doesn\'t come back on the private address, the server restores its previous settings.
-     * @summary Switch k3s server to a private address
+     * Switches the server of a K3s cluster from its public address to a private one from GET /cluster-k3s-private-addresses/{id} for cluster traffic, so worker nodes can join, and keeps the public address for public traffic. K3s restarts once: the Kubernetes API pauses for about a minute while apps keep running, and new deployments wait until the switch ends. Refused while application operations are active. If K3s doesn\'t come back on the private address, the server restores its previous settings.
+     * @summary Switch K3s server to a private address
      * @param {number} id 
      * @param {SwitchK3SServerAddressInput} switchK3SServerAddressInput 
      * @param {*} [options] Override http request option.
@@ -570,8 +618,8 @@ export interface ClustersApiInterface {
     switchK3SServerAddressRaw(requestParameters: SwitchK3SServerAddressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
-     * Switches the server of a k3s cluster from its public address to a private one from GET /cluster-k3s-private-addresses/{id} for cluster traffic, so worker nodes can join, and keeps the public address for public traffic. k3s restarts once: the Kubernetes API pauses for about a minute while apps keep running, and new deployments wait until the switch ends. Refused while application operations are active. If k3s doesn\'t come back on the private address, the server restores its previous settings.
-     * Switch k3s server to a private address
+     * Switches the server of a K3s cluster from its public address to a private one from GET /cluster-k3s-private-addresses/{id} for cluster traffic, so worker nodes can join, and keeps the public address for public traffic. K3s restarts once: the Kubernetes API pauses for about a minute while apps keep running, and new deployments wait until the switch ends. Refused while application operations are active. If K3s doesn\'t come back on the private address, the server restores its previous settings.
+     * Switch K3s server to a private address
      */
     switchK3SServerAddress(requestParameters: SwitchK3SServerAddressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
@@ -695,8 +743,25 @@ export interface ClustersApiInterface {
     updateClusterSharing(requestParameters: UpdateClusterSharingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceSharing>;
 
     /**
-     * Changes the public IP address that routes to a self-hosted k3s cluster. Returns the cluster.
-     * @summary Update k3s cluster public IP
+     * Sets how many pods each node of a K3s cluster runs at most. K3s restarts on every node whose setting changes, one node at a time: apps keep running, the Kubernetes API pauses for about a minute while the server restarts, and new deployments wait until it ends. Refused while application operations are active, below the pods a node already runs, on a node with no free pod slot, and before the cluster\'s infrastructure upgrade that sets it.
+     * @summary Set pods per node of a K3s cluster
+     * @param {number} id 
+     * @param {UpdateK3SClusterMaxPodsInput} updateK3SClusterMaxPodsInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    updateK3SClusterMaxPodsRaw(requestParameters: UpdateK3SClusterMaxPodsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Sets how many pods each node of a K3s cluster runs at most. K3s restarts on every node whose setting changes, one node at a time: apps keep running, the Kubernetes API pauses for about a minute while the server restarts, and new deployments wait until it ends. Refused while application operations are active, below the pods a node already runs, on a node with no free pod slot, and before the cluster\'s infrastructure upgrade that sets it.
+     * Set pods per node of a K3s cluster
+     */
+    updateK3SClusterMaxPods(requestParameters: UpdateK3SClusterMaxPodsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Changes the public IP address that routes to a self-hosted K3s cluster. Returns the cluster.
+     * @summary Update K3s cluster public IP
      * @param {number} id 
      * @param {UpdateK3SClusterPublicIPInput} updateK3SClusterPublicIPInput 
      * @param {*} [options] Override http request option.
@@ -706,8 +771,8 @@ export interface ClustersApiInterface {
     updateK3SClusterPublicIpRaw(requestParameters: UpdateK3SClusterPublicIpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>>;
 
     /**
-     * Changes the public IP address that routes to a self-hosted k3s cluster. Returns the cluster.
-     * Update k3s cluster public IP
+     * Changes the public IP address that routes to a self-hosted K3s cluster. Returns the cluster.
+     * Update K3s cluster public IP
      */
     updateK3SClusterPublicIp(requestParameters: UpdateK3SClusterPublicIpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
 
@@ -793,8 +858,8 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Registers a self-hosted k3s cluster. Run the command from GET /clusters/k3s-install-command/{id} on the server to connect it.
-     * Create k3s cluster
+     * Registers a self-hosted K3s cluster. Run the command from GET /clusters/k3s-install-command/{id} on the server to connect it.
+     * Create K3s cluster
      */
     async createK3SClusterRaw(requestParameters: CreateK3SClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
         if (requestParameters['newK3SClusterInput'] == null) {
@@ -826,8 +891,8 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Registers a self-hosted k3s cluster. Run the command from GET /clusters/k3s-install-command/{id} on the server to connect it.
-     * Create k3s cluster
+     * Registers a self-hosted K3s cluster. Run the command from GET /clusters/k3s-install-command/{id} on the server to connect it.
+     * Create K3s cluster
      */
     async createK3SCluster(requestParameters: CreateK3SClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
         const response = await this.createK3SClusterRaw(requestParameters, initOverrides);
@@ -1002,7 +1067,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Returns the updates Wodby can apply to single components of a healthy cluster, without a Kubernetes or infrastructure upgrade. The ID is the cluster\'s. Most components cannot be updated this way, because their provider or K3S release owns them, so the list is often empty.
+     * Returns the updates Wodby can apply to single components of a healthy cluster, without a Kubernetes or infrastructure upgrade. The ID is the cluster\'s. Most components cannot be updated this way, because their provider or K3s release owns them, so the list is often empty.
      * List cluster component updates
      */
     async getClusterComponentUpdatesRaw(requestParameters: GetClusterComponentUpdatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterComponentUpdate>>> {
@@ -1032,7 +1097,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Returns the updates Wodby can apply to single components of a healthy cluster, without a Kubernetes or infrastructure upgrade. The ID is the cluster\'s. Most components cannot be updated this way, because their provider or K3S release owns them, so the list is often empty.
+     * Returns the updates Wodby can apply to single components of a healthy cluster, without a Kubernetes or infrastructure upgrade. The ID is the cluster\'s. Most components cannot be updated this way, because their provider or K3s release owns them, so the list is often empty.
      * List cluster component updates
      */
     async getClusterComponentUpdates(requestParameters: GetClusterComponentUpdatesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterComponentUpdate>> {
@@ -1080,7 +1145,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Returns what a K3S cluster\'s server last reported about its protections against the Linux kernel bug CVE-2026-98432. The server checks after each boot and once a day, puts back a protection that is missing, and reports the result. The ID is the cluster\'s. Every known check is listed, as unknown when the server hasn\'t reported it or its last report is more than two days old. Managed clusters return an empty list.
+     * Returns what a K3s cluster\'s server last reported about its protections against the Linux kernel bug CVE-2026-98432. The server checks after each boot and once a day, puts back a protection that is missing, and reports the result. The ID is the cluster\'s. Every known check is listed, as unknown when the server hasn\'t reported it or its last report is more than two days old. Managed clusters return an empty list.
      * List cluster host checks
      */
     async getClusterHostChecksRaw(requestParameters: GetClusterHostChecksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterHostCheck>>> {
@@ -1110,7 +1175,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Returns what a K3S cluster\'s server last reported about its protections against the Linux kernel bug CVE-2026-98432. The server checks after each boot and once a day, puts back a protection that is missing, and reports the result. The ID is the cluster\'s. Every known check is listed, as unknown when the server hasn\'t reported it or its last report is more than two days old. Managed clusters return an empty list.
+     * Returns what a K3s cluster\'s server last reported about its protections against the Linux kernel bug CVE-2026-98432. The server checks after each boot and once a day, puts back a protection that is missing, and reports the result. The ID is the cluster\'s. Every known check is listed, as unknown when the server hasn\'t reported it or its last report is more than two days old. Managed clusters return an empty list.
      * List cluster host checks
      */
     async getClusterHostChecks(requestParameters: GetClusterHostChecksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterHostCheck>> {
@@ -1162,7 +1227,46 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Returns where the cluster stands on each security advisory Wodby tracks, such as CVE-2026-98432. The ID is the cluster\'s. A K3S cluster is mitigated or not by the protections Wodby keeps on its server. A managed cluster is fixed or not by the node images its provider ships. An advisory is left out when Wodby can\'t tell, for example when the provider hasn\'t said which node images carry the fix. Wodby Cloud and serverless clusters return an empty list.
+     * Returns the known upstream vulnerabilities of the Kubernetes version the cluster last reported. The ID is the cluster\'s. The vulnerabilities describe the upstream patch level of the version; K3s and managed Kubernetes builds can carry fixes that are newer than that patch. Returns null while they are unknown: for Wodby Cloud and serverless clusters, before the cluster reports its version, or while they can\'t be loaded.
+     * List Kubernetes version vulnerabilities
+     */
+    async getClusterKubernetesVulnerabilitiesRaw(requestParameters: GetClusterKubernetesVulnerabilitiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterKubernetesVulnerabilities>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling getClusterKubernetesVulnerabilities().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/cluster-kubernetes-vulnerabilities/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the known upstream vulnerabilities of the Kubernetes version the cluster last reported. The ID is the cluster\'s. The vulnerabilities describe the upstream patch level of the version; K3s and managed Kubernetes builds can carry fixes that are newer than that patch. Returns null while they are unknown: for Wodby Cloud and serverless clusters, before the cluster reports its version, or while they can\'t be loaded.
+     * List Kubernetes version vulnerabilities
+     */
+    async getClusterKubernetesVulnerabilities(requestParameters: GetClusterKubernetesVulnerabilitiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterKubernetesVulnerabilities> {
+        const response = await this.getClusterKubernetesVulnerabilitiesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns where the cluster stands on each security advisory Wodby tracks, such as CVE-2026-98432. The ID is the cluster\'s. A K3s cluster is mitigated or not by the protections Wodby keeps on its server. A managed cluster is fixed or not by the node images its provider ships, as Wodby last checked them: once a day, and when a task that replaces nodes finishes. A managed cluster returns an empty list until its first check, within minutes of its creation. An advisory is left out when Wodby can\'t tell, for example when the provider hasn\'t said which node images carry the fix. Wodby Cloud and serverless clusters return an empty list.
      * List cluster security advisories
      */
     async getClusterSecurityAdvisoriesRaw(requestParameters: GetClusterSecurityAdvisoriesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterSecurityAdvisory>>> {
@@ -1192,7 +1296,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Returns where the cluster stands on each security advisory Wodby tracks, such as CVE-2026-98432. The ID is the cluster\'s. A K3S cluster is mitigated or not by the protections Wodby keeps on its server. A managed cluster is fixed or not by the node images its provider ships. An advisory is left out when Wodby can\'t tell, for example when the provider hasn\'t said which node images carry the fix. Wodby Cloud and serverless clusters return an empty list.
+     * Returns where the cluster stands on each security advisory Wodby tracks, such as CVE-2026-98432. The ID is the cluster\'s. A K3s cluster is mitigated or not by the protections Wodby keeps on its server. A managed cluster is fixed or not by the node images its provider ships, as Wodby last checked them: once a day, and when a task that replaces nodes finishes. A managed cluster returns an empty list until its first check, within minutes of its creation. An advisory is left out when Wodby can\'t tell, for example when the provider hasn\'t said which node images carry the fix. Wodby Cloud and serverless clusters return an empty list.
      * List cluster security advisories
      */
     async getClusterSecurityAdvisories(requestParameters: GetClusterSecurityAdvisoriesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterSecurityAdvisory>> {
@@ -1240,8 +1344,8 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Returns the shell command that installs Wodby on the k3s server and connects the cluster. The command contains short-lived credentials; treat it as a secret.
-     * Get k3s install command
+     * Returns the shell command that installs Wodby on the K3s server and connects the cluster. The command contains short-lived credentials; treat it as a secret.
+     * Get K3s install command
      */
     async getK3SClusterInstallCommandRaw(requestParameters: GetK3SClusterInstallCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<K3SInstallCommand>> {
         if (requestParameters['id'] == null) {
@@ -1270,8 +1374,8 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Returns the shell command that installs Wodby on the k3s server and connects the cluster. The command contains short-lived credentials; treat it as a secret.
-     * Get k3s install command
+     * Returns the shell command that installs Wodby on the K3s server and connects the cluster. The command contains short-lived credentials; treat it as a secret.
+     * Get K3s install command
      */
     async getK3SClusterInstallCommand(requestParameters: GetK3SClusterInstallCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<K3SInstallCommand> {
         const response = await this.getK3SClusterInstallCommandRaw(requestParameters, initOverrides);
@@ -1279,8 +1383,8 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Returns a one-time shell command that joins another server to a k3s cluster as a worker node. Run it as root on that server within 15 minutes. Both servers must share a private network, and the cluster must be in OK status on current infrastructure. The command contains short-lived credentials; treat it as a secret.
-     * Get k3s join command
+     * Returns a one-time shell command that joins another server to a K3s cluster as a worker node. Run it as root on that server within 15 minutes. Both servers must share a private network, and the cluster must be in OK status on current infrastructure. The command contains short-lived credentials; treat it as a secret.
+     * Get K3s join command
      */
     async getK3SClusterJoinCommandRaw(requestParameters: GetK3SClusterJoinCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<K3SJoinCommand>> {
         if (requestParameters['id'] == null) {
@@ -1309,8 +1413,8 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Returns a one-time shell command that joins another server to a k3s cluster as a worker node. Run it as root on that server within 15 minutes. Both servers must share a private network, and the cluster must be in OK status on current infrastructure. The command contains short-lived credentials; treat it as a secret.
-     * Get k3s join command
+     * Returns a one-time shell command that joins another server to a K3s cluster as a worker node. Run it as root on that server within 15 minutes. Both servers must share a private network, and the cluster must be in OK status on current infrastructure. The command contains short-lived credentials; treat it as a secret.
+     * Get K3s join command
      */
     async getK3SClusterJoinCommand(requestParameters: GetK3SClusterJoinCommandRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<K3SJoinCommand> {
         const response = await this.getK3SClusterJoinCommandRaw(requestParameters, initOverrides);
@@ -1353,6 +1457,45 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async getKubernetesVersionUpgradePlan(requestParameters: GetKubernetesVersionUpgradePlanRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<KubernetesVersionUpgradePlan> {
         const response = await this.getKubernetesVersionUpgradePlanRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the nodes of a cluster, read live from the cluster: the general nodes first, then the GPU node pool. Wodby Cloud and serverless clusters don\'t list nodes. The ID is the cluster\'s.
+     * List cluster nodes
+     */
+    async listClusterNodesRaw(requestParameters: ListClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterNode>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listClusterNodes().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/cluster-nodes/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the nodes of a cluster, read live from the cluster: the general nodes first, then the GPU node pool. Wodby Cloud and serverless clusters don\'t list nodes. The ID is the cluster\'s.
+     * List cluster nodes
+     */
+    async listClusterNodes(requestParameters: ListClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterNode>> {
+        const response = await this.listClusterNodesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1405,8 +1548,8 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Returns the nodes of a k3s cluster, read live from the cluster, the server first. The ID is the cluster\'s.
-     * List k3s cluster nodes
+     * Returns the nodes of a K3s cluster, read live from the cluster, the server first. The ID is the cluster\'s.
+     * List K3s cluster nodes
      */
     async listK3SClusterNodesRaw(requestParameters: ListK3SClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<K3SClusterNode>>> {
         if (requestParameters['id'] == null) {
@@ -1435,8 +1578,8 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Returns the nodes of a k3s cluster, read live from the cluster, the server first. The ID is the cluster\'s.
-     * List k3s cluster nodes
+     * Returns the nodes of a K3s cluster, read live from the cluster, the server first. The ID is the cluster\'s.
+     * List K3s cluster nodes
      */
     async listK3SClusterNodes(requestParameters: ListK3SClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<K3SClusterNode>> {
         const response = await this.listK3SClusterNodesRaw(requestParameters, initOverrides);
@@ -1444,8 +1587,8 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Returns the private addresses the server of a k3s cluster could switch to, read from the server itself. Only for a server that uses its public address for cluster traffic, which keeps worker nodes out. Runs a short check on the server and needs permission to modify the cluster. The ID is the cluster\'s.
-     * List k3s server private addresses
+     * Returns the private addresses the server of a K3s cluster could switch to, read from the server itself. Only for a server that uses its public address for cluster traffic, which keeps worker nodes out. Runs a short check on the server and needs permission to modify the cluster. The ID is the cluster\'s.
+     * List K3s server private addresses
      */
     async listK3SServerPrivateAddressesRaw(requestParameters: ListK3SServerPrivateAddressesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<K3SPrivateAddress>>> {
         if (requestParameters['id'] == null) {
@@ -1474,8 +1617,8 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Returns the private addresses the server of a k3s cluster could switch to, read from the server itself. Only for a server that uses its public address for cluster traffic, which keeps worker nodes out. Runs a short check on the server and needs permission to modify the cluster. The ID is the cluster\'s.
-     * List k3s server private addresses
+     * Returns the private addresses the server of a K3s cluster could switch to, read from the server itself. Only for a server that uses its public address for cluster traffic, which keeps worker nodes out. Runs a short check on the server and needs permission to modify the cluster. The ID is the cluster\'s.
+     * List K3s server private addresses
      */
     async listK3SServerPrivateAddresses(requestParameters: ListK3SServerPrivateAddressesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<K3SPrivateAddress>> {
         const response = await this.listK3SServerPrivateAddressesRaw(requestParameters, initOverrides);
@@ -1515,7 +1658,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. A single-node DigitalOcean cluster gets a temporary second node first, and its public IP changes: Wodby updates the technical domains, but custom domains with an A record to the old IP must be updated. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for K3S, Wodby Cloud and serverless clusters, and while application operations are active. New deployments wait until it ends.
+     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. A single-node DigitalOcean cluster gets a temporary second node first, and its public IP changes: Wodby updates the technical domains, but custom domains with an A record to the old IP must be updated. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for K3s, Wodby Cloud and serverless clusters, and while application operations are active. New deployments wait until it ends.
      * Recycle cluster nodes
      */
     async recycleClusterNodesRaw(requestParameters: RecycleClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -1545,7 +1688,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. A single-node DigitalOcean cluster gets a temporary second node first, and its public IP changes: Wodby updates the technical domains, but custom domains with an A record to the old IP must be updated. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for K3S, Wodby Cloud and serverless clusters, and while application operations are active. New deployments wait until it ends.
+     * Starts refreshing the cluster\'s worker nodes, so applications restart as their pods move. EKS moves each node group to its latest node image and leaves a group that already runs it in place. AKS and DigitalOcean replace every node. A single-node DigitalOcean cluster gets a temporary second node first, and its public IP changes: Wodby updates the technical domains, but custom domains with an A record to the old IP must be updated. Refused for providers whose kube settings report nodeRecycling as false, currently GKE and OVHcloud, for K3s, Wodby Cloud and serverless clusters, and while application operations are active. New deployments wait until it ends.
      * Recycle cluster nodes
      */
     async recycleClusterNodes(requestParameters: RecycleClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
@@ -1554,8 +1697,8 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Takes a worker node out of a k3s cluster: moves its pods to other nodes, stops k3s on it and deletes the node. Refuses the server, and without force a node that stores persistent volumes, whose data would be lost. Run sudo /usr/local/bin/wodby-k3s-uninstall on that server afterwards to remove k3s from it.
-     * Remove k3s cluster node
+     * Takes a worker node out of a K3s cluster: moves its pods to other nodes, stops K3s on it and deletes the node. Refuses the server, and without force a node that stores persistent volumes, whose data would be lost. Run sudo /usr/local/bin/wodby-k3s-uninstall on that server afterwards to remove K3s from it.
+     * Remove K3s cluster node
      */
     async removeK3SClusterNodeRaw(requestParameters: RemoveK3SClusterNodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
         if (requestParameters['id'] == null) {
@@ -1594,8 +1737,8 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Takes a worker node out of a k3s cluster: moves its pods to other nodes, stops k3s on it and deletes the node. Refuses the server, and without force a node that stores persistent volumes, whose data would be lost. Run sudo /usr/local/bin/wodby-k3s-uninstall on that server afterwards to remove k3s from it.
-     * Remove k3s cluster node
+     * Takes a worker node out of a K3s cluster: moves its pods to other nodes, stops K3s on it and deletes the node. Refuses the server, and without force a node that stores persistent volumes, whose data would be lost. Run sudo /usr/local/bin/wodby-k3s-uninstall on that server afterwards to remove K3s from it.
+     * Remove K3s cluster node
      */
     async removeK3SClusterNode(requestParameters: RemoveK3SClusterNodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.removeK3SClusterNodeRaw(requestParameters, initOverrides);
@@ -1652,8 +1795,8 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Switches the server of a k3s cluster from its public address to a private one from GET /cluster-k3s-private-addresses/{id} for cluster traffic, so worker nodes can join, and keeps the public address for public traffic. k3s restarts once: the Kubernetes API pauses for about a minute while apps keep running, and new deployments wait until the switch ends. Refused while application operations are active. If k3s doesn\'t come back on the private address, the server restores its previous settings.
-     * Switch k3s server to a private address
+     * Switches the server of a K3s cluster from its public address to a private one from GET /cluster-k3s-private-addresses/{id} for cluster traffic, so worker nodes can join, and keeps the public address for public traffic. K3s restarts once: the Kubernetes API pauses for about a minute while apps keep running, and new deployments wait until the switch ends. Refused while application operations are active. If K3s doesn\'t come back on the private address, the server restores its previous settings.
+     * Switch K3s server to a private address
      */
     async switchK3SServerAddressRaw(requestParameters: SwitchK3SServerAddressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
         if (requestParameters['id'] == null) {
@@ -1692,8 +1835,8 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Switches the server of a k3s cluster from its public address to a private one from GET /cluster-k3s-private-addresses/{id} for cluster traffic, so worker nodes can join, and keeps the public address for public traffic. k3s restarts once: the Kubernetes API pauses for about a minute while apps keep running, and new deployments wait until the switch ends. Refused while application operations are active. If k3s doesn\'t come back on the private address, the server restores its previous settings.
-     * Switch k3s server to a private address
+     * Switches the server of a K3s cluster from its public address to a private one from GET /cluster-k3s-private-addresses/{id} for cluster traffic, so worker nodes can join, and keeps the public address for public traffic. K3s restarts once: the Kubernetes API pauses for about a minute while apps keep running, and new deployments wait until the switch ends. Refused while application operations are active. If K3s doesn\'t come back on the private address, the server restores its previous settings.
+     * Switch K3s server to a private address
      */
     async switchK3SServerAddress(requestParameters: SwitchK3SServerAddressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.switchK3SServerAddressRaw(requestParameters, initOverrides);
@@ -2044,8 +2187,57 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Changes the public IP address that routes to a self-hosted k3s cluster. Returns the cluster.
-     * Update k3s cluster public IP
+     * Sets how many pods each node of a K3s cluster runs at most. K3s restarts on every node whose setting changes, one node at a time: apps keep running, the Kubernetes API pauses for about a minute while the server restarts, and new deployments wait until it ends. Refused while application operations are active, below the pods a node already runs, on a node with no free pod slot, and before the cluster\'s infrastructure upgrade that sets it.
+     * Set pods per node of a K3s cluster
+     */
+    async updateK3SClusterMaxPodsRaw(requestParameters: UpdateK3SClusterMaxPodsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateK3SClusterMaxPods().'
+            );
+        }
+
+        if (requestParameters['updateK3SClusterMaxPodsInput'] == null) {
+            throw new runtime.RequiredError(
+                'updateK3SClusterMaxPodsInput',
+                'Required parameter "updateK3SClusterMaxPodsInput" was null or undefined when calling updateK3SClusterMaxPods().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/{id}/actions/update-k3s-max-pods`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['updateK3SClusterMaxPodsInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Sets how many pods each node of a K3s cluster runs at most. K3s restarts on every node whose setting changes, one node at a time: apps keep running, the Kubernetes API pauses for about a minute while the server restarts, and new deployments wait until it ends. Refused while application operations are active, below the pods a node already runs, on a node with no free pod slot, and before the cluster\'s infrastructure upgrade that sets it.
+     * Set pods per node of a K3s cluster
+     */
+    async updateK3SClusterMaxPods(requestParameters: UpdateK3SClusterMaxPodsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.updateK3SClusterMaxPodsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Changes the public IP address that routes to a self-hosted K3s cluster. Returns the cluster.
+     * Update K3s cluster public IP
      */
     async updateK3SClusterPublicIpRaw(requestParameters: UpdateK3SClusterPublicIpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
         if (requestParameters['id'] == null) {
@@ -2084,8 +2276,8 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Changes the public IP address that routes to a self-hosted k3s cluster. Returns the cluster.
-     * Update k3s cluster public IP
+     * Changes the public IP address that routes to a self-hosted K3s cluster. Returns the cluster.
+     * Update K3s cluster public IP
      */
     async updateK3SClusterPublicIp(requestParameters: UpdateK3SClusterPublicIpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
         const response = await this.updateK3SClusterPublicIpRaw(requestParameters, initOverrides);

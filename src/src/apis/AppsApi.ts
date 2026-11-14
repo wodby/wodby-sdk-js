@@ -18,6 +18,8 @@ import type {
   App,
   AppPreviewPullRequestList,
   AppSettingsInput,
+  AppVulnerabilityIgnore,
+  AppVulnerabilityIgnoreInput,
   NewAppInput,
   NewAppPreviewEnvironmentRequest,
   OperationResult,
@@ -36,7 +38,16 @@ export interface CreateAppPreviewEnvironmentRequest {
     newAppPreviewEnvironmentRequest: NewAppPreviewEnvironmentRequest;
 }
 
+export interface CreateAppVulnerabilityIgnoreRequest {
+    id: number;
+    appVulnerabilityIgnoreInput: AppVulnerabilityIgnoreInput;
+}
+
 export interface DeleteAppRequest {
+    id: number;
+}
+
+export interface DeleteAppVulnerabilityIgnoreRequest {
     id: number;
 }
 
@@ -54,6 +65,10 @@ export interface GetAppSharingRequest {
 }
 
 export interface ListAppPreviewPullRequestsRequest {
+    id: number;
+}
+
+export interface ListAppVulnerabilityIgnoresRequest {
     id: number;
 }
 
@@ -123,6 +138,23 @@ export interface AppsApiInterface {
     createAppPreviewEnvironment(requestParameters: CreateAppPreviewEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
+     * Ignores a vulnerability in one package for every build of the app, including later scans. Ignored findings are left out of vulnerability counts and reported in the ignored count instead. Needs permission to modify the app and vulnerability scanning on the organization\'s plan. Fails when the app already ignores the vulnerability in that package.
+     * @summary Ignore a vulnerability
+     * @param {number} id 
+     * @param {AppVulnerabilityIgnoreInput} appVulnerabilityIgnoreInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppsApiInterface
+     */
+    createAppVulnerabilityIgnoreRaw(requestParameters: CreateAppVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppVulnerabilityIgnore>>;
+
+    /**
+     * Ignores a vulnerability in one package for every build of the app, including later scans. Ignored findings are left out of vulnerability counts and reported in the ignored count instead. Needs permission to modify the app and vulnerability scanning on the organization\'s plan. Fails when the app already ignores the vulnerability in that package.
+     * Ignore a vulnerability
+     */
+    createAppVulnerabilityIgnore(requestParameters: CreateAppVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppVulnerabilityIgnore>;
+
+    /**
      * Deletes the app and returns the operation result.
      * @summary Delete app
      * @param {number} id 
@@ -137,6 +169,22 @@ export interface AppsApiInterface {
      * Delete app
      */
     deleteApp(requestParameters: DeleteAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Removes an ignore, so matching findings count again. Needs permission to modify the app.
+     * @summary Stop ignoring a vulnerability
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppsApiInterface
+     */
+    deleteAppVulnerabilityIgnoreRaw(requestParameters: DeleteAppVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Removes an ignore, so matching findings count again. Needs permission to modify the app.
+     * Stop ignoring a vulnerability
+     */
+    deleteAppVulnerabilityIgnore(requestParameters: DeleteAppVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Returns the app identified by the request path, with the environment types the caller can create and whether pull request previews can work for it.
@@ -202,6 +250,22 @@ export interface AppsApiInterface {
      * List pull requests for preview environments
      */
     listAppPreviewPullRequests(requestParameters: ListAppPreviewPullRequestsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppPreviewPullRequestList>;
+
+    /**
+     * Lists the vulnerabilities the app ignores, newest first. Each one applies to its package in every build of every environment of the app.
+     * @summary List ignored vulnerabilities
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppsApiInterface
+     */
+    listAppVulnerabilityIgnoresRaw(requestParameters: ListAppVulnerabilityIgnoresRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppVulnerabilityIgnore>>>;
+
+    /**
+     * Lists the vulnerabilities the app ignores, newest first. Each one applies to its package in every build of every environment of the app.
+     * List ignored vulnerabilities
+     */
+    listAppVulnerabilityIgnores(requestParameters: ListAppVulnerabilityIgnoresRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppVulnerabilityIgnore>>;
 
     /**
      * Returns apps matching the request filters.
@@ -387,6 +451,55 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
+     * Ignores a vulnerability in one package for every build of the app, including later scans. Ignored findings are left out of vulnerability counts and reported in the ignored count instead. Needs permission to modify the app and vulnerability scanning on the organization\'s plan. Fails when the app already ignores the vulnerability in that package.
+     * Ignore a vulnerability
+     */
+    async createAppVulnerabilityIgnoreRaw(requestParameters: CreateAppVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppVulnerabilityIgnore>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createAppVulnerabilityIgnore().'
+            );
+        }
+
+        if (requestParameters['appVulnerabilityIgnoreInput'] == null) {
+            throw new runtime.RequiredError(
+                'appVulnerabilityIgnoreInput',
+                'Required parameter "appVulnerabilityIgnoreInput" was null or undefined when calling createAppVulnerabilityIgnore().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/apps/vulnerability-ignores/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['appVulnerabilityIgnoreInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Ignores a vulnerability in one package for every build of the app, including later scans. Ignored findings are left out of vulnerability counts and reported in the ignored count instead. Needs permission to modify the app and vulnerability scanning on the organization\'s plan. Fails when the app already ignores the vulnerability in that package.
+     * Ignore a vulnerability
+     */
+    async createAppVulnerabilityIgnore(requestParameters: CreateAppVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppVulnerabilityIgnore> {
+        const response = await this.createAppVulnerabilityIgnoreRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Deletes the app and returns the operation result.
      * Delete app
      */
@@ -422,6 +535,45 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
      */
     async deleteApp(requestParameters: DeleteAppRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.deleteAppRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Removes an ignore, so matching findings count again. Needs permission to modify the app.
+     * Stop ignoring a vulnerability
+     */
+    async deleteAppVulnerabilityIgnoreRaw(requestParameters: DeleteAppVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteAppVulnerabilityIgnore().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-vulnerability-ignores/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Removes an ignore, so matching findings count again. Needs permission to modify the app.
+     * Stop ignoring a vulnerability
+     */
+    async deleteAppVulnerabilityIgnore(requestParameters: DeleteAppVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteAppVulnerabilityIgnoreRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -582,6 +734,45 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
      */
     async listAppPreviewPullRequests(requestParameters: ListAppPreviewPullRequestsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppPreviewPullRequestList> {
         const response = await this.listAppPreviewPullRequestsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists the vulnerabilities the app ignores, newest first. Each one applies to its package in every build of every environment of the app.
+     * List ignored vulnerabilities
+     */
+    async listAppVulnerabilityIgnoresRaw(requestParameters: ListAppVulnerabilityIgnoresRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppVulnerabilityIgnore>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppVulnerabilityIgnores().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/apps/vulnerability-ignores/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Lists the vulnerabilities the app ignores, newest first. Each one applies to its package in every build of every environment of the app.
+     * List ignored vulnerabilities
+     */
+    async listAppVulnerabilityIgnores(requestParameters: ListAppVulnerabilityIgnoresRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppVulnerabilityIgnore>> {
+        const response = await this.listAppVulnerabilityIgnoresRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

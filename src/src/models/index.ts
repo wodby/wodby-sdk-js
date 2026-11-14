@@ -2057,6 +2057,12 @@ export interface AppEnvironmentHealth {
      * @memberof AppEnvironmentHealth
      */
     backups: AppEnvironmentBackupHealth;
+    /**
+     * Critical and high vulnerabilities in the build images the environment currently runs, from their last successful scans. Null when vulnerability scanning is unavailable for the organization.
+     * @type {AppEnvironmentVulnerabilityHealth}
+     * @memberof AppEnvironmentHealth
+     */
+    vulnerabilities?: AppEnvironmentVulnerabilityHealth | null;
 }
 /**
  * 
@@ -2886,6 +2892,25 @@ export interface AppEnvironmentStackUpgradeSettingsInput {
      * @memberof AppEnvironmentStackUpgradeSettingsInput
      */
     main?: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface AppEnvironmentVulnerabilityHealth
+ */
+export interface AppEnvironmentVulnerabilityHealth {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentVulnerabilityHealth
+     */
+    critical: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppEnvironmentVulnerabilityHealth
+     */
+    high: number;
 }
 /**
  * 
@@ -4816,7 +4841,7 @@ export interface AppServiceDeploymentRequest {
      */
     appServiceId: number;
     /**
-     * 
+     * Build image to deploy for this service: the `id` of an item in an app build's `appServiceBuilds` that belongs to this service, not the app build `id`. A derivative service may name its parent service's build. Use `0` to start a new build. Required for services with a build source. To deploy every image of an app build, use `POST /app-builds/{id}/deploy` instead.
      * @type {number}
      * @memberof AppServiceDeploymentRequest
      */
@@ -5881,6 +5906,74 @@ export interface AppSettingsInput {
 /**
  * 
  * @export
+ * @interface AppVulnerabilityIgnore
+ */
+export interface AppVulnerabilityIgnore {
+    /**
+     * 
+     * @type {number}
+     * @memberof AppVulnerabilityIgnore
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppVulnerabilityIgnore
+     */
+    appId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppVulnerabilityIgnore
+     */
+    vulnerabilityId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppVulnerabilityIgnore
+     */
+    packageName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppVulnerabilityIgnore
+     */
+    reason?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppVulnerabilityIgnore
+     */
+    createdAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface AppVulnerabilityIgnoreInput
+ */
+export interface AppVulnerabilityIgnoreInput {
+    /**
+     * Vulnerability ID as reported by the scan, such as CVE-2024-12345.
+     * @type {string}
+     * @memberof AppVulnerabilityIgnoreInput
+     */
+    vulnerabilityId: string;
+    /**
+     * Name of the vulnerable package as reported by the scan.
+     * @type {string}
+     * @memberof AppVulnerabilityIgnoreInput
+     */
+    packageName: string;
+    /**
+     * Why the vulnerability is accepted.
+     * @type {string}
+     * @memberof AppVulnerabilityIgnoreInput
+     */
+    reason?: string;
+}
+/**
+ * 
+ * @export
  * @interface AutomationTimeWindow
  */
 export interface AutomationTimeWindow {
@@ -6859,6 +6952,12 @@ export interface Cluster {
      */
     maxNodeCount?: number | null;
     /**
+     * How many pods each node of a K3s cluster runs at most. Absent when it can't be changed: the cluster isn't k3s, or its infrastructure hasn't been upgraded to set it yet.
+     * @type {number}
+     * @memberof Cluster
+     */
+    k3sMaxPods?: number | null;
+    /**
      * 
      * @type {ClusterNodePool}
      * @memberof Cluster
@@ -7144,7 +7243,7 @@ export interface ClusterAutoInfrastructureUpgradeSettingsInput {
     apps?: ClusterAutoInfrastructureComponentSettingsInput;
 }
 /**
- * Automatic Kubernetes version upgrades. Kubernetes versions are 1.MINOR.PATCH, so there is no major upgrade. A newer provider build of the same version, such as 1.36.5-do.1 to 1.36.5-do.2, counts as a patch. When there is no version upgrade to start, the same policy and window apply the cluster's component updates, such as Cilium on k3s and EKS add-ons, unless includeComponentUpdates is off; an update within the component's minor counts as a patch. On by default for k3s clusters, which are upgraded in place. Off by default for managed clusters, because each upgrade replaces their nodes and restarts every pod. Always disabled for Wodby Cloud and serverless clusters. Turning it on is refused for a single-node managed cluster with custom domains, because each upgrade changes its public IP; a policy that was already on starts nothing while the cluster has them.
+ * Automatic Kubernetes version upgrades. Kubernetes versions are 1.MINOR.PATCH, so there is no major upgrade. A newer provider build of the same version, such as 1.36.5-do.1 to 1.36.5-do.2, counts as a patch. When there is no version upgrade to start, the same policy and window apply the cluster's component updates, such as Cilium on K3s and EKS add-ons, unless includeComponentUpdates is off; an update within the component's minor counts as a patch. On by default for K3s clusters, which are upgraded in place. Off by default for managed clusters, because each upgrade replaces their nodes and restarts every pod. Always disabled for Wodby Cloud and serverless clusters. Turning it on is refused for a single-node managed cluster with custom domains, because each upgrade changes its public IP; a policy that was already on starts nothing while the cluster has them.
  * @export
  * @interface ClusterAutoKubernetesUpgradeSettings
  */
@@ -7354,7 +7453,7 @@ export interface ClusterComponent {
      */
     source: ClusterComponentSourceEnum;
     /**
-     * Who can update the component. wodby is installed by Wodby outside an app, such as Cilium on K3S; infra_app runs in an infrastructure app; k3s comes with the K3S release; provider is run by the managed Kubernetes provider; host is the operating system of a server you run; and other was installed outside Wodby or is not recognized.
+     * Who can update the component. wodby is installed by Wodby outside an app, such as Cilium on K3s; infra_app runs in an infrastructure app; k3s comes with the K3s release; provider is run by the managed Kubernetes provider; host is the operating system of a server you run; and other was installed outside Wodby or is not recognized.
      * @type {string}
      * @memberof ClusterComponent
      */
@@ -7483,7 +7582,7 @@ export type ClusterComponentUpdatePathEnum = typeof ClusterComponentUpdatePathEn
  */
 export interface ClusterComponentUpdate {
     /**
-     * cilium upgrades the Cilium release on a K3S cluster; provider_addon asks the provider to update an add-on.
+     * cilium upgrades the Cilium release on a K3s cluster; provider_addon asks the provider to update an add-on.
      * @type {string}
      * @memberof ClusterComponentUpdate
      */
@@ -7758,6 +7857,150 @@ export interface ClusterInfraAppUpgradeChangelog {
     serviceChanges: Array<ServiceRevisionChange>;
 }
 /**
+ * 
+ * @export
+ * @interface ClusterKubernetesVulnerabilities
+ */
+export interface ClusterKubernetesVulnerabilities {
+    /**
+     * The upstream patch version the vulnerabilities apply to, such as 1.33.5.
+     * @type {string}
+     * @memberof ClusterKubernetesVulnerabilities
+     */
+    version: string;
+    /**
+     * 
+     * @type {Array<ClusterKubernetesVulnerability>}
+     * @memberof ClusterKubernetesVulnerabilities
+     */
+    vulnerabilities: Array<ClusterKubernetesVulnerability>;
+}
+/**
+ * 
+ * @export
+ * @interface ClusterKubernetesVulnerability
+ */
+export interface ClusterKubernetesVulnerability {
+    /**
+     * The CVE ID, such as CVE-2024-10220, or the OSV ID when the vulnerability has no CVE.
+     * @type {string}
+     * @memberof ClusterKubernetesVulnerability
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterKubernetesVulnerability
+     */
+    summary: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterKubernetesVulnerability
+     */
+    severity: ClusterKubernetesVulnerabilitySeverityEnum;
+    /**
+     * The vulnerability's record at cve.org or osv.dev.
+     * @type {string}
+     * @memberof ClusterKubernetesVulnerability
+     */
+    url: string;
+    /**
+     * The closest upstream Kubernetes version that fixes the vulnerability. Absent when no fixed version is known.
+     * @type {string}
+     * @memberof ClusterKubernetesVulnerability
+     */
+    fixedIn?: string;
+}
+
+
+/**
+ * @export
+ */
+export const ClusterKubernetesVulnerabilitySeverityEnum = {
+    Critical: 'critical',
+    High: 'high',
+    Medium: 'medium',
+    Low: 'low',
+    Negligible: 'negligible',
+    Unknown: 'unknown'
+} as const;
+export type ClusterKubernetesVulnerabilitySeverityEnum = typeof ClusterKubernetesVulnerabilitySeverityEnum[keyof typeof ClusterKubernetesVulnerabilitySeverityEnum];
+
+/**
+ * 
+ * @export
+ * @interface ClusterNode
+ */
+export interface ClusterNode {
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterNode
+     */
+    name: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ClusterNode
+     */
+    ready: boolean;
+    /**
+     * Whether the node accepts new pods. A node being drained, recycled or upgraded doesn't.
+     * @type {boolean}
+     * @memberof ClusterNode
+     */
+    schedulable: boolean;
+    /**
+     * The node's Kubernetes version, as its kubelet reports it.
+     * @type {string}
+     * @memberof ClusterNode
+     */
+    version: string;
+    /**
+     * The provider's machine type of the node, such as m6i.large, when the node reports it.
+     * @type {string}
+     * @memberof ClusterNode
+     */
+    machineType?: string;
+    /**
+     * The availability zone of the node, when the node reports it.
+     * @type {string}
+     * @memberof ClusterNode
+     */
+    zone?: string;
+    /**
+     * Whether the node belongs to the cluster's GPU node pool.
+     * @type {boolean}
+     * @memberof ClusterNode
+     */
+    gpuNodePool: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterNode
+     */
+    internalIp?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterNode
+     */
+    externalIp?: string;
+    /**
+     * 
+     * @type {NodeCapacity}
+     * @memberof ClusterNode
+     */
+    capacity: NodeCapacity;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterNode
+     */
+    createdAt: string;
+}
+/**
  * An optional node pool of the cluster, such as the GPU node pool.
  * @export
  * @interface ClusterNodePool
@@ -7838,7 +8081,7 @@ export interface ClusterSecurityAdvisory {
      */
     title: string;
     /**
-     * mitigated or not_mitigated for a K3S cluster, by the protections Wodby keeps on its server. fixed or not_fixed for a managed cluster, by the node images its provider ships.
+     * mitigated or not_mitigated for a K3s cluster, by the protections Wodby keeps on its server. fixed or not_fixed for a managed cluster, by the node images its provider ships.
      * @type {string}
      * @memberof ClusterSecurityAdvisory
      */
@@ -10439,7 +10682,7 @@ export interface K3SClusterNode {
      */
     name: string;
     /**
-     * server runs the k3s control plane; agent is a worker node joined with the join command.
+     * server runs the K3s control plane; agent is a worker node joined with the join command.
      * @type {string}
      * @memberof K3SClusterNode
      */
@@ -10457,7 +10700,7 @@ export interface K3SClusterNode {
      */
     schedulable: boolean;
     /**
-     * The node's k3s release, such as v1.36.6+k3s1.
+     * The node's K3s release, such as v1.36.6+k3s1.
      * @type {string}
      * @memberof K3SClusterNode
      */
@@ -10480,6 +10723,12 @@ export interface K3SClusterNode {
      * @memberof K3SClusterNode
      */
     localVolumes: Array<string>;
+    /**
+     * 
+     * @type {NodeCapacity}
+     * @memberof K3SClusterNode
+     */
+    capacity: NodeCapacity;
     /**
      * 
      * @type {string}
@@ -10549,7 +10798,7 @@ export interface K3SPrivateAddress {
      */
     mtu: number;
     /**
-     * Whether the server's network configuration brings the address back after a reboot. k3s doesn't start when its address is gone, so switching to an address that isn't persistent needs force.
+     * Whether the server's network configuration brings the address back after a reboot. K3s doesn't start when its address is gone, so switching to an address that isn't persistent needs force.
      * @type {boolean}
      * @memberof K3SPrivateAddress
      */
@@ -13352,6 +13601,37 @@ export interface NewWorkspaceInput {
      * @memberof NewWorkspaceInput
      */
     homeSize?: number;
+}
+/**
+ * What a node's machine provides, as the node reports it.
+ * @export
+ * @interface NodeCapacity
+ */
+export interface NodeCapacity {
+    /**
+     * CPU cores.
+     * @type {number}
+     * @memberof NodeCapacity
+     */
+    cpu: number;
+    /**
+     * Memory in bytes.
+     * @type {number}
+     * @memberof NodeCapacity
+     */
+    memory: number;
+    /**
+     * The size of the node's root disk in bytes, when the node reports it.
+     * @type {number}
+     * @memberof NodeCapacity
+     */
+    disk?: number;
+    /**
+     * GPUs the node offers to pods. 0 without GPUs, and until the node's GPU driver reports them.
+     * @type {number}
+     * @memberof NodeCapacity
+     */
+    gpus: number;
 }
 /**
  * 
@@ -20048,6 +20328,19 @@ export interface UpdateIntegrationInput {
 /**
  * 
  * @export
+ * @interface UpdateK3SClusterMaxPodsInput
+ */
+export interface UpdateK3SClusterMaxPodsInput {
+    /**
+     * Pods each node runs at most.
+     * @type {number}
+     * @memberof UpdateK3SClusterMaxPodsInput
+     */
+    maxPods: number;
+}
+/**
+ * 
+ * @export
  * @interface UpdateK3SClusterPublicIPInput
  */
 export interface UpdateK3SClusterPublicIPInput {
@@ -20470,7 +20763,7 @@ export interface VolumeSizeInput {
     storageClassName?: string | null;
 }
 /**
- * 
+ * Findings the app ignores are counted only in ignored, never in a severity, total or fixable.
  * @export
  * @interface VulnerabilityCounts
  */
@@ -20523,6 +20816,12 @@ export interface VulnerabilityCounts {
      * @memberof VulnerabilityCounts
      */
     fixable: number;
+    /**
+     * Findings the app ignores.
+     * @type {number}
+     * @memberof VulnerabilityCounts
+     */
+    ignored?: number;
 }
 
 /**
