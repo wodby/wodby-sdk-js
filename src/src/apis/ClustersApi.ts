@@ -27,6 +27,7 @@ import type {
   K3SClusterNode,
   K3SInstallCommand,
   K3SJoinCommand,
+  K3SPrivateAddress,
   KubernetesVersionUpgradePlan,
   NewClusterInput,
   NewK3SClusterInput,
@@ -37,6 +38,7 @@ import type {
   ResourceSharing,
   ResourceSharingInput,
   ScaleClusterInput,
+  SwitchK3SServerAddressInput,
   UpdateClusterComponentRequest,
   UpdateClusterGPUNodePoolInput,
   UpdateK3SClusterPublicIPInput,
@@ -119,6 +121,10 @@ export interface ListK3SClusterNodesRequest {
     id: number;
 }
 
+export interface ListK3SServerPrivateAddressesRequest {
+    id: number;
+}
+
 export interface RecycleClusterNodesRequest {
     id: number;
 }
@@ -131,6 +137,11 @@ export interface RemoveK3SClusterNodeRequest {
 export interface ScaleClusterRequest {
     id: number;
     scaleClusterInput: ScaleClusterInput;
+}
+
+export interface SwitchK3SServerAddressRequest {
+    id: number;
+    switchK3SServerAddressInput: SwitchK3SServerAddressInput;
 }
 
 export interface UpdateClusterRequest {
@@ -467,6 +478,22 @@ export interface ClustersApiInterface {
     listK3SClusterNodes(requestParameters: ListK3SClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<K3SClusterNode>>;
 
     /**
+     * Returns the private addresses the server of a k3s cluster could switch to, read from the server itself. Only for a server that uses its public address for cluster traffic, which keeps worker nodes out. Runs a short check on the server and needs permission to modify the cluster. The ID is the cluster\'s.
+     * @summary List k3s server private addresses
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    listK3SServerPrivateAddressesRaw(requestParameters: ListK3SServerPrivateAddressesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<K3SPrivateAddress>>>;
+
+    /**
+     * Returns the private addresses the server of a k3s cluster could switch to, read from the server itself. Only for a server that uses its public address for cluster traffic, which keeps worker nodes out. Runs a short check on the server and needs permission to modify the cluster. The ID is the cluster\'s.
+     * List k3s server private addresses
+     */
+    listK3SServerPrivateAddresses(requestParameters: ListK3SServerPrivateAddressesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<K3SPrivateAddress>>;
+
+    /**
      * Returns the machine types available for Wodby Cloud clusters with their prices.
      * @summary List Wodby Cloud machine types
      * @param {*} [options] Override http request option.
@@ -530,6 +557,23 @@ export interface ClustersApiInterface {
      * Scale cluster nodes
      */
     scaleCluster(requestParameters: ScaleClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Switches the server of a k3s cluster from its public address to a private one from GET /cluster-k3s-private-addresses/{id} for cluster traffic, so worker nodes can join, and keeps the public address for public traffic. k3s restarts once: the Kubernetes API pauses for about a minute while apps keep running, and new deployments wait until the switch ends. Refused while application operations are active. If k3s doesn\'t come back on the private address, the server restores its previous settings.
+     * @summary Switch k3s server to a private address
+     * @param {number} id 
+     * @param {SwitchK3SServerAddressInput} switchK3SServerAddressInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    switchK3SServerAddressRaw(requestParameters: SwitchK3SServerAddressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Switches the server of a k3s cluster from its public address to a private one from GET /cluster-k3s-private-addresses/{id} for cluster traffic, so worker nodes can join, and keeps the public address for public traffic. k3s restarts once: the Kubernetes API pauses for about a minute while apps keep running, and new deployments wait until the switch ends. Refused while application operations are active. If k3s doesn\'t come back on the private address, the server restores its previous settings.
+     * Switch k3s server to a private address
+     */
+    switchK3SServerAddress(requestParameters: SwitchK3SServerAddressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Updates the cluster and returns the updated resource.
@@ -1400,6 +1444,45 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Returns the private addresses the server of a k3s cluster could switch to, read from the server itself. Only for a server that uses its public address for cluster traffic, which keeps worker nodes out. Runs a short check on the server and needs permission to modify the cluster. The ID is the cluster\'s.
+     * List k3s server private addresses
+     */
+    async listK3SServerPrivateAddressesRaw(requestParameters: ListK3SServerPrivateAddressesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<K3SPrivateAddress>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listK3SServerPrivateAddresses().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/cluster-k3s-private-addresses/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns the private addresses the server of a k3s cluster could switch to, read from the server itself. Only for a server that uses its public address for cluster traffic, which keeps worker nodes out. Runs a short check on the server and needs permission to modify the cluster. The ID is the cluster\'s.
+     * List k3s server private addresses
+     */
+    async listK3SServerPrivateAddresses(requestParameters: ListK3SServerPrivateAddressesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<K3SPrivateAddress>> {
+        const response = await this.listK3SServerPrivateAddressesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns the machine types available for Wodby Cloud clusters with their prices.
      * List Wodby Cloud machine types
      */
@@ -1565,6 +1648,55 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async scaleCluster(requestParameters: ScaleClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.scaleClusterRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Switches the server of a k3s cluster from its public address to a private one from GET /cluster-k3s-private-addresses/{id} for cluster traffic, so worker nodes can join, and keeps the public address for public traffic. k3s restarts once: the Kubernetes API pauses for about a minute while apps keep running, and new deployments wait until the switch ends. Refused while application operations are active. If k3s doesn\'t come back on the private address, the server restores its previous settings.
+     * Switch k3s server to a private address
+     */
+    async switchK3SServerAddressRaw(requestParameters: SwitchK3SServerAddressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling switchK3SServerAddress().'
+            );
+        }
+
+        if (requestParameters['switchK3SServerAddressInput'] == null) {
+            throw new runtime.RequiredError(
+                'switchK3SServerAddressInput',
+                'Required parameter "switchK3SServerAddressInput" was null or undefined when calling switchK3SServerAddress().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/{id}/actions/switch-k3s-server-address`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['switchK3SServerAddressInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Switches the server of a k3s cluster from its public address to a private one from GET /cluster-k3s-private-addresses/{id} for cluster traffic, so worker nodes can join, and keeps the public address for public traffic. k3s restarts once: the Kubernetes API pauses for about a minute while apps keep running, and new deployments wait until the switch ends. Refused while application operations are active. If k3s doesn\'t come back on the private address, the server restores its previous settings.
+     * Switch k3s server to a private address
+     */
+    async switchK3SServerAddress(requestParameters: SwitchK3SServerAddressRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.switchK3SServerAddressRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

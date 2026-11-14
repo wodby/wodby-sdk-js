@@ -263,7 +263,7 @@ export interface IntegrationsApiInterface {
     getIntegration(requestParameters: GetIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration>;
 
     /**
-     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool), gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0) and nodeRecycling (whether a running cluster\'s worker nodes can be recycled).
+     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool), gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0), nodeRecycling (whether a running cluster\'s worker nodes can be recycled) and nodeAutoscaling (whether the provider scales nodes between the minimum and maximum node counts; when false, a cluster has a fixed number of nodes and must be created and scaled with equal minimum and maximum node counts).
      * @summary Get Kubernetes settings
      * @param {number} id 
      * @param {*} [options] Override http request option.
@@ -273,7 +273,7 @@ export interface IntegrationsApiInterface {
     getIntegrationKubeSettingsRaw(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>>;
 
     /**
-     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool), gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0) and nodeRecycling (whether a running cluster\'s worker nodes can be recycled).
+     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool), gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0), nodeRecycling (whether a running cluster\'s worker nodes can be recycled) and nodeAutoscaling (whether the provider scales nodes between the minimum and maximum node counts; when false, a cluster has a fixed number of nodes and must be created and scaled with equal minimum and maximum node counts).
      * Get Kubernetes settings
      */
     getIntegrationKubeSettings(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }>;
@@ -880,7 +880,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
-     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool), gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0) and nodeRecycling (whether a running cluster\'s worker nodes can be recycled).
+     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool), gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0), nodeRecycling (whether a running cluster\'s worker nodes can be recycled) and nodeAutoscaling (whether the provider scales nodes between the minimum and maximum node counts; when false, a cluster has a fixed number of nodes and must be created and scaled with equal minimum and maximum node counts).
      * Get Kubernetes settings
      */
     async getIntegrationKubeSettingsRaw(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: any; }>> {
@@ -910,7 +910,7 @@ export class IntegrationsApi extends runtime.BaseAPI implements IntegrationsApiI
     }
 
     /**
-     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool), gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0) and nodeRecycling (whether a running cluster\'s worker nodes can be recycled).
+     * Returns what clusters of the integration\'s Kubernetes provider support: highAvailability, nodeDiskSizeIsConfigurable, noSingleAZ, singleNode, serverless, billingOptions, gpuNodePool (whether a cluster can have an optional GPU node pool), gpuNodePoolScalesToZero (whether that pool\'s minimum may be 0), nodeRecycling (whether a running cluster\'s worker nodes can be recycled) and nodeAutoscaling (whether the provider scales nodes between the minimum and maximum node counts; when false, a cluster has a fixed number of nodes and must be created and scaled with equal minimum and maximum node counts).
      * Get Kubernetes settings
      */
     async getIntegrationKubeSettings(requestParameters: GetIntegrationKubeSettingsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }> {

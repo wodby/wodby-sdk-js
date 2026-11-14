@@ -2651,6 +2651,12 @@ export interface AppEnvironmentStackUpgradeInput {
      */
     deployment?: boolean;
     /**
+     * Build services whose build inputs the upgrade changes before deploying them. When false, those services are deployed with their current build and stay marked as needing a rebuild until their next build; a service with no build to reuse is still built. Ignored when deployment is false.
+     * @type {boolean}
+     * @memberof AppEnvironmentStackUpgradeInput
+     */
+    rebuild?: boolean;
+    /**
      * 
      * @type {boolean}
      * @memberof AppEnvironmentStackUpgradeInput
@@ -3808,6 +3814,60 @@ export interface AppService {
      * @type {string}
      * @memberof AppService
      */
+    icon?: string;
+    /**
+     * True when the app service's version has reached its end of life.
+     * @type {boolean}
+     * @memberof AppService
+     */
+    eol?: boolean;
+    /**
+     * How the app service gets its source code to build, public, clone or connect. Null when it is not built from source.
+     * @type {string}
+     * @memberof AppService
+     */
+    buildSourceType?: string | null;
+    /**
+     * The service derivative the app service runs. Null for the service itself.
+     * @type {string}
+     * @memberof AppService
+     */
+    derivative?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AppService
+     */
+    gitRepoId?: number | null;
+    /**
+     * Workspace code mounts of the service, with its settings resolved in the paths. Empty without a workspace contract.
+     * @type {Array<AppServiceWorkspaceMount>}
+     * @memberof AppService
+     */
+    workspaceMounts?: Array<AppServiceWorkspaceMount>;
+    /**
+     * The database the app service uses on a provider-managed database server.
+     * @type {number}
+     * @memberof AppService
+     */
+    databaseDbId?: number | null;
+    /**
+     * The database user the app service connects as on a provider-managed database server.
+     * @type {number}
+     * @memberof AppService
+     */
+    databaseUserId?: number | null;
+    /**
+     * What this app environment set differently from the stack service the app service was created from, such as a setting value, an extra variable or another link target. Only names are returned, never values. Returned only by GET /app-services/{id}.
+     * @type {Array<AppServiceCustomization>}
+     * @memberof AppService
+     */
+    customizations?: Array<AppServiceCustomization>;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppService
+     */
     createdAt: string;
     /**
      * 
@@ -4613,6 +4673,31 @@ export interface AppServiceCustomLinkValue {
      * @memberof AppServiceCustomLinkValue
      */
     value: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface AppServiceCustomization
+ */
+export interface AppServiceCustomization {
+    /**
+     * The part of the app service where the customization is: general, resources, variables, helm, annotations, settings, links, integrations, volumes or configs.
+     * @type {string}
+     * @memberof AppServiceCustomization
+     */
+    section: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceCustomization
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceCustomization
+     */
+    title: string;
 }
 /**
  * 
@@ -5735,6 +5820,37 @@ export interface AppServiceVolumeStorageClassState {
      * @memberof AppServiceVolumeStorageClassState
      */
     status: string;
+}
+/**
+ * 
+ * @export
+ * @interface AppServiceWorkspaceMount
+ */
+export interface AppServiceWorkspaceMount {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServiceWorkspaceMount
+     */
+    name: string;
+    /**
+     * Absolute path in the container.
+     * @type {string}
+     * @memberof AppServiceWorkspaceMount
+     */
+    path: string;
+    /**
+     * Directory of the checkout that is mounted; empty for the whole repository.
+     * @type {string}
+     * @memberof AppServiceWorkspaceMount
+     */
+    subPath: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AppServiceWorkspaceMount
+     */
+    readOnly: boolean;
 }
 /**
  * 
@@ -8009,6 +8125,84 @@ export interface Database {
      * @type {number}
      * @memberof Database
      */
+    replicas?: number;
+    /**
+     * Storage size in GB. Null when the database does not set one.
+     * @type {number}
+     * @memberof Database
+     */
+    storageSize?: number | null;
+    /**
+     * Provisioned storage IOPS. Null when the database does not set them.
+     * @type {number}
+     * @memberof Database
+     */
+    storageIOPS?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Database
+     */
+    machineType?: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Database
+     */
+    highAvailability?: boolean;
+    /**
+     * True for a database that runs outside Wodby, such as a provider-managed database server.
+     * @type {boolean}
+     * @memberof Database
+     */
+    external?: boolean;
+    /**
+     * The database's ID at its provider.
+     * @type {string}
+     * @memberof Database
+     */
+    externalId?: string | null;
+    /**
+     * True when connections to the database use TLS.
+     * @type {boolean}
+     * @memberof Database
+     */
+    ssl?: boolean;
+    /**
+     * Host name for connections from outside the database's network. Null when the database has none.
+     * @type {string}
+     * @memberof Database
+     */
+    publicHost?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Database
+     */
+    publicPort?: number | null;
+    /**
+     * Host name for connections from inside the database's network.
+     * @type {string}
+     * @memberof Database
+     */
+    privateHost?: string | null;
+    /**
+     * The cluster that runs the database.
+     * @type {number}
+     * @memberof Database
+     */
+    clusterId?: number | null;
+    /**
+     * The cluster whose network a provider-managed database is placed in.
+     * @type {number}
+     * @memberof Database
+     */
+    residedClusterId?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Database
+     */
     integrationId?: number | null;
     /**
      * 
@@ -9648,6 +9842,24 @@ export interface Integration {
      * @type {string}
      * @memberof Integration
      */
+    icon?: string;
+    /**
+     * The integration types the credentials are set up for.
+     * @type {Array<IntegrationKind>}
+     * @memberof Integration
+     */
+    kinds?: Array<IntegrationKind>;
+    /**
+     * The provider fields of the integration. A secret field is returned without its value. Returned only by GET /integrations/{id}.
+     * @type {Array<IntegrationFieldValue>}
+     * @memberof Integration
+     */
+    fieldValues?: Array<IntegrationFieldValue>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Integration
+     */
     createdAt: string;
     /**
      * 
@@ -9799,6 +10011,68 @@ export const IntegrationEnvironmentPolicyInputAllowedEnvTypesEnum = {
 } as const;
 export type IntegrationEnvironmentPolicyInputAllowedEnvTypesEnum = typeof IntegrationEnvironmentPolicyInputAllowedEnvTypesEnum[keyof typeof IntegrationEnvironmentPolicyInputAllowedEnvTypesEnum];
 
+/**
+ * 
+ * @export
+ * @interface IntegrationFieldValue
+ */
+export interface IntegrationFieldValue {
+    /**
+     * 
+     * @type {number}
+     * @memberof IntegrationFieldValue
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationFieldValue
+     */
+    field: string;
+    /**
+     * The field's value. Null for a secret field.
+     * @type {string}
+     * @memberof IntegrationFieldValue
+     */
+    value?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface IntegrationKind
+ */
+export interface IntegrationKind {
+    /**
+     * 
+     * @type {number}
+     * @memberof IntegrationKind
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationKind
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationKind
+     */
+    title: string;
+    /**
+     * The integration type in lower case, such as kubernetes, git or registry.
+     * @type {string}
+     * @memberof IntegrationKind
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof IntegrationKind
+     */
+    status: string;
+}
 /**
  * 
  * @export
@@ -10249,6 +10523,43 @@ export interface K3SJoinCommand {
      * @memberof K3SJoinCommand
      */
     command: string;
+}
+/**
+ * 
+ * @export
+ * @interface K3SPrivateAddress
+ */
+export interface K3SPrivateAddress {
+    /**
+     * 
+     * @type {string}
+     * @memberof K3SPrivateAddress
+     */
+    address: string;
+    /**
+     * The network interface the address is on, such as enp0s31f6.4000 for a VLAN.
+     * @type {string}
+     * @memberof K3SPrivateAddress
+     */
+    networkInterface: string;
+    /**
+     * The interface's MTU, or 0 when the server doesn't report it.
+     * @type {number}
+     * @memberof K3SPrivateAddress
+     */
+    mtu: number;
+    /**
+     * Whether the server's network configuration brings the address back after a reboot. k3s doesn't start when its address is gone, so switching to an address that isn't persistent needs force.
+     * @type {boolean}
+     * @memberof K3SPrivateAddress
+     */
+    persistent: boolean;
+    /**
+     * What keeps the address after a reboot, such as systemd-networkd or NetworkManager.
+     * @type {string}
+     * @memberof K3SPrivateAddress
+     */
+    persistentSource?: string;
 }
 /**
  * 
@@ -17217,6 +17528,30 @@ export interface StackService {
     outdated: boolean;
     /**
      * 
+     * @type {string}
+     * @memberof StackService
+     */
+    icon?: string;
+    /**
+     * True when the version of the stack service's default option has reached its end of life.
+     * @type {boolean}
+     * @memberof StackService
+     */
+    eol?: boolean;
+    /**
+     * The service derivative the stack service runs. Null for the service itself.
+     * @type {string}
+     * @memberof StackService
+     */
+    derivative?: string | null;
+    /**
+     * The stack service this derivative stack service belongs to. Null for the service itself.
+     * @type {number}
+     * @memberof StackService
+     */
+    parentStackServiceId?: number | null;
+    /**
+     * 
      * @type {number}
      * @memberof StackService
      */
@@ -18424,6 +18759,25 @@ export interface StorageClass {
      * @memberof StorageClass
      */
     selectable: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface SwitchK3SServerAddressInput
+ */
+export interface SwitchK3SServerAddressInput {
+    /**
+     * A private address from GET /cluster-k3s-private-addresses/{id}.
+     * @type {string}
+     * @memberof SwitchK3SServerAddressInput
+     */
+    address: string;
+    /**
+     * Switch to an address the server's network configuration isn't known to keep after a reboot.
+     * @type {boolean}
+     * @memberof SwitchK3SServerAddressInput
+     */
+    force?: boolean;
 }
 /**
  * 
