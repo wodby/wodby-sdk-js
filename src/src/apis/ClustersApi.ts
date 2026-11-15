@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Wodby 2 Public API
- * Public REST API for customer SDKs and code integrations. GraphQL remains internal for the dashboard. This contract is the versioned public surface. 
+ * REST API for automating Wodby 2. Manage organizations, projects, apps, environments, clusters, databases and integrations, authenticated with an API key. 
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -26,6 +26,7 @@ import type {
   ClusterNode,
   ClusterSecurityAdvisory,
   ClusterSettingsInput,
+  ClusterVulnerabilitiesResponse,
   K3SClusterNode,
   K3SInstallCommand,
   K3SJoinCommand,
@@ -119,6 +120,15 @@ export interface GetKubernetesVersionUpgradePlanRequest {
 
 export interface ListClusterNodesRequest {
     id: number;
+}
+
+export interface ListClusterVulnerabilitiesRequest {
+    id: number;
+    components?: string;
+    severities?: string;
+    unresolved?: boolean;
+    page?: number;
+    pageSize?: number;
 }
 
 export interface ListClustersRequest {
@@ -489,6 +499,27 @@ export interface ClustersApiInterface {
      * List cluster nodes
      */
     listClusterNodes(requestParameters: ListClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterNode>>;
+
+    /**
+     * Lists the cluster\'s vulnerabilities from every source Wodby has, in one list: the security advisories Wodby tracks, the scans of a K3s cluster\'s server packages, managed node pools on an outdated image, the known vulnerabilities of the cluster\'s Kubernetes version, and the scans of the images Wodby\'s infrastructure apps run. The ID is the cluster\'s. Vulnerabilities the cluster is still exposed to come first, then the most severe. Wodby Cloud and serverless clusters return an empty list.
+     * @summary List cluster vulnerabilities
+     * @param {number} id 
+     * @param {string} [components] Comma-separated components to list: operating_system, node_image, kubernetes, infrastructure_app. All when omitted.
+     * @param {string} [severities] Comma-separated severities to list, such as critical,high. All when omitted.
+     * @param {boolean} [unresolved] Only vulnerabilities the cluster is still exposed to.
+     * @param {number} [page] Page number, defaults to 1
+     * @param {number} [pageSize] Page size, defaults to 30
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    listClusterVulnerabilitiesRaw(requestParameters: ListClusterVulnerabilitiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterVulnerabilitiesResponse>>;
+
+    /**
+     * Lists the cluster\'s vulnerabilities from every source Wodby has, in one list: the security advisories Wodby tracks, the scans of a K3s cluster\'s server packages, managed node pools on an outdated image, the known vulnerabilities of the cluster\'s Kubernetes version, and the scans of the images Wodby\'s infrastructure apps run. The ID is the cluster\'s. Vulnerabilities the cluster is still exposed to come first, then the most severe. Wodby Cloud and serverless clusters return an empty list.
+     * List cluster vulnerabilities
+     */
+    listClusterVulnerabilities(requestParameters: ListClusterVulnerabilitiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterVulnerabilitiesResponse>;
 
     /**
      * Returns clusters matching the request filters.
@@ -1496,6 +1527,65 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async listClusterNodes(requestParameters: ListClusterNodesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterNode>> {
         const response = await this.listClusterNodesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists the cluster\'s vulnerabilities from every source Wodby has, in one list: the security advisories Wodby tracks, the scans of a K3s cluster\'s server packages, managed node pools on an outdated image, the known vulnerabilities of the cluster\'s Kubernetes version, and the scans of the images Wodby\'s infrastructure apps run. The ID is the cluster\'s. Vulnerabilities the cluster is still exposed to come first, then the most severe. Wodby Cloud and serverless clusters return an empty list.
+     * List cluster vulnerabilities
+     */
+    async listClusterVulnerabilitiesRaw(requestParameters: ListClusterVulnerabilitiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterVulnerabilitiesResponse>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listClusterVulnerabilities().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['components'] != null) {
+            queryParameters['components'] = requestParameters['components'];
+        }
+
+        if (requestParameters['severities'] != null) {
+            queryParameters['severities'] = requestParameters['severities'];
+        }
+
+        if (requestParameters['unresolved'] != null) {
+            queryParameters['unresolved'] = requestParameters['unresolved'];
+        }
+
+        if (requestParameters['page'] != null) {
+            queryParameters['page'] = requestParameters['page'];
+        }
+
+        if (requestParameters['pageSize'] != null) {
+            queryParameters['pageSize'] = requestParameters['pageSize'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/cluster-vulnerabilities/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Lists the cluster\'s vulnerabilities from every source Wodby has, in one list: the security advisories Wodby tracks, the scans of a K3s cluster\'s server packages, managed node pools on an outdated image, the known vulnerabilities of the cluster\'s Kubernetes version, and the scans of the images Wodby\'s infrastructure apps run. The ID is the cluster\'s. Vulnerabilities the cluster is still exposed to come first, then the most severe. Wodby Cloud and serverless clusters return an empty list.
+     * List cluster vulnerabilities
+     */
+    async listClusterVulnerabilities(requestParameters: ListClusterVulnerabilitiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterVulnerabilitiesResponse> {
+        const response = await this.listClusterVulnerabilitiesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

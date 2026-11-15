@@ -8175,6 +8175,213 @@ export interface ClusterSettingsInput {
 /**
  * 
  * @export
+ * @interface ClusterVulnerabilitiesResponse
+ */
+export interface ClusterVulnerabilitiesResponse {
+    /**
+     * 
+     * @type {Array<ClusterVulnerability>}
+     * @memberof ClusterVulnerabilitiesResponse
+     */
+    items: Array<ClusterVulnerability>;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClusterVulnerabilitiesResponse
+     */
+    totalCount: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClusterVulnerabilitiesResponse
+     */
+    nextPage?: number;
+    /**
+     * 
+     * @type {VulnerabilityCounts}
+     * @memberof ClusterVulnerabilitiesResponse
+     */
+    counts: VulnerabilityCounts;
+    /**
+     * 
+     * @type {Array<ClusterVulnerabilitySource>}
+     * @memberof ClusterVulnerabilitiesResponse
+     */
+    sources: Array<ClusterVulnerabilitySource>;
+}
+/**
+ * 
+ * @export
+ * @interface ClusterVulnerability
+ */
+export interface ClusterVulnerability {
+    /**
+     * The CVE ID when there is one, otherwise the advisory's own ID. Not unique: the same vulnerability is listed once per affected thing.
+     * @type {string}
+     * @memberof ClusterVulnerability
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterVulnerability
+     */
+    summary: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterVulnerability
+     */
+    component: ClusterVulnerabilityComponentEnum;
+    /**
+     * What is vulnerable, such as Kubernetes 1.35.10.
+     * @type {string}
+     * @memberof ClusterVulnerability
+     */
+    affected: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterVulnerability
+     */
+    severity: ClusterVulnerabilitySeverityEnum;
+    /**
+     * Whether the cluster is still exposed: not_fixed or not_mitigated. Wodby's protections mitigate some vulnerabilities without fixing them.
+     * @type {string}
+     * @memberof ClusterVulnerability
+     */
+    state: ClusterVulnerabilityStateEnum;
+    /**
+     * What fixes or mitigates the vulnerability. update_server_packages is done on the K3s server, not by Wodby. Absent when nothing is needed or no fix is available yet.
+     * @type {string}
+     * @memberof ClusterVulnerability
+     */
+    action?: ClusterVulnerabilityActionEnum;
+    /**
+     * The version that fixes the vulnerability. Absent when none is known.
+     * @type {string}
+     * @memberof ClusterVulnerability
+     */
+    fixedIn?: string;
+    /**
+     * The vulnerability's public record. Absent when Wodby has none.
+     * @type {string}
+     * @memberof ClusterVulnerability
+     */
+    url?: string;
+    /**
+     * Why the cluster is in this state, for vulnerabilities Wodby tracks itself.
+     * @type {string}
+     * @memberof ClusterVulnerability
+     */
+    message?: string;
+}
+
+
+/**
+ * @export
+ */
+export const ClusterVulnerabilityComponentEnum = {
+    OperatingSystem: 'operating_system',
+    NodeImage: 'node_image',
+    Kubernetes: 'kubernetes',
+    InfrastructureApp: 'infrastructure_app'
+} as const;
+export type ClusterVulnerabilityComponentEnum = typeof ClusterVulnerabilityComponentEnum[keyof typeof ClusterVulnerabilityComponentEnum];
+
+/**
+ * @export
+ */
+export const ClusterVulnerabilitySeverityEnum = {
+    Critical: 'critical',
+    High: 'high',
+    Medium: 'medium',
+    Low: 'low',
+    Negligible: 'negligible',
+    Unknown: 'unknown'
+} as const;
+export type ClusterVulnerabilitySeverityEnum = typeof ClusterVulnerabilitySeverityEnum[keyof typeof ClusterVulnerabilitySeverityEnum];
+
+/**
+ * @export
+ */
+export const ClusterVulnerabilityStateEnum = {
+    NotFixed: 'not_fixed',
+    NotMitigated: 'not_mitigated',
+    Mitigated: 'mitigated',
+    Fixed: 'fixed'
+} as const;
+export type ClusterVulnerabilityStateEnum = typeof ClusterVulnerabilityStateEnum[keyof typeof ClusterVulnerabilityStateEnum];
+
+/**
+ * @export
+ */
+export const ClusterVulnerabilityActionEnum = {
+    UpdateKubernetes: 'update_kubernetes',
+    UpgradeInfrastructure: 'upgrade_infrastructure',
+    UpgradeInfrastructureApps: 'upgrade_infrastructure_apps',
+    RecycleNodes: 'recycle_nodes',
+    UpdateServerPackages: 'update_server_packages'
+} as const;
+export type ClusterVulnerabilityActionEnum = typeof ClusterVulnerabilityActionEnum[keyof typeof ClusterVulnerabilityActionEnum];
+
+/**
+ * 
+ * @export
+ * @interface ClusterVulnerabilitySource
+ */
+export interface ClusterVulnerabilitySource {
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterVulnerabilitySource
+     */
+    component: ClusterVulnerabilitySourceComponentEnum;
+    /**
+     * checked when the component's vulnerabilities are listed; failed keeps earlier results.
+     * @type {string}
+     * @memberof ClusterVulnerabilitySource
+     */
+    status: ClusterVulnerabilitySourceStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterVulnerabilitySource
+     */
+    checkedAt?: string;
+    /**
+     * Why the check is pending or failed.
+     * @type {string}
+     * @memberof ClusterVulnerabilitySource
+     */
+    message?: string;
+}
+
+
+/**
+ * @export
+ */
+export const ClusterVulnerabilitySourceComponentEnum = {
+    OperatingSystem: 'operating_system',
+    NodeImage: 'node_image',
+    Kubernetes: 'kubernetes',
+    InfrastructureApp: 'infrastructure_app'
+} as const;
+export type ClusterVulnerabilitySourceComponentEnum = typeof ClusterVulnerabilitySourceComponentEnum[keyof typeof ClusterVulnerabilitySourceComponentEnum];
+
+/**
+ * @export
+ */
+export const ClusterVulnerabilitySourceStatusEnum = {
+    Checked: 'checked',
+    Pending: 'pending',
+    Failed: 'failed'
+} as const;
+export type ClusterVulnerabilitySourceStatusEnum = typeof ClusterVulnerabilitySourceStatusEnum[keyof typeof ClusterVulnerabilitySourceStatusEnum];
+
+/**
+ * 
+ * @export
  * @interface ConfigOverrideInput
  */
 export interface ConfigOverrideInput {
@@ -14162,85 +14369,6 @@ export interface OrgSSOProvider {
      * @memberof OrgSSOProvider
      */
     updatedAt: string;
-}
-/**
- * 
- * @export
- * @interface OrgSSOProviderInput
- */
-export interface OrgSSOProviderInput {
-    /**
-     * Used when creating a provider. Optional for API-key requests; defaults to the API key's organization.
-     * @type {number}
-     * @memberof OrgSSOProviderInput
-     */
-    orgId?: number;
-    /**
-     * Provider kind when creating, such as oidc, github or saml. It cannot be changed.
-     * @type {string}
-     * @memberof OrgSSOProviderInput
-     */
-    kind?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrgSSOProviderInput
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrgSSOProviderInput
-     */
-    issuerUrl?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrgSSOProviderInput
-     */
-    clientId?: string | null;
-    /**
-     * OIDC or GitHub client secret. Leave it out on update to keep the stored secret.
-     * @type {string}
-     * @memberof OrgSSOProviderInput
-     */
-    clientSecret?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrgSSOProviderInput
-     */
-    githubOrg?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrgSSOProviderInput
-     */
-    samlIdpMetadataUrl?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof OrgSSOProviderInput
-     */
-    samlIdpMetadataXml?: string | null;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof OrgSSOProviderInput
-     */
-    enabled: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof OrgSSOProviderInput
-     */
-    jitEnabled: boolean;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof OrgSSOProviderInput
-     */
-    domains: Array<string>;
 }
 /**
  * 
@@ -20723,19 +20851,6 @@ export interface ValidationResult {
      * @memberof ValidationResult
      */
     valid: boolean;
-}
-/**
- * 
- * @export
- * @interface VerifyOrgSSODomainInput
- */
-export interface VerifyOrgSSODomainInput {
-    /**
-     * 
-     * @type {string}
-     * @memberof VerifyOrgSSODomainInput
-     */
-    domain: string;
 }
 /**
  * 
