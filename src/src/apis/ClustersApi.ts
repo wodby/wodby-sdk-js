@@ -27,10 +27,13 @@ import type {
   ClusterSecurityAdvisory,
   ClusterSettingsInput,
   ClusterVulnerabilitiesResponse,
+  ClusterVulnerabilityIgnore,
+  ClusterVulnerabilityIgnoreInput,
   K3SClusterNode,
   K3SInstallCommand,
   K3SJoinCommand,
   K3SPrivateAddress,
+  K3SServerNodesInput,
   KubernetesVersionUpgradePlan,
   NewClusterInput,
   NewK3SClusterInput,
@@ -55,6 +58,11 @@ export interface CreateClusterRequest {
     newClusterInput: NewClusterInput;
 }
 
+export interface CreateClusterVulnerabilityIgnoreRequest {
+    id: number;
+    clusterVulnerabilityIgnoreInput: ClusterVulnerabilityIgnoreInput;
+}
+
 export interface CreateK3SClusterRequest {
     newK3SClusterInput: NewK3SClusterInput;
 }
@@ -66,6 +74,10 @@ export interface CreateWodbyCloudClusterRequest {
 export interface DeleteClusterRequest {
     id: number;
     force?: boolean;
+}
+
+export interface DeleteClusterVulnerabilityIgnoreRequest {
+    id: number;
 }
 
 export interface GetClusterRequest {
@@ -131,6 +143,10 @@ export interface ListClusterVulnerabilitiesRequest {
     pageSize?: number;
 }
 
+export interface ListClusterVulnerabilityIgnoresRequest {
+    id: number;
+}
+
 export interface ListClustersRequest {
     orgId?: number;
     projectIds?: string;
@@ -153,6 +169,11 @@ export interface RecycleClusterNodesRequest {
 export interface RemoveK3SClusterNodeRequest {
     id: number;
     removeK3SClusterNodeInput: RemoveK3SClusterNodeInput;
+}
+
+export interface RestartK3SServersRequest {
+    id: number;
+    k3SServerNodesInput?: K3SServerNodesInput;
 }
 
 export interface ScaleClusterRequest {
@@ -210,6 +231,11 @@ export interface UpdateK3SClusterPublicIpRequest {
     updateK3SClusterPublicIPInput: UpdateK3SClusterPublicIPInput;
 }
 
+export interface UpdateK3SServerPackagesRequest {
+    id: number;
+    k3SServerNodesInput?: K3SServerNodesInput;
+}
+
 export interface UpgradeClusterInfraRequest {
     id: number;
 }
@@ -240,6 +266,23 @@ export interface ClustersApiInterface {
      * Create cluster
      */
     createCluster(requestParameters: CreateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
+
+    /**
+     * Ignores a vulnerability in every component of the cluster, including later checks. Ignored vulnerabilities stay listed, last, and are left out of the cluster\'s vulnerability counts and reported in the ignored count instead. Only vulnerabilities listed as ignorable are affected. The ID is the cluster\'s. Needs permission to modify the cluster. Fails when the cluster already ignores the vulnerability.
+     * @summary Ignore a cluster vulnerability
+     * @param {number} id 
+     * @param {ClusterVulnerabilityIgnoreInput} clusterVulnerabilityIgnoreInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    createClusterVulnerabilityIgnoreRaw(requestParameters: CreateClusterVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterVulnerabilityIgnore>>;
+
+    /**
+     * Ignores a vulnerability in every component of the cluster, including later checks. Ignored vulnerabilities stay listed, last, and are left out of the cluster\'s vulnerability counts and reported in the ignored count instead. Only vulnerabilities listed as ignorable are affected. The ID is the cluster\'s. Needs permission to modify the cluster. Fails when the cluster already ignores the vulnerability.
+     * Ignore a cluster vulnerability
+     */
+    createClusterVulnerabilityIgnore(requestParameters: CreateClusterVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterVulnerabilityIgnore>;
 
     /**
      * Registers a self-hosted K3s cluster. Run the command from GET /clusters/k3s-install-command/{id} on the server to connect it.
@@ -289,6 +332,22 @@ export interface ClustersApiInterface {
      * Delete cluster
      */
     deleteCluster(requestParameters: DeleteClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Removes an ignore, so the vulnerability counts again. The ID is the ignore\'s. Needs permission to modify the cluster.
+     * @summary Stop ignoring a cluster vulnerability
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    deleteClusterVulnerabilityIgnoreRaw(requestParameters: DeleteClusterVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Removes an ignore, so the vulnerability counts again. The ID is the ignore\'s. Needs permission to modify the cluster.
+     * Stop ignoring a cluster vulnerability
+     */
+    deleteClusterVulnerabilityIgnore(requestParameters: DeleteClusterVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Returns the cluster identified by the request path.
@@ -506,7 +565,7 @@ export interface ClustersApiInterface {
      * @param {number} id 
      * @param {string} [components] Comma-separated components to list: operating_system, node_image, kubernetes, infrastructure_app. All when omitted.
      * @param {string} [severities] Comma-separated severities to list, such as critical,high. All when omitted.
-     * @param {boolean} [unresolved] Only vulnerabilities the cluster is still exposed to.
+     * @param {boolean} [unresolved] Only vulnerabilities the cluster is still exposed to and doesn\&#39;t ignore.
      * @param {number} [page] Page number, defaults to 1
      * @param {number} [pageSize] Page size, defaults to 30
      * @param {*} [options] Override http request option.
@@ -520,6 +579,22 @@ export interface ClustersApiInterface {
      * List cluster vulnerabilities
      */
     listClusterVulnerabilities(requestParameters: ListClusterVulnerabilitiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterVulnerabilitiesResponse>;
+
+    /**
+     * Lists the vulnerabilities the cluster ignores, newest first, including those that match nothing listed now. The ID is the cluster\'s.
+     * @summary List ignored cluster vulnerabilities
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    listClusterVulnerabilityIgnoresRaw(requestParameters: ListClusterVulnerabilityIgnoresRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterVulnerabilityIgnore>>>;
+
+    /**
+     * Lists the vulnerabilities the cluster ignores, newest first, including those that match nothing listed now. The ID is the cluster\'s.
+     * List ignored cluster vulnerabilities
+     */
+    listClusterVulnerabilityIgnores(requestParameters: ListClusterVulnerabilityIgnoresRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterVulnerabilityIgnore>>;
 
     /**
      * Returns clusters matching the request filters.
@@ -619,6 +694,23 @@ export interface ClustersApiInterface {
      * Remove K3s cluster node
      */
     removeK3SClusterNode(requestParameters: RemoveK3SClusterNodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Restarts a K3s cluster\'s nodes one at a time and waits for each to come back Ready. Leave nodes empty to restart only the nodes that say a restart is pending. A node is drained first when another node can take its pods; on a cluster with one node, every app is unavailable until the node is back, usually a few minutes. New deployments wait until the restarts end. Refused while application operations are active.
+     * @summary Restart K3s servers
+     * @param {number} id 
+     * @param {K3SServerNodesInput} [k3SServerNodesInput] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    restartK3SServersRaw(requestParameters: RestartK3SServersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Restarts a K3s cluster\'s nodes one at a time and waits for each to come back Ready. Leave nodes empty to restart only the nodes that say a restart is pending. A node is drained first when another node can take its pods; on a cluster with one node, every app is unavailable until the node is back, usually a few minutes. New deployments wait until the restarts end. Refused while application operations are active.
+     * Restart K3s servers
+     */
+    restartK3SServers(requestParameters: RestartK3SServersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
      * Changes the minimum and maximum node count of a managed cluster and starts the node pool update.
@@ -808,6 +900,23 @@ export interface ClustersApiInterface {
     updateK3SClusterPublicIp(requestParameters: UpdateK3SClusterPublicIpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster>;
 
     /**
+     * Updates the operating system packages of a K3s cluster\'s nodes with each server\'s package manager, one node at a time, within the installed release. Leave nodes empty to update every node. Apps keep running. A node that needs a restart to apply the updates, such as for a new kernel, shows it in GET /cluster-vulnerabilities/{id} after its next scan. Supported on Debian, Ubuntu, RHEL-family and SUSE servers that run systemd.
+     * @summary Update K3s server packages
+     * @param {number} id 
+     * @param {K3SServerNodesInput} [k3SServerNodesInput] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    updateK3SServerPackagesRaw(requestParameters: UpdateK3SServerPackagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Updates the operating system packages of a K3s cluster\'s nodes with each server\'s package manager, one node at a time, within the installed release. Leave nodes empty to update every node. Apps keep running. A node that needs a restart to apply the updates, such as for a new kernel, shows it in GET /cluster-vulnerabilities/{id} after its next scan. Supported on Debian, Ubuntu, RHEL-family and SUSE servers that run systemd.
+     * Update K3s server packages
+     */
+    updateK3SServerPackages(requestParameters: UpdateK3SServerPackagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
      * Starts a cluster infrastructure upgrade task and returns the task identifier.
      * @summary Upgrade cluster infrastructure
      * @param {number} id 
@@ -885,6 +994,55 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async createCluster(requestParameters: CreateClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
         const response = await this.createClusterRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Ignores a vulnerability in every component of the cluster, including later checks. Ignored vulnerabilities stay listed, last, and are left out of the cluster\'s vulnerability counts and reported in the ignored count instead. Only vulnerabilities listed as ignorable are affected. The ID is the cluster\'s. Needs permission to modify the cluster. Fails when the cluster already ignores the vulnerability.
+     * Ignore a cluster vulnerability
+     */
+    async createClusterVulnerabilityIgnoreRaw(requestParameters: CreateClusterVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClusterVulnerabilityIgnore>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createClusterVulnerabilityIgnore().'
+            );
+        }
+
+        if (requestParameters['clusterVulnerabilityIgnoreInput'] == null) {
+            throw new runtime.RequiredError(
+                'clusterVulnerabilityIgnoreInput',
+                'Required parameter "clusterVulnerabilityIgnoreInput" was null or undefined when calling createClusterVulnerabilityIgnore().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/vulnerability-ignores/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['clusterVulnerabilityIgnoreInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Ignores a vulnerability in every component of the cluster, including later checks. Ignored vulnerabilities stay listed, last, and are left out of the cluster\'s vulnerability counts and reported in the ignored count instead. Only vulnerabilities listed as ignorable are affected. The ID is the cluster\'s. Needs permission to modify the cluster. Fails when the cluster already ignores the vulnerability.
+     * Ignore a cluster vulnerability
+     */
+    async createClusterVulnerabilityIgnore(requestParameters: CreateClusterVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClusterVulnerabilityIgnore> {
+        const response = await this.createClusterVulnerabilityIgnoreRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1012,6 +1170,45 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async deleteCluster(requestParameters: DeleteClusterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.deleteClusterRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Removes an ignore, so the vulnerability counts again. The ID is the ignore\'s. Needs permission to modify the cluster.
+     * Stop ignoring a cluster vulnerability
+     */
+    async deleteClusterVulnerabilityIgnoreRaw(requestParameters: DeleteClusterVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteClusterVulnerabilityIgnore().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/cluster-vulnerability-ignores/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Removes an ignore, so the vulnerability counts again. The ID is the ignore\'s. Needs permission to modify the cluster.
+     * Stop ignoring a cluster vulnerability
+     */
+    async deleteClusterVulnerabilityIgnore(requestParameters: DeleteClusterVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.deleteClusterVulnerabilityIgnoreRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1590,6 +1787,45 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
+     * Lists the vulnerabilities the cluster ignores, newest first, including those that match nothing listed now. The ID is the cluster\'s.
+     * List ignored cluster vulnerabilities
+     */
+    async listClusterVulnerabilityIgnoresRaw(requestParameters: ListClusterVulnerabilityIgnoresRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ClusterVulnerabilityIgnore>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listClusterVulnerabilityIgnores().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/vulnerability-ignores/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Lists the vulnerabilities the cluster ignores, newest first, including those that match nothing listed now. The ID is the cluster\'s.
+     * List ignored cluster vulnerabilities
+     */
+    async listClusterVulnerabilityIgnores(requestParameters: ListClusterVulnerabilityIgnoresRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ClusterVulnerabilityIgnore>> {
+        const response = await this.listClusterVulnerabilityIgnoresRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns clusters matching the request filters.
      * List clusters
      */
@@ -1832,6 +2068,48 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async removeK3SClusterNode(requestParameters: RemoveK3SClusterNodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
         const response = await this.removeK3SClusterNodeRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Restarts a K3s cluster\'s nodes one at a time and waits for each to come back Ready. Leave nodes empty to restart only the nodes that say a restart is pending. A node is drained first when another node can take its pods; on a cluster with one node, every app is unavailable until the node is back, usually a few minutes. New deployments wait until the restarts end. Refused while application operations are active.
+     * Restart K3s servers
+     */
+    async restartK3SServersRaw(requestParameters: RestartK3SServersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling restartK3SServers().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/{id}/actions/restart-k3s-servers`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['k3SServerNodesInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Restarts a K3s cluster\'s nodes one at a time and waits for each to come back Ready. Leave nodes empty to restart only the nodes that say a restart is pending. A node is drained first when another node can take its pods; on a cluster with one node, every app is unavailable until the node is back, usually a few minutes. New deployments wait until the restarts end. Refused while application operations are active.
+     * Restart K3s servers
+     */
+    async restartK3SServers(requestParameters: RestartK3SServersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.restartK3SServersRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -2371,6 +2649,48 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
      */
     async updateK3SClusterPublicIp(requestParameters: UpdateK3SClusterPublicIpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
         const response = await this.updateK3SClusterPublicIpRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates the operating system packages of a K3s cluster\'s nodes with each server\'s package manager, one node at a time, within the installed release. Leave nodes empty to update every node. Apps keep running. A node that needs a restart to apply the updates, such as for a new kernel, shows it in GET /cluster-vulnerabilities/{id} after its next scan. Supported on Debian, Ubuntu, RHEL-family and SUSE servers that run systemd.
+     * Update K3s server packages
+     */
+    async updateK3SServerPackagesRaw(requestParameters: UpdateK3SServerPackagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateK3SServerPackages().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/{id}/actions/update-k3s-server-packages`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['k3SServerNodesInput'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Updates the operating system packages of a K3s cluster\'s nodes with each server\'s package manager, one node at a time, within the installed release. Leave nodes empty to update every node. Apps keep running. A node that needs a restart to apply the updates, such as for a new kernel, shows it in GET /cluster-vulnerabilities/{id} after its next scan. Supported on Debian, Ubuntu, RHEL-family and SUSE servers that run systemd.
+     * Update K3s server packages
+     */
+    async updateK3SServerPackages(requestParameters: UpdateK3SServerPackagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.updateK3SServerPackagesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

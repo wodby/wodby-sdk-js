@@ -8208,6 +8208,24 @@ export interface ClusterVulnerabilitiesResponse {
      * @memberof ClusterVulnerabilitiesResponse
      */
     sources: Array<ClusterVulnerabilitySource>;
+    /**
+     * Whether a vulnerability check of the cluster is waiting or running. Until it ends, the list shows the results of the checks that finished before it.
+     * @type {boolean}
+     * @memberof ClusterVulnerabilitiesResponse
+     */
+    scanning: boolean;
+    /**
+     * The cluster's critical and high vulnerabilities, not ignored, that a restart of its K3s servers fixes: the fix is installed and runs after the restart. Covers the whole cluster, whatever the filter.
+     * @type {number}
+     * @memberof ClusterVulnerabilitiesResponse
+     */
+    restartRequired: number;
+    /**
+     * The cluster's critical and high vulnerabilities, not ignored, that wait for a fix from an infrastructure image's maintainers. They aren't in counts. Covers the whole cluster, whatever the filter.
+     * @type {number}
+     * @memberof ClusterVulnerabilitiesResponse
+     */
+    waitingForUpstream: number;
 }
 /**
  * 
@@ -8246,13 +8264,13 @@ export interface ClusterVulnerability {
      */
     severity: ClusterVulnerabilitySeverityEnum;
     /**
-     * Whether the cluster is still exposed: not_fixed or not_mitigated. Wodby's protections mitigate some vulnerabilities without fixing them.
+     * Whether the cluster is still exposed: not_fixed, not_mitigated or fixed_after_restart. Wodby's protections mitigate some vulnerabilities without fixing them. fixed_after_restart is a vulnerability of a K3s server's running kernel that the newer kernel installed on the server doesn't have; the server is exposed until it restarts into that kernel. waiting_for_upstream is a vulnerability of an infrastructure app's image that no upgrade Wodby can offer fixes yet; it needs a new release from the image's maintainers and isn't counted among those that need action.
      * @type {string}
      * @memberof ClusterVulnerability
      */
     state: ClusterVulnerabilityStateEnum;
     /**
-     * What fixes or mitigates the vulnerability. update_server_packages is done on the K3s server, not by Wodby. Absent when nothing is needed or no fix is available yet.
+     * What fixes or mitigates the vulnerability. update_server_packages and restart_server are done on the K3s server, not by Wodby: restart_server applies updates already installed on it, such as a new kernel. Absent when nothing is needed or no fix is available yet.
      * @type {string}
      * @memberof ClusterVulnerability
      */
@@ -8270,11 +8288,47 @@ export interface ClusterVulnerability {
      */
     url?: string;
     /**
-     * Why the cluster is in this state, for vulnerabilities Wodby tracks itself.
+     * Why the cluster is in this state, for vulnerabilities Wodby tracks itself and those a restart fixes.
      * @type {string}
      * @memberof ClusterVulnerability
      */
     message?: string;
+    /**
+     * Whether the cluster can ignore the vulnerability: true for findings of a scan and the known vulnerabilities of the Kubernetes version, false for the advisories Wodby tracks itself and notices such as an outdated node image.
+     * @type {boolean}
+     * @memberof ClusterVulnerability
+     */
+    ignorable: boolean;
+    /**
+     * Whether the cluster ignores the vulnerability. Ignored vulnerabilities are listed last.
+     * @type {boolean}
+     * @memberof ClusterVulnerability
+     */
+    ignored: boolean;
+    /**
+     * The ignore that matches an ignored vulnerability. Absent when not ignored.
+     * @type {number}
+     * @memberof ClusterVulnerability
+     */
+    ignoreId?: number;
+    /**
+     * Whether the vulnerability is on CISA's catalog of known exploited vulnerabilities.
+     * @type {boolean}
+     * @memberof ClusterVulnerability
+     */
+    exploited: boolean;
+    /**
+     * The EPSS probability that the vulnerability is exploited in the next 30 days, from 0 to 1. Absent when unknown.
+     * @type {number}
+     * @memberof ClusterVulnerability
+     */
+    epss?: number;
+    /**
+     * Whether the vulnerability raises the alert: a scan finding known or likely to be exploited, or an advisory Wodby tracks itself.
+     * @type {boolean}
+     * @memberof ClusterVulnerability
+     */
+    urgent: boolean;
 }
 
 
@@ -8309,7 +8363,9 @@ export const ClusterVulnerabilityStateEnum = {
     NotFixed: 'not_fixed',
     NotMitigated: 'not_mitigated',
     Mitigated: 'mitigated',
-    Fixed: 'fixed'
+    Fixed: 'fixed',
+    FixedAfterRestart: 'fixed_after_restart',
+    WaitingForUpstream: 'waiting_for_upstream'
 } as const;
 export type ClusterVulnerabilityStateEnum = typeof ClusterVulnerabilityStateEnum[keyof typeof ClusterVulnerabilityStateEnum];
 
@@ -8321,10 +8377,67 @@ export const ClusterVulnerabilityActionEnum = {
     UpgradeInfrastructure: 'upgrade_infrastructure',
     UpgradeInfrastructureApps: 'upgrade_infrastructure_apps',
     RecycleNodes: 'recycle_nodes',
-    UpdateServerPackages: 'update_server_packages'
+    UpdateServerPackages: 'update_server_packages',
+    RestartServer: 'restart_server'
 } as const;
 export type ClusterVulnerabilityActionEnum = typeof ClusterVulnerabilityActionEnum[keyof typeof ClusterVulnerabilityActionEnum];
 
+/**
+ * 
+ * @export
+ * @interface ClusterVulnerabilityIgnore
+ */
+export interface ClusterVulnerabilityIgnore {
+    /**
+     * 
+     * @type {number}
+     * @memberof ClusterVulnerabilityIgnore
+     */
+    id: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClusterVulnerabilityIgnore
+     */
+    clusterId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterVulnerabilityIgnore
+     */
+    vulnerabilityId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterVulnerabilityIgnore
+     */
+    reason?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClusterVulnerabilityIgnore
+     */
+    createdAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface ClusterVulnerabilityIgnoreInput
+ */
+export interface ClusterVulnerabilityIgnoreInput {
+    /**
+     * Vulnerability ID as listed for the cluster, such as CVE-2024-12345.
+     * @type {string}
+     * @memberof ClusterVulnerabilityIgnoreInput
+     */
+    vulnerabilityId: string;
+    /**
+     * Why the vulnerability is accepted.
+     * @type {string}
+     * @memberof ClusterVulnerabilityIgnoreInput
+     */
+    reason?: string;
+}
 /**
  * 
  * @export
@@ -11016,6 +11129,19 @@ export interface K3SPrivateAddress {
      * @memberof K3SPrivateAddress
      */
     persistentSource?: string;
+}
+/**
+ * 
+ * @export
+ * @interface K3SServerNodesInput
+ */
+export interface K3SServerNodesInput {
+    /**
+     * Node names from GET /cluster-k3s-nodes/{id}. Empty for the default nodes.
+     * @type {Array<string>}
+     * @memberof K3SServerNodesInput
+     */
+    nodes?: Array<string>;
 }
 /**
  * 
@@ -13736,9 +13862,10 @@ export interface NewWodbyCloudClusterInput {
      */
     demo: boolean;
     /**
-     * 
+     * Persistent Wodby Cloud clusters can't be single-node; true is refused unless demo is true. Set minNodeCount and maxNodeCount instead. Demo clusters always run on one node.
      * @type {boolean}
      * @memberof NewWodbyCloudClusterInput
+     * @deprecated
      */
     singleNode?: boolean | null;
     /**
@@ -13754,13 +13881,13 @@ export interface NewWodbyCloudClusterInput {
      */
     machineType?: string | null;
     /**
-     * 
+     * Minimum node count of a persistent cluster, at least 1. Required unless demo is true.
      * @type {number}
      * @memberof NewWodbyCloudClusterInput
      */
     minNodeCount?: number | null;
     /**
-     * 
+     * Maximum node count of a persistent cluster. Required unless demo is true.
      * @type {number}
      * @memberof NewWodbyCloudClusterInput
      */
@@ -20937,6 +21064,12 @@ export interface VulnerabilityCounts {
      * @memberof VulnerabilityCounts
      */
     ignored?: number;
+    /**
+     * Findings known to be exploited, or likely to be with an EPSS probability of at least 10%, whatever their severity, plus unresolved advisories Wodby tracks itself on a cluster. These raise the alert. Ignored ones are left out.
+     * @type {number}
+     * @memberof VulnerabilityCounts
+     */
+    urgent?: number;
 }
 
 /**
