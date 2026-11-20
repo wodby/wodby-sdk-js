@@ -8306,7 +8306,7 @@ export interface ClusterVulnerability {
      */
     ignored: boolean;
     /**
-     * The ignore that matches an ignored vulnerability. Absent when not ignored.
+     * The ignore that matches an ignored vulnerability, or one marked ignoredBeforeUrgent. Absent otherwise.
      * @type {number}
      * @memberof ClusterVulnerability
      */
@@ -8324,11 +8324,17 @@ export interface ClusterVulnerability {
      */
     epss?: number;
     /**
-     * Whether the vulnerability raises the alert: a scan finding known or likely to be exploited, or an advisory Wodby tracks itself.
+     * Whether the vulnerability raises the alert: it is known or likely to be exploited, or Wodby tracks it, as it does critical vulnerabilities in PHP and nginx before public databases list them.
      * @type {boolean}
      * @memberof ClusterVulnerability
      */
     urgent: boolean;
+    /**
+     * Whether the cluster ignored the vulnerability before it raised the alert. Such an ignore doesn't apply while the vulnerability raises the alert, so it counts until the cluster ignores it again.
+     * @type {boolean}
+     * @memberof ClusterVulnerability
+     */
+    ignoredBeforeUrgent: boolean;
 }
 
 
@@ -21065,7 +21071,7 @@ export interface VulnerabilityCounts {
      */
     ignored?: number;
     /**
-     * Findings known to be exploited, or likely to be with an EPSS probability of at least 10%, whatever their severity, plus unresolved advisories Wodby tracks itself on a cluster. These raise the alert. Ignored ones are left out.
+     * Findings known to be exploited, or likely to be with an EPSS probability of at least 10%, whatever their severity, plus vulnerabilities Wodby tracks itself, such as critical PHP and nginx vulnerabilities before public databases list them, and unresolved advisories Wodby tracks on a cluster. These raise the alert. Ignored ones are left out.
      * @type {number}
      * @memberof VulnerabilityCounts
      */
