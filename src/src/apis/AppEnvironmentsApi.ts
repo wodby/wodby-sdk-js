@@ -31,6 +31,7 @@ import type {
   AppEnvironmentStackUpgradeChangelog,
   AppEnvironmentStackUpgradeInput,
   AppServiceBuild,
+  KubernetesEvent,
   NewAppAccessInput,
   NewAppAnnotationInput,
   NewAppEnvironmentAccessInput,
@@ -136,6 +137,13 @@ export interface ListAppAccessCleanupsRequest {
 export interface ListAppAnnotationsRequest {
     appEnvironmentId: number;
     types?: string;
+}
+
+export interface ListAppEnvironmentEventsRequest {
+    id: number;
+    appServiceId?: number;
+    warningsOnly?: boolean;
+    limit?: number;
 }
 
 export interface ListAppEnvironmentMigrationsRequest {
@@ -570,6 +578,25 @@ export interface AppEnvironmentsApiInterface {
      * List app annotations
      */
     listAppAnnotations(requestParameters: ListAppAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppAnnotation>>;
+
+    /**
+     * Returns recent Kubernetes events in the app environment, newest first: for example why a pod can\'t be scheduled, fails its health checks, can\'t pull its image or mount a volume. Kubernetes keeps events for about an hour. Repeats of the same event are merged, and known secret values in messages are masked.
+     * @summary List app environment events
+     * @param {number} id 
+     * @param {number} [appServiceId] Only events about this app service\&#39;s workloads, pods and volume claims.
+     * @param {boolean} [warningsOnly] Only warnings (default true). Set to false to include normal events.
+     * @param {number} [limit] At most this many events, 50 by default and 200 at most.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    listAppEnvironmentEventsRaw(requestParameters: ListAppEnvironmentEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<KubernetesEvent>>>;
+
+    /**
+     * Returns recent Kubernetes events in the app environment, newest first: for example why a pod can\'t be scheduled, fails its health checks, can\'t pull its image or mount a volume. Kubernetes keeps events for about an hour. Repeats of the same event are merged, and known secret values in messages are masked.
+     * List app environment events
+     */
+    listAppEnvironmentEvents(requestParameters: ListAppEnvironmentEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<KubernetesEvent>>;
 
     /**
      * Returns the cluster migrations of one app environment.
@@ -1760,6 +1787,57 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
      */
     async listAppAnnotations(requestParameters: ListAppAnnotationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppAnnotation>> {
         const response = await this.listAppAnnotationsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns recent Kubernetes events in the app environment, newest first: for example why a pod can\'t be scheduled, fails its health checks, can\'t pull its image or mount a volume. Kubernetes keeps events for about an hour. Repeats of the same event are merged, and known secret values in messages are masked.
+     * List app environment events
+     */
+    async listAppEnvironmentEventsRaw(requestParameters: ListAppEnvironmentEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<KubernetesEvent>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppEnvironmentEvents().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['appServiceId'] != null) {
+            queryParameters['appServiceId'] = requestParameters['appServiceId'];
+        }
+
+        if (requestParameters['warningsOnly'] != null) {
+            queryParameters['warningsOnly'] = requestParameters['warningsOnly'];
+        }
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-environments/events/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns recent Kubernetes events in the app environment, newest first: for example why a pod can\'t be scheduled, fails its health checks, can\'t pull its image or mount a volume. Kubernetes keeps events for about an hour. Repeats of the same event are merged, and known secret values in messages are masked.
+     * List app environment events
+     */
+    async listAppEnvironmentEvents(requestParameters: ListAppEnvironmentEventsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<KubernetesEvent>> {
+        const response = await this.listAppEnvironmentEventsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

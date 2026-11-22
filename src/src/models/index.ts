@@ -5446,6 +5446,49 @@ export interface AppServicePod {
      * @memberof AppServicePod
      */
     containers: Array<AppServicePodContainer>;
+    /**
+     * The pod's conditions that aren't met and say why, such as PodScheduled with reason Unschedulable. Known secret values in messages are masked.
+     * @type {Array<AppServicePodCondition>}
+     * @memberof AppServicePod
+     */
+    conditions: Array<AppServicePodCondition>;
+}
+/**
+ * A pod condition that isn't met.
+ * @export
+ * @interface AppServicePodCondition
+ */
+export interface AppServicePodCondition {
+    /**
+     * The condition, such as PodScheduled, Initialized, ContainersReady or Ready.
+     * @type {string}
+     * @memberof AppServicePodCondition
+     */
+    type: string;
+    /**
+     * False or Unknown.
+     * @type {string}
+     * @memberof AppServicePodCondition
+     */
+    status: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePodCondition
+     */
+    reason?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePodCondition
+     */
+    message?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppServicePodCondition
+     */
+    lastTransitionTime?: string | null;
 }
 /**
  * 
@@ -5519,6 +5562,24 @@ export interface AppServicePodContainer {
      * @memberof AppServicePodContainer
      */
     finishedAt?: string | null;
+    /**
+     * Why the container's previous run ended, such as OOMKilled or Error. Null when it hasn't restarted.
+     * @type {string}
+     * @memberof AppServicePodContainer
+     */
+    lastTerminationReason?: string | null;
+    /**
+     * Exit code of the container's previous run. Null when it hasn't restarted.
+     * @type {number}
+     * @memberof AppServicePodContainer
+     */
+    lastExitCode?: number | null;
+    /**
+     * When the container's previous run ended. Null when it hasn't restarted.
+     * @type {string}
+     * @memberof AppServicePodContainer
+     */
+    lastFinishedAt?: string | null;
     /**
      * 
      * @type {number}
@@ -11198,6 +11259,73 @@ export interface KubeVersion {
      * @memberof KubeVersion
      */
     title: string;
+}
+/**
+ * A Kubernetes event in an app environment, with repeats of the same event merged.
+ * @export
+ * @interface KubernetesEvent
+ */
+export interface KubernetesEvent {
+    /**
+     * Warning or Normal.
+     * @type {string}
+     * @memberof KubernetesEvent
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof KubernetesEvent
+     */
+    reason: string;
+    /**
+     * The event's message with known secret values masked.
+     * @type {string}
+     * @memberof KubernetesEvent
+     */
+    message: string;
+    /**
+     * Kind of the object the event is about, such as Pod or PersistentVolumeClaim.
+     * @type {string}
+     * @memberof KubernetesEvent
+     */
+    objectKind: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof KubernetesEvent
+     */
+    objectName: string;
+    /**
+     * The app service the object belongs to. Null for objects no app service defines, or ones Wodby can't attribute.
+     * @type {number}
+     * @memberof KubernetesEvent
+     */
+    appServiceId: number | null;
+    /**
+     * The component that reported the event, such as kubelet or default-scheduler.
+     * @type {string}
+     * @memberof KubernetesEvent
+     */
+    source: string | null;
+    /**
+     * How many times the event occurred.
+     * @type {number}
+     * @memberof KubernetesEvent
+     */
+    count: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof KubernetesEvent
+     */
+    firstSeen: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof KubernetesEvent
+     */
+    lastSeen: string;
 }
 /**
  * 
