@@ -16359,6 +16359,18 @@ export interface Service {
      */
     vulnerabilities?: ServiceVulnerabilityHealth;
     /**
+     * When the service was archived. Absent while the service is in use.
+     * @type {string}
+     * @memberof Service
+     */
+    archivedAt?: string;
+    /**
+     * Why the service is archived: manual when someone archived it, removed_from_git when a Git update no longer found it in its repository. A removed_from_git service is unarchived and updated when it returns to the repository. Absent while the service is in use.
+     * @type {string}
+     * @memberof Service
+     */
+    archiveReason?: ServiceArchiveReasonEnum;
+    /**
      * 
      * @type {string}
      * @memberof Service
@@ -16381,6 +16393,15 @@ export const ServiceOwnershipScopeEnum = {
     Project: 'project'
 } as const;
 export type ServiceOwnershipScopeEnum = typeof ServiceOwnershipScopeEnum[keyof typeof ServiceOwnershipScopeEnum];
+
+/**
+ * @export
+ */
+export const ServiceArchiveReasonEnum = {
+    Manual: 'manual',
+    RemovedFromGit: 'removed_from_git'
+} as const;
+export type ServiceArchiveReasonEnum = typeof ServiceArchiveReasonEnum[keyof typeof ServiceArchiveReasonEnum];
 
 /**
  * 

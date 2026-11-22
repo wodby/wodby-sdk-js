@@ -33,6 +33,10 @@ import type {
   UpdateStackFromGitRequest,
 } from '../models/index';
 
+export interface ArchiveServiceRequest {
+    id: number;
+}
+
 export interface CreateServiceFromManifestRequest {
     manifestFromYAMLInput: ManifestFromYAMLInput;
 }
@@ -80,12 +84,17 @@ export interface ListServicesRequest {
     orgId?: number;
     projectIds?: string;
     search?: string;
+    archived?: ListServicesArchivedEnum;
     page?: number;
     pageSize?: number;
 }
 
 export interface ScaffoldServiceFromHelmChartRequest {
     helmChartServiceScaffoldInput: HelmChartServiceScaffoldInput;
+}
+
+export interface UnarchiveServiceRequest {
+    id: number;
 }
 
 export interface UpdateServiceFromGitRequest {
@@ -119,6 +128,22 @@ export interface ValidateServiceManifestRequest {
  * @interface ServicesApiInterface
  */
 export interface ServicesApiInterface {
+    /**
+     * Archives a service that only earlier stack revisions use, when it can no longer be deleted but is not needed. The stack revisions and environments that already use it keep working. Archived services are left out of service lists, and stacks and services cannot start using them until they are unarchived. Fails while the current or draft revision of a stack uses the service, or while a service that is not archived inherits from it.
+     * @summary Archive service
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServicesApiInterface
+     */
+    archiveServiceRaw(requestParameters: ArchiveServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>>;
+
+    /**
+     * Archives a service that only earlier stack revisions use, when it can no longer be deleted but is not needed. The stack revisions and environments that already use it keep working. Archived services are left out of service lists, and stacks and services cannot start using them until they are unarchived. Fails while the current or draft revision of a stack uses the service, or while a service that is not archived inherits from it.
+     * Archive service
+     */
+    archiveService(requestParameters: ArchiveServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service>;
+
     /**
      * Creates a non-Git Wodby service from a service manifest.
      * @summary Create service from manifest
@@ -288,6 +313,7 @@ export interface ServicesApiInterface {
      * @param {number} [orgId] Optional for API-key requests; defaults to the API key\&#39;s organization. If provided, it must match the key\&#39;s organization.
      * @param {string} [projectIds] Comma-separated project ids
      * @param {string} [search] 
+     * @param {'exclude' | 'include' | 'only'} [archived] Which services to list: exclude lists the services in use, include lists every service with archived ones last, and only lists archived services.
      * @param {number} [page] Page number, defaults to 1
      * @param {number} [pageSize] Page size, defaults to 30
      * @param {*} [options] Override http request option.
@@ -317,6 +343,22 @@ export interface ServicesApiInterface {
      * Scaffold service from Helm chart
      */
     scaffoldServiceFromHelmChart(requestParameters: ScaffoldServiceFromHelmChartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HelmChartServiceScaffoldResponse>;
+
+    /**
+     * Returns an archived service to service lists, so stacks and services can use it again.
+     * @summary Unarchive service
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ServicesApiInterface
+     */
+    unarchiveServiceRaw(requestParameters: UnarchiveServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>>;
+
+    /**
+     * Returns an archived service to service lists, so stacks and services can use it again.
+     * Unarchive service
+     */
+    unarchiveService(requestParameters: UnarchiveServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service>;
 
     /**
      * Starts a task that moves a Git-sourced service to another ref.
@@ -408,6 +450,45 @@ export interface ServicesApiInterface {
  * 
  */
 export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface {
+
+    /**
+     * Archives a service that only earlier stack revisions use, when it can no longer be deleted but is not needed. The stack revisions and environments that already use it keep working. Archived services are left out of service lists, and stacks and services cannot start using them until they are unarchived. Fails while the current or draft revision of a stack uses the service, or while a service that is not archived inherits from it.
+     * Archive service
+     */
+    async archiveServiceRaw(requestParameters: ArchiveServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling archiveService().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/services/{id}/actions/archive`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Archives a service that only earlier stack revisions use, when it can no longer be deleted but is not needed. The stack revisions and environments that already use it keep working. Archived services are left out of service lists, and stacks and services cannot start using them until they are unarchived. Fails while the current or draft revision of a stack uses the service, or while a service that is not archived inherits from it.
+     * Archive service
+     */
+    async archiveService(requestParameters: ArchiveServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service> {
+        const response = await this.archiveServiceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Creates a non-Git Wodby service from a service manifest.
@@ -843,6 +924,10 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
             queryParameters['search'] = requestParameters['search'];
         }
 
+        if (requestParameters['archived'] != null) {
+            queryParameters['archived'] = requestParameters['archived'];
+        }
+
         if (requestParameters['page'] != null) {
             queryParameters['page'] = requestParameters['page'];
         }
@@ -915,6 +1000,45 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
      */
     async scaffoldServiceFromHelmChart(requestParameters: ScaffoldServiceFromHelmChartRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HelmChartServiceScaffoldResponse> {
         const response = await this.scaffoldServiceFromHelmChartRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns an archived service to service lists, so stacks and services can use it again.
+     * Unarchive service
+     */
+    async unarchiveServiceRaw(requestParameters: UnarchiveServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Service>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling unarchiveService().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/services/{id}/actions/unarchive`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Returns an archived service to service lists, so stacks and services can use it again.
+     * Unarchive service
+     */
+    async unarchiveService(requestParameters: UnarchiveServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Service> {
+        const response = await this.unarchiveServiceRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1157,3 +1281,13 @@ export class ServicesApi extends runtime.BaseAPI implements ServicesApiInterface
     }
 
 }
+
+/**
+ * @export
+ */
+export const ListServicesArchivedEnum = {
+    Exclude: 'exclude',
+    Include: 'include',
+    Only: 'only'
+} as const;
+export type ListServicesArchivedEnum = typeof ListServicesArchivedEnum[keyof typeof ListServicesArchivedEnum];
