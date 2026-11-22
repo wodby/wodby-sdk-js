@@ -138,7 +138,7 @@ export interface AppsApiInterface {
     createAppPreviewEnvironment(requestParameters: CreateAppPreviewEnvironmentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * Ignores a vulnerability in one package for every build of the app, including later scans. Ignored findings are left out of vulnerability counts and reported in the ignored count instead. Needs permission to modify the app and vulnerability scanning on the organization\'s plan. Fails when the app already ignores the vulnerability in that package.
+     * Ignores a vulnerability in one package for every build of the app, including later scans. A scan lists a vulnerability once per image with every package it affects there, so ignoring it in any of those packages ignores the whole finding. Ignored findings are left out of vulnerability counts and reported in the ignored count instead. Needs permission to modify the app and vulnerability scanning on the organization\'s plan. Fails when the app already ignores the vulnerability in that package.
      * @summary Ignore a vulnerability
      * @param {number} id 
      * @param {AppVulnerabilityIgnoreInput} appVulnerabilityIgnoreInput 
@@ -149,7 +149,7 @@ export interface AppsApiInterface {
     createAppVulnerabilityIgnoreRaw(requestParameters: CreateAppVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppVulnerabilityIgnore>>;
 
     /**
-     * Ignores a vulnerability in one package for every build of the app, including later scans. Ignored findings are left out of vulnerability counts and reported in the ignored count instead. Needs permission to modify the app and vulnerability scanning on the organization\'s plan. Fails when the app already ignores the vulnerability in that package.
+     * Ignores a vulnerability in one package for every build of the app, including later scans. A scan lists a vulnerability once per image with every package it affects there, so ignoring it in any of those packages ignores the whole finding. Ignored findings are left out of vulnerability counts and reported in the ignored count instead. Needs permission to modify the app and vulnerability scanning on the organization\'s plan. Fails when the app already ignores the vulnerability in that package.
      * Ignore a vulnerability
      */
     createAppVulnerabilityIgnore(requestParameters: CreateAppVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppVulnerabilityIgnore>;
@@ -451,7 +451,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
-     * Ignores a vulnerability in one package for every build of the app, including later scans. Ignored findings are left out of vulnerability counts and reported in the ignored count instead. Needs permission to modify the app and vulnerability scanning on the organization\'s plan. Fails when the app already ignores the vulnerability in that package.
+     * Ignores a vulnerability in one package for every build of the app, including later scans. A scan lists a vulnerability once per image with every package it affects there, so ignoring it in any of those packages ignores the whole finding. Ignored findings are left out of vulnerability counts and reported in the ignored count instead. Needs permission to modify the app and vulnerability scanning on the organization\'s plan. Fails when the app already ignores the vulnerability in that package.
      * Ignore a vulnerability
      */
     async createAppVulnerabilityIgnoreRaw(requestParameters: CreateAppVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppVulnerabilityIgnore>> {
@@ -491,7 +491,7 @@ export class AppsApi extends runtime.BaseAPI implements AppsApiInterface {
     }
 
     /**
-     * Ignores a vulnerability in one package for every build of the app, including later scans. Ignored findings are left out of vulnerability counts and reported in the ignored count instead. Needs permission to modify the app and vulnerability scanning on the organization\'s plan. Fails when the app already ignores the vulnerability in that package.
+     * Ignores a vulnerability in one package for every build of the app, including later scans. A scan lists a vulnerability once per image with every package it affects there, so ignoring it in any of those packages ignores the whole finding. Ignored findings are left out of vulnerability counts and reported in the ignored count instead. Needs permission to modify the app and vulnerability scanning on the organization\'s plan. Fails when the app already ignores the vulnerability in that package.
      * Ignore a vulnerability
      */
     async createAppVulnerabilityIgnore(requestParameters: CreateAppVulnerabilityIgnoreRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppVulnerabilityIgnore> {

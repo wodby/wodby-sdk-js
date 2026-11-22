@@ -30,6 +30,7 @@ import type {
   AppEnvironmentStackReconciliationInput,
   AppEnvironmentStackUpgradeChangelog,
   AppEnvironmentStackUpgradeInput,
+  AppServiceBuild,
   NewAppAccessInput,
   NewAppAnnotationInput,
   NewAppEnvironmentAccessInput,
@@ -139,6 +140,10 @@ export interface ListAppAnnotationsRequest {
 
 export interface ListAppEnvironmentMigrationsRequest {
     appEnvironmentId: number;
+}
+
+export interface ListAppEnvironmentVulnerabilityScansRequest {
+    id: number;
 }
 
 export interface ListAppEnvironmentsRequest {
@@ -581,6 +586,22 @@ export interface AppEnvironmentsApiInterface {
      * List app environment migrations
      */
     listAppEnvironmentMigrations(requestParameters: ListAppEnvironmentMigrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppEnvironmentMigration>>;
+
+    /**
+     * Lists the build images an app environment currently runs, each with the summary of its latest vulnerability scan, ordered by the app service that built them. The ID is the app environment\'s. An image several app services run is listed once. Returns null when vulnerability scanning is unavailable for the organization.
+     * @summary List app environment vulnerability scans
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AppEnvironmentsApiInterface
+     */
+    listAppEnvironmentVulnerabilityScansRaw(requestParameters: ListAppEnvironmentVulnerabilityScansRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceBuild>>>;
+
+    /**
+     * Lists the build images an app environment currently runs, each with the summary of its latest vulnerability scan, ordered by the app service that built them. The ID is the app environment\'s. An image several app services run is listed once. Returns null when vulnerability scanning is unavailable for the organization.
+     * List app environment vulnerability scans
+     */
+    listAppEnvironmentVulnerabilityScans(requestParameters: ListAppEnvironmentVulnerabilityScansRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceBuild>>;
 
     /**
      * Returns app environments matching the request filters.
@@ -1782,6 +1803,45 @@ export class AppEnvironmentsApi extends runtime.BaseAPI implements AppEnvironmen
      */
     async listAppEnvironmentMigrations(requestParameters: ListAppEnvironmentMigrationsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppEnvironmentMigration>> {
         const response = await this.listAppEnvironmentMigrationsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists the build images an app environment currently runs, each with the summary of its latest vulnerability scan, ordered by the app service that built them. The ID is the app environment\'s. An image several app services run is listed once. Returns null when vulnerability scanning is unavailable for the organization.
+     * List app environment vulnerability scans
+     */
+    async listAppEnvironmentVulnerabilityScansRaw(requestParameters: ListAppEnvironmentVulnerabilityScansRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<AppServiceBuild>>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listAppEnvironmentVulnerabilityScans().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/app-environment-vulnerability-scans/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Lists the build images an app environment currently runs, each with the summary of its latest vulnerability scan, ordered by the app service that built them. The ID is the app environment\'s. An image several app services run is listed once. Returns null when vulnerability scanning is unavailable for the organization.
+     * List app environment vulnerability scans
+     */
+    async listAppEnvironmentVulnerabilityScans(requestParameters: ListAppEnvironmentVulnerabilityScansRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<AppServiceBuild>> {
+        const response = await this.listAppEnvironmentVulnerabilityScansRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

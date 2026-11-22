@@ -171,6 +171,10 @@ export interface RemoveK3SClusterNodeRequest {
     removeK3SClusterNodeInput: RemoveK3SClusterNodeInput;
 }
 
+export interface RescanClusterVulnerabilitiesRequest {
+    id: number;
+}
+
 export interface RestartK3SServersRequest {
     id: number;
     k3SServerNodesInput?: K3SServerNodesInput;
@@ -696,7 +700,23 @@ export interface ClustersApiInterface {
     removeK3SClusterNode(requestParameters: RemoveK3SClusterNodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
 
     /**
-     * Restarts a K3s cluster\'s nodes one at a time and waits for each to come back Ready. Leave nodes empty to restart only the nodes that say a restart is pending. A node is drained first when another node can take its pods; on a cluster with one node, every app is unavailable until the node is back, usually a few minutes. New deployments wait until the restarts end. Refused while application operations are active.
+     * Scans the cluster for vulnerabilities again now instead of on the daily schedule: the operating system packages of a K3s cluster\'s servers, such as after updating them outside Wodby, and the images of the apps Wodby installs on the cluster. An image scanned in the last hour keeps its result. GET /cluster-vulnerabilities/{id} shows the earlier results, with scanning true, until the scan ends. Refused while a scan of the cluster is waiting or running, and for Wodby Cloud and serverless clusters.
+     * @summary Rescan cluster vulnerabilities
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClustersApiInterface
+     */
+    rescanClusterVulnerabilitiesRaw(requestParameters: RescanClusterVulnerabilitiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
+
+    /**
+     * Scans the cluster for vulnerabilities again now instead of on the daily schedule: the operating system packages of a K3s cluster\'s servers, such as after updating them outside Wodby, and the images of the apps Wodby installs on the cluster. An image scanned in the last hour keeps its result. GET /cluster-vulnerabilities/{id} shows the earlier results, with scanning true, until the scan ends. Refused while a scan of the cluster is waiting or running, and for Wodby Cloud and serverless clusters.
+     * Rescan cluster vulnerabilities
+     */
+    rescanClusterVulnerabilities(requestParameters: RescanClusterVulnerabilitiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
+
+    /**
+     * Updates the operating system packages of a K3s cluster\'s nodes first, as POST /clusters/{id}/actions/update-k3s-server-packages does, so one restart applies every available update; no node restarts when an update fails. Then restarts the nodes one at a time and waits for each to come back Ready. Leave nodes empty to update every node and restart only the nodes that say a restart is pending. A node is drained first when another node can take its pods; on a cluster with one node, every app is unavailable until the node is back, usually a few minutes. New deployments wait until the restarts end. Refused while application operations are active.
      * @summary Restart K3s servers
      * @param {number} id 
      * @param {K3SServerNodesInput} [k3SServerNodesInput] 
@@ -707,7 +727,7 @@ export interface ClustersApiInterface {
     restartK3SServersRaw(requestParameters: RestartK3SServersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>>;
 
     /**
-     * Restarts a K3s cluster\'s nodes one at a time and waits for each to come back Ready. Leave nodes empty to restart only the nodes that say a restart is pending. A node is drained first when another node can take its pods; on a cluster with one node, every app is unavailable until the node is back, usually a few minutes. New deployments wait until the restarts end. Refused while application operations are active.
+     * Updates the operating system packages of a K3s cluster\'s nodes first, as POST /clusters/{id}/actions/update-k3s-server-packages does, so one restart applies every available update; no node restarts when an update fails. Then restarts the nodes one at a time and waits for each to come back Ready. Leave nodes empty to update every node and restart only the nodes that say a restart is pending. A node is drained first when another node can take its pods; on a cluster with one node, every app is unavailable until the node is back, usually a few minutes. New deployments wait until the restarts end. Refused while application operations are active.
      * Restart K3s servers
      */
     restartK3SServers(requestParameters: RestartK3SServersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult>;
@@ -2072,7 +2092,46 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Restarts a K3s cluster\'s nodes one at a time and waits for each to come back Ready. Leave nodes empty to restart only the nodes that say a restart is pending. A node is drained first when another node can take its pods; on a cluster with one node, every app is unavailable until the node is back, usually a few minutes. New deployments wait until the restarts end. Refused while application operations are active.
+     * Scans the cluster for vulnerabilities again now instead of on the daily schedule: the operating system packages of a K3s cluster\'s servers, such as after updating them outside Wodby, and the images of the apps Wodby installs on the cluster. An image scanned in the last hour keeps its result. GET /cluster-vulnerabilities/{id} shows the earlier results, with scanning true, until the scan ends. Refused while a scan of the cluster is waiting or running, and for Wodby Cloud and serverless clusters.
+     * Rescan cluster vulnerabilities
+     */
+    async rescanClusterVulnerabilitiesRaw(requestParameters: RescanClusterVulnerabilitiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling rescanClusterVulnerabilities().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["X-API-KEY"] = await this.configuration.apiKey("X-API-KEY"); // apiKeyHeader authentication
+        }
+
+        const response = await this.request({
+            path: `/clusters/{id}/actions/rescan-vulnerabilities`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response);
+    }
+
+    /**
+     * Scans the cluster for vulnerabilities again now instead of on the daily schedule: the operating system packages of a K3s cluster\'s servers, such as after updating them outside Wodby, and the images of the apps Wodby installs on the cluster. An image scanned in the last hour keeps its result. GET /cluster-vulnerabilities/{id} shows the earlier results, with scanning true, until the scan ends. Refused while a scan of the cluster is waiting or running, and for Wodby Cloud and serverless clusters.
+     * Rescan cluster vulnerabilities
+     */
+    async rescanClusterVulnerabilities(requestParameters: RescanClusterVulnerabilitiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {
+        const response = await this.rescanClusterVulnerabilitiesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Updates the operating system packages of a K3s cluster\'s nodes first, as POST /clusters/{id}/actions/update-k3s-server-packages does, so one restart applies every available update; no node restarts when an update fails. Then restarts the nodes one at a time and waits for each to come back Ready. Leave nodes empty to update every node and restart only the nodes that say a restart is pending. A node is drained first when another node can take its pods; on a cluster with one node, every app is unavailable until the node is back, usually a few minutes. New deployments wait until the restarts end. Refused while application operations are active.
      * Restart K3s servers
      */
     async restartK3SServersRaw(requestParameters: RestartK3SServersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OperationResult>> {
@@ -2105,7 +2164,7 @@ export class ClustersApi extends runtime.BaseAPI implements ClustersApiInterface
     }
 
     /**
-     * Restarts a K3s cluster\'s nodes one at a time and waits for each to come back Ready. Leave nodes empty to restart only the nodes that say a restart is pending. A node is drained first when another node can take its pods; on a cluster with one node, every app is unavailable until the node is back, usually a few minutes. New deployments wait until the restarts end. Refused while application operations are active.
+     * Updates the operating system packages of a K3s cluster\'s nodes first, as POST /clusters/{id}/actions/update-k3s-server-packages does, so one restart applies every available update; no node restarts when an update fails. Then restarts the nodes one at a time and waits for each to come back Ready. Leave nodes empty to update every node and restart only the nodes that say a restart is pending. A node is drained first when another node can take its pods; on a cluster with one node, every app is unavailable until the node is back, usually a few minutes. New deployments wait until the restarts end. Refused while application operations are active.
      * Restart K3s servers
      */
     async restartK3SServers(requestParameters: RestartK3SServersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OperationResult> {

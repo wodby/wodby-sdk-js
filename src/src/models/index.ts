@@ -2040,6 +2040,25 @@ export interface AppEnvironmentCronHealth {
     latestFailureAt?: string | null;
 }
 /**
+ * Defaults for the environment's deployments.
+ * @export
+ * @interface AppEnvironmentDeploymentSettings
+ */
+export interface AppEnvironmentDeploymentSettings {
+    /**
+     * Run repository pre- and post-deployment scripts when a deployment rolls an app service back to an older build.
+     * @type {boolean}
+     * @memberof AppEnvironmentDeploymentSettings
+     */
+    runScriptsForOlderBuilds: boolean;
+    /**
+     * Keep a failed rollout in place instead of restoring the previous release, for every deployment.
+     * @type {boolean}
+     * @memberof AppEnvironmentDeploymentSettings
+     */
+    skipRollback: boolean;
+}
+/**
  * 
  * @export
  * @interface AppEnvironmentHealth
@@ -2502,6 +2521,12 @@ export interface AppEnvironmentSettings {
      * @memberof AppEnvironmentSettings
      */
     buildImageCleanup?: BuildImageCleanupSettings;
+    /**
+     * 
+     * @type {AppEnvironmentDeploymentSettings}
+     * @memberof AppEnvironmentSettings
+     */
+    deployment?: AppEnvironmentDeploymentSettings;
 }
 /**
  * 
@@ -2521,6 +2546,12 @@ export interface AppEnvironmentSettingsInput {
      * @memberof AppEnvironmentSettingsInput
      */
     buildImageCleanup?: BuildImageCleanupSettingsInput;
+    /**
+     * Omit it to keep the current deployment settings.
+     * @type {AppEnvironmentDeploymentSettings}
+     * @memberof AppEnvironmentSettingsInput
+     */
+    deployment?: AppEnvironmentDeploymentSettings;
 }
 /**
  * 
@@ -12685,6 +12716,12 @@ export interface NewBuildFromCIInput {
      * @memberof NewBuildFromCIInput
      */
     postDeployment?: string | null;
+    /**
+     * Content of the repository's .wodby/pre-deployment.yml. A deployment of this build runs these scripts with the new version before rolling the app service out.
+     * @type {string}
+     * @memberof NewBuildFromCIInput
+     */
+    preDeployment?: string | null;
 }
 /**
  * 
@@ -16189,6 +16226,12 @@ export interface Service {
     settings?: ServiceSettings;
     /**
      * 
+     * @type {ServiceVulnerabilityHealth}
+     * @memberof Service
+     */
+    vulnerabilities?: ServiceVulnerabilityHealth;
+    /**
+     * 
      * @type {string}
      * @memberof Service
      */
@@ -16983,6 +17026,31 @@ export interface ServiceSettingsInput {
     autoBaseRevisionUpdate?: ServiceAutoBaseRevisionUpdateSettingsInput;
 }
 /**
+ * Vulnerabilities in the images the latest revision of your organization's own service deploys, summed over its distinct images from their last successful scans. Absent for catalog and external services, and without vulnerability scanning.
+ * @export
+ * @interface ServiceVulnerabilityHealth
+ */
+export interface ServiceVulnerabilityHealth {
+    /**
+     * 
+     * @type {number}
+     * @memberof ServiceVulnerabilityHealth
+     */
+    critical: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ServiceVulnerabilityHealth
+     */
+    high: number;
+    /**
+     * Findings known or likely to be exploited, or tracked by Wodby, whatever their severity.
+     * @type {number}
+     * @memberof ServiceVulnerabilityHealth
+     */
+    urgent: number;
+}
+/**
  * 
  * @export
  * @interface ServiceWorkloadDeploymentConfiguration
@@ -17284,6 +17352,18 @@ export interface Stack {
      */
     variantStackIds: Array<number>;
     /**
+     * Catalog category of the stack, such as cms for WordPress. Absent when the stack's template names none.
+     * @type {string}
+     * @memberof Stack
+     */
+    category?: StackCategoryEnum | null;
+    /**
+     * How many of the stack's services have an update that fixes a vulnerability known or likely to be exploited, or one Wodby tracks. Each such service lists the vulnerabilities in securityFixes. Absent without vulnerability scanning.
+     * @type {number}
+     * @memberof Stack
+     */
+    securityUpdates?: number | null;
+    /**
      * 
      * @type {number}
      * @memberof Stack
@@ -17327,6 +17407,27 @@ export interface Stack {
     updatedAt: string;
 }
 
+
+/**
+ * @export
+ */
+export const StackCategoryEnum = {
+    Javascript: 'javascript',
+    Frameworks: 'frameworks',
+    Runtimes: 'runtimes',
+    Cms: 'cms',
+    Databases: 'databases',
+    Datastores: 'datastores',
+    Search: 'search',
+    Observability: 'observability',
+    Data: 'data',
+    Ai: 'ai',
+    Devtools: 'devtools',
+    Collaboration: 'collaboration',
+    Networking: 'networking',
+    Platform: 'platform'
+} as const;
+export type StackCategoryEnum = typeof StackCategoryEnum[keyof typeof StackCategoryEnum];
 
 /**
  * @export
@@ -18080,6 +18181,12 @@ export interface StackService {
      */
     eol?: boolean;
     /**
+     * Vulnerabilities known or likely to be exploited, or tracked by Wodby, that an image this stack service deploys has and the image of the service's latest version doesn't, so updating the stack service fixes them. Images are compared for each option version the stack service offers. Empty when the update fixes none of them or the stack service has no update: it is up to date, pinned or a derivative, or its service pulls from a private registry. Absent without vulnerability scanning.
+     * @type {Array<StackServiceSecurityFix>}
+     * @memberof StackService
+     */
+    securityFixes?: Array<StackServiceSecurityFix> | null;
+    /**
      * The service derivative the stack service runs. Null for the service itself.
      * @type {string}
      * @memberof StackService
@@ -18736,6 +18843,82 @@ export interface StackServiceOptionsInput {
      */
     options: Array<StackServiceOptionInput>;
 }
+/**
+ * A vulnerability that updating a stack service to its service's latest version fixes.
+ * @export
+ * @interface StackServiceSecurityFix
+ */
+export interface StackServiceSecurityFix {
+    /**
+     * The CVE ID when there is one, otherwise the advisory's own ID.
+     * @type {string}
+     * @memberof StackServiceSecurityFix
+     */
+    vulnerabilityId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackServiceSecurityFix
+     */
+    severity: StackServiceSecurityFixSeverityEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof StackServiceSecurityFix
+     */
+    packageName: string;
+    /**
+     * The vulnerable version in the image the stack service deploys now.
+     * @type {string}
+     * @memberof StackServiceSecurityFix
+     */
+    packageVersion: string;
+    /**
+     * Whether the vulnerability is on CISA's catalog of known exploited vulnerabilities.
+     * @type {boolean}
+     * @memberof StackServiceSecurityFix
+     */
+    exploited: boolean;
+    /**
+     * The EPSS probability that the vulnerability is exploited in the next 30 days, from 0 to 1. Absent when unknown.
+     * @type {number}
+     * @memberof StackServiceSecurityFix
+     */
+    epss?: number;
+    /**
+     * Whether Wodby tracks the vulnerability itself because public databases don't list it yet.
+     * @type {boolean}
+     * @memberof StackServiceSecurityFix
+     */
+    tracked: boolean;
+    /**
+     * The vulnerability's public record. Absent when there is none.
+     * @type {string}
+     * @memberof StackServiceSecurityFix
+     */
+    url?: string;
+    /**
+     * The stack service's option versions whose images have the vulnerability, such as 8.3 and 8.4.
+     * @type {Array<string>}
+     * @memberof StackServiceSecurityFix
+     */
+    optionVersions: Array<string>;
+}
+
+
+/**
+ * @export
+ */
+export const StackServiceSecurityFixSeverityEnum = {
+    Critical: 'critical',
+    High: 'high',
+    Medium: 'medium',
+    Low: 'low',
+    Negligible: 'negligible',
+    Unknown: 'unknown'
+} as const;
+export type StackServiceSecurityFixSeverityEnum = typeof StackServiceSecurityFixSeverityEnum[keyof typeof StackServiceSecurityFixSeverityEnum];
+
 /**
  * 
  * @export
